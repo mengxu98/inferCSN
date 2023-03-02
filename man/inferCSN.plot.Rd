@@ -9,11 +9,11 @@ inferCSN.plot(data, plotType = NULL)
 \arguments{
 \item{data}{A long data table}
 
-\item{plotType}{}
+\item{plotType}{boxplot}
 }
 \value{
 A ggplot2 object
 }
 \description{
-inferCSN.plot
+Plot
 }
