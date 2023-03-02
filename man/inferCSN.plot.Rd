@@ -2,13 +2,21 @@
 % Please edit documentation in R/inferCSN.plot.R
 \name{inferCSN.plot}
 \alias{inferCSN.plot}
-\title{Title}
+\title{inferCSN.plot}
 \usage{
 inferCSN.plot(data, plotType = NULL)
 }
 \arguments{
+\item{data}{A long data table}
+
 \item{plotType}{}
 }
+\value{
+A ggplot2 object
+}
 \description{
-Title
+inferCSN.plot
+}
+\examples{
+inferCSN.plot(data)
 }

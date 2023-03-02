@@ -1,18 +1,18 @@
 #' Plot of dynamic networks
 #'
-#' @param weightdf
-#' @param tfs
-#' @param onlyTFs
-#' @param order
-#' @param thresh
+#' @param weightLists  A list of ggplot2 objects
+#' @param tfs tfs = NULL
+#' @param onlyTFs onlyTFs = TRUE
+#' @param order order = NULL
+#' @param thresh thresh = NULL
 #'
-#' @return
+#' @return A list of ggplot2 objects
 #' @export
 #'
-#' @examples
-inferCSN.plot.dynamic.network <- function(weightdf, tfs = NULL, onlyTFs = TRUE, order = NULL, thresh = NULL){
+#' @examples inferCSN.plot.dynamic.network(weightLists)
+inferCSN.plot.dynamic.network <- function(weightLists, tfs = NULL, onlyTFs = TRUE, order = NULL, thresh = NULL){
   library("ggnetwork")
-  df <- net.format(weightdf)
+  df <- net.format(weightLists)
   net <- graph_from_data_frame(df[, c("TF", "TG", "interaction")], directed=FALSE)
   #tfnet<-ggnetwork(net,layout="fruchtermanreingold",cell.jitter=0)
   layout <- layout_with_fr(net)
@@ -44,19 +44,19 @@ inferCSN.plot.dynamic.network <- function(weightdf, tfs = NULL, onlyTFs = TRUE, 
                          size=2.5,
                          color="#5A8BAD")+
     theme_blank() #+
-  #ggtitle(names(grn)[i])
+  #ggtitle(names(weightList)[i])
   g <- g + theme(legend.position="none")
 }
 
-#' Title
+#' inferCSN.plot
 #'
-#' @param data
+#' @param data A long data table
 #' @param plotType
 #'
-#' @return
+#' @return A ggplot2 object
 #' @export
 #'
-#' @examples
+#' @examples inferCSN.plot(data)
 inferCSN.plot <- function(data, plotType = NULL) {
   if (is.null(plotType)) {
     plotType <- boxplot
@@ -100,16 +100,16 @@ inferCSN.plot <- function(data, plotType = NULL) {
 
 #' net.format
 #'
-#' @param grn
+#' @param weightList
 #'
-#' @return
+#' @return A formated weight list
 #' @export
 #'
-#' @examples
-net.format <- function(grn){
-  colnames(grn) <- c("TF","TG","weight")
-  grn$weight <- as.numeric(grn$weight)
-  grn$interaction <- "activation"
-  grn$interaction[grn$weight < 0] <- "repression"
-  return(grn)
+#' @examples weightList <- net.format(weightList)
+net.format <- function(weightList){
+  colnames(weightList) <- c("TF","TG","weight")
+  weightList$weight <- as.numeric(weightList$weight)
+  weightList$interaction <- "activation"
+  weightList$interaction[weightList$weight < 0] <- "repression"
+  return(weightList)
 }

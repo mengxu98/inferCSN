@@ -4,16 +4,22 @@
 \alias{compute.gene.rank}
 \title{compute.gene.rank}
 \usage{
-compute.gene.rank(weightdf, directedGraph = FALSE)
+compute.gene.rank(weightList, directedGraph = FALSE)
 }
 \arguments{
-\item{weightdf}{Result of GRN reconstruction}
+\item{weightList}{Result of GRN reconstruction}
 
 \item{directedGraph}{If GRN is directed or not}
+}
+\value{
+A data.table with three columns.
 }
 \description{
 compute.gene.rank
 }
 \details{
 Function to compute page rank of TF+target networks
+}
+\examples{
+compute.gene.rank(weightList)
 }

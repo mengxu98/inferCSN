@@ -19,8 +19,28 @@ inferCSN.fit(
 \arguments{
 \item{X}{The rows are samples and the columns are genes of the matrix}
 
-\item{gammaMax}{}
+\item{Y}{The vector}
+
+\item{penalty}{penalty = penalty}
+
+\item{nFolds}{nFolds = 10}
+
+\item{seed}{seed = 1}
+
+\item{maxSuppSize}{maxSuppSize = maxSuppSize}
+
+\item{nGamma}{nGamma = 5}
+
+\item{gammaMin}{gammaMin = 0.0001}
+
+\item{gammaMax}{gammaMax = 10}
+}
+\value{
+A vector
 }
 \description{
 inferCSN.fit
+}
+\examples{
+inferCSN.fit(X, Y)
 }

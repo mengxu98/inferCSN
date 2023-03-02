@@ -1,19 +1,19 @@
 #' inferCSN.fit
 #'
 #' @param X The rows are samples and the columns are genes of the matrix
-#' @param Y
-#' @param penalty
-#' @param nFolds
-#' @param seed
-#' @param maxSuppSize
-#' @param nGamma
-#' @param gammaMin
-#' @param gammaMax
+#' @param Y The vector
+#' @param penalty penalty = penalty
+#' @param nFolds nFolds = 10
+#' @param seed seed = 1
+#' @param maxSuppSize maxSuppSize = maxSuppSize
+#' @param nGamma nGamma = 5
+#' @param gammaMin gammaMin = 0.0001
+#' @param gammaMax gammaMax = 10
 #'
-#' @return
+#' @return A vector
 #' @export
 #'
-#' @examples
+#' @examples inferCSN.fit(X, Y)
 inferCSN.fit <- function(X, Y,
                    penalty = penalty,
                    nFolds = 10,

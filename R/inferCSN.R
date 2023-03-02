@@ -1,16 +1,16 @@
 #' inferCSN
 #'
-#' @param matrix
-#' @param penalty
-#' @param regulators
-#' @param targets
-#' @param maxSuppSize
-#' @param cores
+#' @param matrix Gene experssion matrix
+#' @param penalty Default "L0"
+#' @param regulators Regulator genes
+#' @param targets Target genes
+#' @param maxSuppSize The number of non-zore coef
+#' @param cores CPU cores
 #'
-#' @return
+#' @return A list of gene-gene regulatory relationship
 #' @export
 #'
-#' @examples
+#' @examples inferCSN(matrix)
 inferCSN <- function(matrix,
                     penalty = NULL,
                     regulators = NULL,

@@ -14,8 +14,24 @@ inferCSN(
 )
 }
 \arguments{
-\item{cores}{}
+\item{matrix}{Gene experssion matrix}
+
+\item{penalty}{Default "L0"}
+
+\item{regulators}{Regulator genes}
+
+\item{targets}{Target genes}
+
+\item{maxSuppSize}{The number of non-zore coef}
+
+\item{cores}{CPU cores}
+}
+\value{
+A list of gene-gene regulatory relationship
 }
 \description{
 inferCSN
+}
+\examples{
+inferCSN(matrix)
 }

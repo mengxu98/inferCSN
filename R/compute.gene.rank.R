@@ -1,29 +1,29 @@
 #' compute.gene.rank
 #' @details Function to compute page rank of TF+target networks
 #'
-#' @param weightdf Result of GRN reconstruction
+#' @param weightList Result of GRN reconstruction
 #' @param directedGraph If GRN is directed or not
 #'
-#' @return
+#' @return A data.table with three columns.
 #' @export
 #'
-#' @examples
-compute.gene.rank <- function(weightdf, directedGraph = FALSE) {
-  if (!is.null(weightdf)) {
-    if (nrow(weightdf)==3) {
-      colnames(weightdf) <- c("regulatoryGene", "targetGene", "weight")
+#' @examples compute.gene.rank(weightList)
+compute.gene.rank <- function(weightList, directedGraph = FALSE) {
+  if (!is.null(weightList)) {
+    if (nrow(weightList)==3) {
+      colnames(weightList) <- c("regulatoryGene", "targetGene", "weight")
     }else{
-      weightdf <- weightdf[, 1:3]
-      colnames(weightdf) <- c("regulatoryGene", "targetGene", "weight")
+      weightList <- weightList[, 1:3]
+      colnames(weightList) <- c("regulatoryGene", "targetGene", "weight")
     }
   }
-  tfnet <- igraph::graph_from_data_frame(weightdf, directed = directedGraph)
+  tfnet <- igraph::graph_from_data_frame(weightList, directed = directedGraph)
   pageRank <- data.frame(igraph::page_rank(tfnet, directed = directedGraph)$vector)
   colnames(pageRank) <- c("pageRank")
   pageRank$gene <- rownames(pageRank)
   pageRank <- pageRank[, c("gene", "pageRank")]
   pageRank <- pageRank[order(pageRank$pageRank, decreasing = TRUE), ]
   pageRank$is_regulator <- FALSE
-  pageRank$is_regulator[pageRank$gene %in% unique(weightdf$regulatoryGene)] <- TRUE
+  pageRank$is_regulator[pageRank$gene %in% unique(weightList$regulatoryGene)] <- TRUE
   return(pageRank)
 }

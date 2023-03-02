@@ -5,7 +5,7 @@
 \title{Plot of dynamic networks}
 \usage{
 inferCSN.plot.dynamic.network(
-  weightdf,
+  weightLists,
   tfs = NULL,
   onlyTFs = TRUE,
   order = NULL,
@@ -13,8 +13,22 @@ inferCSN.plot.dynamic.network(
 )
 }
 \arguments{
-\item{thresh}{}
+\item{weightLists}{A list of ggplot2 objects}
+
+\item{tfs}{tfs = NULL}
+
+\item{onlyTFs}{onlyTFs = TRUE}
+
+\item{order}{order = NULL}
+
+\item{thresh}{thresh = NULL}
+}
+\value{
+A list of ggplot2 objects
 }
 \description{
 Plot of dynamic networks
+}
+\examples{
+inferCSN.plot.dynamic.network(weightLists)
 }

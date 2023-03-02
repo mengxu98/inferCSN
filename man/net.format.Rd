@@ -4,11 +4,17 @@
 \alias{net.format}
 \title{net.format}
 \usage{
-net.format(grn)
+net.format(weightList)
 }
 \arguments{
-\item{grn}{}
+\item{weightList}{}
+}
+\value{
+A formated weight list
 }
 \description{
 net.format
+}
+\examples{
+weightList <- net.format(weightList)
 }
