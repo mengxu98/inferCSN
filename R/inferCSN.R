@@ -10,14 +10,16 @@
 #' @return A list of gene-gene regulatory relationship
 #' @export
 #'
-#' @examples inferCSN(matrix)
+#' @examples
+#'   data("exampleDataMatrix")
+#'   weightList <- inferCSN(exampleDataMatrix)
 inferCSN <- function(matrix,
                     penalty = NULL,
                     regulators = NULL,
                     targets = NULL,
                     maxSuppSize = NULL,
                     cores = 1) {
-  matrix <- as.data.frame(t(matrix))
+  matrix <- as.data.frame(matrix)
 
   if (is.null(penalty)) penalty <- "L0"
 

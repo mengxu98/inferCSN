@@ -29,6 +29,3 @@ A list of ggplot2 objects
 \description{
 Plot of dynamic networks
 }
-\examples{
-inferCSN.plot.dynamic.network(weightLists)
-}

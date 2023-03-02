@@ -13,7 +13,6 @@
 #' @return A vector
 #' @export
 #'
-#' @examples inferCSN.fit(X, Y)
 inferCSN.fit <- function(X, Y,
                    penalty = penalty,
                    nFolds = 10,

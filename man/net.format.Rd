@@ -15,6 +15,3 @@ A formated weight list
 \description{
 net.format
 }
-\examples{
-weightList <- net.format(weightList)
-}

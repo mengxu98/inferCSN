@@ -7,7 +7,10 @@
 #' @return A data.table with three columns.
 #' @export
 #'
-#' @examples compute.gene.rank(weightList)
+#' @examples
+#'   data("exampleDataMatrix")
+#'   weightList <- inferCSN(exampleDataMatrix)
+#'   compute.gene.rank(weightList)
 compute.gene.rank <- function(weightList, directedGraph = FALSE) {
   if (!is.null(weightList)) {
     if (nrow(weightList)==3) {

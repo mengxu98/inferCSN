@@ -17,6 +17,3 @@ A ggplot2 object
 \description{
 inferCSN.plot
 }
-\examples{
-inferCSN.plot(data)
-}

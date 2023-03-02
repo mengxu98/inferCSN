@@ -8,8 +8,6 @@
 #'
 #' @return A list of ggplot2 objects
 #' @export
-#'
-#' @examples inferCSN.plot.dynamic.network(weightLists)
 inferCSN.plot.dynamic.network <- function(weightLists, tfs = NULL, onlyTFs = TRUE, order = NULL, thresh = NULL){
   library("ggnetwork")
   df <- net.format(weightLists)
@@ -56,7 +54,6 @@ inferCSN.plot.dynamic.network <- function(weightLists, tfs = NULL, onlyTFs = TRU
 #' @return A ggplot2 object
 #' @export
 #'
-#' @examples inferCSN.plot(data)
 inferCSN.plot <- function(data, plotType = NULL) {
   if (is.null(plotType)) {
     plotType <- boxplot
@@ -105,7 +102,6 @@ inferCSN.plot <- function(data, plotType = NULL) {
 #' @return A formated weight list
 #' @export
 #'
-#' @examples weightList <- net.format(weightList)
 net.format <- function(weightList){
   colnames(weightList) <- c("TF","TG","weight")
   weightList$weight <- as.numeric(weightList$weight)

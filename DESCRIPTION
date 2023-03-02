@@ -10,3 +10,8 @@ License: MIT license
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
+Depends: 
+    R (>= 2.10)
+Imports: 
+    igraph,
+    L0Learn

@@ -41,6 +41,3 @@ A vector
 \description{
 inferCSN.fit
 }
-\examples{
-inferCSN.fit(X, Y)
-}

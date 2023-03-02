@@ -33,5 +33,6 @@ A list of gene-gene regulatory relationship
 inferCSN
 }
 \examples{
-inferCSN(matrix)
+  data("exampleDataMatrix")
+  weightList <- inferCSN(exampleDataMatrix)
 }
