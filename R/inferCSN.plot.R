@@ -1,4 +1,5 @@
 #' Plot of dynamic networks
+#' @description Plot
 #'
 #' @param weightLists  A list of ggplot2 objects
 #' @param tfs tfs = NULL
@@ -9,9 +10,9 @@
 #' @return A list of ggplot2 objects
 #' @export
 inferCSN.plot.dynamic.network <- function(weightLists, tfs = NULL, onlyTFs = TRUE, order = NULL, thresh = NULL){
-  library("ggnetwork")
+  requireNamespace("ggnetwork")
   df <- net.format(weightLists)
-  net <- graph_from_data_frame(df[, c("TF", "TG", "interaction")], directed=FALSE)
+  net <- igraph::graph_from_data_frame(df[, c("TF", "TG", "interaction")], directed=FALSE)
   #tfnet<-ggnetwork(net,layout="fruchtermanreingold",cell.jitter=0)
   layout <- layout_with_fr(net)
   rownames(layout) <- V(net)$name
@@ -47,9 +48,10 @@ inferCSN.plot.dynamic.network <- function(weightLists, tfs = NULL, onlyTFs = TRU
 }
 
 #' inferCSN.plot
+#' @description Plot
 #'
 #' @param data A long data table
-#' @param plotType
+#' @param plotType boxplot
 #'
 #' @return A ggplot2 object
 #' @export
@@ -97,7 +99,7 @@ inferCSN.plot <- function(data, plotType = NULL) {
 
 #' net.format
 #'
-#' @param weightList
+#' @param weightList weightList of GRN
 #'
 #' @return A formated weight list
 #' @export
