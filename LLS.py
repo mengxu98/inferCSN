@@ -5,7 +5,6 @@
 #usage : ./script.py [edgelist] [genelist.txt] 
 #outfile format : [bin_link] [cumLLS] [TP] [FP] [Gene_Coverage] [binLLS]
 
-
 import sys
 import pandas as pd
 import numpy as np
@@ -14,12 +13,11 @@ from math import *
 #print(sys.version)
 #exit()
 
-
 '''
 def calc_pearsonr_fast(expr_data, absort = True):
     genes = expr_data.index
-    pcc = expr_data.transpose().corr(method='pearson')
-    net = pcc.corr().where(np.triu(np.ones(pcc.shape), k=1).astype(bool)).stack().reset_index()
+    pcc = expr_data.transpose().corr(method = 'pearson')
+    net = pcc.corr().where(np.triu(np.ones(pcc.shape), k = 1).astype(bool)).stack().reset_index()
     net.columns = ['gene1', 'gene2', 'PCC']
     net_cut = net.loc[(net["PCC"] > 0.6) | (net["PCC"] < -0.8)] #cut meaningless links
 
@@ -29,17 +27,15 @@ def calc_pearsonr_fast(expr_data, absort = True):
     
     #rename network rowname
     net_cut.index = net_cut.genepair
-    edges_all = net_cut.loc[:,'PCC'] #series
+    edges_all = net_cut.loc[:, 'PCC'] #series
 
-    
     if absort == False:
-        edges_all = pd.Series(edges_all).abs().sort_values(ascending=False)
+        edges_all = pd.Series(edges_all).abs().sort_values(ascending = False)
     
-    edges_all = pd.Series(edges_all).sort_values(ascending=False)
+    edges_all = pd.Series(edges_all).sort_values(ascending = False)
 
     print(edges_all)    
     
-
     return edges_all
 '''
 
@@ -53,7 +49,7 @@ def read_edgelist(file_path):
 
     #rename network rowname
     net.index = net.genepair
-    edges_all = net.loc[:,'PCC'] #series
+    edges_all = net.loc[:, 'PCC'] #series
 
     return edges_all
 
@@ -70,12 +66,17 @@ def load_gold_standard_pairs(gsfile):
                 network[b] = dict()
             network[a][b] = True
             network[b][a] = True
+            
     return network
 
-def run_benchmark_LLS(target_network, gold_standard_pairs, already_sorted = True, ascending = False, max_pair = 1000000,binsize=1000):
+def run_benchmark_LLS(target_network,
+                      gold_standard_pairs,
+                      already_sorted = True,
+                      ascending = False,
+                      max_pair = 1000000,
+                      binsize=1000):
 
     # calculate positive, negative pairs
-
     pos = 0
     for g in gold_standard_pairs:
         pos+=len(gold_standard_pairs[g])
@@ -84,7 +85,6 @@ def run_benchmark_LLS(target_network, gold_standard_pairs, already_sorted = True
     neg = ( len(gold_standard_pairs) * (len(gold_standard_pairs)-1) / 2 ) - pos
 
     # calculate pr curve
-
     TP = 0
     FP = 0
     FN = pos
@@ -109,7 +109,6 @@ def run_benchmark_LLS(target_network, gold_standard_pairs, already_sorted = True
     else:
         sorted_keys = target_network.keys()
 
-
     for pair in sorted_keys:
         if count>=max_pair:
             break
@@ -117,9 +116,9 @@ def run_benchmark_LLS(target_network, gold_standard_pairs, already_sorted = True
         already.add(pair[0])
         already.add(pair[1])
 
-
         binstats.append(target_network[pair])
         count+=1
+        
         if pair[0] in gold_standard_pairs and pair[1] in gold_standard_pairs[pair[0]]:
             TP += 1
             FN -= 1
@@ -137,7 +136,7 @@ def run_benchmark_LLS(target_network, gold_standard_pairs, already_sorted = True
                     lls = log((float(TP)/float(FP)) / priorprob) / log(2)
                 except ValueError:
                     print('Error: no annotation!')
-                    print(TP,FP,priorprob)
+                    print(TP, FP, priorprob)
                     exit()
             else:
                 lls = 20.0
@@ -150,18 +149,15 @@ def run_benchmark_LLS(target_network, gold_standard_pairs, already_sorted = True
                 binlls = -5.0
             
             # save result
-            benchdata[count] = {"cumLLS":lls,"TP":TP,"FP":FP,"MeanBinStatistics":np.mean(binstats),"GeneCoverage":len(already),"BinLLS":binlls}
+            benchdata[count] = {"cumLLS":lls, "TP":TP, "FP":FP, "MeanBinStatistics":np.mean(binstats), "GeneCoverage":len(already), "BinLLS":binlls}
             #print("%d\t%.3f\t%d\t%d\t%d\t%f"%(count,lls,TP,FP,len(already),binlls))
-
 
             # initialize
             binTP=0
             binFP=0
             binstats=list()
 
-
     if count%binsize != 0:
-            
         precision = float(TP)/float(TP+FP)
         recall = float(TP)/float(TP+FN)
         oddratio = precision/randomprecision
@@ -177,7 +173,6 @@ def run_benchmark_LLS(target_network, gold_standard_pairs, already_sorted = True
         benchdata[count] = {"cumLLS":lls,"TP":TP,"FP":FP,"MeanBinStatistics":np.mean(binstats),"GeneCoverage":len(already),"BinLLS":binlls}
         #print("%d\t%.3f\t%d\t%d\t%d\t%f"%(count,lls,TP,FP,len(already),binlls))
     return pd.DataFrame().from_dict(benchdata).T
-
 
 corrnetpath =  sys.argv[1] #"/home3/junhacha/test/network_test/condLLS_test/sorted_network_file.tsv"
 #genelistfile = sys.argv[2] #"/home3/junhacha/test/network_test/condLLS_test/genelist.txt" 
@@ -215,8 +210,7 @@ elif method == 'sort':
 #load gs data accounting for input genespace
 print('loading gold standard list filtered through genelist...')
 gspairs = load_gold_standard_pairs(gsdatapath)
-
-                 
+             
 #calcuate benchmark and output
 print('calculate LLS...')
 benchdata = run_benchmark_LLS(edges_all, gspairs)
