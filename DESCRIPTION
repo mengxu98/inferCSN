@@ -6,12 +6,17 @@ Author: MengXu
 Maintainer: The package maintainer <mengxu98@qq.com>
 Description: A method for inferring cell-specific gene regulatory network from single-cell transcriptome data.
     We will continue to add other omics data in the future work.
-License: MIT license
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
 Depends: 
     R (>= 2.10)
 Imports: 
+    doParallel,
+    doRNG,
+    foreach,
+    ggnetwork,
     igraph,
-    L0Learn
+    L0Learn,
+    parallel
