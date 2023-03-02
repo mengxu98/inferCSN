@@ -7,7 +7,7 @@
 net.format(weightList)
 }
 \arguments{
-\item{weightList}{}
+\item{weightList}{weightList of GRN}
 }
 \value{
 A formated weight list
