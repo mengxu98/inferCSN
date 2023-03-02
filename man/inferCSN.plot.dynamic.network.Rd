@@ -27,5 +27,5 @@ inferCSN.plot.dynamic.network(
 A list of ggplot2 objects
 }
 \description{
-Plot of dynamic networks
+Plot
 }
