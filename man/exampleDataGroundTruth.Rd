@@ -15,7 +15,7 @@ A matrix with 5000 rows and 18 variables:
 \url{NULL}
 }
 \description{
-A dataset containing the prices and other attributes of almost 54,000
+A dataset
 diamonds.
 }
 \details{
