@@ -19,4 +19,7 @@ Imports:
     ggnetwork,
     igraph,
     L0Learn,
-    parallel
+    parallel,
+    ROCR,
+    ggplot2,
+    modEvA
