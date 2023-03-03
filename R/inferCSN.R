@@ -36,7 +36,7 @@ inferCSN <- function(matrix,
   if (cores == 1) {
     weightList <- c()
     for (i in 1:length(regulators)) {
-      message(paste("Running for",i , "of", length(regulators), "gene:", regulators[i]))
+      message(paste("Running for", i, "of", length(regulators), "gene:", regulators[i]))
       X <- as.matrix(matrix[, -which(colnames(matrix) == regulators[i])])
       Y <- matrix[, regulators[i]]
       temp <- inferCSN.fit(X, Y,
