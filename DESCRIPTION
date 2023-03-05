@@ -22,4 +22,5 @@ Imports:
     parallel,
     ROCR,
     ggplot2,
-    modEvA
+    modEvA,
+    Seurat
