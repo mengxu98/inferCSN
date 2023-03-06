@@ -19,6 +19,7 @@ inferCSN <- function(matrix,
                     targets = NULL,
                     maxSuppSize = NULL,
                     cores = 1) {
+  if (!require("L0Learn")) devtools::install_github("hazimehh/L0Learn")
   matrix <- as.data.frame(matrix)
 
   if (is.null(penalty)) penalty <- "L0"
