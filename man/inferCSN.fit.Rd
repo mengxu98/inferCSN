@@ -7,7 +7,7 @@
 inferCSN.fit(
   X,
   Y,
-  crossValidation = FALSE,
+  crossValidation = crossValidation,
   penalty = penalty,
   nFolds = 10,
   seed = 1,
