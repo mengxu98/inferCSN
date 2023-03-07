@@ -15,7 +15,7 @@
 #' @export
 #'
 inferCSN.fit <- function(X, Y,
-                         crossValidation = FALSE,
+                         crossValidation = crossValidation,
                          penalty = penalty,
                          nFolds = 10,
                          seed = 1,
