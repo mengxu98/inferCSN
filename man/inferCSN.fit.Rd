@@ -7,6 +7,7 @@
 inferCSN.fit(
   X,
   Y,
+  crossValidation = FALSE,
   penalty = penalty,
   nFolds = 10,
   seed = 1,
@@ -20,6 +21,8 @@ inferCSN.fit(
 \item{X}{The rows are samples and the columns are genes of the matrix}
 
 \item{Y}{The vector}
+
+\item{crossValidation}{Cross validation}
 
 \item{penalty}{penalty = penalty}
 
