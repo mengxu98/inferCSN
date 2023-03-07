@@ -7,6 +7,7 @@
 inferCSN(
   matrix,
   penalty = NULL,
+  crossValidation = FALSE,
   regulators = NULL,
   targets = NULL,
   maxSuppSize = NULL,
@@ -17,6 +18,8 @@ inferCSN(
 \item{matrix}{Gene experssion matrix}
 
 \item{penalty}{Default "L0"}
+
+\item{crossValidation}{Cross validation}
 
 \item{regulators}{Regulator genes}
 
