@@ -81,30 +81,38 @@ inferCSN <- function(matrix,
     message(paste("\nUsing", foreach::getDoParWorkers(), "cores."))
     "%dopar%" <- foreach::"%dopar%"
     suppressPackageStartupMessages(
-      weightList <- doRNG::"%dorng%"(foreach::foreach(regulator = regulators, .combine = "rbind", .export = "inferCSN.fit"), {
-        X <- as.matrix(matrix[, -which(colnames(matrix) == regulator)])
-        Y <- matrix[, regulator]
-        temp <- inferCSN.fit(X, Y,
-                             penalty = penalty,
-                             crossValidation = FALSE,
-                             nFolds = 10,
-                             seed = 1,
-                             maxSuppSize = maxSuppSize,
-                             nGamma = 5,
-                             gammaMin = 0.0001,
-                             gammaMax = 10
-        )
-        temp <- as.vector(temp)
-        wghts <- temp[-1]
-        wghts <- abs(wghts)
-        wghts <- wghts / sum(wghts)
+      weightList <- doRNG::"%dorng%"(
+        foreach::foreach(regulator = regulators,
+                         .combine = "rbind",
+                         .export = "inferCSN.fit"), {
+                           X <- as.matrix(matrix[, -which(colnames(matrix) == regulator)])
+                           Y <- matrix[, regulator]
+                           temp <- inferCSN.fit(X, Y,
+                                                penalty = penalty,
+                                                crossValidation = FALSE,
+                                                nFolds = 10,
+                                                seed = 1,
+                                                maxSuppSize = maxSuppSize,
+                                                nGamma = 5,
+                                                gammaMin = 0.0001,
+                                                gammaMax = 10
+                           )
+                           temp <- as.vector(temp)
+                           wghts <- temp[-1]
+                           wghts <- abs(wghts)
+                           wghts <- wghts / sum(wghts)
 
-        if (length(wghts) != dim(X)[2]) {
-          weightd <- data.frame(regulatoryGene = colnames(X), targetGene = regulator, weight = 0)
-        } else {
-          weightd <- data.frame(regulatoryGene = colnames(X), targetGene = regulator, weight = wghts)
-        }
-      })
+                           if (length(wghts) != dim(X)[2]) {
+                             weightd <- data.frame(regulatoryGene = colnames(X),
+                                                   targetGene = regulator,
+                                                   weight = 0)
+                           } else {
+                             weightd <- data.frame(regulatoryGene = colnames(X),
+                                                   targetGene = regulator,
+                                                   weight = wghts)
+                           }
+                         }
+        )
     )
     parallel::stopCluster(cl)
   }
