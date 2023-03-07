@@ -2,6 +2,7 @@
 #'
 #' @param matrix Gene experssion matrix
 #' @param penalty Default "L0"
+#' @param crossValidation Cross validation
 #' @param regulators Regulator genes
 #' @param targets Target genes
 #' @param maxSuppSize The number of non-zore coef
@@ -14,11 +15,12 @@
 #'   data("exampleDataMatrix")
 #'   weightList <- inferCSN(exampleDataMatrix)
 inferCSN <- function(matrix,
-                    penalty = NULL,
-                    regulators = NULL,
-                    targets = NULL,
-                    maxSuppSize = NULL,
-                    cores = 1) {
+                     penalty = NULL,
+                     crossValidation = FALSE,
+                     regulators = NULL,
+                     targets = NULL,
+                     maxSuppSize = NULL,
+                     cores = 1) {
 
   matrix <- as.data.frame(matrix)
 
@@ -41,13 +43,14 @@ inferCSN <- function(matrix,
       X <- as.matrix(matrix[, -which(colnames(matrix) == regulators[i])])
       Y <- matrix[, regulators[i]]
       temp <- inferCSN.fit(X, Y,
-                     penalty = penalty,
-                     nFolds = 10,
-                     seed = 1,
-                     maxSuppSize = maxSuppSize,
-                     nGamma = 5,
-                     gammaMin = 0.0001,
-                     gammaMax = 10
+                           penalty = penalty,
+                           crossValidation = FALSE,
+                           nFolds = 10,
+                           seed = 1,
+                           maxSuppSize = maxSuppSize,
+                           nGamma = 5,
+                           gammaMin = 0.0001,
+                           gammaMax = 10
       )
       temp <- as.vector(temp)
       wghts <- temp[-1]
@@ -82,13 +85,14 @@ inferCSN <- function(matrix,
         X <- as.matrix(matrix[, -which(colnames(matrix) == regulator)])
         Y <- matrix[, regulator]
         temp <- inferCSN.fit(X, Y,
-                       penalty = penalty,
-                       nFolds = 10,
-                       seed = 1,
-                       maxSuppSize = maxSuppSize,
-                       nGamma = 5,
-                       gammaMin = 0.0001,
-                       gammaMax = 10
+                             penalty = penalty,
+                             crossValidation = FALSE,
+                             nFolds = 10,
+                             seed = 1,
+                             maxSuppSize = maxSuppSize,
+                             nGamma = 5,
+                             gammaMin = 0.0001,
+                             gammaMax = 10
         )
         temp <- as.vector(temp)
         wghts <- temp[-1]
