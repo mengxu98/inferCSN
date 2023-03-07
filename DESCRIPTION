@@ -23,4 +23,5 @@ Imports:
     ROCR,
     ggplot2,
     modEvA,
-    Seurat
+    Seurat,
+    graphics
