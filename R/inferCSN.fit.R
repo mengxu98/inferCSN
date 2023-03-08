@@ -1,40 +1,33 @@
 #' inferCSN.fit
 #'
 #' @param X The rows are samples and the columns are genes of the matrix
-#' @param Y The vector
+#' @param y Target vector
 #' @param penalty penalty = penalty
 #' @param crossValidation Cross validation
-#' @param nFolds nFolds = 10
-#' @param seed seed = 1
+#' @param nFolds  N folds cross validation
 #' @param maxSuppSize maxSuppSize = maxSuppSize
-#' @param nGamma nGamma = 5
-#' @param gammaMin gammaMin = 0.0001
-#' @param gammaMax gammaMax = 10
+#' @param verbose Print detailed information
+#' @param nGamma nGamma = nGamma
 #'
 #' @return A vector
 #' @export
 #'
-inferCSN.fit <- function(X, Y,
+inferCSN.fit <- function(X, y,
                          crossValidation = crossValidation,
                          penalty = penalty,
-                         nFolds = 10,
-                         seed = 1,
                          maxSuppSize = maxSuppSize,
-                         nGamma = 5,
-                         gammaMin = 0.0001,
-                         gammaMax = 10) {
+                         nFolds = nFolds,
+                         nGamma = nGamma,
+                         verbose = verbose) {
   if (crossValidation) {
     tryCatch(
       {
-        message("---------- Using cross validation ----------")
-        fit <- L0Learn::L0Learn.cvfit(X, Y,
+        if (verbose) message("---------- Using cross validation ----------")
+        fit <- L0Learn::L0Learn.cvfit(X, y,
                                       penalty = penalty,
                                       maxSuppSize = maxSuppSize,
-                                      nFolds = 10,
-                                      seed = 1,
-                                      nGamma = 5,
-                                      gammaMin = 0.0001,
-                                      gammaMax = 10
+                                      nFolds = nFolds,
+                                      nGamma = nGamma
         )
         fit_inf <- print(fit)
         optimalGammaIndex <- which(unlist(lapply(fit$cvMeans, min)) == min(unlist(lapply(fit$cvMeans, min))))
@@ -52,13 +45,11 @@ inferCSN.fit <- function(X, Y,
         temp <- coef(fit, lambda = lambda, gamma = gamma)
       },
       error = function(e) {
-        message("---------- Cross validation error, used fit instead ----------")
-        fit <- L0Learn::L0Learn.fit(X, Y,
+        if (verbose) message("---------- Cross validation error, used fit instead ----------")
+        fit <- L0Learn::L0Learn.fit(X, y,
                                     penalty = penalty,
                                     maxSuppSize = maxSuppSize,
-                                    nGamma = 5,
-                                    gammaMin = 0.0001,
-                                    gammaMax = 10
+                                    nGamma = nGamma
         )
         fit_inf <- print(fit)
         fit_inf <- fit_inf[order(fit_inf$suppSize, decreasing = TRUE), ]
@@ -68,12 +59,10 @@ inferCSN.fit <- function(X, Y,
       }
     )
   } else {
-    fit <- L0Learn::L0Learn.fit(X, Y,
+    fit <- L0Learn::L0Learn.fit(X, y,
                                 penalty = penalty,
                                 maxSuppSize = maxSuppSize,
-                                nGamma = 5,
-                                gammaMin = 0.0001,
-                                gammaMax = 10
+                                nGamma = nGamma
     )
     fit_inf <- print(fit)
     fit_inf <- fit_inf[order(fit_inf$suppSize, decreasing = TRUE), ]
