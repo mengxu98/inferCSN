@@ -24,4 +24,6 @@ Imports:
     ggplot2,
     modEvA,
     Seurat,
-    graphics
+    graphics,
+    precrec,
+    cowplot
