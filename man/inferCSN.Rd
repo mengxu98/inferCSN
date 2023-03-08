@@ -2,15 +2,19 @@
 % Please edit documentation in R/inferCSN.R
 \name{inferCSN}
 \alias{inferCSN}
-\title{inferCSN}
+\title{inferCSN
+   A method for inferring cell-specific gene regulatory network from single-cell transcriptome data.}
 \usage{
 inferCSN(
   matrix,
   penalty = NULL,
   crossValidation = FALSE,
+  nFolds = 10,
   regulators = NULL,
   targets = NULL,
   maxSuppSize = NULL,
+  nGamma = 5,
+  verbose = FALSE,
   cores = 1
 )
 }
@@ -21,11 +25,17 @@ inferCSN(
 
 \item{crossValidation}{Cross validation}
 
+\item{nFolds}{N folds cross validation}
+
 \item{regulators}{Regulator genes}
 
 \item{targets}{Target genes}
 
 \item{maxSuppSize}{The number of non-zore coef}
+
+\item{nGamma}{nGamma}
+
+\item{verbose}{Print detailed information}
 
 \item{cores}{CPU cores}
 }
@@ -34,6 +44,7 @@ A list of gene-gene regulatory relationship
 }
 \description{
 inferCSN
+   A method for inferring cell-specific gene regulatory network from single-cell transcriptome data.
 }
 \examples{
   data("exampleDataMatrix")

@@ -6,37 +6,31 @@
 \usage{
 inferCSN.fit(
   X,
-  Y,
+  y,
   crossValidation = crossValidation,
   penalty = penalty,
-  nFolds = 10,
-  seed = 1,
   maxSuppSize = maxSuppSize,
-  nGamma = 5,
-  gammaMin = 1e-04,
-  gammaMax = 10
+  nFolds = nFolds,
+  nGamma = nGamma,
+  verbose = verbose
 )
 }
 \arguments{
 \item{X}{The rows are samples and the columns are genes of the matrix}
 
-\item{Y}{The vector}
+\item{y}{Target vector}
 
 \item{crossValidation}{Cross validation}
 
 \item{penalty}{penalty = penalty}
 
-\item{nFolds}{nFolds = 10}
-
-\item{seed}{seed = 1}
-
 \item{maxSuppSize}{maxSuppSize = maxSuppSize}
 
-\item{nGamma}{nGamma = 5}
+\item{nFolds}{N folds cross validation}
 
-\item{gammaMin}{gammaMin = 0.0001}
+\item{nGamma}{nGamma = nGamma}
 
-\item{gammaMax}{gammaMax = 10}
+\item{verbose}{Print detailed information}
 }
 \value{
 A vector
