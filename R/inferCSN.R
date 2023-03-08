@@ -1,12 +1,16 @@
 #' inferCSN
+#'    A method for inferring cell-specific gene regulatory network from single-cell transcriptome data.
 #'
 #' @param matrix Gene experssion matrix
 #' @param penalty Default "L0"
 #' @param crossValidation Cross validation
+#' @param nFolds N folds cross validation
 #' @param regulators Regulator genes
 #' @param targets Target genes
 #' @param maxSuppSize The number of non-zore coef
+#' @param verbose Print detailed information
 #' @param cores CPU cores
+#' @param nGamma nGamma
 #'
 #' @return A list of gene-gene regulatory relationship
 #' @export
@@ -17,16 +21,19 @@
 inferCSN <- function(matrix,
                      penalty = NULL,
                      crossValidation = FALSE,
+                     nFolds = 10,
                      regulators = NULL,
                      targets = NULL,
                      maxSuppSize = NULL,
+                     nGamma = 5,
+                     verbose = FALSE,
                      cores = 1) {
 
   matrix <- as.data.frame(matrix)
 
   if (is.null(penalty)) penalty <- "L0"
 
-  if (is.null(maxSuppSize)) maxSuppSize <- dim(matrix)[2]
+  if (is.null(maxSuppSize)) maxSuppSize <- ncol(matrix)
 
   if (is.null(targets)) targets <- colnames(matrix)
 
@@ -38,78 +45,62 @@ inferCSN <- function(matrix,
 
   if (cores == 1) {
     weightList <- c()
-    for (i in 1:length(regulators)) {
-      message(paste("Running for", i, "of", length(regulators), "gene:", regulators[i]))
-      X <- as.matrix(matrix[, -which(colnames(matrix) == regulators[i])])
-      Y <- matrix[, regulators[i]]
-      temp <- inferCSN.fit(X, Y,
+    for (i in 1:length(targets)) {
+      if (verbose) message(paste("Running for", i, "of", length(targets), "gene:", targets[i]))
+      X <- as.matrix(matrix[, -which(colnames(matrix) == targets[i])])
+      y <- matrix[, targets[i]]
+      temp <- inferCSN.fit(X, y,
                            penalty = penalty,
                            crossValidation = crossValidation,
-                           nFolds = 10,
-                           seed = 1,
+                           nFolds = nFolds,
                            maxSuppSize = maxSuppSize,
-                           nGamma = 5,
-                           gammaMin = 0.0001,
-                           gammaMax = 10
+                           nGamma = nGamma,
+                           verbose = verbose
       )
       temp <- as.vector(temp)
       wghts <- temp[-1]
       wghts <- abs(wghts)
       wghts <- wghts / sum(wghts)
-      if (F) {
-        wghts <- wghts / max(wghts)
-        indices <- sort.list(wghts, decreasing = TRUE)
-        zeros <- which(wghts <= 0.8)
-        # wghts[1:length(wghts)] <- 1
-        wghts[zeros] <- 0
-      }
-      if (length(wghts) != dim(X)[2]) {
-        weightd <- data.frame(regulatoryGene = colnames(X), targetGene = regulators[i], weight = 0)
+      if (length(wghts) != ncol(X)) {
+        weightd <- data.frame(regulator = colnames(X), target = targets[i], weight = 0)
       } else {
-        weightd <- data.frame(regulatoryGene = colnames(X), targetGene = regulators[i], weight = wghts)
+        weightd <- data.frame(regulator = colnames(X), target = targets[i], weight = wghts)
       }
+      # if (length(wghts) != ncol(X)) weight <- matrix(0, nrow = ncol(X), ncol = 1)
+      # weightd <- data.frame(regulator = colnames(X), target = targets[i], weight = wghts)
       weightList <- rbind.data.frame(weightList, weightd)
-      if (i == length(regulators)) {
-        weightList <- weightList[order(weightList$weight, decreasing = TRUE), ]
-      }
     }
   } else {
     cores <- min(parallel::detectCores(logical = F), cores)
     cl <- parallel::makeCluster(cores)
     doParallel::registerDoParallel(cl)
     # doParallel::registerDoParallel(cores = cores)
-    message(paste("\nUsing", foreach::getDoParWorkers(), "cores."))
+    if (verbose) message(paste("\nUsing", foreach::getDoParWorkers(), "cores."))
     "%dopar%" <- foreach::"%dopar%"
     suppressPackageStartupMessages(
       weightList <- doRNG::"%dorng%"(
-        foreach::foreach(regulator = regulators,
+        foreach::foreach(target = targets,
                          .combine = "rbind",
-                         .export = "inferCSN.fit"), {
-                           X <- as.matrix(matrix[, -which(colnames(matrix) == regulator)])
-                           Y <- matrix[, regulator]
-                           temp <- inferCSN.fit(X, Y,
+                         .export = "inferCSN.fit",
+                         .packages = c("doParallel")), {
+                           X <- as.matrix(matrix[, -which(colnames(matrix) == target)])
+                           y <- matrix[, target]
+                           temp <- inferCSN.fit(X, y,
                                                 penalty = penalty,
                                                 crossValidation = crossValidation,
-                                                nFolds = 10,
-                                                seed = 1,
+                                                nFolds = nFolds,
                                                 maxSuppSize = maxSuppSize,
-                                                nGamma = 5,
-                                                gammaMin = 0.0001,
-                                                gammaMax = 10
+                                                nGamma = nGamma,
+                                                verbose = verbose
                            )
                            temp <- as.vector(temp)
                            wghts <- temp[-1]
                            wghts <- abs(wghts)
                            wghts <- wghts / sum(wghts)
-
-                           if (length(wghts) != dim(X)[2]) {
-                             weightd <- data.frame(regulatoryGene = colnames(X),
-                                                   targetGene = regulator,
-                                                   weight = 0)
+                           if (length(wghts) != ncol(X)) {
+                             weightd <- data.frame(regulator = colnames(X), target = target, weight = 0)
                            } else {
-                             weightd <- data.frame(regulatoryGene = colnames(X),
-                                                   targetGene = regulator,
-                                                   weight = wghts)
+                             weightd <- data.frame(regulator = colnames(X), target = target, weight = wghts)
                            }
                          }
         )
