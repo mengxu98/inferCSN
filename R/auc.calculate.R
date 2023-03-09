@@ -47,12 +47,41 @@ auc.calculate <- function(weightList = NULL,
   gold <- merge(weightList, gold_ref, by = c("regulator", "target"), all.x = TRUE)
   gold$gold[is.na(gold$gold)] <- 0
   auc.curves <- precrec::evalmod(scores = gold$weight, labels = gold$gold)
-  if (plot) {
-    p <- ggplot2::autoplot(auc.curves)
-    cowplot::ggsave2(file = "ROC and Precision-Recall.png", p, width = 18, height = 10, units = "cm")
-  }
+
   auc <- attr(auc.curves, "auc")
   auc.metric[1, "AUROC"] <- auc$aucs[1]
   auc.metric[1, "AUPRC"] <- auc$aucs[2]
+
+  if (plot) {
+    p <- ggplot2::autoplot(auc.curves)
+
+    # # Subset data to separate prc and roc
+    # auprcDf <- subset(ggplot2::fortify(auc.curves), curvetype == "PRC")
+    # aurocDf <- subset(ggplot2::fortify(auc.curves), curvetype == "ROC")
+    #
+    # # ROC
+    # auroc <- ggplot2::ggplot(aurocDf, aes(x = x, y = y)) +
+    #   geom_line() +
+    #   geom_abline(slope = 1, color="gray", linetype = "dotted") +
+    #   ggtitle(paste("AUROC:", auc$aucs[1])) +
+    #   labs(x = "FPR", y = "TPR") +     # change x y titles
+    #   coord_fixed() +                  # 1:1 aspect ratio
+    #   theme_bw()                       # set theme to black & white
+    #
+    # # precision-recall
+    # auprc <- ggplot2::ggplot(auprcDf, aes(x = x, y = y)) +
+    #   geom_line() +
+    #   geom_hline(yintercept = 0.5, color="gray", linetype = "dotted") +
+    #   ggtitle(paste("AUPRC:", auc$aucs[2])) + # Precision-recall
+    #   labs(x = "TPR", y = "PPV") +     # change x y titles
+    #   ylim(0, 1) +                     # set y range
+    #   coord_fixed() +                  # 1:1 aspect ratio
+    #   theme_bw()                       # set theme to black & white
+    #
+    # p <- auroc + auprc                 # combine two plots by patchwork
+
+    cowplot::ggsave2(file = "AUC.png", p, width = 18, height = 10, units = "cm")
+  }
+
   return(auc.metric)
 }
