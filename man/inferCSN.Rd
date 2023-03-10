@@ -6,7 +6,8 @@
    A method for inferring cell-specific gene regulatory network from single-cell transcriptome data.}
 \usage{
 inferCSN(
-  matrix,
+  data = NULL,
+  normalize = FALSE,
   penalty = NULL,
   crossValidation = FALSE,
   nFolds = 10,
@@ -19,7 +20,9 @@ inferCSN(
 )
 }
 \arguments{
-\item{matrix}{Gene experssion matrix}
+\item{data}{An object}
+
+\item{normalize}{Data normalize}
 
 \item{penalty}{Default "L0"}
 
