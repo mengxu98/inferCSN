@@ -1,7 +1,8 @@
 #' inferCSN
 #'    A method for inferring cell-specific gene regulatory network from single-cell transcriptome data.
 #'
-#' @param matrix Gene experssion matrix
+#' @param data An object
+#' @param normalize Data normalize
 #' @param penalty Default "L0"
 #' @param crossValidation Cross validation
 #' @param nFolds N folds cross validation
@@ -18,7 +19,8 @@
 #' @examples
 #'   data("exampleDataMatrix")
 #'   weightList <- inferCSN(exampleDataMatrix)
-inferCSN <- function(matrix,
+inferCSN <- function(data = NULL,
+                     normalize = FALSE,
                      penalty = NULL,
                      crossValidation = FALSE,
                      nFolds = 10,
@@ -28,8 +30,12 @@ inferCSN <- function(matrix,
                      nGamma = 5,
                      verbose = FALSE,
                      cores = 1) {
-
-  matrix <- as.data.frame(matrix)
+  # Processing
+  if (!is.null(data)) {
+    matrix <- data.processing(data, normalize = normalize, verbose = verbose)
+  } else {
+    stop("Please ensure provide an object!")
+  }
 
   if (is.null(penalty)) penalty <- "L0"
 
@@ -46,7 +52,7 @@ inferCSN <- function(matrix,
   if (cores == 1) {
     weightList <- c()
     for (i in 1:length(targets)) {
-      if (verbose) message(paste("Running for", i, "of", length(targets), "gene:", targets[i]))
+      if (verbose) message(paste("Running for", i, "of", length(targets), "gene:", targets[i],"......"))
       X <- as.matrix(matrix[, -which(colnames(matrix) == targets[i])])
       y <- matrix[, targets[i]]
       temp <- inferCSN.fit(X, y,
@@ -75,7 +81,7 @@ inferCSN <- function(matrix,
     cl <- parallel::makeCluster(cores)
     doParallel::registerDoParallel(cl)
     # doParallel::registerDoParallel(cores = cores)
-    if (verbose) message(paste("\nUsing", foreach::getDoParWorkers(), "cores."))
+    if (verbose) message(paste("\nUsing", foreach::getDoParWorkers(), "cores......"))
     "%dopar%" <- foreach::"%dopar%"
     suppressPackageStartupMessages(
       weightList <- doRNG::"%dorng%"(
@@ -108,7 +114,7 @@ inferCSN <- function(matrix,
     parallel::stopCluster(cl)
   }
   attr(weightList, "rng") <- NULL
-  attr(weightList,"doRNG_version") <- NULL
+  attr(weightList, "doRNG_version") <- NULL
   weightList <- weightList[order(weightList$weight, decreasing = TRUE), ]
   return(weightList)
 }
