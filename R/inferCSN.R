@@ -50,7 +50,8 @@ inferCSN <- function(data = NULL,
     targetsMatrix <- matrix
   }
 
-  if (!is.null(regulators)) regulators <- colnames(matrix)
+  # if (!is.null(regulators)) regulators <- colnames(matrix)
+
   if (!is.null(regulators)) {
     regulatorsMatrix <- matrix[, regulators]
   } else {
