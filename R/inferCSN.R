@@ -41,21 +41,17 @@ inferCSN <- function(data = NULL,
 
   if (!is.null(regulators)) {
     regulatorsMatrix <- matrix[, intersect(colnames(matrix), regulators)]
-    regulators <- colnames(regulatorsMatrix)
   } else {
     regulatorsMatrix <- matrix
-    regulators <- colnames(regulatorsMatrix)
   }
-
-  # if (is.null(targets)) targets <- colnames(matrix)
+  regulators <- colnames(regulatorsMatrix)
 
   if (!is.null(targets)) {
     targetsMatrix <- matrix[, intersect(colnames(matrix), targets)]
-    targets <- colnames(targetsMatrix)
   } else {
     targetsMatrix <- matrix
-    targets <- colnames(targetsMatrix)
   }
+  targets <- colnames(targetsMatrix)
 
   if (is.null(maxSuppSize)) maxSuppSize <- ncol(targetsMatrix)
 
