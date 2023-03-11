@@ -49,11 +49,12 @@ inferCSN <- function(data = NULL,
     targets <- colnames(matrix)
   }
 
-  if (!is.null(regulators)) {
-    matrix <- matrix[, regulators]
-  } else {
-    regulators <- colnames(matrix)
-  }
+  if (!is.null(regulators)) regulators <- colnames(matrix)
+  # if (!is.null(regulators)) {
+  #   matrix <- matrix[, regulators]
+  # } else {
+  #   regulators <- colnames(matrix)
+  # }
 
   if (cores == 1) {
     weightList <- c()
