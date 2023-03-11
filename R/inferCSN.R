@@ -62,11 +62,11 @@ inferCSN <- function(data = NULL,
     for (i in 1:length(targets)) {
       if (verbose) message(paste("Running for", i, "of", length(targets), "gene:", targets[i],"......"))
 
-      if (targets[i] %in% regulators) {
-        X <- as.matrix(regulatorsMatrix[, -which(colnames(regulatorsMatrix) == targets[i])])
-      } else {
-        X <- as.matrix(regulatorsMatrix)
-      }
+      # if (targets[i] %in% regulators) {
+        X <- as.matrix(regulatorsMatrix[, setdiff(colnames(regulatorsMatrix), targets[i])])
+      # } else {
+      #   X <- as.matrix(regulatorsMatrix)
+      # }
 
       y <- targetsMatrix[, targets[i]]
 
@@ -107,11 +107,11 @@ inferCSN <- function(data = NULL,
                            # X <- as.matrix(matrix[, -which(colnames(matrix) == target)])
                            # y <- matrix[, target]
 
-                           if (target %in% regulators) {
-                             X <- as.matrix(regulatorsMatrix[, -which(colnames(regulatorsMatrix) == target)])
-                           } else {
-                             X <- as.matrix(regulatorsMatrix)
-                           }
+                           # if (target %in% regulators) {
+                             X <- as.matrix(regulatorsMatrix[, setdiff(colnames(regulatorsMatrix), target)])
+                           # } else {
+                           #   X <- as.matrix(regulatorsMatrix)
+                           # }
 
                            y <- targetsMatrix[, target]
 
