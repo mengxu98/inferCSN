@@ -1,8 +1,9 @@
 # inferCSN
 ## Install
+&nbsp;&nbsp;&nbsp;
 ``` r
-&nbsp;&nbsp;&nbsp; `# install.packages("devtools")`
-&nbsp;&nbsp;&nbsp; `devtools::install_github("wiscstatman/EBSeq")`
-&nbsp;&nbsp;&nbsp; `devtools::install_github("hazimehh/L0Learn")`
-&nbsp;&nbsp;&nbsp; `devtools::install_github("mengxu98/inferCSN")`
+# install.packages("devtools")
+devtools::install_github("wiscstatman/EBSeq")
+devtools::install_github("hazimehh/L0Learn")
+devtools::install_github("mengxu98/inferCSN")
 ```
