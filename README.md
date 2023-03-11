@@ -1,6 +1,5 @@
 # inferCSN
 ## Install
-&nbsp;&nbsp;&nbsp;
 ``` r
 # install.packages("devtools")
 devtools::install_github("wiscstatman/EBSeq")
