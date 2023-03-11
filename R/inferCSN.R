@@ -41,7 +41,13 @@ inferCSN <- function(data = NULL,
 
   if (is.null(maxSuppSize)) maxSuppSize <- ncol(matrix)
 
-  if (is.null(targets)) targets <- colnames(matrix)
+  # if (is.null(targets)) targets <- colnames(matrix)
+
+  if (!is.null(targets)) {
+    matrix <- matrix[, targets]
+  } else {
+    targets <- colnames(matrix)
+  }
 
   if (!is.null(regulators)) {
     matrix <- matrix[, regulators]
