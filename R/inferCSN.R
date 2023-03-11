@@ -49,7 +49,7 @@ inferCSN <- function(data = NULL,
   # if (is.null(targets)) targets <- colnames(matrix)
 
   if (!is.null(targets)) {
-    targetsMatrix <- matrix[, targets]
+    targetsMatrix <- as.matrix(matrix[, targets])
   } else {
     targets <- colnames(matrix)
     targetsMatrix <- matrix
@@ -60,7 +60,7 @@ inferCSN <- function(data = NULL,
   if (cores == 1) {
     weightList <- c()
     for (i in 1:length(targets)) {
-      if (verbose) message(paste("Running for", i, "of", length(targets), "gene:", targets[i],"......"))
+      if (verbose) message(paste("Running for", i, "of", length(targets), "gene:", targets[i], "......"))
 
       # if (targets[i] %in% regulators) {
         X <- as.matrix(regulatorsMatrix[, setdiff(colnames(regulatorsMatrix), targets[i])])
