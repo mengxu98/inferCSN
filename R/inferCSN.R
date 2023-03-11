@@ -44,24 +44,33 @@ inferCSN <- function(data = NULL,
   # if (is.null(targets)) targets <- colnames(matrix)
 
   if (!is.null(targets)) {
-    matrix <- matrix[, targets]
+    targetsMatrix <- matrix[, targets]
   } else {
     targets <- colnames(matrix)
+    targetsMatrix <- matrix
   }
 
   if (!is.null(regulators)) regulators <- colnames(matrix)
-  # if (!is.null(regulators)) {
-  #   matrix <- matrix[, regulators]
-  # } else {
-  #   regulators <- colnames(matrix)
-  # }
+  if (!is.null(regulators)) {
+    regulatorsMatrix <- matrix[, regulators]
+  } else {
+    regulators <- colnames(matrix)
+    regulatorsMatrix <- matrix
+  }
 
   if (cores == 1) {
     weightList <- c()
     for (i in 1:length(targets)) {
       if (verbose) message(paste("Running for", i, "of", length(targets), "gene:", targets[i],"......"))
-      X <- as.matrix(matrix[, -which(colnames(matrix) == targets[i])])
-      y <- matrix[, targets[i]]
+
+      if (targets[i] %in% regulators) {
+        X <- as.matrix(targetsMatrix[, -which(colnames(targetsMatrix) == targets[i])])
+      } else {
+        X <- as.matrix(targetsMatrix)
+      }
+
+      y <- regulatorsMatrix[, targets[i]]
+
       temp <- inferCSN.fit(X, y,
                            penalty = penalty,
                            crossValidation = crossValidation,
@@ -96,8 +105,17 @@ inferCSN <- function(data = NULL,
                          .combine = "rbind",
                          .export = "inferCSN.fit",
                          .packages = c("doParallel")), {
-                           X <- as.matrix(matrix[, -which(colnames(matrix) == target)])
-                           y <- matrix[, target]
+                           # X <- as.matrix(matrix[, -which(colnames(matrix) == target)])
+                           # y <- matrix[, target]
+
+                           if (target %in% regulators) {
+                             X <- as.matrix(targetsMatrix[, -which(colnames(targetsMatrix) == target)])
+                           } else {
+                             X <- as.matrix(targetsMatrix)
+                           }
+
+                           y <- regulatorsMatrix[, target]
+
                            temp <- inferCSN.fit(X, y,
                                                 penalty = penalty,
                                                 crossValidation = crossValidation,
