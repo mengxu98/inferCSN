@@ -39,7 +39,12 @@ inferCSN <- function(data = NULL,
 
   if (is.null(penalty)) penalty <- "L0"
 
-  if (is.null(maxSuppSize)) maxSuppSize <- ncol(matrix)
+  if (!is.null(regulators)) {
+    regulatorsMatrix <- matrix[, regulators]
+  } else {
+    regulators <- colnames(matrix)
+    regulatorsMatrix <- matrix
+  }
 
   # if (is.null(targets)) targets <- colnames(matrix)
 
@@ -50,12 +55,7 @@ inferCSN <- function(data = NULL,
     targetsMatrix <- matrix
   }
 
-  if (!is.null(regulators)) {
-    regulatorsMatrix <- matrix[, regulators]
-  } else {
-    regulators <- colnames(matrix)
-    regulatorsMatrix <- matrix
-  }
+  if (is.null(maxSuppSize)) maxSuppSize <- ncol(targetsMatrix)
 
   if (cores == 1) {
     weightList <- c()
@@ -63,12 +63,12 @@ inferCSN <- function(data = NULL,
       if (verbose) message(paste("Running for", i, "of", length(targets), "gene:", targets[i],"......"))
 
       if (targets[i] %in% regulators) {
-        X <- as.matrix(targetsMatrix[, -which(colnames(targetsMatrix) == targets[i])])
+        X <- as.matrix(regulatorsMatrix[, -which(colnames(regulatorsMatrix) == targets[i])])
       } else {
-        X <- as.matrix(targetsMatrix)
+        X <- as.matrix(regulatorsMatrix)
       }
 
-      y <- regulatorsMatrix[, targets[i]]
+      y <- targetsMatrix[, targets[i]]
 
       temp <- inferCSN.fit(X, y,
                            penalty = penalty,
@@ -108,12 +108,12 @@ inferCSN <- function(data = NULL,
                            # y <- matrix[, target]
 
                            if (target %in% regulators) {
-                             X <- as.matrix(targetsMatrix[, -which(colnames(targetsMatrix) == target)])
+                             X <- as.matrix(regulatorsMatrix[, -which(colnames(regulatorsMatrix) == target)])
                            } else {
-                             X <- as.matrix(targetsMatrix)
+                             X <- as.matrix(regulatorsMatrix)
                            }
 
-                           y <- regulatorsMatrix[, target]
+                           y <- targetsMatrix[, target]
 
                            temp <- inferCSN.fit(X, y,
                                                 penalty = penalty,
