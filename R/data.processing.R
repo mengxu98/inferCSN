@@ -15,9 +15,9 @@ data.processing <- function(data,
   } else if (class(data)[1] == "data.frame") {
     matrix <- t(data)
   } else if (class(data)[1] == "Seurat") {
-    matrix <- t(as.matrix(data@assays$RNA@counts))
+    matrix <- as.matrix(data@assays$RNA@counts)
   } else if (class(data)[1] == "SingleCellExperiment") {
-    matrix <- t(as.matrix(sce@assays@data$counts))
+    matrix <- as.matrix(sce@assays@data$counts)
   } else {
     stop("Error")
   }
