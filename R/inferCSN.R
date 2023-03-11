@@ -40,7 +40,7 @@ inferCSN <- function(data = NULL,
   if (is.null(penalty)) penalty <- "L0"
 
   if (!is.null(regulators)) {
-    regulatorsMatrix <- matrix[, regulators]
+    regulatorsMatrix <- matrix[, intersect(colnames(matrix), regulators)]
   } else {
     regulators <- colnames(matrix)
     regulatorsMatrix <- matrix
@@ -49,7 +49,7 @@ inferCSN <- function(data = NULL,
   # if (is.null(targets)) targets <- colnames(matrix)
 
   if (!is.null(targets)) {
-    targetsMatrix <- as.matrix(matrix[, targets])
+    targetsMatrix <- matrix[, intersect(colnames(matrix), targets)]
   } else {
     targets <- colnames(matrix)
     targetsMatrix <- matrix
