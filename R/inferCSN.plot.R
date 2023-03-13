@@ -1,50 +1,79 @@
 #' Plot of dynamic networks
 #' @description Plot
 #'
-#' @param weightLists  A list of ggplot2 objects
-#' @param tfs tfs = NULL
-#' @param onlyTFs onlyTFs = TRUE
+#' @param weightList weightList
+#' @param regulators regulators
 #' @param order order = NULL
 #' @param thresh thresh = NULL
+#' @param onlyRegulators onlyregulators
+#' @param legend.position legend.position
 #'
 #' @return A list of ggplot2 objects
 #' @export
-inferCSN.plot.dynamic.network <- function(weightLists, tfs = NULL, onlyTFs = TRUE, order = NULL, thresh = NULL){
+inferCSN.plot.dynamic.networks <- function(weightList,
+                                           regulators = NULL,
+                                           onlyRegulators = TRUE,
+                                           order = NULL,
+                                           thresh = NULL,
+                                           legend.position = "right"){ # "none"
+  # library("ggnetwork")
   requireNamespace("ggnetwork")
-  df <- net.format(weightLists)
-  net <- igraph::graph_from_data_frame(df[, c("TF", "TG", "interaction")], directed=FALSE)
-  #tfnet<-ggnetwork(net,layout="fruchtermanreingold",cell.jitter=0)
-  layout <- layout_with_fr(net)
-  rownames(layout) <- V(net)$name
-  layout_ordered <- layout[V(net)$name,]
-  tfnet <- ggnetwork(net, layout = layout_ordered, cell.jitter=0)
-  tfnet$is_regulator <- as.character(tfnet$name %in% tfs)
-  cols<-c("activation" = "blue", "repression" = "red")
+  df <- net.format(weightList, regulators=regulators)
+  net <- igraph::graph_from_data_frame(df[, c("regulator", "target", "Interaction")], directed = FALSE)
+  layout <- igraph::layout_with_fr(net)
+  rownames(layout) <- igraph::V(net)$name
+  layout_ordered <- layout[igraph::V(net)$name,]
+  regulatornet <- ggnetwork::ggnetwork(net, layout = layout_ordered, cell.jitter=0)
+  regulatornet$is_regulator <- as.character(regulatornet$name %in% regulators)
+  cols<-c("Activation" = "#3366cc", "Repression" = "#ff0066")
   g<-ggplot()+
-    geom_edges(data=tfnet,
-               aes(x=x, y=y, xend=xend, yend=yend, color=interaction),
+    geom_edges(data=regulatornet,
+               aes(x=x, y=y, xend=xend, yend=yend, color=Interaction),
                size=0.75,
                curvature=0.1,
                alpha=.6)+
-    geom_nodes(data=tfnet,
-               aes(x=x, y=y, xend=xend, yend=yend),
+    geom_nodes(data=regulatornet,
+               aes(x=x, y=y, xend=xend, yend=yend, size=weight),
                color="darkgray",
                size=6,
                alpha=.5)+
-    geom_nodes(data=tfnet[tfnet$is_regulator=="TRUE",],
-               aes(x=x, y=y, xend=xend, yend=yend),
+    geom_nodes(data=regulatornet[regulatornet$is_regulator == "TRUE",],
+               aes(x=x, y=y, xend=xend, yend=yend, size=weight),
                color="#8C4985",
                size=6,
                alpha=.8)+
-    #geom_nodelabel_repel(data=tfnet,aes(x=x, y=y, label=vertex.names),size=6, color="#8856a7")+
+    # geom_nodelabel_repel(data= regulatornet, aes(x=x, y=y, label = "test"),size=6, color="#8856a7")+
     scale_color_manual(values=cols)+
-    geom_nodelabel_repel(data=tfnet,
+    geom_nodelabel_repel(data=regulatornet,
                          aes(x=x, y=y, label=name),
                          size=2.5,
                          color="#5A8BAD")+
-    theme_blank() #+
+    theme_blank()
   #ggtitle(names(weightList)[i])
-  g <- g + theme(legend.position="none")
+  g <- g + theme(legend.position = legend.position)
+}
+
+#' net.format
+#'
+#' @param weightList weightList of GRN
+#' @param regulators Regulators list
+#'
+#' @return A formated weight list
+#' @export
+#'
+net.format <- function(weightList,
+                       regulators = regulators){
+  colnames(weightList) <- c("regulator","target","weight")
+  weightListNew <- c()
+  for (i in 1:length(regulators)) {
+    weightList1 <- weightList[which(weightList$regulator==regulators[i]),]
+    weightListNew <- rbind.data.frame(weightListNew, weightList1)
+  }
+  weightList <- weightListNew
+  weightList$weight <- as.numeric(weightList$weight)
+  weightList$Interaction <- "Activation"
+  weightList$Interaction[weightList$weight < 0] <- "Repression"
+  return(weightList)
 }
 
 #' inferCSN.plot
@@ -95,19 +124,4 @@ inferCSN.plot <- function(data, plotType = NULL) {
       )
   }
   p
-}
-
-#' net.format
-#'
-#' @param weightList weightList of GRN
-#'
-#' @return A formated weight list
-#' @export
-#'
-net.format <- function(weightList){
-  colnames(weightList) <- c("TF","TG","weight")
-  weightList$weight <- as.numeric(weightList$weight)
-  weightList$interaction <- "activation"
-  weightList$interaction[weightList$weight < 0] <- "repression"
-  return(weightList)
 }
