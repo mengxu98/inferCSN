@@ -4,10 +4,12 @@
 \alias{net.format}
 \title{net.format}
 \usage{
-net.format(weightList)
+net.format(weightList, regulators = regulators)
 }
 \arguments{
 \item{weightList}{weightList of GRN}
+
+\item{regulators}{Regulators list}
 }
 \value{
 A formated weight list
