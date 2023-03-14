@@ -15,8 +15,7 @@ inferCSN.plot.dynamic.networks <- function(weightList,
                                            onlyRegulators = TRUE,
                                            order = NULL,
                                            thresh = NULL,
-                                           legend.position = "right"){ # "none"
-  # library("ggnetwork")
+                                           legend.position = "right"){
   requireNamespace("ggnetwork")
   df <- net.format(weightList, regulators=regulators)
   net <- igraph::graph_from_data_frame(df[, c("regulator", "target", "Interaction")], directed = FALSE)
@@ -67,12 +66,14 @@ inferCSN.plot.dynamic.networks <- function(weightList,
 net.format <- function(weightList,
                        regulators = regulators){
   colnames(weightList) <- c("regulator","target","weight")
-  weightListNew <- c()
-  for (i in 1:length(regulators)) {
-    weightList1 <- weightList[which(weightList$regulator==regulators[i]),]
-    weightListNew <- rbind.data.frame(weightListNew, weightList1)
+  if (!is.null(regulators)) {
+    weightListNew <- c()
+    for (i in 1:length(regulators)) {
+      weightList1 <- weightList[which(weightList$regulator == regulators[i]),]
+      weightListNew <- rbind.data.frame(weightListNew, weightList1)
+    }
+    weightList <- weightListNew
   }
-  weightList <- weightListNew
   weightList$weight <- as.numeric(weightList$weight)
   weightList$Interaction <- "Activation"
   weightList$Interaction[weightList$weight < 0] <- "Repression"
