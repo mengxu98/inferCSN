@@ -32,22 +32,25 @@ inferCSN.plot.dynamic.networks <- function(weightList,
                size=0.75,
                curvature=0.1,
                alpha=.6)+
-    geom_nodes(data=regulatornet,
-               aes(x=x, y=y, xend=xend, yend=yend, size=weight),
+    geom_nodes(data=regulatornet[regulatornet$is_regulator == "FALSE",],
+               aes(x=x, y=y, xend=xend, yend=yend),
                color="darkgray",
-               size=6,
+               size=3,
                alpha=.5)+
     geom_nodes(data=regulatornet[regulatornet$is_regulator == "TRUE",],
-               aes(x=x, y=y, xend=xend, yend=yend, size=weight),
+               aes(x=x, y=y, xend=xend, yend=yend),
                color="#8C4985",
                size=6,
                alpha=.8)+
-    # geom_nodelabel_repel(data= regulatornet, aes(x=x, y=y, label = "test"),size=6, color="#8856a7")+
     scale_color_manual(values=cols)+
-    geom_nodelabel_repel(data=regulatornet,
+    geom_nodelabel_repel(data=regulatornet[regulatornet$is_regulator == "FALSE",],
                          aes(x=x, y=y, label=name),
-                         size=2.5,
+                         size=2,
                          color="#5A8BAD")+
+    geom_nodelabel_repel(data=regulatornet[regulatornet$is_regulator == "TRUE",],
+                         aes(x=x, y=y, label=name),
+                         size=3.5,
+                         color="black")+
     theme_blank()
   #ggtitle(names(weightList)[i])
   g <- g + theme(legend.position = legend.position)
