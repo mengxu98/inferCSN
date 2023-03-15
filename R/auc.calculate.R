@@ -55,6 +55,8 @@ auc.calculate <- function(weightList = NULL,
   if (plot) {
     p <- ggplot2::autoplot(auc.curves)
 
+    # requireNamespace("ggplot2")
+    #
     # # Subset data to separate prc and roc
     # auprcDf <- subset(ggplot2::fortify(auc.curves), curvetype == "PRC")
     # aurocDf <- subset(ggplot2::fortify(auc.curves), curvetype == "ROC")
