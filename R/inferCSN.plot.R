@@ -68,10 +68,14 @@ net.format <- function(weightList,
   colnames(weightList) <- c("regulator","target","weight")
   if (!is.null(regulators)) {
     weightListNew <- c()
-    for (i in 1:length(regulators)) {
-      weightList1 <- weightList[which(weightList$regulator == regulators[i]),]
-      weightListNew <- rbind.data.frame(weightListNew, weightList1)
+    # for (i in 1:length(regulators)) {
+    #   weightList1 <- weightList[which(weightList$regulator == regulators[i]),]
+    #   weightListNew <- rbind.data.frame(weightListNew, weightList1)
+    # }
+    xxx <- function(x){
+      weight <- weightList[which(weightList$regulator == x), ]
     }
+    weightListNew <- purrr::map_dfr(regulators, xxx)
     weightList <- weightListNew
   }
   weightList$weight <- as.numeric(weightList$weight)
