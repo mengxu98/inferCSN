@@ -15,43 +15,62 @@ inferCSN.plot.dynamic.networks <- function(weightList,
                                            onlyRegulators = TRUE,
                                            order = NULL,
                                            thresh = NULL,
-                                           legend.position = "right"){
+                                           legend.position = "right") {
   requireNamespace("ggnetwork")
-  df <- net.format(weightList, regulators=regulators)
-  net <- igraph::graph_from_data_frame(df[, c("regulator", "target", "Interaction")], directed = FALSE)
+  df <- net.format(
+    weightList,
+    regulators = regulators
+  )
+  net <- igraph::graph_from_data_frame(
+    df[, c("regulator", "target", "Interaction")],
+    directed = FALSE
+  )
   layout <- igraph::layout_with_fr(net)
   rownames(layout) <- igraph::V(net)$name
-  layout_ordered <- layout[igraph::V(net)$name,]
-  regulatornet <- ggnetwork::ggnetwork(net, layout = layout_ordered, cell.jitter=0)
+  layout_ordered <- layout[igraph::V(net)$name, ]
+  regulatornet <- ggnetwork::ggnetwork(net,
+    layout = layout_ordered,
+    cell.jitter = 0
+  )
   regulatornet$is_regulator <- as.character(regulatornet$name %in% regulators)
-  cols<-c("Activation" = "#3366cc", "Repression" = "#ff0066")
-  g<-ggplot()+
-    geom_edges(data=regulatornet,
-               aes(x=x, y=y, xend=xend, yend=yend, color=Interaction),
-               size=0.75,
-               curvature=0.1,
-               alpha=.6)+
-    geom_nodes(data=regulatornet[regulatornet$is_regulator == "FALSE",],
-               aes(x=x, y=y, xend=xend, yend=yend),
-               color="darkgray",
-               size=3,
-               alpha=.5)+
-    geom_nodes(data=regulatornet[regulatornet$is_regulator == "TRUE",],
-               aes(x=x, y=y, xend=xend, yend=yend),
-               color="#8C4985",
-               size=6,
-               alpha=.8)+
-    scale_color_manual(values=cols)+
-    geom_nodelabel_repel(data=regulatornet[regulatornet$is_regulator == "FALSE",],
-                         aes(x=x, y=y, label=name),
-                         size=2,
-                         color="#5A8BAD")+
-    geom_nodelabel_repel(data=regulatornet[regulatornet$is_regulator == "TRUE",],
-                         aes(x=x, y=y, label=name),
-                         size=3.5,
-                         color="black")+
+  cols <- c("Activation" = "#3366cc", "Repression" = "#ff0066")
+  g <- ggplot() +
+    geom_edges(
+      data = regulatornet,
+      aes(x = x, y = y, xend = xend, yend = yend, color = Interaction),
+      size = 0.75,
+      curvature = 0.1,
+      alpha = .6
+    ) +
+    geom_nodes(
+      data = regulatornet[regulatornet$is_regulator == "FALSE", ],
+      aes(x = x, y = y, xend = xend, yend = yend),
+      color = "darkgray",
+      size = 3,
+      alpha = .5
+    ) +
+    geom_nodes(
+      data = regulatornet[regulatornet$is_regulator == "TRUE", ],
+      aes(x = x, y = y, xend = xend, yend = yend),
+      color = "#8C4985",
+      size = 6,
+      alpha = .8
+    ) +
+    scale_color_manual(values = cols) +
+    geom_nodelabel_repel(
+      data = regulatornet[regulatornet$is_regulator == "FALSE", ],
+      aes(x = x, y = y, label = name),
+      size = 2,
+      color = "#5A8BAD"
+    ) +
+    geom_nodelabel_repel(
+      data = regulatornet[regulatornet$is_regulator == "TRUE", ],
+      aes(x = x, y = y, label = name),
+      size = 3.5,
+      color = "black"
+    ) +
     theme_blank()
-  #ggtitle(names(weightList)[i])
+  # ggtitle(names(weightList)[i])
   g <- g + theme(legend.position = legend.position)
 }
 
@@ -64,18 +83,14 @@ inferCSN.plot.dynamic.networks <- function(weightList,
 #' @export
 #'
 net.format <- function(weightList,
-                       regulators = regulators){
-  colnames(weightList) <- c("regulator","target","weight")
+                       regulators = regulators) {
+  colnames(weightList) <- c("regulator", "target", "weight")
   if (!is.null(regulators)) {
-    weightListNew <- c()
-    # for (i in 1:length(regulators)) {
-    #   weightList1 <- weightList[which(weightList$regulator == regulators[i]),]
-    #   weightListNew <- rbind.data.frame(weightListNew, weightList1)
-    # }
-    xxx <- function(x){
-      weight <- weightList[which(weightList$regulator == x), ]
-    }
-    weightListNew <- purrr::map_dfr(regulators, xxx)
+    weightListNew <- purrr::map_dfr(
+      regulators, function(x) {
+        weight <- weightList[which(weightList$regulator == x), ]
+      }
+    )
     weightList <- weightListNew
   }
   weightList$weight <- as.numeric(weightList$weight)
@@ -106,7 +121,7 @@ inferCSN.plot <- function(data, plotType = NULL) {
       #     trim = FALSE
       # ) +
       geom_boxplot(aes(fill = Method),
-                   width = 0.8
+        width = 0.8
       ) +
       stat_compare_means(
         method = "wilcox.test",
