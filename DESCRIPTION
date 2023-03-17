@@ -26,4 +26,5 @@ Imports:
     Seurat,
     graphics,
     precrec,
-    cowplot
+    cowplot,
+    purrr
