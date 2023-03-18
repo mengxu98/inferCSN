@@ -17,8 +17,8 @@
 #' @export
 #'
 #' @examples
-#'   data("exampleDataMatrix")
-#'   weightList <- inferCSN(exampleDataMatrix)
+#'    data("exampleDataMatrix")
+#'    weightList <- inferCSN(exampleDataMatrix)
 inferCSN <- function(data = NULL,
                      normalize = FALSE,
                      penalty = NULL,
@@ -30,7 +30,7 @@ inferCSN <- function(data = NULL,
                      nGamma = 5,
                      verbose = FALSE,
                      cores = 1) {
-  # Processing
+  # Data processing
   if (!is.null(data)) {
     matrix <- data.processing(data, normalize = normalize, verbose = verbose)
   } else {
@@ -61,20 +61,21 @@ inferCSN <- function(data = NULL,
       if (verbose) message(paste("Running for", i, "of", length(targets), "gene:", targets[i], "......"))
 
       # if (targets[i] %in% regulators) {
-        X <- as.matrix(regulatorsMatrix[, setdiff(colnames(regulatorsMatrix), targets[i])])
+      X <- as.matrix(regulatorsMatrix[, setdiff(colnames(regulatorsMatrix), targets[i])])
       # } else {
       #   X <- as.matrix(regulatorsMatrix)
       # }
 
       y <- targetsMatrix[, targets[i]]
 
-      temp <- inferCSN.fit(X, y,
-                           penalty = penalty,
-                           crossValidation = crossValidation,
-                           nFolds = nFolds,
-                           maxSuppSize = maxSuppSize,
-                           nGamma = nGamma,
-                           verbose = verbose
+      temp <- inferCSN.fit(
+        X, y,
+        penalty = penalty,
+        crossValidation = crossValidation,
+        nFolds = nFolds,
+        maxSuppSize = maxSuppSize,
+        nGamma = nGamma,
+        verbose = verbose
       )
       temp <- as.vector(temp)
       wghts <- temp[-1]
@@ -90,7 +91,7 @@ inferCSN <- function(data = NULL,
       weightList <- rbind.data.frame(weightList, weightd)
     }
   } else {
-    cores <- min(parallel::detectCores(logical = F), cores)
+    cores <- min(parallel::detectCores(logical = FALSE), cores)
     cl <- parallel::makeCluster(cores)
     doParallel::registerDoParallel(cl)
     # doParallel::registerDoParallel(cores = cores)
@@ -98,40 +99,42 @@ inferCSN <- function(data = NULL,
     "%dopar%" <- foreach::"%dopar%"
     suppressPackageStartupMessages(
       weightList <- doRNG::"%dorng%"(
-        foreach::foreach(target = targets,
-                         .combine = "rbind",
-                         .export = "inferCSN.fit",
-                         .packages = c("doParallel")), {
-                           # X <- as.matrix(matrix[, -which(colnames(matrix) == target)])
-                           # y <- matrix[, target]
+        foreach::foreach(
+          target = targets,
+          .combine = "rbind",
+          .export = "inferCSN.fit",
+          .packages = c("doParallel")
+        ), {
+          # X <- as.matrix(matrix[, -which(colnames(matrix) == target)])
+          # y <- matrix[, target]
 
-                           # if (target %in% regulators) {
-                             X <- as.matrix(regulatorsMatrix[, setdiff(colnames(regulatorsMatrix), target)])
-                           # } else {
-                           #   X <- as.matrix(regulatorsMatrix)
-                           # }
+          # if (target %in% regulators) {
+          X <- as.matrix(regulatorsMatrix[, setdiff(colnames(regulatorsMatrix), target)])
+          # } else {
+          #   X <- as.matrix(regulatorsMatrix)
+          # }
 
-                           y <- targetsMatrix[, target]
+          y <- targetsMatrix[, target]
 
-                           temp <- inferCSN.fit(X, y,
-                                                penalty = penalty,
-                                                crossValidation = crossValidation,
-                                                nFolds = nFolds,
-                                                maxSuppSize = maxSuppSize,
-                                                nGamma = nGamma,
-                                                verbose = verbose
-                           )
-                           temp <- as.vector(temp)
-                           wghts <- temp[-1]
-                           wghts <- abs(wghts)
-                           wghts <- wghts / sum(wghts)
-                           if (length(wghts) != ncol(X)) {
-                             weightd <- data.frame(regulator = colnames(X), target = target, weight = 0)
-                           } else {
-                             weightd <- data.frame(regulator = colnames(X), target = target, weight = wghts)
-                           }
-                         }
-        )
+          temp <- inferCSN.fit(
+            X, y,
+            penalty = penalty,
+            crossValidation = crossValidation,
+            nFolds = nFolds,
+            maxSuppSize = maxSuppSize,
+            nGamma = nGamma,
+            verbose = verbose
+          )
+          temp <- as.vector(temp)
+          wghts <- temp[-1]
+          wghts <- abs(wghts)
+          wghts <- wghts / sum(wghts)
+          if (length(wghts) != ncol(X)) {
+            weightd <- data.frame(regulator = colnames(X), target = target, weight = 0)
+          } else {
+            weightd <- data.frame(regulator = colnames(X), target = target, weight = wghts)
+          }
+      })
     )
     parallel::stopCluster(cl)
   }
