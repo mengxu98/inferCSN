@@ -32,3 +32,8 @@ A list of ggplot2 objects
 \description{
 Plot
 }
+\examples{
+   data("exampleDataMatrix")
+   weightList <- inferCSN(exampleDataMatrix)
+   inferCSN.plot.dynamic.networks(weightList)
+}

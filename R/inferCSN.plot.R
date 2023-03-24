@@ -10,17 +10,25 @@
 #'
 #' @return A list of ggplot2 objects
 #' @export
+#'
+#' @examples
+#'    data("exampleDataMatrix")
+#'    weightList <- inferCSN(exampleDataMatrix)
+#'    inferCSN.plot.dynamic.networks(weightList)
 inferCSN.plot.dynamic.networks <- function(weightList,
                                            regulators = NULL,
                                            onlyRegulators = TRUE,
                                            order = NULL,
                                            thresh = NULL,
                                            legend.position = "right") {
-  requireNamespace("ggnetwork")
+  # requireNamespace("ggnetwork")
+  # requireNamespace("ggplot2")
+  # Format input data
   df <- net.format(
     weightList,
     regulators = regulators
   )
+
   net <- igraph::graph_from_data_frame(
     df[, c("regulator", "target", "Interaction")],
     directed = FALSE
@@ -29,49 +37,49 @@ inferCSN.plot.dynamic.networks <- function(weightList,
   rownames(layout) <- igraph::V(net)$name
   layout_ordered <- layout[igraph::V(net)$name, ]
   regulatornet <- ggnetwork::ggnetwork(net,
-    layout = layout_ordered,
-    cell.jitter = 0
+                                       layout = layout_ordered,
+                                       cell.jitter = 0
   )
   regulatornet$is_regulator <- as.character(regulatornet$name %in% regulators)
   cols <- c("Activation" = "#3366cc", "Repression" = "#ff0066")
-  g <- ggplot() +
-    geom_edges(
+  g <- ggplot2::ggplot() +
+    ggnetwork::geom_edges(
       data = regulatornet,
-      aes(x = x, y = y, xend = xend, yend = yend, color = Interaction),
+      ggplot2::aes(x = x, y = y, xend = xend, yend = yend, color = Interaction),
       size = 0.75,
       curvature = 0.1,
       alpha = .6
     ) +
-    geom_nodes(
+    ggnetwork::geom_nodes(
       data = regulatornet[regulatornet$is_regulator == "FALSE", ],
-      aes(x = x, y = y, xend = xend, yend = yend),
+      ggplot2::aes(x = x, y = y, xend = xend, yend = yend),
       color = "darkgray",
       size = 3,
       alpha = .5
     ) +
-    geom_nodes(
+    ggnetwork::geom_nodes(
       data = regulatornet[regulatornet$is_regulator == "TRUE", ],
-      aes(x = x, y = y, xend = xend, yend = yend),
+      ggplot2::aes(x = x, y = y, xend = xend, yend = yend),
       color = "#8C4985",
       size = 6,
       alpha = .8
     ) +
-    scale_color_manual(values = cols) +
-    geom_nodelabel_repel(
+    ggplot2::scale_color_manual(values = cols) +
+    ggnetwork::geom_nodelabel_repel(
       data = regulatornet[regulatornet$is_regulator == "FALSE", ],
-      aes(x = x, y = y, label = name),
+      ggplot2::aes(x = x, y = y, label = name),
       size = 2,
       color = "#5A8BAD"
     ) +
-    geom_nodelabel_repel(
+    ggnetwork::geom_nodelabel_repel(
       data = regulatornet[regulatornet$is_regulator == "TRUE", ],
-      aes(x = x, y = y, label = name),
+      ggplot2::aes(x = x, y = y, label = name),
       size = 3.5,
       color = "black"
     ) +
-    theme_blank()
+    ggnetwork::theme_blank()
   # ggtitle(names(weightList)[i])
-  g <- g + theme(legend.position = legend.position)
+  g <- g + ggplot2::theme(legend.position = legend.position)
 }
 
 #' net.format
@@ -121,7 +129,7 @@ inferCSN.plot <- function(data, plotType = NULL) {
       #     trim = FALSE
       # ) +
       geom_boxplot(aes(fill = Method),
-        width = 0.8
+                   width = 0.8
       ) +
       stat_compare_means(
         method = "wilcox.test",

@@ -10,10 +10,10 @@
 #' @export
 #'
 #' @examples
-#'   data("exampleDataMatrix")
-#'   data("exampleDataGroundTruth")
-#'   weightList <- inferCSN(exampleDataMatrix, cores = 2)
-#'   auc <- auc.calculate(weightList, exampleDataGroundTruth)
+#'    data("exampleDataMatrix")
+#'    data("exampleDataGroundTruth")
+#'    weightList <- inferCSN(exampleDataMatrix, cores = 2)
+#'    auc <- auc.calculate(weightList, exampleDataGroundTruth)
 auc.calculate <- function(weightList = NULL,
                           goldRef = NULL,
                           goldPathway = NULL,
@@ -53,35 +53,35 @@ auc.calculate <- function(weightList = NULL,
   auc.metric[1, "AUPRC"] <- auc$aucs[2]
 
   if (plot) {
-    p <- ggplot2::autoplot(auc.curves)
+    # p <- ggplot2::autoplot(auc.curves)
 
-    # requireNamespace("ggplot2")
-    #
-    # # Subset data to separate prc and roc
-    # auprcDf <- subset(ggplot2::fortify(auc.curves), curvetype == "PRC")
-    # aurocDf <- subset(ggplot2::fortify(auc.curves), curvetype == "ROC")
-    #
-    # # ROC
-    # auroc <- ggplot2::ggplot(aurocDf, aes(x = x, y = y)) +
-    #   geom_line() +
-    #   geom_abline(slope = 1, color="gray", linetype = "dotted") +
-    #   ggtitle(paste("AUROC:", auc$aucs[1])) +
-    #   labs(x = "FPR", y = "TPR") +     # change x y titles
-    #   coord_fixed() +                  # 1:1 aspect ratio
-    #   theme_bw()                       # set theme to black & white
-    #
-    # # precision-recall
-    # auprc <- ggplot2::ggplot(auprcDf, aes(x = x, y = y)) +
-    #   geom_line() +
-    #   geom_hline(yintercept = 0.5, color="gray", linetype = "dotted") +
-    #   ggtitle(paste("AUPRC:", auc$aucs[2])) + # Precision-recall
-    #   labs(x = "TPR", y = "PPV") +     # change x y titles
-    #   ylim(0, 1) +                     # set y range
-    #   coord_fixed() +                  # 1:1 aspect ratio
-    #   theme_bw()                       # set theme to black & white
-    #
-    # p <- auroc + auprc                 # combine two plots by patchwork
+    # Subset data to separate prc and roc
+    auprcDf <- subset(ggplot2::fortify(auc.curves), curvetype == "PRC")
+    aurocDf <- subset(ggplot2::fortify(auc.curves), curvetype == "ROC")
 
+    # ROC
+    auroc <- ggplot2::ggplot(aurocDf, ggplot2::aes(x = x, y = y)) +
+      ggplot2::geom_line() +
+      ggplot2::geom_abline(slope = 1, color="gray", linetype = "dotted") +
+      ggplot2::ggtitle(paste("AUROC:", auc$aucs[1])) +
+      ggplot2::labs(x = "FPR", y = "TPR") +            # change x y titles
+      ggplot2::coord_fixed() +                         # 1:1 aspect ratio
+      ggplot2::theme_bw()                              # set theme to black & white
+
+    # precision-recall
+    auprc <- ggplot2::ggplot(auprcDf, ggplot2::aes(x = x, y = y)) +
+      ggplot2::geom_line() +
+      ggplot2::geom_hline(yintercept = 0.5, color="gray", linetype = "dotted") +
+      ggplot2::ggtitle(paste("AUPRC:", auc$aucs[2])) + # Precision-recall
+      ggplot2::labs(x = "TPR", y = "PPV") +            # change x y titles
+      ggplot2::ylim(0, 1) +                            # set y range
+      ggplot2::coord_fixed() +                         # 1:1 aspect ratio
+      ggplot2::theme_bw()                              # set theme to black & white
+
+    # Combine two plots by patchwork
+    p <- auroc + auprc
+
+    # Save
     cowplot::ggsave2(file = "AUC.png", p, width = 18, height = 10, units = "cm")
   }
 

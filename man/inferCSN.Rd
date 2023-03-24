@@ -50,6 +50,6 @@ inferCSN
    A method for inferring cell-specific gene regulatory network from single-cell transcriptome data.
 }
 \examples{
-  data("exampleDataMatrix")
-  weightList <- inferCSN(exampleDataMatrix)
+   data("exampleDataMatrix")
+   weightList <- inferCSN(exampleDataMatrix)
 }
