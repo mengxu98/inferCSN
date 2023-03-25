@@ -22,7 +22,6 @@ data.processing <- function(data,
     stop("Error")
   }
 
-  if (verbose) message("Data processing......")
   # Remove ribo.genes
   genes.all <- rownames(matrix)
   ribo.genes <- genes.all[grep('^RPS[0-9]*|^RPL[0-9]*', genes.all)]

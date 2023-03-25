@@ -1,42 +1,45 @@
-#' auc.calculate
-#'  AUC value calculate
+#' @title auc.calculate
+#' @description AUC value calculate
 #'
 #' @param weightList weightList
-#' @param goldRef goldRef
-#' @param goldPathway goldPathway
+#' @param groundTruth groundTruth
+#' @param groundTruthTPath groundTruthTPath
 #' @param plot plot
 #'
-#' @return AUC
+#' @import patchwork
+#'
+#' @return AUC values and AUC plot
 #' @export
 #'
 #' @examples
-#'    data("exampleDataMatrix")
-#'    data("exampleDataGroundTruth")
-#'    weightList <- inferCSN(exampleDataMatrix, cores = 2)
-#'    auc <- auc.calculate(weightList, exampleDataGroundTruth)
+#' data("exampleDataMatrix")
+#' data("exampleDataGroundTruth")
+#' weightList <- inferCSN(exampleDataMatrix, cores = 2)
+#' auc <- auc.calculate(weightList, exampleDataGroundTruth)
 auc.calculate <- function(weightList = NULL,
-                          goldRef = NULL,
-                          goldPathway = NULL,
+                          groundTruth = NULL,
+                          groundTruthTPath = NULL,
                           plot = FALSE) {
+  # Check input data
   if (!is.null(weightList) & ncol(weightList) == 3) {
     names(weightList) <- c("regulator", "target", "weight")
   } else {
     stop("Please provide a 'weightList' of gene-gene relationships!")
   }
 
-  if (!is.null(goldRef) | !is.null(goldPathway)) {
-    if (!is.null(goldRef)) {
-      gold_ref <- goldRef
+  if (!is.null(groundTruth) | !is.null(groundTruthTPath)) {
+    if (!is.null(groundTruth)) {
+      gold_ref <- groundTruth
     } else {
       gold_ref <- read.table(
-        file = goldPathway,
+        file = groundTruthTPath,
         stringsAsFactors = FALSE,
         header = TRUE,
         sep = ","
       )
     }
   } else {
-    stop("Please provide a reference dataset or goldPathway of gene-gene relationships!")
+    stop("Please provide a reference dataset or groundTruthTPath of gene-gene relationships!")
   }
 
   if (ncol(gold_ref) > 2) gold_ref <- gold_ref[, 1:2]
@@ -62,21 +65,21 @@ auc.calculate <- function(weightList = NULL,
     # ROC
     auroc <- ggplot2::ggplot(aurocDf, ggplot2::aes(x = x, y = y)) +
       ggplot2::geom_line() +
-      ggplot2::geom_abline(slope = 1, color="gray", linetype = "dotted") +
+      ggplot2::geom_abline(slope = 1, color = "gray", linetype = "dotted") +
       ggplot2::ggtitle(paste("AUROC:", auc$aucs[1])) +
-      ggplot2::labs(x = "FPR", y = "TPR") +            # change x y titles
-      ggplot2::coord_fixed() +                         # 1:1 aspect ratio
-      ggplot2::theme_bw()                              # set theme to black & white
+      ggplot2::labs(x = "FPR", y = "TPR") + # change x y titles
+      ggplot2::coord_fixed() + # 1:1 aspect ratio
+      ggplot2::theme_bw() # set theme to black & white
 
     # precision-recall
     auprc <- ggplot2::ggplot(auprcDf, ggplot2::aes(x = x, y = y)) +
       ggplot2::geom_line() +
-      ggplot2::geom_hline(yintercept = 0.5, color="gray", linetype = "dotted") +
+      ggplot2::geom_hline(yintercept = 0.5, color = "gray", linetype = "dotted") +
       ggplot2::ggtitle(paste("AUPRC:", auc$aucs[2])) + # Precision-recall
-      ggplot2::labs(x = "TPR", y = "PPV") +            # change x y titles
-      ggplot2::ylim(0, 1) +                            # set y range
-      ggplot2::coord_fixed() +                         # 1:1 aspect ratio
-      ggplot2::theme_bw()                              # set theme to black & white
+      ggplot2::labs(x = "TPR", y = "PPV") + # change x y titles
+      ggplot2::ylim(0, 1) + # set y range
+      ggplot2::coord_fixed() + # 1:1 aspect ratio
+      ggplot2::theme_bw() # set theme to black & white
 
     # Combine two plots by patchwork
     p <- auroc + auprc

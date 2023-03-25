@@ -2,35 +2,33 @@
 % Please edit documentation in R/auc.calculate.R
 \name{auc.calculate}
 \alias{auc.calculate}
-\title{auc.calculate
- AUC value calculate}
+\title{auc.calculate}
 \usage{
 auc.calculate(
   weightList = NULL,
-  goldRef = NULL,
-  goldPathway = NULL,
+  groundTruth = NULL,
+  groundTruthTPath = NULL,
   plot = FALSE
 )
 }
 \arguments{
 \item{weightList}{weightList}
 
-\item{goldRef}{goldRef}
+\item{groundTruth}{groundTruth}
 
-\item{goldPathway}{goldPathway}
+\item{groundTruthTPath}{groundTruthTPath}
 
 \item{plot}{plot}
 }
 \value{
-AUC
+AUC values and AUC plot
 }
 \description{
-auc.calculate
- AUC value calculate
+AUC value calculate
 }
 \examples{
-   data("exampleDataMatrix")
-   data("exampleDataGroundTruth")
-   weightList <- inferCSN(exampleDataMatrix, cores = 2)
-   auc <- auc.calculate(weightList, exampleDataGroundTruth)
+data("exampleDataMatrix")
+data("exampleDataGroundTruth")
+weightList <- inferCSN(exampleDataMatrix, cores = 2)
+auc <- auc.calculate(weightList, exampleDataGroundTruth)
 }

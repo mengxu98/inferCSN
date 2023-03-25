@@ -1,4 +1,4 @@
-#' Plot of dynamic networks
+#' @title Plot of dynamic networks
 #' @description Plot
 #'
 #' @param weightList weightList
@@ -21,8 +21,6 @@ inferCSN.plot.dynamic.networks <- function(weightList,
                                            order = NULL,
                                            thresh = NULL,
                                            legend.position = "right") {
-  # requireNamespace("ggnetwork")
-  # requireNamespace("ggplot2")
   # Format input data
   df <- net.format(
     weightList,
@@ -113,6 +111,7 @@ net.format <- function(weightList,
 #' @param data A long data table
 #' @param plotType boxplot
 #'
+#' @importFrom graphics "boxplot"
 #' @return A ggplot2 object
 #' @export
 #'

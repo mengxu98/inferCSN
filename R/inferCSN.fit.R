@@ -9,6 +9,8 @@
 #' @param verbose Print detailed information
 #' @param nGamma nGamma = nGamma
 #'
+#' @importFrom stats "coef"
+#'
 #' @return A vector
 #' @export
 #'
@@ -22,7 +24,6 @@ inferCSN.fit <- function(X, y,
   if (crossValidation) {
     tryCatch(
       {
-        if (verbose) message("---------- Using cross validation ----------")
         fit <- L0Learn::L0Learn.cvfit(X, y,
                                       penalty = penalty,
                                       maxSuppSize = maxSuppSize,
@@ -42,10 +43,9 @@ inferCSN.fit <- function(X, y,
             lambda <- min(lambda_list$lambda)
           }
         }
-        temp <- coef(fit, lambda = lambda, gamma = gamma)
       },
       error = function(e) {
-        if (verbose) message("---------- Cross validation error, used fit instead ----------")
+        if (verbose) message("Cross validation error, used fit instead......")
         fit <- L0Learn::L0Learn.fit(X, y,
                                     penalty = penalty,
                                     maxSuppSize = maxSuppSize,
@@ -55,7 +55,6 @@ inferCSN.fit <- function(X, y,
         fit_inf <- fit_inf[order(fit_inf$suppSize, decreasing = TRUE), ]
         lambda <- fit_inf$lambda[1]
         gamma <- fit_inf$gamma[1]
-        temp <- coef(fit, lambda = lambda, gamma = gamma)
       }
     )
   } else {

@@ -8,17 +8,16 @@
 #' @export
 #'
 #' @examples
-#'   data("exampleDataMatrix")
-#'   weightList <- inferCSN(exampleDataMatrix)
-#'   compute.gene.rank(weightList)
-compute.gene.rank <- function(weightList, directedGraph = FALSE) {
+#' data("exampleDataMatrix")
+#' weightList <- inferCSN(exampleDataMatrix)
+#' compute.gene.rank(weightList)
+compute.gene.rank <- function(weightList,
+                              directedGraph = FALSE) {
   if (!is.null(weightList)) {
-    if (nrow(weightList)==3) {
-      colnames(weightList) <- c("regulatoryGene", "targetGene", "weight")
-    }else{
-      weightList <- weightList[, 1:3]
-      colnames(weightList) <- c("regulatoryGene", "targetGene", "weight")
-    }
+    if (nrow(weightList) > 3) weightList <- weightList[, 1:3]
+    colnames(weightList) <- c("regulatoryGene", "targetGene", "weight")
+  } else {
+    stop("Please input data......")
   }
   tfnet <- igraph::graph_from_data_frame(weightList, directed = directedGraph)
   pageRank <- data.frame(igraph::page_rank(tfnet, directed = directedGraph)$vector)

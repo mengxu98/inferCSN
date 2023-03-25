@@ -2,8 +2,7 @@
 % Please edit documentation in R/inferCSN.R
 \name{inferCSN}
 \alias{inferCSN}
-\title{inferCSN
-   A method for inferring cell-specific gene regulatory network from single-cell transcriptome data.}
+\title{inferCSN}
 \usage{
 inferCSN(
   data = NULL,
@@ -46,10 +45,10 @@ inferCSN(
 A list of gene-gene regulatory relationship
 }
 \description{
-inferCSN
-   A method for inferring cell-specific gene regulatory network from single-cell transcriptome data.
+A method for inferring cell-type-specific gene regulatory network
+from single-cell transcriptome data.
 }
 \examples{
-   data("exampleDataMatrix")
-   weightList <- inferCSN(exampleDataMatrix)
+data("exampleDataMatrix")
+weightList <- inferCSN(exampleDataMatrix, verbose = TRUE)
 }
