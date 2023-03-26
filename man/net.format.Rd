@@ -7,13 +7,13 @@
 net.format(weightList, regulators = regulators)
 }
 \arguments{
-\item{weightList}{weightList of GRN}
+\item{weightList}{weightList of CSN}
 
 \item{regulators}{Regulators list}
 }
 \value{
-A formated weight list
+Format weight table
 }
 \description{
-net.format
+Format weight table
 }

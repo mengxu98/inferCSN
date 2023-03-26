@@ -16,15 +16,15 @@ inferCSN.plot.dynamic.networks(
 \arguments{
 \item{weightList}{weightList}
 
-\item{regulators}{regulators}
+\item{regulators}{[Default = NULL] regulators}
 
-\item{onlyRegulators}{onlyregulators}
+\item{onlyRegulators}{[Default = NULL] onlyregulators}
 
-\item{order}{order = NULL}
+\item{order}{[Default = NULL] order = NULL}
 
-\item{thresh}{thresh = NULL}
+\item{thresh}{[Default = NULL] thresh = NULL}
 
-\item{legend.position}{legend.position}
+\item{legend.position}{[Default = "right"] legend.position}
 }
 \value{
 A list of ggplot2 objects
@@ -33,7 +33,7 @@ A list of ggplot2 objects
 Plot
 }
 \examples{
-   data("exampleDataMatrix")
-   weightList <- inferCSN(exampleDataMatrix)
-   inferCSN.plot.dynamic.networks(weightList)
+data("exampleDataMatrix")
+weightList <- inferCSN(exampleDataMatrix)
+inferCSN.plot.dynamic.networks(weightList)
 }

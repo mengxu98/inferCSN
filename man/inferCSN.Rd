@@ -19,27 +19,27 @@ inferCSN(
 )
 }
 \arguments{
-\item{data}{An object}
+\item{data}{[Default = NULL] An object}
 
-\item{normalize}{Data normalize}
+\item{normalize}{[Default = FALSE] Data normalize}
 
-\item{penalty}{Default "L0"}
+\item{penalty}{[Default = NULL]}
 
-\item{crossValidation}{Cross validation}
+\item{crossValidation}{[Default = FALSE] Check whether cross validation is used}
 
-\item{nFolds}{N folds cross validation}
+\item{nFolds}{[Default = 10] N folds cross validation}
 
-\item{regulators}{Regulator genes}
+\item{regulators}{[Default = NULL] Regulator genes}
 
-\item{targets}{Target genes}
+\item{targets}{[Default = NULL] Target genes}
 
-\item{maxSuppSize}{The number of non-zore coef}
+\item{maxSuppSize}{[Default = NULL] The number of non-zore coef}
 
-\item{nGamma}{nGamma}
+\item{nGamma}{[Default = 5] nGamma}
 
-\item{verbose}{Print detailed information}
+\item{verbose}{[Default = FALSE] Print detailed information}
 
-\item{cores}{CPU cores}
+\item{cores}{[Default = 1] CPU cores}
 }
 \value{
 A list of gene-gene regulatory relationship

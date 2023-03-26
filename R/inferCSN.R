@@ -2,17 +2,17 @@
 #' @description A method for inferring cell-type-specific gene regulatory network
 #' from single-cell transcriptome data.
 #'
-#' @param data An object
-#' @param normalize Data normalize
-#' @param penalty Default "L0"
-#' @param crossValidation Cross validation
-#' @param nFolds N folds cross validation
-#' @param regulators Regulator genes
-#' @param targets Target genes
-#' @param maxSuppSize The number of non-zore coef
-#' @param verbose Print detailed information
-#' @param cores CPU cores
-#' @param nGamma nGamma
+#' @param data [Default = NULL] An object
+#' @param normalize [Default = FALSE] Data normalize
+#' @param penalty [Default = NULL]
+#' @param crossValidation [Default = FALSE] Check whether cross validation is used
+#' @param nFolds [Default = 10] N folds cross validation
+#' @param regulators [Default = NULL] Regulator genes
+#' @param targets [Default = NULL] Target genes
+#' @param maxSuppSize [Default = NULL] The number of non-zore coef
+#' @param nGamma [Default = 5] nGamma
+#' @param verbose [Default = FALSE] Print detailed information
+#' @param cores [Default = 1] CPU cores
 #'
 #' @import magrittr
 #' @importFrom utils "methods" "read.table" "setTxtProgressBar" "txtProgressBar"
@@ -53,13 +53,13 @@ inferCSN <- function(data = NULL,
   } else {
     penalty <- "L0"
   }
-  message(paste("Using", penalty, "penalty regression......"))
+  if (verbose) message(paste("Using", penalty, "penalty regression......"))
 
   # Check whether cross validation is used
   if (verbose & crossValidation) {
-    if (verbose) message("Using cross validation......")
+    if (verbose) message(paste("Using ", penalty, "cross validation......"))
   } else {
-    if (verbose) message("Using fit......")
+    if (verbose) message(paste("Using ", penalty, "fit......"))
   }
 
   if (!is.null(regulators)) {

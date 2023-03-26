@@ -84,7 +84,7 @@ auc.calculate <- function(weightList = NULL,
     # Combine two plots by patchwork
     p <- auroc + auprc
 
-    # Save
+    # Save figure
     cowplot::ggsave2(file = "AUC.png", p, width = 18, height = 10, units = "cm")
   }
 
