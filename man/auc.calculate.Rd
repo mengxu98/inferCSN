@@ -18,7 +18,7 @@ auc.calculate(
 
 \item{groundTruthTPath}{groundTruthTPath}
 
-\item{plot}{plot}
+\item{plot}{[Default = FALSE] plot}
 }
 \value{
 AUC values and AUC plot
