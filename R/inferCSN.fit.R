@@ -22,28 +22,27 @@ inferCSN.fit <- function(X, y,
                          nGamma = nGamma,
                          verbose = verbose) {
   if (crossValidation) {
-    tryCatch(
-      {
-        fit <- L0Learn::L0Learn.cvfit(X, y,
+    tryCatch({
+      fit <- L0Learn::L0Learn.cvfit(X, y,
                                       penalty = penalty,
                                       maxSuppSize = maxSuppSize,
                                       nFolds = nFolds,
                                       nGamma = nGamma
         )
-        fit_inf <- print(fit)
-        optimalGammaIndex <- which(unlist(lapply(fit$cvMeans, min)) == min(unlist(lapply(fit$cvMeans, min))))
-        gamma <- fit$fit$gamma[optimalGammaIndex]
-        lambda_list <- fit_inf[which(fit_inf$gamma == gamma), ]
-        if (is.null(maxSuppSize)) {
-          lambda <- min(lambda_list$lambda)
+      fit_inf <- print(fit)
+      optimalGammaIndex <- which(unlist(lapply(fit$cvMeans, min)) == min(unlist(lapply(fit$cvMeans, min))))
+      gamma <- fit$fit$gamma[optimalGammaIndex]
+      lambda_list <- fit_inf[which(fit_inf$gamma == gamma),]
+      if (is.null(maxSuppSize)) {
+        lambda <- min(lambda_list$lambda)
+      } else {
+        if (maxSuppSize %in% lambda_list$maxSuppSize) {
+          lambda <- lambda_list$maxSuppSize[which(lambda_list$maxSuppSize == maxSuppSize)]
         } else {
-          if (maxSuppSize %in% lambda_list$maxSuppSize) {
-            lambda <- lambda_list$maxSuppSize[which(lambda_list$maxSuppSize == maxSuppSize)]
-          } else {
-            lambda <- min(lambda_list$lambda)
-          }
+          lambda <- min(lambda_list$lambda)
         }
-      },
+      }
+    },
       error = function(e) {
         if (verbose) message("Cross validation error, used fit instead......")
         fit <- L0Learn::L0Learn.fit(X, y,

@@ -34,7 +34,7 @@ inferCSN.plot.dynamic.networks <- function(weightList,
 
   layout <- igraph::layout_with_fr(net)
   rownames(layout) <- igraph::V(net)$name
-  layout_ordered <- layout[igraph::V(net)$name, ]
+  layout_ordered <- layout[igraph::V(net)$name,]
   regulatorNet <- ggnetwork::ggnetwork(
     net,
     layout = layout_ordered,
@@ -129,10 +129,10 @@ inferCSN.plot <- function(data, plotType = NULL) {
       data,
       aes(x = Method, y = AUPRC)
     ) +
-      # geom_violin(aes(fill = Method),
-      #     trim = FALSE
-      # ) +
-      geom_boxplot(aes(fill = Method),
+    # geom_violin(aes(fill = Method),
+    #     trim = FALSE
+    # ) +
+    geom_boxplot(aes(fill = Method),
         width = 0.8
       ) +
       stat_compare_means(
@@ -144,8 +144,8 @@ inferCSN.plot <- function(data, plotType = NULL) {
         color = "#6699cc"
       ) +
       scale_fill_manual(values = mycol) +
-      # scale_color_manual(values = mycol) +
-      scale_x_discrete(labels = methods) +
+    # scale_color_manual(values = mycol) +
+    scale_x_discrete(labels = methods) +
       labs(x = "Methods", y = "AUPRC") +
       theme(legend.position = "bottom") +
       theme_bw() +

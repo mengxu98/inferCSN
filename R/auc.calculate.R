@@ -86,6 +86,5 @@ auc.calculate <- function(weightList = NULL,
     # Save figure
     cowplot::ggsave2(file = "AUC.pdf", p, width = 18, height = 10, units = "cm")
   }
-
   return(auc.metric)
 }

@@ -39,7 +39,7 @@ inferCSN <- function(data = NULL,
     if (verbose) message("Data processing......")
     matrix <- data.processing(data, normalize = normalize, verbose = verbose)
   } else {
-    stop("Please ensure provide an object!")
+    stop("Please ensure provide an object......")
   }
 
   # Check the penalty terms of the regression model
