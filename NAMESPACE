@@ -2,7 +2,10 @@
 
 export(auc.calculate)
 export(compute.gene.rank)
+export(data.ksmooth)
 export(data.processing)
+export(dynamic.genes)
+export(gam.fit)
 export(inferCSN)
 export(inferCSN.fit)
 export(inferCSN.plot)
