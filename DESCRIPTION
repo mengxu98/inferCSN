@@ -20,6 +20,7 @@ Imports:
     dplyr,
     EBSeq,
     foreach,
+    gam,
     ggplot2,
     ggnetwork,
     graphics,
