@@ -6,12 +6,12 @@
 Find genes expressed dynamically
 uses slingshot approach}
 \usage{
-dynamic.genes(matrix, matedata, path = NULL, method = "gam", matrixRaw = NULL)
+dynamic.genes(matrix, metadata, path = NULL, method = "gam", matrixRaw = NULL)
 }
 \arguments{
 \item{matrix}{properly normalized expression matrix}
 
-\item{matedata}{sample table that includes pseudotime, rownames = cells, and a group column}
+\item{metadata}{sample table that includes pseudotime, rownames = cells, and a group column}
 
 \item{path}{vector of group names to include}
 
@@ -19,9 +19,9 @@ dynamic.genes(matrix, matedata, path = NULL, method = "gam", matrixRaw = NULL)
 
 \item{matrixRaw}{raw expression matrix, required if method="tradeseq"}
 
-\item{group_column}{column name in matedata annotating groups in the path}
+\item{group_column}{column name in metadata annotating groups in the path}
 
-\item{pseudotime_column}{column name in matedata annotating pseudotime or latent time}
+\item{pseudotime_column}{column name in metadata annotating pseudotime or latent time}
 }
 \value{
 pvals and cell info
