@@ -1,14 +1,4 @@
 url: https://mengxu98.github.io/inferCSN/
-development:
-  mode: auto
 template:
-  package: rbitemplate
   bootstrap: 5
-home:
-  links:
-  - text: inferCSN
-    href: https://mengxu98.github.io/inferCSN/
-reference:
-- title: pre-built references
-- contents: has_concept("ref")
 
