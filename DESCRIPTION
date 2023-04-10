@@ -1,17 +1,20 @@
 Package: inferCSN
 Type: Package
-Title: inferCSN
+Title: Inferring cell-specific gene regulatory network
 Version: 0.1.0
+Date: 2023-04-10
 Author: MengXu
-Maintainer: The package maintainer <mengxu98@qq.com>
+Maintainer: The package maintainer: MengXu <mengxu98@qq.com>
 Description: A method for inferring cell-specific gene regulatory network from single-cell transcriptome data.
     We will continue to add other omics data in the future work.
+URL: https://mengxu98.github.io/inferCSN/
+BugReports: https://github.com/mengxu98/inferCSN/issues
 License: MIT + file LICENSE
-Encoding: UTF-8
-LazyData: true
+Depends: R (>= 3.3.0)
+SystemRequirements: C++11
+LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.2.3
-Depends: 
-    R (>= 2.10)
+Encoding: UTF-8
 Imports: 
     cowplot,
     doParallel,
@@ -26,15 +29,18 @@ Imports:
     graphics,
     igraph,
     Kendall,
-    L0Learn,
     magrittr,
+    MASS,
+    Matrix,
+    methods,
     modEvA,
     parallel,
     patchwork,
     precrec,
     progress,
     purrr,
+    Rcpp (>= 0.12.13),
+    reshape2,
     ROCR,
     Seurat,
     snow
-URL: https://mengxu98.github.io/inferCSN/
