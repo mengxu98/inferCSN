@@ -29,6 +29,6 @@ AUC value calculate
 \examples{
 data("exampleDataMatrix")
 data("exampleDataGroundTruth")
-weightList <- inferCSN(exampleDataMatrix, cores = 2)
+weightList <- inferCSN(exampleDataMatrix, cores = 1, verbose = TRUE)
 auc <- auc.calculate(weightList, exampleDataGroundTruth)
 }
