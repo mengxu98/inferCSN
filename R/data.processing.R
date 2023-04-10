@@ -56,8 +56,8 @@ data.processing <- function(data,
 #' smooths expression across metadata in path
 #'
 #' @param matrix  expression matrix
+#' @param bandwidth bandwidth
 #' @param metadata sample table that includes "cell"  "pseudotime" "group"
-#' @param bandwith bandwith for kernel smoother
 #'
 #' @return smoothed matrix
 #'

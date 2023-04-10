@@ -5,8 +5,7 @@
 #' @param ... ignore
 #' @method print inferCSN
 #' @export
-print.inferCSN <- function(x, ...)
-{
+print.inferCSN <- function(x, ...) {
 		gammas = rep(x$gamma, times=lapply(x$lambda, length) )
 		data.frame(lambda = unlist(x["lambda"]), gamma = gammas, suppSize = unlist(x["suppSize"]), row.names = NULL)
 }
@@ -14,7 +13,6 @@ print.inferCSN <- function(x, ...)
 #' @rdname print.inferCSN
 #' @method print inferCSNCV
 #' @export
-print.inferCSNCV <- function(x, ...)
-{
+print.inferCSNCV <- function(x, ...) {
     print.inferCSN(x$fit)
 }

@@ -18,10 +18,6 @@ dynamic.genes(matrix, metadata, path = NULL, method = "gam", matrixRaw = NULL)
 \item{method}{method to find dynamic genes. Defaults to "gam", if "tradeseq", must provide matrixRaw}
 
 \item{matrixRaw}{raw expression matrix, required if method="tradeseq"}
-
-\item{group_column}{column name in metadata annotating groups in the path}
-
-\item{pseudotime_column}{column name in metadata annotating pseudotime or latent time}
 }
 \value{
 pvals and cell info

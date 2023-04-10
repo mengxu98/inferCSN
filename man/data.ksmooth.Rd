@@ -12,7 +12,7 @@ data.ksmooth(matrix, metadata, bandwidth = 0.25)
 
 \item{metadata}{sample table that includes "cell"  "pseudotime" "group"}
 
-\item{bandwith}{bandwith for kernel smoother}
+\item{bandwidth}{bandwidth}
 }
 \value{
 smoothed matrix

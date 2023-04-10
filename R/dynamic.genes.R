@@ -5,11 +5,10 @@
 #' @param matrix properly normalized expression matrix
 #' @param metadata sample table that includes pseudotime, rownames = cells, and a group column
 #' @param path vector of group names to include
-#' @param group_column column name in metadata annotating groups in the path
-#' @param pseudotime_column column name in metadata annotating pseudotime or latent time
 #' @param method method to find dynamic genes. Defaults to "gam", if "tradeseq", must provide matrixRaw
 #' @param matrixRaw raw expression matrix, required if method="tradeseq"
 #'
+#' @import tradeSeq
 #' @return pvals and cell info
 #'
 #' @export
