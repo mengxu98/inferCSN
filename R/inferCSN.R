@@ -93,7 +93,7 @@ inferCSN <- function(data = NULL,
 
       y <- targetsMatrix[, targets[i]]
 
-      temp <- inferCSN.fit(
+      temp <- inferCSN.core(
         X, y,
         penalty = penalty,
         crossValidation = crossValidation,
@@ -132,7 +132,7 @@ inferCSN <- function(data = NULL,
     weightList <- foreach::foreach(
       target = targets,
       .combine = "rbind",
-      .export = "inferCSN.fit",
+      .export = "inferCSN.core",
       .packages = c("Kendall"),
       .options.snow = opts
     ) %dopar% {
@@ -140,7 +140,7 @@ inferCSN <- function(data = NULL,
 
       y <- targetsMatrix[, target]
 
-      temp <- inferCSN.fit(
+      temp <- inferCSN.core(
         X, y,
         penalty = penalty,
         crossValidation = crossValidation,
@@ -170,7 +170,7 @@ inferCSN <- function(data = NULL,
     #     foreach::foreach(
     #       target = targets,
     #       .combine = "rbind",
-    #       .export = "inferCSN.fit",
+    #       .export = "inferCSN.core",
     #       .packages = c("doParallel", "dplyr")
     #     ), {
     #
@@ -178,7 +178,7 @@ inferCSN <- function(data = NULL,
     #
     #       y <- targetsMatrix[, target]
     #
-    #       temp <- inferCSN.fit(
+    #       temp <- inferCSN.core(
     #         X, y,
     #         penalty = penalty,
     #         crossValidation = crossValidation,
