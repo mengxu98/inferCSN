@@ -1,7 +1,7 @@
 Package: inferCSN
 Type: Package
 Title: Inferring cell-specific gene regulatory network
-Version: 0.1.0
+Version: 0.1.1
 Date: 2023-04-10
 Author: MengXu
 Maintainer: The package maintainer: MengXu <mengxu98@qq.com>
