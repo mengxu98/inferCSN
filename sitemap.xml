@@ -16,15 +16,6 @@
     <loc>https://mengxu98.github.io/inferCSN/index.html</loc>
   </url>
   <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/GenSynthetic.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/GenSyntheticHighCorr.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/GenSyntheticLogistic.html</loc>
-  </url>
-  <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/auc.calculate.html</loc>
   </url>
   <url>
@@ -32,6 +23,15 @@
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/compute.gene.rank.html</loc>
+  </url>
+  <url>
+    <loc>https://mengxu98.github.io/inferCSN/reference/cross_corr.html</loc>
+  </url>
+  <url>
+    <loc>https://mengxu98.github.io/inferCSN/reference/crossweight.html</loc>
+  </url>
+  <url>
+    <loc>https://mengxu98.github.io/inferCSN/reference/crossweight_params.html</loc>
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/data.ksmooth.html</loc>
@@ -76,15 +76,9 @@
     <loc>https://mengxu98.github.io/inferCSN/reference/net.format.html</loc>
   </url>
   <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/plot.inferCSN.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/plot.inferCSNCV.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/predict.inferCSN.html</loc>
-  </url>
-  <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/print.inferCSN.html</loc>
+  </url>
+  <url>
+    <loc>https://mengxu98.github.io/inferCSN/reference/score_offset.html</loc>
   </url>
 </urlset>
