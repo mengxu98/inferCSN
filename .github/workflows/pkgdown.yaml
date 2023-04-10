@@ -44,5 +44,3 @@ jobs:
           clean: false
           branch: gh-pages
           folder: docs
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
