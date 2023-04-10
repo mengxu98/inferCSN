@@ -14,7 +14,7 @@
 #' @return A vector
 #' @export
 #'
-inferCSN.fit <- function(X, y,
+inferCSN.core <- function(X, y,
                          crossValidation = crossValidation,
                          penalty = penalty,
                          maxSuppSize = maxSuppSize,
@@ -23,7 +23,7 @@ inferCSN.fit <- function(X, y,
                          verbose = verbose) {
   if (crossValidation) {
     tryCatch({
-      fit <- L0Learn::L0Learn.cvfit(X, y,
+      fit <- inferCSN.cvfit(X, y,
                                       penalty = penalty,
                                       maxSuppSize = maxSuppSize,
                                       nFolds = nFolds,
@@ -45,7 +45,7 @@ inferCSN.fit <- function(X, y,
     },
       error = function(e) {
         if (verbose) message("Cross validation error, used fit instead......")
-        fit <- L0Learn::L0Learn.fit(X, y,
+        fit <- inferCSN.fit(X, y,
                                     penalty = penalty,
                                     maxSuppSize = maxSuppSize,
                                     nGamma = nGamma
@@ -57,7 +57,7 @@ inferCSN.fit <- function(X, y,
       }
     )
   } else {
-    fit <- L0Learn::L0Learn.fit(X, y,
+    fit <- inferCSN.fit(X, y,
                                 penalty = penalty,
                                 maxSuppSize = maxSuppSize,
                                 nGamma = nGamma
