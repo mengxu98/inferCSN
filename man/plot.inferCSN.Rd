@@ -18,13 +18,3 @@
 \description{
 Plots the regularization path for a given gamma.
 }
-\examples{
-# Generate synthetic data for this example
-data <- GenSynthetic(n=500,p=1000,k=10,seed=1)
-X = data$X
-y = data$y
-# Fit an L0 Model with a maximum of 50 non-zeros
-fit <- inferCSN.fit(X, y, penalty="L0", maxSuppSize=50)
-plot(fit, gamma=0)
-
-}
