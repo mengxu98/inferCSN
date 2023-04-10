@@ -63,251 +63,219 @@
 #' \item{converged}{This is a list of sequences for checking whether the algorithm has converged at every grid point. The ith element of the list is a sequence
 #' corresponding to the ith value of gamma, where the jth element in each sequence indicates whether the algorithm has converged at the jth value of lambda.}
 #'
-#' @examples
-#' # Generate synthetic data for this example
-#' data <- GenSynthetic(n=500,p=1000,k=10,seed=1)
-#' X = data$X
-#' y = data$y
-#'
-#' # Fit an L0 regression model with a maximum of 50 non-zeros using coordinate descent (CD)
-#' fit1 <- inferCSN.fit(X, y, penalty="L0", maxSuppSize=50)
-#' print(fit1)
-#' # Extract the coefficients at lambda = 0.0325142
-#' coef(fit1, lambda=0.0325142)
-#' # Apply the fitted model on X to predict the response
-#' predict(fit1, newx = X, lambda=0.0325142)
-#'
-#' # Fit an L0 regression model with a maximum of 50 non-zeros using CD and local search
-#' fit2 <- inferCSN.fit(X, y, penalty="L0", algorithm="CDPSI", maxSuppSize=50)
-#' print(fit2)
-#'
-#' # Fit an L0L2 regression model with 10 values of Gamma ranging from 0.0001 to 10, using CD
-#' fit3 <- inferCSN.fit(X, y, penalty="L0L2", maxSuppSize=50, nGamma=10, gammaMin=0.0001, gammaMax = 10)
-#' print(fit3)
-#' # Extract the coefficients at lambda = 0.0361829 and gamma = 0.0001
-#' coef(fit3, lambda=0.0361829, gamma=0.0001)
-#' # Apply the fitted model on X to predict the response
-#' predict(fit3, newx = X, lambda=0.0361829, gamma=0.0001)
-#'
-#' # Fit an L0 logistic regression model
-#' # First, convert the response to binary
-#' y = sign(y)
-#' fit4 <- inferCSN.fit(X, y, loss="Logistic", maxSuppSize=20)
-#' print(fit4)
-#'
 #' @export
 inferCSN.fit <- function(x, y, loss="SquaredError", penalty="L0", algorithm="CD",
-                        maxSuppSize=100, nLambda=100, nGamma=10, gammaMax=10,
-                        gammaMin=0.0001, partialSort = TRUE, maxIters=200,
-						rtol=1e-6, atol=1e-9, activeSet=TRUE, activeSetNum=3, maxSwaps=100,
-						scaleDownFactor=0.8, screenSize=1000, autoLambda = NULL,
-						lambdaGrid = list(), excludeFirstK=0, intercept = TRUE,
-						lows=-Inf, highs=Inf) {
+                         maxSuppSize=100, nLambda=100, nGamma=10, gammaMax=10,
+                         gammaMin=0.0001, partialSort = TRUE, maxIters=200,
+                         rtol=1e-6, atol=1e-9, activeSet=TRUE, activeSetNum=3, maxSwaps=100,
+                         scaleDownFactor=0.8, screenSize=1000, autoLambda = NULL,
+                         lambdaGrid = list(), excludeFirstK=0, intercept = TRUE,
+                         lows=-Inf, highs=Inf) {
 
-    if ((rtol < 0) || (rtol >= 1)){
-        stop("The specified rtol parameter must exist in [0, 1)")
+  if ((rtol < 0) || (rtol >= 1)){
+    stop("The specified rtol parameter must exist in [0, 1)")
+  }
+
+  if (atol < 0){
+    stop("The specified atol parameter must exist in [0, INF)")
+  }
+
+  # Some sanity checks for the inputs
+  if ( !(loss %in% c("SquaredError","Logistic","SquaredHinge")) ){
+    stop("The specified loss function is not supported.")
+  }
+  if ( !(penalty %in% c("L0","L0L2","L0L1")) ){
+    stop("The specified penalty is not supported.")
+  }
+  if ( !(algorithm %in% c("CD","CDPSI")) ){
+    stop("The specified algorithm is not supported.")
+  }
+  if (loss=="Logistic" | loss=="SquaredHinge"){
+    if (dim(table(y)) != 2){
+      stop("Only binary classification is supported. Make sure y has only 2 unique values.")
     }
+    y = factor(y,labels=c(-1,1)) # returns a vector of strings
+    y = as.numeric(levels(y))[y]
 
-    if (atol < 0){
-        stop("The specified atol parameter must exist in [0, INF)")
-    }
+    if (penalty == "L0"){
+      # Pure L0 is not supported for classification
+      # Below we add a small L2 component.
 
-	# Some sanity checks for the inputs
-	if ( !(loss %in% c("SquaredError","Logistic","SquaredHinge")) ){
-			stop("The specified loss function is not supported.")
-	}
-	if ( !(penalty %in% c("L0","L0L2","L0L1")) ){
-			stop("The specified penalty is not supported.")
-	}
-	if ( !(algorithm %in% c("CD","CDPSI")) ){
-			stop("The specified algorithm is not supported.")
-	}
-	if (loss=="Logistic" | loss=="SquaredHinge"){
-			if (dim(table(y)) != 2){
-					stop("Only binary classification is supported. Make sure y has only 2 unique values.")
-			}
-			y = factor(y,labels=c(-1,1)) # returns a vector of strings
-			y = as.numeric(levels(y))[y]
-
-			if (penalty == "L0"){
-					# Pure L0 is not supported for classification
-					# Below we add a small L2 component.
-
-    			    if ((length(lambdaGrid) != 0) && (length(lambdaGrid) != 1)){
-    			        # If this error checking was left to the lower section, it would confuse users as
-    			        # we are converting L0 to L0L2 with small L2 penalty.
-    			        # Here we must check if lambdaGrid is supplied (And thus use 'autolambda')
-    			        # If 'lambdaGrid' is supplied, we must only supply 1 list of lambda values
+      if ((length(lambdaGrid) != 0) && (length(lambdaGrid) != 1)){
+        # If this error checking was left to the lower section, it would confuse users as
+        # we are converting L0 to L0L2 with small L2 penalty.
+        # Here we must check if lambdaGrid is supplied (And thus use 'autolambda')
+        # If 'lambdaGrid' is supplied, we must only supply 1 list of lambda values
 
 
-    			        stop("L0 Penalty requires 'lambdaGrid' to be a list of length 1.
+        stop("L0 Penalty requires 'lambdaGrid' to be a list of length 1.
     			             Where lambdaGrid[[1]] is a list or vector of decreasing positive values.")
-    			    }
-					penalty = "L0L2"
-					nGamma = 1
-					gammaMax = 1e-7
-					gammaMin = 1e-7
-			}
-	}
+      }
+      penalty = "L0L2"
+      nGamma = 1
+      gammaMax = 1e-7
+      gammaMin = 1e-7
+    }
+  }
 
-    # Handle Lambda Grids:
-    if (length(lambdaGrid) != 0){
-        if (!is.null(autoLambda)){
-            warning("In inferCSN V2+, autoLambda is ignored and inferred if 'lambdaGrid' is supplied", call.=FALSE)
-        }
-        autoLambda = FALSE
-    } else {
-        autoLambda = TRUE
-        lambdaGrid = list(0)
+  # Handle Lambda Grids:
+  if (length(lambdaGrid) != 0){
+    if (!is.null(autoLambda)){
+      warning("In inferCSN V2+, autoLambda is ignored and inferred if 'lambdaGrid' is supplied", call.=FALSE)
+    }
+    autoLambda = FALSE
+  } else {
+    autoLambda = TRUE
+    lambdaGrid = list(0)
+  }
+
+  if (penalty == "L0" && !autoLambda){
+    bad_lambdaGrid = FALSE
+    if (length(lambdaGrid) != 1){
+      bad_lambdaGrid = TRUE
+    }
+    current = Inf
+    for (nxt in lambdaGrid[[1]]){
+      if (nxt > current){
+        # This must be > instead of >= to allow first iteration L0L1 lambdas of all 0s to be valid
+        bad_lambdaGrid = TRUE
+        break
+      }
+      if (nxt < 0){
+        bad_lambdaGrid = TRUE
+        break
+      }
+      current = nxt
+
     }
 
-    if (penalty == "L0" && !autoLambda){
-        bad_lambdaGrid = FALSE
-        if (length(lambdaGrid) != 1){
-            bad_lambdaGrid = TRUE
-        }
-        current = Inf
-        for (nxt in lambdaGrid[[1]]){
-            if (nxt > current){
-                # This must be > instead of >= to allow first iteration L0L1 lambdas of all 0s to be valid
-                bad_lambdaGrid = TRUE
-                break
-            }
-            if (nxt < 0){
-                bad_lambdaGrid = TRUE
-                break
-            }
-            current = nxt
-
-        }
-
-        if (bad_lambdaGrid){
-            stop("L0 Penalty requires 'lambdaGrid' to be a list of length 1.
+    if (bad_lambdaGrid){
+      stop("L0 Penalty requires 'lambdaGrid' to be a list of length 1.
                  Where lambdaGrid[[1]] is a list or vector of decreasing positive values.")
-        }
+    }
+  }
+
+  if (penalty != "L0" && !autoLambda){
+    # Covers L0L1, L0L2 cases
+    bad_lambdaGrid = FALSE
+    if (length(lambdaGrid) != nGamma){
+      warning("In inferCSN V2+, nGamma is ignored and replaced with length(lambdaGrid)", call.=FALSE)
+      nGamma = length(lambdaGrid)
+      # bad_lambdaGrid = TRUE # Remove in V2.0,0
     }
 
-    if (penalty != "L0" && !autoLambda){
-        # Covers L0L1, L0L2 cases
-        bad_lambdaGrid = FALSE
-        if (length(lambdaGrid) != nGamma){
-            warning("In inferCSN V2+, nGamma is ignored and replaced with length(lambdaGrid)", call.=FALSE)
-            nGamma = length(lambdaGrid)
-            # bad_lambdaGrid = TRUE # Remove in V2.0,0
+    for (i in 1:length(lambdaGrid)){
+      current = Inf
+      for (nxt in lambdaGrid[[i]]){
+        if (nxt > current){
+          # This must be > instead of >= to allow first iteration L0L1 lambdas of all 0s to be valid
+          bad_lambdaGrid = TRUE
+          break
         }
-
-        for (i in 1:length(lambdaGrid)){
-            current = Inf
-            for (nxt in lambdaGrid[[i]]){
-                if (nxt > current){
-                    # This must be > instead of >= to allow first iteration L0L1 lambdas of all 0s to be valid
-                    bad_lambdaGrid = TRUE
-                    break
-                }
-                if (nxt < 0){
-                    bad_lambdaGrid = TRUE
-                    break
-                }
-                current = nxt
-            }
-            if (bad_lambdaGrid){
-                break
-            }
+        if (nxt < 0){
+          bad_lambdaGrid = TRUE
+          break
         }
+        current = nxt
+      }
+      if (bad_lambdaGrid){
+        break
+      }
+    }
 
-        if (bad_lambdaGrid){
-            stop("L0L1 or L0L2 Penalty requires 'lambdaGrid' to be a list of length 'nGamma'.
+    if (bad_lambdaGrid){
+      stop("L0L1 or L0L2 Penalty requires 'lambdaGrid' to be a list of length 'nGamma'.
                  Where lambdaGrid[[i]] is a list or vector of decreasing positive values.")
-        }
-
-
     }
 
-    is.scalar <- function(x) is.atomic(x) && length(x) == 1L && !is.character(x) && Im(x)==0 && !is.nan(x) && !is.na(x)
 
-    p = dim(x)[[2]]
+  }
 
-    withBounds = FALSE
+  is.scalar <- function(x) is.atomic(x) && length(x) == 1L && !is.character(x) && Im(x)==0 && !is.nan(x) && !is.na(x)
 
-    if ((!identical(lows, -Inf)) || (!identical(highs, Inf))){
-        withBounds = TRUE
+  p = dim(x)[[2]]
 
-        if (algorithm == "CDPSI"){
-            if (any(lows != -Inf) || any(highs != Inf)){
-                stop("Bounds are not YET supported for CDPSI algorithm. Please raise
+  withBounds = FALSE
+
+  if ((!identical(lows, -Inf)) || (!identical(highs, Inf))){
+    withBounds = TRUE
+
+    if (algorithm == "CDPSI"){
+      if (any(lows != -Inf) || any(highs != Inf)){
+        stop("Bounds are not YET supported for CDPSI algorithm. Please raise
                      an issue at 'https://github.com/hazimehh/inferCSN' to express
                      interest in this functionality")
-            }
-        }
-
-        if (is.scalar(lows)){
-            lows = lows*rep(1, p)
-        } else if (!all(sapply(lows, is.scalar)) || length(lows) != p) {
-            stop('Lows must be a vector of real values of length p')
-        }
-
-        if (is.scalar(highs)){
-            highs = highs*rep(1, p)
-        } else if (!all(sapply(highs, is.scalar)) || length(highs) != p) {
-            stop('Highs must be a vector of real values of length p')
-        }
-
-        if (any(lows >= highs) || any(lows > 0) || any(highs < 0)){
-            stop("Bounds must conform to the following conditions: Lows <= 0, Highs >= 0, Lows < Highs")
-        }
-
+      }
     }
 
-    M = list()
-    if (is(x, "sparseMatrix")){
-        M <- .Call('_inferCSN_inferCSNFit_sparse', PACKAGE = 'inferCSN', x, y, loss, penalty,
-                   algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
-                   partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
-                   scaleDownFactor, screenSize, !autoLambda, lambdaGrid,
-                   excludeFirstK, intercept, withBounds, lows, highs)
-    } else{
-        M <- .Call('_inferCSN_inferCSNFit_dense', PACKAGE = 'inferCSN', x, y, loss, penalty,
-                   algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
-                   partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
-                   scaleDownFactor, screenSize, !autoLambda, lambdaGrid,
-                   excludeFirstK, intercept, withBounds, lows, highs)
+    if (is.scalar(lows)){
+      lows = lows*rep(1, p)
+    } else if (!all(sapply(lows, is.scalar)) || length(lows) != p) {
+      stop('Lows must be a vector of real values of length p')
     }
 
-	# The C++ function uses LambdaU = 1 for user-specified grid. In R, we use autoLambda0 = 0 for user-specified grid (thus the negation when passing the parameter to the function below)
+    if (is.scalar(highs)){
+      highs = highs*rep(1, p)
+    } else if (!all(sapply(highs, is.scalar)) || length(highs) != p) {
+      stop('Highs must be a vector of real values of length p')
+    }
 
-	settings = list()
-	settings[[1]] = intercept # Settings only contains intercept for now. Might include additional elements later.
-	names(settings) <- c("intercept")
+    if (any(lows >= highs) || any(lows > 0) || any(highs < 0)){
+      stop("Bounds must conform to the following conditions: Lows <= 0, Highs >= 0, Lows < Highs")
+    }
 
-	# Find potential support sizes exceeding maxSuppSize and remove them (this is due to
-	# the C++ core whose last solution can exceed maxSuppSize
-	for (i in 1:length(M$SuppSize)){
-			last = length(M$SuppSize[[i]])
-			if (M$SuppSize[[i]][last] > maxSuppSize){
-					if (last == 1){
-							warning("Warning! Only 1 element in path with support size > maxSuppSize. \n Try increasing maxSuppSize to resolve the issue.")
-					} else{
-							M$SuppSize[[i]] = M$SuppSize[[i]][-last]
-							M$Converged[[i]] = M$Converged[[i]][-last]
-							M$lambda[[i]] = M$lambda[[i]][-last]
-							M$a0[[i]] = M$a0[[i]][-last]
-							M$beta[[i]] = as(M$beta[[i]][,-last], "sparseMatrix") # conversion to sparseMatrix is necessary to handle the case of a single column
-					}
-			}
-	}
+  }
 
-	G <- list(beta = M$beta, lambda=lapply(M$lambda,signif, digits=6), a0=M$a0, converged = M$Converged, suppSize= M$SuppSize, gamma=M$gamma, penalty=penalty, loss=loss, settings = settings)
+  M = list()
+  if (is(x, "sparseMatrix")){
+    M <- .Call('_inferCSN_inferCSNFit_sparse', PACKAGE = 'inferCSN', x, y, loss, penalty,
+               algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
+               partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
+               scaleDownFactor, screenSize, !autoLambda, lambdaGrid,
+               excludeFirstK, intercept, withBounds, lows, highs)
+  } else{
+    M <- .Call('_inferCSN_inferCSNFit_dense', PACKAGE = 'inferCSN', x, y, loss, penalty,
+               algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
+               partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
+               scaleDownFactor, screenSize, !autoLambda, lambdaGrid,
+               excludeFirstK, intercept, withBounds, lows, highs)
+  }
+
+  # The C++ function uses LambdaU = 1 for user-specified grid. In R, we use autoLambda0 = 0 for user-specified grid (thus the negation when passing the parameter to the function below)
+
+  settings = list()
+  settings[[1]] = intercept # Settings only contains intercept for now. Might include additional elements later.
+  names(settings) <- c("intercept")
+
+  # Find potential support sizes exceeding maxSuppSize and remove them (this is due to
+  # the C++ core whose last solution can exceed maxSuppSize
+  for (i in 1:length(M$SuppSize)){
+    last = length(M$SuppSize[[i]])
+    if (M$SuppSize[[i]][last] > maxSuppSize){
+      if (last == 1){
+        warning("Warning! Only 1 element in path with support size > maxSuppSize. \n Try increasing maxSuppSize to resolve the issue.")
+      } else{
+        M$SuppSize[[i]] = M$SuppSize[[i]][-last]
+        M$Converged[[i]] = M$Converged[[i]][-last]
+        M$lambda[[i]] = M$lambda[[i]][-last]
+        M$a0[[i]] = M$a0[[i]][-last]
+        M$beta[[i]] = as(M$beta[[i]][,-last], "sparseMatrix") # conversion to sparseMatrix is necessary to handle the case of a single column
+      }
+    }
+  }
+
+  G <- list(beta = M$beta, lambda=lapply(M$lambda,signif, digits=6), a0=M$a0, converged = M$Converged, suppSize= M$SuppSize, gamma=M$gamma, penalty=penalty, loss=loss, settings = settings)
 
 
-	if (is.null(colnames(x))){
-			varnames <- 1:dim(x)[2]
-	} else {
-			varnames <- colnames(x)
-	}
-	G$varnames <- varnames
+  if (is.null(colnames(x))){
+    varnames <- 1:dim(x)[2]
+  } else {
+    varnames <- colnames(x)
+  }
+  G$varnames <- varnames
 
-	class(G) <- "inferCSN"
-	G$n <- dim(x)[1]
-	G$p <- dim(x)[2]
-	G
+  class(G) <- "inferCSN"
+  G$n <- dim(x)[1]
+  G$p <- dim(x)[2]
+  G
 }
