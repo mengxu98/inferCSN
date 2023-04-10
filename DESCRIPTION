@@ -15,32 +15,36 @@ SystemRequirements: C++11
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.2.3
 Encoding: UTF-8
-Imports: 
-    cowplot,
+Imports:
     doParallel,
     doRNG,
     doSNOW,
     dplyr,
-    EBSeq,
     foreach,
+    igraph,
+    Kendall,
+    magrittr,
+    modEvA,
+    patchwork,
+    parallel,
+    progress,
+    purrr,
+    Rcpp (>= 0.12.13),
+    snow,
+    Matrix,
+    methods,
+    tradeSeq
+Suggests: 
+    cowplot,
+    Seurat,
+    reshape2,
+    precrec,
+    MASS,
     gam,
     ggplot2,
     ggnetwork,
     graphics,
-    igraph,
-    Kendall,
-    magrittr,
-    MASS,
-    Matrix,
-    methods,
-    modEvA,
-    parallel,
-    patchwork,
-    precrec,
-    progress,
-    purrr,
-    Rcpp (>= 0.12.13),
-    reshape2,
     ROCR,
-    Seurat,
-    snow
+    EBSeq
+biocViews: tradeSeq
+    
