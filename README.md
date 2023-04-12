@@ -4,7 +4,7 @@
 
 ## **Install**
 
-### Using `devtools` {style="color: gray"}
+### Using `devtools`
 
 ``` r
 # install.packages("devtools")
@@ -13,7 +13,7 @@ devtools::install_github("hazimehh/L0Learn")
 devtools::install_github("mengxu98/inferCSN")
 ```
 
-### Using `clone` {style="color: gray"}
+### Using `clone`
 
 ``` bash
 git clone https://github.com/mengxu98/inferCSN.git
