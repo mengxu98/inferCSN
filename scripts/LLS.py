@@ -82,6 +82,7 @@ def run_benchmark_LLS(target_network,
     # Calculate positive, negative pairs
     pos = 0
     for g in gold_standard_pairs:
+        print("Now: ", "----- ", g)
         pos += len(gold_standard_pairs[g])
 
     pos /= 2
@@ -146,14 +147,20 @@ def run_benchmark_LLS(target_network,
                     exit()
             else:
                 lls = 20.0
+
+            print("lls", lls)
+            
+
             if binTP != 0:
                 if binFP != 0:
                     binlls = log((float(binTP)/float(binFP)) /
-                                 priorprob) / log(2)
+                                    priorprob) / log(2)
                 else:
                     binlls = 20.0
             else:
                 binlls = -5.0
+
+            print("binlls: ", binlls)
 
             # save result
             benchdata[count] = {"cumLLS": lls, "TP": TP, "FP": FP, "MeanBinStatistics": np.mean(
@@ -184,11 +191,15 @@ def run_benchmark_LLS(target_network,
     return pd.DataFrame().from_dict(benchdata).T
 
 
-# "/home3/junhacha/test/network_test/condLLS_test/sorted_network_file.tsv"
-corrnetpath = sys.argv[1]
-# genelistfile = sys.argv[2] #"/home3/junhacha/test/network_test/condLLS_test/genelist.txt"
+# "/test/network_test/condLLS_test/sorted_network_file.tsv"
+# corrnetpath = sys.argv[1]
+corrnetpath = "net.txt"
+
+# genelistfile = sys.argv[2] #"/test/network_test/condLLS_test/genelist.txt"
 # [name] [des] [gene1] [g2] [g3] ....
-gsdatapath = "/home3/junhacha/public_Data/gold_standard_symbol_HNv3"
+
+# gsdatapath = "/public_Data/gold_standard_symbol_HNv3"
+gsdatapath = "test.txt"
 # genelist = list() #this is the genespace critical for conLLS
 
 '''
@@ -196,6 +207,7 @@ if (method != 'sort' and method != 'absort'):
     print('wrong sorting method, type sort or absort')
     exit()
 '''
+
 '''
 #genelist into list
 with open(genelistfile,'r') as fp:
@@ -227,6 +239,9 @@ gspairs = load_gold_standard_pairs(gsdatapath)
 # calcuate benchmark and output
 print('calculate LLS...')
 benchdata = run_benchmark_LLS(edges_all, gspairs)
+# target_network = edges_all
+# gold_standard_pairs = gspairs
 
 print('write output...analysis complete')
 benchdata.to_csv(f"{corrnetpath}.binlls", sep='\t')
+# benchdata.to_csv(f"{corrnetpath}.binlls.csv", sep='\t')
