@@ -25,13 +25,13 @@
     <loc>https://mengxu98.github.io/inferCSN/reference/compute.gene.rank.html</loc>
   </url>
   <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/cross_corr.html</loc>
+    <loc>https://mengxu98.github.io/inferCSN/reference/cross.corr.html</loc>
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/crossweight.html</loc>
   </url>
   <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/crossweight_params.html</loc>
+    <loc>https://mengxu98.github.io/inferCSN/reference/crossweight.params.html</loc>
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/data.ksmooth.html</loc>
@@ -43,19 +43,22 @@
     <loc>https://mengxu98.github.io/inferCSN/reference/dynamic.genes.html</loc>
   </url>
   <url>
+    <loc>https://mengxu98.github.io/inferCSN/reference/dynamic.networks.html</loc>
+  </url>
+  <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/exampleDataGroundTruth.html</loc>
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/exampleDataMatrix.html</loc>
   </url>
   <url>
+    <loc>https://mengxu98.github.io/inferCSN/reference/figure.format.html</loc>
+  </url>
+  <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/gam.fit.html</loc>
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/inferCSN.core.html</loc>
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/inferCSN.cvfit.html</loc>
@@ -67,18 +70,15 @@
     <loc>https://mengxu98.github.io/inferCSN/reference/inferCSN.html</loc>
   </url>
   <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/inferCSN.plot.dynamic.networks.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/inferCSN.plot.html</loc>
-  </url>
-  <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/net.format.html</loc>
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/print.inferCSN.html</loc>
   </url>
   <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/score_offset.html</loc>
+    <loc>https://mengxu98.github.io/inferCSN/reference/score.offset.html</loc>
+  </url>
+  <url>
+    <loc>https://mengxu98.github.io/inferCSN/reference/sparse.regression.html</loc>
   </url>
 </urlset>

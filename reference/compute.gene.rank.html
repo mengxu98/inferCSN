@@ -65,7 +65,7 @@
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A data.table with three columns.</p>
+<p>A data.table with three columns</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -76,7 +76,8 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"exampleDataMatrix"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">weightList</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">exampleDataMatrix</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">compute.gene.rank</span><span class="op">(</span><span class="va">weightList</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ranks</span> <span class="op">&lt;-</span> <span class="fu">compute.gene.rank</span><span class="op">(</span><span class="va">weightList</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ranks</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     gene   pageRank is_regulator</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> g18  g18 0.06780223         TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> g17  g17 0.06509984         TRUE</span>
@@ -84,18 +85,6 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> g4    g4 0.05731333         TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> g14  g14 0.05714662         TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> g13  g13 0.05675850         TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g11  g11 0.05661139         TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g16  g16 0.05645302         TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g7    g7 0.05554882         TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g10  g10 0.05539587         TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g6    g6 0.05503414         TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g9    g9 0.05479741         TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g5    g5 0.05458000         TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g8    g8 0.05424040         TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g3    g3 0.05372278         TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g12  g12 0.05354519         TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g2    g2 0.04605371         TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g1    g1 0.04249759         TRUE</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

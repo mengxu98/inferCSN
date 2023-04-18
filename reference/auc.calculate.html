@@ -52,7 +52,8 @@
 <span>  weightList <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  groundTruth <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  groundTruthTPath <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  plot <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  plot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  fileSave <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -71,7 +72,11 @@
 
 
 <dt>plot</dt>
-<dd><p>[Default = FALSE] plot</p></dd>
+<dd><p>Logic value</p></dd>
+
+
+<dt>fileSave</dt>
+<dd><p>The figure name</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -85,11 +90,15 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"exampleDataMatrix"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"exampleDataGroundTruth"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">weightList</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">exampleDataMatrix</span>, cores <span class="op">=</span> <span class="fl">1</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">weightList</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">exampleDataMatrix</span>, cores <span class="op">=</span> <span class="fl">1</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, algorithm <span class="op">=</span> <span class="st">"CDPSI"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Data processing......</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using L0 penalty regression......</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using  L0 fit......</span>
-<span class="r-in"><span><span class="va">auc</span> <span class="op">&lt;-</span> <span class="fu">auc.calculate</span><span class="op">(</span><span class="va">weightList</span>, <span class="va">exampleDataGroundTruth</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using L0 fit......</span>
+<span class="r-in"><span><span class="va">auc</span> <span class="op">&lt;-</span> <span class="fu">auc.calculate</span><span class="op">(</span><span class="va">weightList</span>, <span class="va">exampleDataGroundTruth</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="auc.calculate-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">auc</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       AUROC     AUPRC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.9558256 0.4332408</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
