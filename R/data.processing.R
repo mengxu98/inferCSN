@@ -1,15 +1,15 @@
-#' data.processing
+#' @title data.processing
 #'
-#' @param data An object
-#' @param normalize Data normalize
-#' @param verbose Print detailed information
+#' @param data [Default = NULL] A matrix, data table, Seurat or SingleCellExperiment object
+#' @param normalize [Default = FALSE] Data normalize
+#' @param verbose [Default = FALSE] Print detailed information
 #'
 #' @return Matrix
 #' @export
 #'
 data.processing <- function(data,
-                            normalize = normalize,
-                            verbose = verbose) {
+                            normalize = FALSE,
+                            verbose = FALSE) {
   if (class(data)[1] == "matrix") {
     matrix <- t(data)
   } else if (class(data)[1] == "data.frame") {
@@ -52,8 +52,9 @@ data.processing <- function(data,
   return(matrix)
 }
 
-#' smooths expression
-#' smooths expression across metadata in path
+#' @title smooths expression
+#' @description
+#'  smooths expression across metadata in path
 #'
 #' @param matrix  expression matrix
 #' @param bandwidth bandwidth

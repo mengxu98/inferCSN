@@ -2,9 +2,7 @@
 % Please edit documentation in R/dynamic.genes.R
 \name{dynamic.genes}
 \alias{dynamic.genes}
-\title{dynamic.genes
-Find genes expressed dynamically
-uses slingshot approach}
+\title{dynamic.genes}
 \usage{
 dynamic.genes(matrix, metadata, path = NULL, method = "gam", matrixRaw = NULL)
 }
@@ -23,7 +21,5 @@ dynamic.genes(matrix, metadata, path = NULL, method = "gam", matrixRaw = NULL)
 pvals and cell info
 }
 \description{
-dynamic.genes
-Find genes expressed dynamically
-uses slingshot approach
+Find genes expressed dynamically using slingshot approach
 }

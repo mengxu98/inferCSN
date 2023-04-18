@@ -8,7 +8,8 @@ auc.calculate(
   weightList = NULL,
   groundTruth = NULL,
   groundTruthTPath = NULL,
-  plot = FALSE
+  plot = FALSE,
+  fileSave = NULL
 )
 }
 \arguments{
@@ -18,7 +19,9 @@ auc.calculate(
 
 \item{groundTruthTPath}{groundTruthTPath}
 
-\item{plot}{[Default = FALSE] plot}
+\item{plot}{Logic value}
+
+\item{fileSave}{The figure name}
 }
 \value{
 AUC values and AUC plot
@@ -29,6 +32,7 @@ AUC value calculate
 \examples{
 data("exampleDataMatrix")
 data("exampleDataGroundTruth")
-weightList <- inferCSN(exampleDataMatrix, cores = 1, verbose = TRUE)
-auc <- auc.calculate(weightList, exampleDataGroundTruth)
+weightList <- inferCSN(exampleDataMatrix, cores = 1, verbose = TRUE, algorithm = "CDPSI")
+auc <- auc.calculate(weightList, exampleDataGroundTruth, plot = TRUE)
+head(auc)
 }

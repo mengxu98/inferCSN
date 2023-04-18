@@ -1,5 +1,5 @@
-#' @title Plot of dynamic networks
-#' @description Plot
+#' @title dynamic.networks
+#' @description Plot of dynamic networks
 #'
 #' @param weightList weightList
 #' @param regulators [Default = NULL] regulators
@@ -14,13 +14,14 @@
 #' @examples
 #' data("exampleDataMatrix")
 #' weightList <- inferCSN(exampleDataMatrix)
-#' inferCSN.plot.dynamic.networks(weightList)
-inferCSN.plot.dynamic.networks <- function(weightList,
-                                           regulators = NULL,
-                                           onlyRegulators = TRUE,
-                                           order = NULL,
-                                           thresh = NULL,
-                                           legend.position = "right") {
+#' p <- dynamic.networks(weightList)
+#' p
+dynamic.networks <- function(weightList,
+                                  regulators = NULL,
+                                  onlyRegulators = TRUE,
+                                  order = NULL,
+                                  thresh = NULL,
+                                  legend.position = "right") {
   # Format input data
   weightList <- net.format(
     weightList,
@@ -94,7 +95,7 @@ inferCSN.plot.dynamic.networks <- function(weightList,
 #' @export
 #'
 net.format <- function(weightList,
-                       regulators = regulators) {
+                       regulators = NULL) {
   colnames(weightList) <- c("regulator", "target", "weight")
   if (!is.null(regulators)) {
     weightList <- purrr::map_dfr(
@@ -108,55 +109,4 @@ net.format <- function(weightList,
   weightList$Interaction[weightList$weight < 0] <- "Repression"
   weightList$weight <- abs(weightList$weight)
   return(weightList)
-}
-
-#' inferCSN.plot
-#' @description Plot
-#'
-#' @param data A long data table
-#' @param plotType boxplot
-#'
-#' @importFrom graphics "boxplot"
-#' @return A ggplot2 object
-#' @export
-#'
-inferCSN.plot <- function(data, plotType = NULL) {
-  if (is.null(plotType)) {
-    plotType <- boxplot
-  }
-  if (plotType == boxplot) {
-    p <- ggplot(
-      data,
-      aes(x = Method, y = AUPRC)
-    ) +
-    # geom_violin(aes(fill = Method),
-    #     trim = FALSE
-    # ) +
-    geom_boxplot(aes(fill = Method),
-        width = 0.8
-      ) +
-      stat_compare_means(
-        method = "wilcox.test",
-        label = "p.signif",
-        comparisons = my_comparisons,
-        bracket.size = 0.6,
-        sizen = 4,
-        color = "#6699cc"
-      ) +
-      scale_fill_manual(values = mycol) +
-    # scale_color_manual(values = mycol) +
-    scale_x_discrete(labels = methods) +
-      labs(x = "Methods", y = "AUPRC") +
-      theme(legend.position = "bottom") +
-      theme_bw() +
-      theme(
-        axis.text.x = element_text(
-          angle = 45,
-          hjust = 1,
-          vjust = 1,
-          size = 10
-        )
-      )
-  }
-  p
 }

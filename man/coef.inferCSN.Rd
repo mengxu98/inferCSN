@@ -16,9 +16,7 @@
 
 \item{gamma}{The value of gamma at which to extract the solution.}
 
-\item{supportSize}{The number of non-zeros each solution extracted will
-contain. If no solutions have `supportSize` non-zeros, solutions with
-the closest number will be extracted.}
+\item{supportSize}{The number of non-zeros each solution extracted will contain}
 
 \item{...}{ignore}
 }

@@ -35,39 +35,32 @@ inferCSN.cvfit(
 )
 }
 \arguments{
-\item{x}{The data matrix.}
+\item{x}{The data matrix}
 
-\item{y}{The response vector. For classification, we only support binary vectors.}
+\item{y}{The response vector}
 
-\item{loss}{The loss function. Currently we support the choices "SquaredError" (for regression), "Logistic" (for logistic regression), and "SquaredHinge" (for smooth SVM).}
+\item{loss}{The loss function. Currently support the choices "SquaredError" (for regression), "Logistic" (for logistic regression), and "SquaredHinge" (for smooth SVM).}
 
-\item{penalty}{The type of regularization. This can take either one of the following choices:
-"L0", "L0L2", and "L0L1".}
+\item{penalty}{The type of regularization}
 
-\item{algorithm}{The type of algorithm used to minimize the objective function. Currently "CD" and "CDPSI" are
-are supported. "CD" is a variant of cyclic coordinate descent and runs very fast. "CDPSI" performs
-local combinatorial search on top of CD and typically achieves higher quality solutions (at the expense
-of increased running time).}
+\item{algorithm}{The type of algorithm used to minimize the objective function. Currently "CD" and "CDPSI" are supported.
+"CD" is a variant of cyclic coordinate descent and runs very fast
+"CDPSI" performs local combinatorial search on top of CD and typically achieves higher quality solutions (at the expense
+of increased running time)}
 
-\item{maxSuppSize}{The maximum support size at which to terminate the regularization path. We recommend setting
+\item{maxSuppSize}{The maximum support size at which to terminate the regularization path. Recommend setting
 this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small
-portion of non-zeros.}
+portion of non-zeros}
 
-\item{nLambda}{The number of Lambda values to select (recall that Lambda is the regularization parameter
-corresponding to the L0 norm). This value is ignored if 'lambdaGrid' is supplied.}
+\item{nLambda}{The number of Lambda values to select}
 
-\item{nGamma}{The number of Gamma values to select (recall that Gamma is the regularization parameter
-corresponding to L1 or L2, depending on the chosen penalty). This value is ignored if 'lambdaGrid' is supplied
-and will be set to length(lambdaGrid)}
+\item{nGamma}{The number of Gamma values to select}
 
-\item{gammaMax}{The maximum value of Gamma when using the L0L2 penalty. For the L0L1 penalty this is
-automatically selected.}
+\item{gammaMax}{The maximum value of Gamma when using the L0L2 penalty.}
 
-\item{gammaMin}{The minimum value of Gamma when using the L0L2 penalty. For the L0L1 penalty, the minimum
-value of gamma in the grid is set to gammaMin * gammaMax. Note that this should be a strictly positive quantity.}
+\item{gammaMin}{The minimum value of Gamma when using the L0L2 penalty.}
 
-\item{partialSort}{If TRUE partial sorting will be used for sorting the coordinates to do greedy cycling (see our paper for
-for details). Otherwise, full sorting is used.}
+\item{partialSort}{If TRUE partial sorting will be used for sorting the coordinates to do greedy cycling. Otherwise, full sorting is used.}
 
 \item{maxIters}{The maximum number of iterations (full cycles) for CD per grid point.}
 
@@ -81,38 +74,29 @@ for details). Otherwise, full sorting is used.}
 
 \item{maxSwaps}{The maximum number of swaps used by CDPSI for each grid point.}
 
-\item{scaleDownFactor}{This parameter decides how close the selected Lambda values are. The choice should be
-strictly between 0 and 1 (i.e., 0 and 1 are not allowed). Larger values lead to closer lambdas and typically to smaller
-gaps between the support sizes. For details, see our paper - Section 5 on Adaptive Selection of Tuning Parameters).}
+\item{scaleDownFactor}{This parameter decides how close the selected Lambda values are}
 
-\item{screenSize}{The number of coordinates to cycle over when performing initial correlation screening.}
+\item{screenSize}{The number of coordinates to cycle over when performing initial correlation screening}
 
-\item{autoLambda}{Ignored parameter. Kept for backwards compatibility.}
+\item{autoLambda}{Ignored parameter. Kept for backwards compatibility}
 
-\item{lambdaGrid}{A grid of Lambda values to use in computing the regularization path. This is by default an empty list and is ignored.
-When specified, LambdaGrid should be a list of length 'nGamma', where the ith element (corresponding to the ith gamma) should be a decreasing sequence of lambda values
-which are used by the algorithm when fitting for the ith value of gamma (see the vignette for details).}
+\item{lambdaGrid}{A grid of Lambda values to use in computing the regularization path}
 
 \item{nFolds}{The number of folds for cross-validation.}
 
-\item{seed}{The seed used in randomly shuffling the data for cross-validation.}
+\item{seed}{The seed used in randomly shuffling the data for cross-validation}
 
-\item{excludeFirstK}{This parameter takes non-negative integers. The first excludeFirstK features in x will be excluded from variable selection,
-i.e., the first excludeFirstK variables will not be included in the L0-norm penalty (they will still be included in the L1 or L2 norm penalties.).}
+\item{excludeFirstK}{This parameter takes non-negative integers}
 
 \item{intercept}{If FALSE, no intercept term is included in the model.}
 
-\item{lows}{Lower bounds for coefficients. Either a scalar for all coefficients to have the same bound or a vector of size p (number of columns of X) where lows[i] is the lower bound for coefficient i.}
+\item{lows}{Lower bounds for coefficients}
 
-\item{highs}{Upper bounds for coefficients. Either a scalar for all coefficients to have the same bound or a vector of size p (number of columns of X) where highs[i] is the upper bound for coefficient i.}
+\item{highs}{Upper bounds for coefficients}
 }
 \value{
-An S3 object of type "inferCSNCV" describing the regularization path. The object has the following members.
-\item{cvMeans}{This is a list, where the ith element is the sequence of cross-validation errors corresponding to the ith gamma value, i.e., the sequence
-cvMeans[[i]] corresponds to fit$gamma[i]}
-\item{cvSDs}{This a list, where the ith element is a sequence of standard deviations for the cross-validation errors: cvSDs[[i]] corresponds to cvMeans[[i]].}
-\item{fit}{The fitted model with type "inferCSN", i.e., this is the same object returned by \code{\link{inferCSN.fit}}.}
+An S3 object of type "inferCSNCV" describing the regularization path
 }
 \description{
-Computes a regularization path and performs K-fold cross-validation.
+Computes a regularization path and performs K-fold cross-validation
 }

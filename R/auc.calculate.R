@@ -4,7 +4,8 @@
 #' @param weightList weightList
 #' @param groundTruth groundTruth
 #' @param groundTruthTPath groundTruthTPath
-#' @param plot [Default = FALSE] plot
+#' @param plot Logic value
+#' @param fileSave The figure name
 #'
 #' @import patchwork
 #'
@@ -14,12 +15,14 @@
 #' @examples
 #' data("exampleDataMatrix")
 #' data("exampleDataGroundTruth")
-#' weightList <- inferCSN(exampleDataMatrix, cores = 1, verbose = TRUE)
-#' auc <- auc.calculate(weightList, exampleDataGroundTruth)
+#' weightList <- inferCSN(exampleDataMatrix, cores = 1, verbose = TRUE, algorithm = "CDPSI")
+#' auc <- auc.calculate(weightList, exampleDataGroundTruth, plot = TRUE)
+#' head(auc)
 auc.calculate <- function(weightList = NULL,
                           groundTruth = NULL,
                           groundTruthTPath = NULL,
-                          plot = FALSE) {
+                          plot = FALSE,
+                          fileSave = NULL) {
   # Check input data
   if (!is.null(weightList) & ncol(weightList) == 3) {
     names(weightList) <- c("regulator", "target", "weight")
@@ -81,10 +84,40 @@ auc.calculate <- function(weightList = NULL,
 
     # Combine two plots by patchwork
     p <- auroc + auprc
-
     print(p)
+
     # Save figure
-    cowplot::ggsave2(file = "AUC.pdf", p, width = 18, height = 10, units = "cm")
+    if (!is.null(fileSave)) {
+      if (figure.format(fileSave)) {
+        cowplot::ggsave2(file = fileSave,
+                         p,
+                         width = 18,
+                         height = 10,
+                         units = "cm",
+                         dpi = 600)
+      } else {
+        cowplot::ggsave2(file = paste0(fileSave, ".png"),
+                         p,
+                         width = 18,
+                         height = 10,
+                         units = "cm",
+                         dpi = 600)
+      }
+    }
   }
   return(auc.metric)
+}
+
+#' @title figure.format
+#' @description Check figure format
+#' @param string A string of file name
+#'
+#' @return logic value
+#' @export
+#'
+figure.format <- function(string) {
+  # Check figure format
+  formats <- c("pdf", "png", "jpg", "jpeg")
+  logic <- grepl(paste(formats, collapse="|"), string, ignore.case=TRUE)
+  return(logic)
 }

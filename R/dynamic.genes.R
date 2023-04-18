@@ -1,6 +1,6 @@
-#' dynamic.genes
-#' Find genes expressed dynamically
-#' uses slingshot approach
+#' @title dynamic.genes
+#' @description
+#'  Find genes expressed dynamically using slingshot approach
 #'
 #' @param matrix properly normalized expression matrix
 #' @param metadata sample table that includes pseudotime, rownames = cells, and a group column
@@ -60,7 +60,7 @@ dynamic.genes <- function(matrix,
   ans
 }
 
-#' gam.fit
+#' @title gam.fit
 #'
 #' @param matrix matrix
 #' @param genes genes

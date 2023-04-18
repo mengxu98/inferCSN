@@ -1,16 +1,17 @@
-#' compute.gene.rank
+#' @title compute.gene.rank
 #' @details Function to compute page rank of TF+target networks
 #'
 #' @param weightList Result of GRN reconstruction
 #' @param directedGraph If GRN is directed or not
 #'
-#' @return A data.table with three columns.
+#' @return A data.table with three columns
 #' @export
 #'
 #' @examples
 #' data("exampleDataMatrix")
 #' weightList <- inferCSN(exampleDataMatrix)
-#' compute.gene.rank(weightList)
+#' ranks <- compute.gene.rank(weightList)
+#' head(ranks)
 compute.gene.rank <- function(weightList,
                               directedGraph = FALSE) {
   if (!is.null(weightList)) {

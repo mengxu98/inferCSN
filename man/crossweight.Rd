@@ -16,9 +16,9 @@ crossweight(
 )
 }
 \arguments{
-\item{grnTab}{GRN dataframe, the result of running reconstructGRN or reconstructGRN_GENIE3}
+\item{grnTab}{GRN dataframe, the result of running reconstructGRN}
 
-\item{expDat}{genes-by-cells expression matrix}
+\item{expDat}{Genes-by-cells expression matrix}
 
 \item{xdyn}{result of running findDynGenes}
 

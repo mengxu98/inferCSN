@@ -2,8 +2,7 @@
 % Please edit documentation in R/data.processing.R
 \name{data.ksmooth}
 \alias{data.ksmooth}
-\title{smooths expression
-smooths expression across metadata in path}
+\title{smooths expression}
 \usage{
 data.ksmooth(matrix, metadata, bandwidth = 0.25)
 }
@@ -18,6 +17,5 @@ data.ksmooth(matrix, metadata, bandwidth = 0.25)
 smoothed matrix
 }
 \description{
-smooths expression
 smooths expression across metadata in path
 }

@@ -12,7 +12,7 @@ compute.gene.rank(weightList, directedGraph = FALSE)
 \item{directedGraph}{If GRN is directed or not}
 }
 \value{
-A data.table with three columns.
+A data.table with three columns
 }
 \description{
 compute.gene.rank
@@ -23,5 +23,6 @@ Function to compute page rank of TF+target networks
 \examples{
 data("exampleDataMatrix")
 weightList <- inferCSN(exampleDataMatrix)
-compute.gene.rank(weightList)
+ranks <- compute.gene.rank(weightList)
+head(ranks)
 }

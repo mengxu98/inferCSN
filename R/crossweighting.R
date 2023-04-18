@@ -1,7 +1,7 @@
-#' Perform crossweighting
+#' @title Perform crossweighting
 #'
-#' @param grnTab GRN dataframe, the result of running reconstructGRN or reconstructGRN_GENIE3
-#' @param expDat genes-by-cells expression matrix
+#' @param grnTab GRN dataframe, the result of running reconstructGRN
+#' @param expDat Genes-by-cells expression matrix
 #' @param xdyn result of running findDynGenes
 #' @param lag lag window on which to run cross-correlation. Cross-correlaiton computed from -lag to +lag.
 #' @param min minimum of weighting window. Edges with offsets (or absolute offsets if symmetric_filter=TRUE) less than min will not be negatively weighted.
@@ -21,18 +21,23 @@ crossweight <- function(grnTab,
                         max = floor(ncol(expDat) / 12),
                         symmetric_filter = FALSE,
                         filter_thresh = 0) {
-  # order expDat
+  # order expDat using dynamic genes
   expDat <- expDat[, rownames(xdyn$cells)]
 
-  grnTab$TG <- as.character(grnTab$TG)
+  colnames(grnTab) <- c("TF", "TG", "zscore")
   grnTab$TF <- as.character(grnTab$TF)
+  grnTab$TG <- as.character(grnTab$TG)
 
-  offset <- apply(grnTab, 1, cross_corr, expDat = expDat, lag = lag)
+  offset <- apply(grnTab, 1, cross.corr, expDat = expDat, lag = lag)
   grnTab$offset <- offset
 
   weighted_score <- c()
   for (i in 1:nrow(grnTab)) {
-    new <- score_offset(grnTab$zscore[i], grnTab$offset[i], min = min, max = max, symmetric_filter = symmetric_filter)
+    new <- score.offset(grnTab$zscore[i],
+                        grnTab$offset[i],
+                        min = min,
+                        max = max,
+                        symmetric_filter = symmetric_filter)
     weighted_score <- c(weighted_score, new)
   }
 
@@ -43,8 +48,7 @@ crossweight <- function(grnTab,
   grnTab
 }
 
-
-#' cross_corr
+#' @title cross.corr
 #'
 #' @param grn_row grn_row
 #' @param expDat expDat
@@ -53,7 +57,7 @@ crossweight <- function(grnTab,
 #' @return offset
 #' @export
 #'
-cross_corr <- function(grn_row, expDat, lag) {
+cross.corr <- function(grn_row, expDat, lag) {
   tg <- grn_row[1]
   tf <- grn_row[2]
 
@@ -66,7 +70,7 @@ cross_corr <- function(grn_row, expDat, lag) {
   offset
 }
 
-#' score_offset
+#' @title score.offset
 #'
 #' @param score score
 #' @param offset offset
@@ -74,10 +78,10 @@ cross_corr <- function(grn_row, expDat, lag) {
 #' @param max max
 #' @param symmetric_filter symmetric_filter
 #'
-#' @return score_offset
+#' @return score.offset
 #' @export
 #'
-score_offset <- function(score, offset, min = 2, max = 20, symmetric_filter = FALSE) {
+score.offset <- function(score, offset, min = 2, max = 20, symmetric_filter = FALSE) {
   if (symmetric_filter) {
     offset <- abs(offset)
   }
@@ -95,8 +99,7 @@ score_offset <- function(score, offset, min = 2, max = 20, symmetric_filter = FA
   res
 }
 
-
-#' crossweight_params
+#' @title crossweight.params
 #'  estimates min and max values for crossweighting
 #'  for now assumes uniform cell density across pseudotime/only considers early time
 #'  this needs to be refined if it's to be useful...
@@ -107,7 +110,10 @@ score_offset <- function(score, offset, min = 2, max = 20, symmetric_filter = FA
 #' @param pseudotime_max pseudotime_max
 #'
 #' @export
-crossweight_params <- function(expDat, xdyn, pseudotime_min = 0.005, pseudotime_max = 0.01) {
+crossweight.params <- function(expDat,
+                               xdyn,
+                               pseudotime_min = 0.005,
+                               pseudotime_max = 0.01) {
   expDat <- expDat[, rownames(xdyn$cells)]
   ncells <- nrow(xdyn$cells)
   min <- nrow(xdyn$cells[xdyn$cells$pseudotime < pseudotime_min, ])

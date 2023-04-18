@@ -2,14 +2,18 @@
 #' @description A method for inferring cell-type-specific gene regulatory network
 #' from single-cell transcriptome data.
 #'
-#' @param data [Default = NULL] An object
+#' @param data [Default = NULL] A matrix, data table, Seurat or SingleCellExperiment object
 #' @param normalize [Default = FALSE] Data normalize
-#' @param penalty [Default = NULL]
+#' @param penalty [Default = "L0"] The type of regularization
+#' This can take either one of the following choices: "L0"and "L0L2"
+#' For high-dimensional and sparse data, such as single-cell transcriptome data, "L0L2" is more effective
+#' @param algorithm [Default = "CD"] Currently "CD" and "CDPSI" are supported.
+#' The CDPSI algorithm may yield better results, but it also increases running time
 #' @param crossValidation [Default = FALSE] Check whether cross validation is used
 #' @param nFolds [Default = 10] N folds cross validation
 #' @param regulators [Default = NULL] Regulator genes
 #' @param targets [Default = NULL] Target genes
-#' @param maxSuppSize [Default = NULL] The number of non-zore coef
+#' @param maxSuppSize [Default = NULL] The number of non-zore coef, this value will affect the final performance
 #' @param nGamma [Default = 5] nGamma
 #' @param verbose [Default = FALSE] Print detailed information
 #' @param cores [Default = 1] CPU cores
@@ -17,15 +21,17 @@
 #' @import magrittr
 #' @importFrom utils "methods" "read.table" "setTxtProgressBar" "txtProgressBar"
 #'
-#' @return A list of gene-gene regulatory relationship
+#' @return A data table of gene-gene regulatory relationship
 #' @export
 #'
 #' @examples
 #' data("exampleDataMatrix")
 #' weightList <- inferCSN(exampleDataMatrix, verbose = TRUE)
+#' head(weightList)
 inferCSN <- function(data = NULL,
                      normalize = FALSE,
                      penalty = NULL,
+                     algorithm = "CD",
                      crossValidation = FALSE,
                      nFolds = 10,
                      regulators = NULL,
@@ -37,7 +43,9 @@ inferCSN <- function(data = NULL,
   # Data processing
   if (!is.null(data)) {
     if (verbose) message("Data processing......")
-    matrix <- data.processing(data, normalize = normalize, verbose = verbose)
+    matrix <- data.processing(data,
+                              normalize = normalize,
+                              verbose = verbose)
   } else {
     stop("Please ensure provide an object......")
   }
@@ -53,13 +61,26 @@ inferCSN <- function(data = NULL,
   } else {
     penalty <- "L0"
   }
+
   if (verbose) message(paste("Using", penalty, "penalty regression......"))
 
   # Check whether cross validation is used
   if (verbose & crossValidation) {
-    if (verbose) message(paste("Using ", penalty, "cross validation......"))
+    if (verbose) message(paste("Using", penalty, "cross validation......"))
   } else {
-    if (verbose) message(paste("Using ", penalty, "fit......"))
+    if (verbose) message(paste("Using", penalty, "fit......"))
+  }
+
+  # Check the algorithm of the regression model
+  if (!is.null(algorithm)) {
+    if (!any(c("CD", "CDPSI") == algorithm)) {
+      stop(paste(
+        "Note: inferCSN does not support", algorithm, "algorithm......\n",
+        "Please set algorithm item as 'CD' or 'CDPSI'......\n"
+      ))
+    }
+  } else {
+    algorithm <- "CD"
   }
 
   if (!is.null(regulators)) {
@@ -79,23 +100,25 @@ inferCSN <- function(data = NULL,
   if (is.null(maxSuppSize)) maxSuppSize <- ncol(targetsMatrix)
 
   if (cores == 1) {
-    # Format print progress information
-    pb <- progress::progress_bar$new(
-      format = "Running [:bar] :percent, No.:current of :total gene,:elapsed......",
-      total = length(targets),
-      clear = TRUE,
-      width = 100
-    )
+    if (verbose) {
+      # Format progress information
+      pb <- progress::progress_bar$new(
+        format = "Running [:bar] :percent, No.:current of :total gene,:elapsed......",
+        total = length(targets),
+        clear = TRUE,
+        width = 100
+      )
+    }
 
     weightList <- c()
     for (i in 1:length(targets)) {
       X <- as.matrix(regulatorsMatrix[, setdiff(colnames(regulatorsMatrix), targets[i])])
-
       y <- targetsMatrix[, targets[i]]
 
-      temp <- inferCSN.core(
+      temp <- sparse.regression(
         X, y,
         penalty = penalty,
+        algorithm = algorithm,
         crossValidation = crossValidation,
         nFolds = nFolds,
         maxSuppSize = maxSuppSize,
@@ -105,6 +128,7 @@ inferCSN <- function(data = NULL,
       wghts <- temp[-1]
       wghts <- abs(wghts)
       wghts <- wghts / sum(wghts)
+
       if (length(wghts) != ncol(X)) {
         weightd <- data.frame(regulator = colnames(X), target = targets[i], weight = 0)
       } else {
@@ -112,9 +136,11 @@ inferCSN <- function(data = NULL,
       }
       weightList <- rbind.data.frame(weightList, weightd)
 
-      # Print progress
-      pb$tick()
-      Sys.sleep(0.05)
+      if (verbose) {
+        # Print progress
+        pb$tick()
+        Sys.sleep(0.05)
+      }
     }
   } else {
     cores <- min(parallel::detectCores(logical = FALSE), cores, length(targets))
@@ -132,17 +158,17 @@ inferCSN <- function(data = NULL,
     weightList <- foreach::foreach(
       target = targets,
       .combine = "rbind",
-      .export = "inferCSN.core",
+      .export = "sparse.regression",
       .packages = c("Kendall"),
       .options.snow = opts
     ) %dopar% {
       X <- as.matrix(regulatorsMatrix[, setdiff(colnames(regulatorsMatrix), target)])
-
       y <- targetsMatrix[, target]
 
-      temp <- inferCSN.core(
+      temp <- sparse.regression(
         X, y,
         penalty = penalty,
+        algorithm = algorithm,
         crossValidation = crossValidation,
         nFolds = nFolds,
         maxSuppSize = maxSuppSize,
@@ -152,6 +178,7 @@ inferCSN <- function(data = NULL,
       wghts <- temp[-1]
       wghts <- abs(wghts)
       wghts <- wghts / sum(wghts)
+
       if (length(wghts) != ncol(X)) {
         weightd <- data.frame(regulator = colnames(X), target = target, weight = 0)
       } else {
@@ -159,44 +186,6 @@ inferCSN <- function(data = NULL,
       }
     }
 
-    # cores <- min(parallel::detectCores(logical = FALSE), cores, length(targets))
-    # cl <- parallel::makeCluster(cores)
-    # doParallel::registerDoParallel(cl)
-    # # doParallel::registerDoParallel(cores = cores)
-    # if (verbose) message(paste("Using", foreach::getDoParWorkers(), "cores......"))
-    # "%dopar%" <- foreach::"%dopar%"
-    # suppressPackageStartupMessages(
-    #   weightList <- doRNG::"%dorng%"(
-    #     foreach::foreach(
-    #       target = targets,
-    #       .combine = "rbind",
-    #       .export = "inferCSN.core",
-    #       .packages = c("doParallel", "dplyr")
-    #     ), {
-    #
-    #       X <- as.matrix(regulatorsMatrix[, setdiff(colnames(regulatorsMatrix), target)])
-    #
-    #       y <- targetsMatrix[, target]
-    #
-    #       temp <- inferCSN.core(
-    #         X, y,
-    #         penalty = penalty,
-    #         crossValidation = crossValidation,
-    #         nFolds = nFolds,
-    #         maxSuppSize = maxSuppSize,
-    #         nGamma = nGamma,
-    #         verbose = verbose
-    #       ) %>% as.vector()
-    #       wghts <- temp[-1]
-    #       wghts <- abs(wghts)
-    #       wghts <- wghts / sum(wghts)
-    #       if (length(wghts) != ncol(X)) {
-    #         weightd <- data.frame(regulator = colnames(X), target = target, weight = 0)
-    #       } else {
-    #         weightd <- data.frame(regulator = colnames(X), target = target, weight = wghts)
-    #       }
-    #   })
-    # )
     close(pb)
     parallel::stopCluster(cl)
   }

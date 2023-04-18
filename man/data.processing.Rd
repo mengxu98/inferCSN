@@ -4,14 +4,14 @@
 \alias{data.processing}
 \title{data.processing}
 \usage{
-data.processing(data, normalize = normalize, verbose = verbose)
+data.processing(data, normalize = FALSE, verbose = FALSE)
 }
 \arguments{
-\item{data}{An object}
+\item{data}{[Default = NULL] A matrix, data table, Seurat or SingleCellExperiment object}
 
-\item{normalize}{Data normalize}
+\item{normalize}{[Default = FALSE] Data normalize}
 
-\item{verbose}{Print detailed information}
+\item{verbose}{[Default = FALSE] Print detailed information}
 }
 \value{
 Matrix
