@@ -4,10 +4,10 @@ url: https://mengxu98.github.io/inferCSN/
 #   bootstrap: 5
 
 template:
-  package: grkgdown
+  package: mxpkgdown
 
 navbar:
   components:
     github:
       icon: fab fa-github fa-lg
-      href: https://github.com/gadenbuie/js4shiny
+      href: https://github.com/mengxu98/inferCSN
