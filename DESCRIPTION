@@ -47,4 +47,4 @@ Suggests:
     ROCR,
     EBSeq
 biocViews: tradeSeq
-Config/Needs/website: gadenbuie/grkgdown
+Config/Needs/website: mengxu98/mxpkgdown
