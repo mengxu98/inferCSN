@@ -1,10 +1,8 @@
 #' @title data.processing
 #'
-#' @param data [Default = NULL] A matrix, data table, Seurat or SingleCellExperiment object
-#' @param normalize [Default = FALSE] Data normalize
-#' @param verbose [Default = FALSE] Print detailed information
+#' @inheritParams inferCSN
 #'
-#' @return Matrix
+#' @return Normalized matrix
 #' @export
 #'
 data.processing <- function(data,
@@ -22,29 +20,24 @@ data.processing <- function(data,
     stop("Error")
   }
 
-  # Remove ribo.genes
+  # Remove ribo.mito.nduf.genes
   genes.all <- rownames(matrix)
   ribo.genes <- genes.all[grep('^RPS[0-9]*|^RPL[0-9]*', genes.all)]
   mito.genes <- genes.all[grep('^MRPS[0-9]*|^MRPL[0-9]*', genes.all)]
   nduf.genes <- genes.all[grep('^NDUF', genes.all)]
   matrix <- matrix[setdiff(genes.all, c(ribo.genes, mito.genes, nduf.genes)),]
 
+  # Normalize matrix
   if (normalize) {
-
-    # Norm data
     geneFiltered <- apply(matrix, 1, function(x) {
       sum(x >= 1) >= 1
     })
-
-    Sizes <- EBSeq::MedianNorm(matrix)
-    if (is.na(Sizes[1])) {
+    sizes <- EBSeq::MedianNorm(matrix)
+    if (is.na(sizes[1])) {
       matrixMedNorm <- matrix
-      # message("alternative normalization method is applied")
-      # Sizes <- EBSeq::MedianNorm(matrix, alternative=TRUE)
     } else {
-      matrixMedNorm <- EBSeq::GetNormalizedMat(matrix, Sizes)
+      matrixMedNorm <- EBSeq::GetNormalizedMat(matrix, sizes)
     }
-
     matrix <- log2(matrixMedNorm + 1)
     matrix <- matrix[which(geneFiltered), ]
   }
@@ -52,9 +45,8 @@ data.processing <- function(data,
   return(matrix)
 }
 
-#' @title smooths expression
-#' @description
-#'  smooths expression across metadata in path
+#' @title data.ksmooth
+#' @description Smooths expression across pseudotime
 #'
 #' @param matrix  expression matrix
 #' @param bandwidth bandwidth

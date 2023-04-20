@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{inferCSN.fit}
 \alias{inferCSN.fit}
-\title{Fit an L0-regularized model}
+\title{Fit a sparse regression model}
 \usage{
 inferCSN.fit(
   x,
@@ -12,7 +12,7 @@ inferCSN.fit(
   algorithm = "CD",
   maxSuppSize = 100,
   nLambda = 100,
-  nGamma = 10,
+  nGamma = 5,
   gammaMax = 10,
   gammaMin = 1e-04,
   partialSort = TRUE,
@@ -39,12 +39,9 @@ inferCSN.fit(
 
 \item{loss}{The loss function. Currently support the choices "SquaredError" (for regression), "Logistic" (for logistic regression), and "SquaredHinge" (for smooth SVM).}
 
-\item{penalty}{The type of regularization}
+\item{penalty}{The type of regularization.}
 
-\item{algorithm}{The type of algorithm used to minimize the objective function. Currently "CD" and "CDPSI" are supported.
-"CD" is a variant of cyclic coordinate descent and runs very fast
-"CDPSI" performs local combinatorial search on top of CD and typically achieves higher quality solutions (at the expense
-of increased running time)}
+\item{algorithm}{The type of algorithm used to minimize the objective function.}
 
 \item{maxSuppSize}{The maximum support size at which to terminate the regularization path. Recommend setting
 this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small
@@ -72,21 +69,21 @@ portion of non-zeros}
 
 \item{maxSwaps}{The maximum number of swaps used by CDPSI for each grid point.}
 
-\item{scaleDownFactor}{This parameter decides how close the selected Lambda values are}
+\item{scaleDownFactor}{This parameter decides how close the selected Lambda values are.}
 
-\item{screenSize}{The number of coordinates to cycle over when performing initial correlation screening}
+\item{screenSize}{The number of coordinates to cycle over when performing initial correlation screening.}
 
-\item{autoLambda}{Ignored parameter. Kept for backwards compatibility}
+\item{autoLambda}{Ignored parameter. Kept for backwards compatibility.}
 
-\item{lambdaGrid}{A grid of Lambda values to use in computing the regularization path}
+\item{lambdaGrid}{A grid of Lambda values to use in computing the regularization path.}
 
-\item{excludeFirstK}{This parameter takes non-negative integers}
+\item{excludeFirstK}{This parameter takes non-negative integers.}
 
 \item{intercept}{If FALSE, no intercept term is included in the model.}
 
-\item{lows}{Lower bounds for coefficients}
+\item{lows}{Lower bounds for coefficients.}
 
-\item{highs}{Upper bounds for coefficients}
+\item{highs}{Upper bounds for coefficients.}
 }
 \value{
 An S3 object of type "inferCSN" describing the regularization path

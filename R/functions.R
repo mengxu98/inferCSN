@@ -5,17 +5,14 @@
 #' @importFrom methods is
 #' @import Matrix
 
-#' @title Fit an L0-regularized model
+#' @title Fit a sparse regression model
 #' @description Computes the regularization path for the specified loss function and penalty function
 #'
 #' @param x The data matrix
 #' @param y The response vector
 #' @param loss The loss function. Currently support the choices "SquaredError" (for regression), "Logistic" (for logistic regression), and "SquaredHinge" (for smooth SVM).
-#' @param penalty The type of regularization
-#' @param algorithm The type of algorithm used to minimize the objective function. Currently "CD" and "CDPSI" are supported.
-#' "CD" is a variant of cyclic coordinate descent and runs very fast
-#' "CDPSI" performs local combinatorial search on top of CD and typically achieves higher quality solutions (at the expense
-#' of increased running time)
+#' @param penalty The type of regularization.
+#' @param algorithm The type of algorithm used to minimize the objective function.
 #' @param maxSuppSize The maximum support size at which to terminate the regularization path. Recommend setting
 #' this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small
 #' portion of non-zeros
@@ -30,14 +27,14 @@
 #' @param activeSet If TRUE, performs active set updates.
 #' @param activeSetNum The number of consecutive times a support should appear before declaring support stabilization.
 #' @param maxSwaps The maximum number of swaps used by CDPSI for each grid point.
-#' @param scaleDownFactor This parameter decides how close the selected Lambda values are
-#' @param screenSize The number of coordinates to cycle over when performing initial correlation screening
-#' @param autoLambda Ignored parameter. Kept for backwards compatibility
-#' @param lambdaGrid A grid of Lambda values to use in computing the regularization path
-#' @param excludeFirstK This parameter takes non-negative integers
+#' @param scaleDownFactor This parameter decides how close the selected Lambda values are.
+#' @param screenSize The number of coordinates to cycle over when performing initial correlation screening.
+#' @param autoLambda Ignored parameter. Kept for backwards compatibility.
+#' @param lambdaGrid A grid of Lambda values to use in computing the regularization path.
+#' @param excludeFirstK This parameter takes non-negative integers.
 #' @param intercept If FALSE, no intercept term is included in the model.
-#' @param lows Lower bounds for coefficients
-#' @param highs Upper bounds for coefficients
+#' @param lows Lower bounds for coefficients.
+#' @param highs Upper bounds for coefficients.
 #'
 #' @return An S3 object of type "inferCSN" describing the regularization path
 #' @export
@@ -48,7 +45,7 @@ inferCSN.fit <- function(x, y,
                          algorithm = "CD",
                          maxSuppSize = 100,
                          nLambda = 100,
-                         nGamma = 10,
+                         nGamma = 5,
                          gammaMax = 10,
                          gammaMin = 0.0001,
                          partialSort = TRUE,
@@ -268,10 +265,10 @@ inferCSN.fit <- function(x, y,
 #' @title Cross Validation
 #' @description Computes a regularization path and performs K-fold cross-validation
 #'
-#' @param nFolds The number of folds for cross-validation.
 #' @inheritParams inferCSN.fit
-#'
+#' @param nFolds The number of folds for cross-validation.
 #' @param seed The seed used in randomly shuffling the data for cross-validation
+#'
 #' @return An S3 object of type "inferCSNCV" describing the regularization path
 #' @export
 #'
@@ -315,12 +312,15 @@ inferCSN.cvfit <- function(x, y,
   if (!(loss %in% c("SquaredError", "Logistic", "SquaredHinge"))) {
     stop("The specified loss function is not supported.")
   }
+
   if (!(penalty %in% c("L0", "L0L2", "L0L1"))) {
     stop("The specified penalty is not supported.")
   }
+
   if (!(algorithm %in% c("CD", "CDPSI"))) {
     stop("The specified algorithm is not supported.")
   }
+
   if (loss == "Logistic" | loss == "SquaredHinge") {
     if (dim(table(y)) != 2) {
       stop("Only binary classification is supported. Make sure y has only 2 unique values.")
@@ -460,10 +460,10 @@ inferCSN.cvfit <- function(x, y,
   }
 
   settings <- list()
-  settings[[1]] <- intercept # Settings only contains intercept for now. Might include additional elements later.
+  settings[[1]] <- intercept
   names(settings) <- c("intercept")
 
-  # the C++ core whose last solution can exceed maxSuppSize
+  # The C++ core whose last solution can exceed maxSuppSize
   for (i in 1:length(M$SuppSize)) {
     last <- length(M$SuppSize[[i]])
     if (M$SuppSize[[i]][last] > maxSuppSize) {
@@ -523,8 +523,7 @@ inferCSN.cvfit <- function(x, y,
 coef.inferCSN <- function(object,
                           lambda = NULL,
                           gamma = NULL,
-                          supportSize = NULL,
-                          ...) {
+                          supportSize = NULL, ...) {
   if (!is.null(supportSize) && !is.null(lambda)) {
     stop("If `supportSize` is provided to `coef` only `gamma` can also be provided.")
   }
@@ -585,8 +584,7 @@ coef.inferCSN <- function(object,
 #' @export
 coef.inferCSNCV <- function(object,
                             lambda = NULL,
-                            gamma = NULL,
-                            ...) {
+                            gamma = NULL, ...) {
   coef.inferCSN(object$fit, lambda, gamma, ...)
 }
 
@@ -597,8 +595,7 @@ coef.inferCSNCV <- function(object,
 #' @param ... ignore
 #' @method print inferCSN
 #' @export
-print.inferCSN <- function(x,
-                           ...) {
+print.inferCSN <- function(x, ...) {
   gammas <- rep(x$gamma, times = lapply(x$lambda, length))
   data.frame(
     lambda = unlist(x["lambda"]),
@@ -611,7 +608,6 @@ print.inferCSN <- function(x,
 #' @rdname print.inferCSN
 #' @method print inferCSNCV
 #' @export
-print.inferCSNCV <- function(x,
-                             ...) {
+print.inferCSNCV <- function(x, ...) {
   print.inferCSN(x$fit)
 }

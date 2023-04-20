@@ -2,21 +2,20 @@
 #' @description A method for inferring cell-type-specific gene regulatory network
 #' from single-cell transcriptome data.
 #'
-#' @param data [Default = NULL] A matrix, data table, Seurat or SingleCellExperiment object
-#' @param normalize [Default = FALSE] Data normalize
-#' @param penalty [Default = "L0"] The type of regularization
-#' This can take either one of the following choices: "L0"and "L0L2"
-#' For high-dimensional and sparse data, such as single-cell transcriptome data, "L0L2" is more effective
+#' @param data A matrix, data table, Seurat or SingleCellExperiment object.
+#' @param normalize [Default = FALSE] Data normalize.
+#' @param penalty [Default = "L0"] The type of regularization.
+#' This can take either one of the following choices: "L0"and "L0L2".
+#' For high-dimensional and sparse data, such as single-cell transcriptome data, "L0L2" is more effective.
 #' @param algorithm [Default = "CD"] Currently "CD" and "CDPSI" are supported.
-#' The CDPSI algorithm may yield better results, but it also increases running time
-#' @param crossValidation [Default = FALSE] Check whether cross validation is used
-#' @param nFolds [Default = 10] N folds cross validation
+#' The CDPSI algorithm may yield better results, but it also increases running time.
+#' @param crossValidation [Default = FALSE] Check whether cross validation is used.
+#' @param nFolds [Default = 10] The number of folds for cross-validation.
 #' @param regulators [Default = NULL] Regulator genes
 #' @param targets [Default = NULL] Target genes
-#' @param maxSuppSize [Default = NULL] The number of non-zore coef, this value will affect the final performance
-#' @param nGamma [Default = 5] nGamma
-#' @param verbose [Default = FALSE] Print detailed information
-#' @param cores [Default = 1] CPU cores
+#' @param maxSuppSize [Default = NULL] The number of non-zore coef, this value will affect the final performance.
+#' @param verbose [Default = FALSE] Print detailed information.
+#' @param cores [Default = 1] CPU cores.
 #'
 #' @import magrittr
 #' @importFrom utils "methods" "read.table" "setTxtProgressBar" "txtProgressBar"
@@ -37,7 +36,6 @@ inferCSN <- function(data = NULL,
                      regulators = NULL,
                      targets = NULL,
                      maxSuppSize = NULL,
-                     nGamma = 5,
                      verbose = FALSE,
                      cores = 1) {
   # Data processing
@@ -122,7 +120,6 @@ inferCSN <- function(data = NULL,
         crossValidation = crossValidation,
         nFolds = nFolds,
         maxSuppSize = maxSuppSize,
-        nGamma = nGamma,
         verbose = verbose
       ) %>% as.vector()
       wghts <- temp[-1]
@@ -172,7 +169,6 @@ inferCSN <- function(data = NULL,
         crossValidation = crossValidation,
         nFolds = nFolds,
         maxSuppSize = maxSuppSize,
-        nGamma = nGamma,
         verbose = verbose
       ) %>% as.vector()
       wghts <- temp[-1]

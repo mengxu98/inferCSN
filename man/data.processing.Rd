@@ -7,14 +7,14 @@
 data.processing(data, normalize = FALSE, verbose = FALSE)
 }
 \arguments{
-\item{data}{[Default = NULL] A matrix, data table, Seurat or SingleCellExperiment object}
+\item{data}{A matrix, data table, Seurat or SingleCellExperiment object.}
 
-\item{normalize}{[Default = FALSE] Data normalize}
+\item{normalize}{[Default = FALSE] Data normalize.}
 
-\item{verbose}{[Default = FALSE] Print detailed information}
+\item{verbose}{[Default = FALSE] Print detailed information.}
 }
 \value{
-Matrix
+Normalized matrix
 }
 \description{
 data.processing

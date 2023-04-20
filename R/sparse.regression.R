@@ -15,8 +15,7 @@ sparse.regression <- function(X, y,
                               algorithm = "CD",
                               maxSuppSize = NULL,
                               nFolds = 10,
-                              nGamma = 5,
-                              verbose = verbose) {
+                              verbose = FALSE) {
   if (crossValidation) {
     tryCatch({
       fit <- inferCSN.cvfit(
@@ -24,8 +23,7 @@ sparse.regression <- function(X, y,
         penalty = penalty,
         algorithm = algorithm,
         maxSuppSize = maxSuppSize,
-        nFolds = nFolds,
-        nGamma = nGamma
+        nFolds = nFolds
       )
       fit_inf <- print(fit)
       optimalGammaIndex <- which(unlist(lapply(fit$cvMeans, min)) == min(unlist(lapply(fit$cvMeans, min))))
@@ -47,8 +45,7 @@ sparse.regression <- function(X, y,
         X, y,
         penalty = penalty,
         algorithm = algorithm,
-        maxSuppSize = maxSuppSize,
-        nGamma = nGamma
+        maxSuppSize = maxSuppSize
       )
       fit_inf <- print(fit)
       fit_inf <- fit_inf[order(fit_inf$suppSize, decreasing = TRUE), ]
@@ -61,8 +58,7 @@ sparse.regression <- function(X, y,
       X, y,
       penalty = penalty,
       algorithm = algorithm,
-      maxSuppSize = maxSuppSize,
-      nGamma = nGamma
+      maxSuppSize = maxSuppSize
     )
     fit_inf <- print(fit)
     fit_inf <- fit_inf[order(fit_inf$suppSize, decreasing = TRUE), ]

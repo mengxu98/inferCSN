@@ -14,38 +14,35 @@ inferCSN(
   regulators = NULL,
   targets = NULL,
   maxSuppSize = NULL,
-  nGamma = 5,
   verbose = FALSE,
   cores = 1
 )
 }
 \arguments{
-\item{data}{[Default = NULL] A matrix, data table, Seurat or SingleCellExperiment object}
+\item{data}{A matrix, data table, Seurat or SingleCellExperiment object.}
 
-\item{normalize}{[Default = FALSE] Data normalize}
+\item{normalize}{[Default = FALSE] Data normalize.}
 
-\item{penalty}{[Default = "L0"] The type of regularization
-This can take either one of the following choices: "L0"and "L0L2"
-For high-dimensional and sparse data, such as single-cell transcriptome data, "L0L2" is more effective}
+\item{penalty}{[Default = "L0"] The type of regularization.
+This can take either one of the following choices: "L0"and "L0L2".
+For high-dimensional and sparse data, such as single-cell transcriptome data, "L0L2" is more effective.}
 
 \item{algorithm}{[Default = "CD"] Currently "CD" and "CDPSI" are supported.
-The CDPSI algorithm may yield better results, but it also increases running time}
+The CDPSI algorithm may yield better results, but it also increases running time.}
 
-\item{crossValidation}{[Default = FALSE] Check whether cross validation is used}
+\item{crossValidation}{[Default = FALSE] Check whether cross validation is used.}
 
-\item{nFolds}{[Default = 10] N folds cross validation}
+\item{nFolds}{[Default = 10] The number of folds for cross-validation.}
 
 \item{regulators}{[Default = NULL] Regulator genes}
 
 \item{targets}{[Default = NULL] Target genes}
 
-\item{maxSuppSize}{[Default = NULL] The number of non-zore coef, this value will affect the final performance}
+\item{maxSuppSize}{[Default = NULL] The number of non-zore coef, this value will affect the final performance.}
 
-\item{nGamma}{[Default = 5] nGamma}
+\item{verbose}{[Default = FALSE] Print detailed information.}
 
-\item{verbose}{[Default = FALSE] Print detailed information}
-
-\item{cores}{[Default = 1] CPU cores}
+\item{cores}{[Default = 1] CPU cores.}
 }
 \value{
 A data table of gene-gene regulatory relationship
