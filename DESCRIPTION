@@ -3,8 +3,9 @@ Type: Package
 Title: Inferring cell-specific gene regulatory network
 Version: 0.1.1
 Date: 2023-04-10
-Author: MengXu
-Maintainer: The package maintainer: MengXu <mengxu98@qq.com>
+Author: person("Meng", "Xu", , "mengxu98@qq.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-8300-1054"))
+Maintainer: MengXu <mengxu98@qq.com>
 Description: A method for inferring cell-specific gene regulatory network from single-cell transcriptome data.
     We will continue to add other omics data in the future work.
 URL: https://mengxu98.github.io/inferCSN/
