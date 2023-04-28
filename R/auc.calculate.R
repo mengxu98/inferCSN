@@ -1,3 +1,5 @@
+globalVariables(c("curvetype"))
+
 #' @title auc.calculate
 #' @description AUC value calculate
 #'

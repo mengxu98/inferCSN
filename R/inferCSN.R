@@ -1,3 +1,5 @@
+globalVariables(c("target"))
+
 #' @title inferCSN
 #' @description A method for inferring cell-type-specific gene regulatory network
 #' from single-cell transcriptome data.

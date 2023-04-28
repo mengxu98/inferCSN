@@ -15,7 +15,7 @@ data.processing <- function(data,
   } else if (class(data)[1] == "Seurat") {
     matrix <- as.matrix(data@assays$RNA@counts)
   } else if (class(data)[1] == "SingleCellExperiment") {
-    matrix <- as.matrix(sce@assays@data$counts)
+    matrix <- as.matrix(data@assays@data$counts)
   } else {
     stop("Error")
   }
@@ -67,7 +67,11 @@ data.ksmooth <- function(matrix,
   matrix <- matrix[, names(pseudotime)]
   matrixKS <- matrix(0, nrow = nrow(matrix), ncol = ncol(matrix))
   for (i in seq(nrow(matrix))) {
-    yy <- ksmooth(pseudotime, matrix[i, ], kernel = "normal", bandwidth = bandwidth, x.points = pseudotime)
+    yy <- stats::ksmooth(pseudotime,
+                         matrix[i, ],
+                         kernel = "normal",
+                         bandwidth = bandwidth,
+                         x.points = pseudotime)
     matrixKS[i, ] <- yy$y
   }
   rownames(matrixKS) <- rownames(matrix)

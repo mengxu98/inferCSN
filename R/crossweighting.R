@@ -53,15 +53,21 @@ crossweight <- function(grnTab,
 #' @param grn_row grn_row
 #' @param expDat expDat
 #' @param lag lag
+#' @importFrom stats "ccf"
 #'
 #' @return offset
 #' @export
 #'
-cross.corr <- function(grn_row, expDat, lag) {
+cross.corr <- function(grn_row,
+                       expDat,
+                       lag) {
   tg <- grn_row[1]
   tf <- grn_row[2]
 
-  x <- ccf(as.numeric(expDat[tf, ]), as.numeric(expDat[tg, ]), lag, pl = FALSE)
+  x <- stats::ccf(as.numeric(expDat[tf, ]),
+                  as.numeric(expDat[tg, ]),
+                  lag,
+                  plot = FALSE)
 
   df <- data.frame(lag = x$lag, cor = abs(x$acf))
   df <- df[order(df$cor, decreasing = TRUE), ]

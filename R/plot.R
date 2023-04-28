@@ -1,12 +1,14 @@
+globalVariables(c("x", "y", "xend", "yend", "weight", "Interaction", "name"))
+
 #' @title dynamic.networks
 #' @description Plot of dynamic networks
 #'
 #' @param weightList weightList
-#' @param regulators [Default = NULL] regulators
-#' @param order [Default = NULL] order = NULL
-#' @param thresh [Default = NULL] thresh = NULL
-#' @param onlyRegulators [Default = NULL] onlyregulators
-#' @param legend.position [Default = "right"] legend.position
+#' @param regulators regulators
+#' @param order order = NULL
+#' @param thresh thresh = NULL
+#' @param onlyRegulators onlyregulators
+#' @param legend.position legend.position
 #'
 #' @return A list of ggplot2 objects
 #' @export
@@ -17,11 +19,11 @@
 #' p <- dynamic.networks(weightList)
 #' p
 dynamic.networks <- function(weightList,
-                                  regulators = NULL,
-                                  onlyRegulators = TRUE,
-                                  order = NULL,
-                                  thresh = NULL,
-                                  legend.position = "right") {
+                             regulators = NULL,
+                             onlyRegulators = TRUE,
+                             order = NULL,
+                             thresh = NULL,
+                             legend.position = "right") {
   # Format input data
   weightList <- net.format(
     weightList,
