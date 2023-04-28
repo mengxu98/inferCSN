@@ -16,15 +16,15 @@ dynamic.networks(
 \arguments{
 \item{weightList}{weightList}
 
-\item{regulators}{[Default = NULL] regulators}
+\item{regulators}{regulators}
 
-\item{onlyRegulators}{[Default = NULL] onlyregulators}
+\item{onlyRegulators}{onlyregulators}
 
-\item{order}{[Default = NULL] order = NULL}
+\item{order}{order = NULL}
 
-\item{thresh}{[Default = NULL] thresh = NULL}
+\item{thresh}{thresh = NULL}
 
-\item{legend.position}{[Default = "right"] legend.position}
+\item{legend.position}{legend.position}
 }
 \value{
 A list of ggplot2 objects
