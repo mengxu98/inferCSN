@@ -8,7 +8,7 @@ inferCSN(
   data = NULL,
   normalize = FALSE,
   penalty = NULL,
-  algorithm = "CD",
+  algorithm = NULL,
   crossValidation = FALSE,
   nFolds = 10,
   regulators = NULL,
