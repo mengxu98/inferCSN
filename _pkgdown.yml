@@ -1,8 +1,5 @@
 url: https://mengxu98.github.io/inferCSN/
 
-# template:
-#   bootstrap: 5
-
 template:
   package: mxpkgdown
 
