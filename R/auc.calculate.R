@@ -118,8 +118,7 @@ auc.calculate <- function(weightList = NULL,
 #' @export
 #'
 figure.format <- function(string) {
-  # Check figure format
   formats <- c("pdf", "png", "jpg", "jpeg")
-  logic <- grepl(paste(formats, collapse="|"), string, ignore.case=TRUE)
+  logic <- grepl(paste(formats, collapse = "|"), string, ignore.case=TRUE)
   return(logic)
 }

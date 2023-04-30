@@ -20,7 +20,7 @@ globalVariables(c("target"))
 #' @param cores [Default = 1] CPU cores.
 #'
 #' @import magrittr
-#' @importFrom utils "methods" "read.table" "setTxtProgressBar" "txtProgressBar"
+#' @importFrom utils methods read.table setTxtProgressBar txtProgressBar
 #'
 #' @return A data table of gene-gene regulatory relationship
 #' @export
@@ -32,7 +32,7 @@ globalVariables(c("target"))
 inferCSN <- function(data = NULL,
                      normalize = FALSE,
                      penalty = NULL,
-                     algorithm = "CD",
+                     algorithm = NULL,
                      crossValidation = FALSE,
                      nFolds = 10,
                      regulators = NULL,
@@ -55,7 +55,7 @@ inferCSN <- function(data = NULL,
     if (!any(c("L0", "L0L2") == penalty)) {
       stop(paste(
         "Note: inferCSN does not support", penalty, "penalty regression......\n",
-        "Please set penalty item as 'L0' or 'L0L2'......\n"
+        "Please set penalty item as 'L0' or 'L0L2'......"
       ))
     }
   } else {
@@ -76,7 +76,7 @@ inferCSN <- function(data = NULL,
     if (!any(c("CD", "CDPSI") == algorithm)) {
       stop(paste(
         "Note: inferCSN does not support", algorithm, "algorithm......\n",
-        "Please set algorithm item as 'CD' or 'CDPSI'......\n"
+        "Please set algorithm item as 'CD' or 'CDPSI'......"
       ))
     }
   } else {
@@ -112,35 +112,24 @@ inferCSN <- function(data = NULL,
 
     weightList <- c()
     for (i in 1:length(targets)) {
-      X <- as.matrix(regulatorsMatrix[, setdiff(colnames(regulatorsMatrix), targets[i])])
-      y <- targetsMatrix[, targets[i]]
-
-      temp <- sparse.regression(
-        X, y,
-        penalty = penalty,
-        algorithm = algorithm,
-        crossValidation = crossValidation,
-        nFolds = nFolds,
-        maxSuppSize = maxSuppSize,
-        verbose = verbose
-      ) %>% as.vector()
-      wghts <- temp[-1]
-      wghts <- abs(wghts)
-      wghts <- wghts / sum(wghts)
-
-      if (length(wghts) != ncol(X)) {
-        weightd <- data.frame(regulator = colnames(X), target = targets[i], weight = 0)
-      } else {
-        weightd <- data.frame(regulator = colnames(X), target = targets[i], weight = wghts)
-      }
-      weightList <- rbind.data.frame(weightList, weightd)
-
       if (verbose) {
         # Print progress
         pb$tick()
         Sys.sleep(0.05)
       }
+      target <- targets[i]
+      sub_weight_list <- sub.inferCSN(regulatorsMatrix = regulatorsMatrix,
+                                      targetsMatrix = targetsMatrix,
+                                      target = target,
+                                      crossValidation = crossValidation,
+                                      penalty = penalty,
+                                      algorithm = algorithm,
+                                      nFolds = nFolds,
+                                      maxSuppSize = maxSuppSize,
+                                      verbose = verbose)
+      weightList <- rbind(weightList, sub_weight_list)
     }
+
   } else {
     cores <- min(parallel::detectCores(logical = FALSE), cores, length(targets))
     cl <- snow::makeSOCKcluster(cores)
@@ -157,36 +146,25 @@ inferCSN <- function(data = NULL,
     weightList <- foreach::foreach(
       target = targets,
       .combine = "rbind",
-      .export = "sparse.regression",
-      .packages = c("Kendall"),
+      .export = c("sparse.regression", "sub.inferCSN"),
+      .packages = "Kendall",
       .options.snow = opts
     ) %dopar% {
-      X <- as.matrix(regulatorsMatrix[, setdiff(colnames(regulatorsMatrix), target)])
-      y <- targetsMatrix[, target]
-
-      temp <- sparse.regression(
-        X, y,
-        penalty = penalty,
-        algorithm = algorithm,
-        crossValidation = crossValidation,
-        nFolds = nFolds,
-        maxSuppSize = maxSuppSize,
-        verbose = verbose
-      ) %>% as.vector()
-      wghts <- temp[-1]
-      wghts <- abs(wghts)
-      wghts <- wghts / sum(wghts)
-
-      if (length(wghts) != ncol(X)) {
-        weightd <- data.frame(regulator = colnames(X), target = target, weight = 0)
-      } else {
-        weightd <- data.frame(regulator = colnames(X), target = target, weight = wghts)
-      }
+      sub.inferCSN(regulatorsMatrix = regulatorsMatrix,
+                   targetsMatrix = targetsMatrix,
+                   target = target,
+                   crossValidation = crossValidation,
+                   penalty = penalty,
+                   algorithm = algorithm,
+                   nFolds = nFolds,
+                   maxSuppSize = maxSuppSize,
+                   verbose = verbose)
     }
 
     close(pb)
     parallel::stopCluster(cl)
   }
+
   attr(weightList, "rng") <- NULL
   attr(weightList, "doRNG_version") <- NULL
   weightList <- weightList[order(weightList$weight, decreasing = TRUE), ]

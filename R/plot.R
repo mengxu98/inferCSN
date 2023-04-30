@@ -5,9 +5,6 @@ globalVariables(c("x", "y", "xend", "yend", "weight", "Interaction", "name"))
 #'
 #' @param weightList weightList
 #' @param regulators regulators
-#' @param order order = NULL
-#' @param thresh thresh = NULL
-#' @param onlyRegulators onlyregulators
 #' @param legend.position legend.position
 #'
 #' @return A list of ggplot2 objects
@@ -20,9 +17,6 @@ globalVariables(c("x", "y", "xend", "yend", "weight", "Interaction", "name"))
 #' p
 dynamic.networks <- function(weightList,
                              regulators = NULL,
-                             onlyRegulators = TRUE,
-                             order = NULL,
-                             thresh = NULL,
                              legend.position = "right") {
   # Format input data
   weightList <- net.format(
@@ -57,14 +51,14 @@ dynamic.networks <- function(weightList,
     ) +
     ggnetwork::geom_nodes(
       data = regulatorNet[regulatorNet$is_regulator == "FALSE", ],
-      ggplot2::aes(x = x, y = y), # , xend = xend, yend = yend
+      ggplot2::aes(x = x, y = y),
       color = "darkgray",
       size = 3,
       alpha = .5
     ) +
     ggnetwork::geom_nodes(
       data = regulatorNet[regulatorNet$is_regulator == "TRUE", ],
-      ggplot2::aes(x = x, y = y), # , xend = xend, yend = yend
+      ggplot2::aes(x = x, y = y),
       color = "#8C4985",
       size = 6,
       alpha = .8
@@ -102,7 +96,7 @@ net.format <- function(weightList,
   if (!is.null(regulators)) {
     weightList <- purrr::map_dfr(
       regulators, function(x) {
-        weight <- weightList[which(weightList$regulator == x), ]
+        weightList[which(weightList$regulator == x), ]
       }
     )
   }
