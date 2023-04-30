@@ -4,25 +4,12 @@
 \alias{dynamic.networks}
 \title{dynamic.networks}
 \usage{
-dynamic.networks(
-  weightList,
-  regulators = NULL,
-  onlyRegulators = TRUE,
-  order = NULL,
-  thresh = NULL,
-  legend.position = "right"
-)
+dynamic.networks(weightList, regulators = NULL, legend.position = "right")
 }
 \arguments{
 \item{weightList}{weightList}
 
 \item{regulators}{regulators}
-
-\item{onlyRegulators}{onlyregulators}
-
-\item{order}{order = NULL}
-
-\item{thresh}{thresh = NULL}
 
 \item{legend.position}{legend.position}
 }
