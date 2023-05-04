@@ -63,21 +63,11 @@ inferCSN.fit <- function(x, y,
                          intercept = TRUE,
                          lows = -Inf,
                          highs = Inf) {
-
   if ((rtol < 0) || (rtol >= 1)) stop("The specified rtol parameter must exist in [0, 1)")
-
   if (atol < 0) stop("The specified atol parameter must exist in [0, INF)")
-
-  # Some sanity checks for the inputs
-  if (!(loss %in% c("SquaredError", "Logistic", "SquaredHinge"))) {
-    stop("The specified loss function is not supported.")
-  }
-  if (!(penalty %in% c("L0", "L0L2", "L0L1"))) {
-    stop("The specified penalty is not supported.")
-  }
-  if (!(algorithm %in% c("CD", "CDPSI"))) {
-    stop("The specified algorithm is not supported.")
-  }
+  if (!(loss %in% c("SquaredError", "Logistic", "SquaredHinge"))) stop("The specified loss function is not supported.")
+  if (!(penalty %in% c("L0", "L0L2", "L0L1"))) stop("The specified penalty is not supported.")
+  if (!(algorithm %in% c("CD", "CDPSI"))) stop("The specified algorithm is not supported.")
   if (loss == "Logistic" | loss == "SquaredHinge") {
     if (dim(table(y)) != 2) {
       stop("Only binary classification is supported. Make sure y has only 2 unique values.")
@@ -153,9 +143,7 @@ inferCSN.fit <- function(x, y,
         }
         current <- nxt
       }
-      if (bad_lambdaGrid) {
-        break
-      }
+      if (bad_lambdaGrid) break
     }
 
     if (bad_lambdaGrid) {
@@ -255,7 +243,6 @@ inferCSN.fit <- function(x, y,
     varnames <- colnames(x)
   }
   G$varnames <- varnames
-
   class(G) <- "inferCSN"
   G$n <- dim(x)[1]
   G$p <- dim(x)[2]
@@ -299,28 +286,11 @@ inferCSN.cvfit <- function(x, y,
                            lows = -Inf,
                            highs = Inf) {
   set.seed(seed)
-
-  if ((rtol < 0) || (rtol >= 1)) {
-    stop("The specified rtol parameter must exist in [0, 1)")
-  }
-
-  if (atol < 0) {
-    stop("The specified atol parameter must exist in [0, INF)")
-  }
-
-  # Some sanity checks for the inputs
-  if (!(loss %in% c("SquaredError", "Logistic", "SquaredHinge"))) {
-    stop("The specified loss function is not supported.")
-  }
-
-  if (!(penalty %in% c("L0", "L0L2", "L0L1"))) {
-    stop("The specified penalty is not supported.")
-  }
-
-  if (!(algorithm %in% c("CD", "CDPSI"))) {
-    stop("The specified algorithm is not supported.")
-  }
-
+  if ((rtol < 0) || (rtol >= 1)) stop("The specified rtol parameter must exist in [0, 1)")
+  if (atol < 0) stop("The specified atol parameter must exist in [0, INF)")
+  if (!(loss %in% c("SquaredError", "Logistic", "SquaredHinge"))) stop("The specified loss function is not supported.")
+  if (!(penalty %in% c("L0", "L0L2", "L0L1"))) stop("The specified penalty is not supported.")
+  if (!(algorithm %in% c("CD", "CDPSI"))) stop("The specified algorithm is not supported.")
   if (loss == "Logistic" | loss == "SquaredHinge") {
     if (dim(table(y)) != 2) {
       stop("Only binary classification is supported. Make sure y has only 2 unique values.")
@@ -398,9 +368,7 @@ inferCSN.cvfit <- function(x, y,
         }
         current <- nxt
       }
-      if (bad_lambdaGrid) {
-        break
-      }
+      if (bad_lambdaGrid) break
     }
 
     if (bad_lambdaGrid) {
@@ -538,10 +506,7 @@ coef.inferCSN <- function(object,
     return(t)
   }
 
-  if (is.null(gamma)) {
-    # if lambda is present but gamma is not, use smallest value of gamma
-    gamma <- object$gamma[1]
-  }
+  if (is.null(gamma)) gamma <- object$gamma[1]
 
   diffGamma <- abs(object$gamma - gamma)
   gammaindex <- which(diffGamma == min(diffGamma))

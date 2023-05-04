@@ -10,7 +10,7 @@ figure.format(string)
 \item{string}{A string of file name}
 }
 \value{
-logic value
+Logic value
 }
 \description{
 Check figure format

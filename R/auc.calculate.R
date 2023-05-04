@@ -114,7 +114,7 @@ auc.calculate <- function(weightList = NULL,
 #' @description Check figure format
 #' @param string A string of file name
 #'
-#' @return logic value
+#' @return Logic value
 #' @export
 #'
 figure.format <- function(string) {

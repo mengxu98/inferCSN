@@ -88,9 +88,7 @@ cross.corr <- function(grn_row,
 #' @export
 #'
 score.offset <- function(score, offset, min = 2, max = 20, symmetric_filter = FALSE) {
-  if (symmetric_filter) {
-    offset <- abs(offset)
-  }
+  if (symmetric_filter) offset <- abs(offset)
 
   if (offset <= min) {
     res <- score
