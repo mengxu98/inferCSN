@@ -28,8 +28,6 @@ sparse.regression <- function(X, y,
         nFolds = nFolds
       )
       gamma <- fit$fit$gamma[which(unlist(lapply(fit$cvMeans, min)) == min(unlist(lapply(fit$cvMeans, min))))]
-      # fit_inf <- print(fit)
-      # lambda_list <- fit_inf[which(fit_inf$gamma == gamma),]
       lambda_list <- print(fit) %>% dplyr::filter(gamma == gamma, )
       if (is.null(maxSuppSize)) {
         lambda <- min(lambda_list$lambda)
