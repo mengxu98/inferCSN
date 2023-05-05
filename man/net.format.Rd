@@ -4,15 +4,15 @@
 \alias{net.format}
 \title{net.format}
 \usage{
-net.format(weightList, regulators = NULL)
+net.format(weightDT, regulators = NULL)
 }
 \arguments{
-\item{weightList}{weightList of CSN}
+\item{weightDT}{The weight data table of network.}
 
-\item{regulators}{Regulators list}
+\item{regulators}{Regulators list.}
 }
 \value{
-Format weight table
+Format weight table.
 }
 \description{
 Format weight table

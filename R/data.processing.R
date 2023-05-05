@@ -2,7 +2,7 @@
 #'
 #' @inheritParams inferCSN
 #'
-#' @return Normalized matrix
+#' @return Normalized matrix.
 #' @export
 #'
 data.processing <- function(data,

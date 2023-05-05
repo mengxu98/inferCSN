@@ -5,7 +5,7 @@
 \title{Perform crossweighting}
 \usage{
 crossweight(
-  grnTab,
+  weightDT,
   expDat,
   xdyn,
   lag = floor(ncol(expDat)/5),
@@ -16,7 +16,7 @@ crossweight(
 )
 }
 \arguments{
-\item{grnTab}{GRN dataframe, the result of running reconstructGRN}
+\item{weightDT}{GRN dataframe, the result of running reconstructGRN}
 
 \item{expDat}{Genes-by-cells expression matrix}
 
@@ -33,7 +33,7 @@ crossweight(
 \item{filter_thresh}{after crossweighting, edges with weights less than filter_thresh will be set to 0.}
 }
 \value{
-grnTab with offset and weighted_score added
+weightDT with offset and weighted_score added
 }
 \description{
 Perform crossweighting

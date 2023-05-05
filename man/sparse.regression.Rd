@@ -36,7 +36,7 @@ The CDPSI algorithm may yield better results, but it also increases running time
 \item{verbose}{[Default = FALSE] Print detailed information.}
 }
 \value{
-A vector of weight
+The vector of coefficients.
 }
 \description{
 sparse.regression

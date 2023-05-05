@@ -8,7 +8,7 @@ globalVariables(c("."))
 #'
 #' @importFrom stats coef
 #'
-#' @return A vector of weight
+#' @return The vector of coefficients.
 #' @export
 #'
 sparse.regression <- function(X, y,
@@ -28,14 +28,14 @@ sparse.regression <- function(X, y,
         nFolds = nFolds
       )
       gamma <- fit$fit$gamma[which(unlist(lapply(fit$cvMeans, min)) == min(unlist(lapply(fit$cvMeans, min))))]
-      lambda_list <- print(fit) %>% dplyr::filter(gamma == gamma, )
+      lambdaList <- print(fit) %>% dplyr::filter(gamma == gamma, )
       if (is.null(maxSuppSize)) {
-        lambda <- min(lambda_list$lambda)
+        lambda <- min(lambdaList$lambda)
       } else {
-        if (maxSuppSize %in% lambda_list$maxSuppSize) {
-          lambda <- lambda_list$maxSuppSize[which(lambda_list$maxSuppSize == maxSuppSize)]
+        if (maxSuppSize %in% lambdaList$maxSuppSize) {
+          lambda <- lambdaList$maxSuppSize[which(lambdaList$maxSuppSize == maxSuppSize)]
         } else {
-          lambda <- min(lambda_list$lambda)
+          lambda <- min(lambdaList$lambda)
         }
       }
     },
@@ -47,9 +47,9 @@ sparse.regression <- function(X, y,
         algorithm = algorithm,
         maxSuppSize = maxSuppSize
       )
-      fit_inf <- print(fit)
-      lambda <- fit_inf$lambda[fit_inf$suppSize %>% which.max()]
-      gamma <- fit_inf$gamma[fit_inf$suppSize %>% which.max()]
+      fitInf <- print(fit)
+      lambda <- fitInf$lambda[fitInf$suppSize %>% which.max()]
+      gamma <- fitInf$gamma[fitInf$suppSize %>% which.max()]
     }
     )
   } else {
@@ -59,12 +59,11 @@ sparse.regression <- function(X, y,
       algorithm = algorithm,
       maxSuppSize = maxSuppSize
     )
-    fit_inf <- print(fit)
-    lambda <- fit_inf$lambda[fit_inf$suppSize %>% which.max()]
-    gamma <- fit_inf$gamma[fit_inf$suppSize %>% which.max()]
+    fitInf <- print(fit)
+    lambda <- fitInf$lambda[fitInf$suppSize %>% which.max()]
+    gamma <- fitInf$gamma[fitInf$suppSize %>% which.max()]
   }
-  coefficients <- coef(fit, lambda = lambda, gamma = gamma) %>% as.vector() %>% .[-1]
-  return(coefficients)
+  return(coef(fit, lambda = lambda, gamma = gamma) %>% as.vector() %>% .[-1])
 }
 
 #' sub.inferCSN
@@ -74,7 +73,7 @@ sparse.regression <- function(X, y,
 #' @param target target
 #' @inheritParams inferCSN
 #'
-#' @return A data table
+#' @return The weight data table of sub-network.
 #' @export
 #'
 sub.inferCSN <- function(regulatorsMatrix = NULL,
@@ -97,9 +96,8 @@ sub.inferCSN <- function(regulatorsMatrix = NULL,
     maxSuppSize = maxSuppSize,
     nFolds = nFolds,
     verbose = verbose
-  ) %>% abs()
-  coefficients <- coefficients / sum(coefficients)
+  )
+  coefficients <- coefficients / sum(abs(coefficients))
   if (length(coefficients) != ncol(X)) coefficients <- 0
-  weightd <- data.frame(regulator = colnames(X), target = target, weight = coefficients)
-  return(weightd)
+  return(data.frame(regulator = colnames(X), target = target, weight = coefficients))
 }

@@ -4,10 +4,10 @@
 \alias{compute.gene.rank}
 \title{compute.gene.rank}
 \usage{
-compute.gene.rank(weightList, directedGraph = FALSE)
+compute.gene.rank(weightDT, directedGraph = FALSE)
 }
 \arguments{
-\item{weightList}{Result of GRN reconstruction}
+\item{weightDT}{The weight data table of network.}
 
 \item{directedGraph}{If GRN is directed or not}
 }
@@ -22,7 +22,7 @@ Function to compute page rank of TF+target networks
 }
 \examples{
 data("exampleDataMatrix")
-weightList <- inferCSN(exampleDataMatrix)
-ranks <- compute.gene.rank(weightList)
+weightDT <- inferCSN(exampleDataMatrix)
+ranks <- compute.gene.rank(weightDT)
 head(ranks)
 }

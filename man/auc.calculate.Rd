@@ -5,26 +5,29 @@
 \title{auc.calculate}
 \usage{
 auc.calculate(
-  weightList = NULL,
+  weightDT = NULL,
   groundTruth = NULL,
   groundTruthTPath = NULL,
   plot = FALSE,
-  fileSave = NULL
+  fileSave = NULL,
+  interaction = FALSE
 )
 }
 \arguments{
-\item{weightList}{weightList}
+\item{weightDT}{The weight data table of network.}
 
-\item{groundTruth}{groundTruth}
+\item{groundTruth}{Ground truth for calculate AUC.}
 
-\item{groundTruthTPath}{groundTruthTPath}
+\item{groundTruthTPath}{Ground truth file.}
 
-\item{plot}{Logic value}
+\item{plot}{If true, draw and print figure of AUC.}
 
 \item{fileSave}{The figure name}
+
+\item{interaction}{If true, consider the positivity and negativity of interaction.}
 }
 \value{
-AUC values and AUC plot
+AUC values and figure
 }
 \description{
 AUC value calculate
@@ -32,7 +35,7 @@ AUC value calculate
 \examples{
 data("exampleDataMatrix")
 data("exampleDataGroundTruth")
-weightList <- inferCSN(exampleDataMatrix, cores = 1, verbose = TRUE, algorithm = "CDPSI")
-auc <- auc.calculate(weightList, exampleDataGroundTruth, plot = TRUE)
+weightDT <- inferCSN(exampleDataMatrix, cores = 1, verbose = TRUE, algorithm = "CDPSI")
+auc <- auc.calculate(weightDT, exampleDataGroundTruth, plot = TRUE)
 head(auc)
 }

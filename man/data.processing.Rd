@@ -14,7 +14,7 @@ data.processing(data, normalize = FALSE, verbose = FALSE)
 \item{verbose}{[Default = FALSE] Print detailed information.}
 }
 \value{
-Normalized matrix
+Normalized matrix.
 }
 \description{
 data.processing

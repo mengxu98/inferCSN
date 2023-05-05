@@ -4,10 +4,10 @@
 \alias{dynamic.networks}
 \title{dynamic.networks}
 \usage{
-dynamic.networks(weightList, regulators = NULL, legend.position = "right")
+dynamic.networks(weightDT, regulators = NULL, legend.position = "right")
 }
 \arguments{
-\item{weightList}{weightList}
+\item{weightDT}{weightDT}
 
 \item{regulators}{regulators}
 
@@ -21,7 +21,7 @@ Plot of dynamic networks
 }
 \examples{
 data("exampleDataMatrix")
-weightList <- inferCSN(exampleDataMatrix)
-p <- dynamic.networks(weightList)
+weightDT <- inferCSN(exampleDataMatrix)
+p <- dynamic.networks(weightDT)
 p
 }

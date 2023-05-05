@@ -53,6 +53,6 @@ from single-cell transcriptome data.
 }
 \examples{
 data("exampleDataMatrix")
-weightList <- inferCSN(exampleDataMatrix, verbose = TRUE)
-head(weightList)
+weightDT <- inferCSN(exampleDataMatrix, verbose = TRUE)
+head(weightDT)
 }

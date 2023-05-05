@@ -39,7 +39,7 @@ The CDPSI algorithm may yield better results, but it also increases running time
 \item{verbose}{[Default = FALSE] Print detailed information.}
 }
 \value{
-A data table
+The weight data table of sub-network.
 }
 \description{
 sub.inferCSN

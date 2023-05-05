@@ -1,6 +1,6 @@
 #' @title Perform crossweighting
 #'
-#' @param grnTab GRN dataframe, the result of running reconstructGRN
+#' @param weightDT GRN dataframe, the result of running reconstructGRN
 #' @param expDat Genes-by-cells expression matrix
 #' @param xdyn result of running findDynGenes
 #' @param lag lag window on which to run cross-correlation. Cross-correlaiton computed from -lag to +lag.
@@ -9,11 +9,11 @@
 #' @param symmetric_filter whether or not to employ a symmetric weight scheme. If true, absolute offset is used in place of offset.
 #' @param filter_thresh after crossweighting, edges with weights less than filter_thresh will be set to 0.
 #'
-#' @return grnTab with offset and weighted_score added
+#' @return weightDT with offset and weighted_score added
 #'
 #' @export
 #'
-crossweight <- function(grnTab,
+crossweight <- function(weightDT,
                         expDat,
                         xdyn,
                         lag = floor(ncol(expDat) / 5),
@@ -24,28 +24,28 @@ crossweight <- function(grnTab,
   # order expDat using dynamic genes
   expDat <- expDat[, rownames(xdyn$cells)]
 
-  colnames(grnTab) <- c("TF", "TG", "zscore")
-  grnTab$TF <- as.character(grnTab$TF)
-  grnTab$TG <- as.character(grnTab$TG)
+  colnames(weightDT) <- c("TF", "TG", "zscore")
+  weightDT$TF <- as.character(weightDT$TF)
+  weightDT$TG <- as.character(weightDT$TG)
 
-  offset <- apply(grnTab, 1, cross.corr, expDat = expDat, lag = lag)
-  grnTab$offset <- offset
+  offset <- apply(weightDT, 1, cross.corr, expDat = expDat, lag = lag)
+  weightDT$offset <- offset
 
   weighted_score <- c()
-  for (i in 1:nrow(grnTab)) {
-    new <- score.offset(grnTab$zscore[i],
-                        grnTab$offset[i],
+  for (i in 1:nrow(weightDT)) {
+    new <- score.offset(weightDT$zscore[i],
+                        weightDT$offset[i],
                         min = min,
                         max = max,
                         symmetric_filter = symmetric_filter)
     weighted_score <- c(weighted_score, new)
   }
 
-  grnTab$weighted_score <- weighted_score
+  weightDT$weighted_score <- weighted_score
 
-  grnTab <- grnTab[grnTab$weighted_score > filter_thresh, ]
+  weightDT <- weightDT[weightDT$weighted_score > filter_thresh, ]
 
-  grnTab
+  weightDT
 }
 
 #' @title cross.corr

@@ -3,39 +3,42 @@ globalVariables(c("curvetype"))
 #' @title auc.calculate
 #' @description AUC value calculate
 #'
-#' @param weightList weightList
-#' @param groundTruth groundTruth
-#' @param groundTruthTPath groundTruthTPath
-#' @param plot Logic value
+#' @param weightDT The weight data table of network.
+#' @param groundTruth Ground truth for calculate AUC.
+#' @param groundTruthTPath Ground truth file.
+#' @param plot If true, draw and print figure of AUC.
 #' @param fileSave The figure name
+#' @param interaction If true, consider the positivity and negativity of interaction.
 #'
 #' @import patchwork
 #'
-#' @return AUC values and AUC plot
+#' @return AUC values and figure
 #' @export
 #'
 #' @examples
 #' data("exampleDataMatrix")
 #' data("exampleDataGroundTruth")
-#' weightList <- inferCSN(exampleDataMatrix, cores = 1, verbose = TRUE, algorithm = "CDPSI")
-#' auc <- auc.calculate(weightList, exampleDataGroundTruth, plot = TRUE)
+#' weightDT <- inferCSN(exampleDataMatrix, cores = 1, verbose = TRUE, algorithm = "CDPSI")
+#' auc <- auc.calculate(weightDT, exampleDataGroundTruth, plot = TRUE)
 #' head(auc)
-auc.calculate <- function(weightList = NULL,
+auc.calculate <- function(weightDT = NULL,
                           groundTruth = NULL,
                           groundTruthTPath = NULL,
                           plot = FALSE,
-                          fileSave = NULL) {
+                          fileSave = NULL,
+                          interaction = FALSE) {
   # Check input data
-  if (!is.null(weightList) & ncol(weightList) == 3) {
-    names(weightList) <- c("regulator", "target", "weight")
+  if (!is.null(weightDT) & ncol(weightDT) == 3) {
+    names(weightDT) <- c("regulator", "target", "weight")
+    if (!interaction) weightDT$weight <- abs(weightDT$weight)
   } else {
     stop("Please provide a data table of regulatory relationships......")
   }
 
   if (!is.null(groundTruth)) {
-    gold_ref <- groundTruth
+    goldRef <- groundTruth
   } else if (!is.null(groundTruthTPath)) {
-    gold_ref <- read.table(
+    goldRef <- read.table(
       file = groundTruthTPath,
       header = TRUE,
       sep = ",",
@@ -45,18 +48,18 @@ auc.calculate <- function(weightList = NULL,
     stop("Please provide a reference data or path of ground-truth......")
   }
 
-  if (ncol(gold_ref) > 2) gold_ref <- gold_ref[, 1:2]
-  names(gold_ref) <- c("regulator", "target")
+  if (ncol(goldRef) > 2) goldRef <- goldRef[, 1:2]
+  names(goldRef) <- c("regulator", "target")
 
-  auc.metric <- data.frame(AUROC = rep(0.000, 1), AUPRC = rep(0.000, 1))
-  gold_ref$gold <- rep(1, nrow(gold_ref))
-  gold <- merge(weightList, gold_ref, by = c("regulator", "target"), all.x = TRUE)
+  aucMetric <- data.frame(AUROC = rep(0.000, 1), AUPRC = rep(0.000, 1))
+  goldRef$gold <- rep(1, nrow(goldRef))
+  gold <- merge(weightDT, goldRef, by = c("regulator", "target"), all.x = TRUE)
   gold$gold[is.na(gold$gold)] <- 0
   auc.curves <- precrec::evalmod(scores = gold$weight, labels = gold$gold)
 
   auc <- attr(auc.curves, "auc")
-  auc.metric[1, "AUROC"] <- auc$aucs[1]
-  auc.metric[1, "AUPRC"] <- auc$aucs[2]
+  aucMetric[1, "AUROC"] <- sprintf("%0.3f", auc$aucs[1])
+  aucMetric[1, "AUPRC"] <- sprintf("%0.3f", auc$aucs[2])
 
   if (plot) {
     # p <- ggplot2::autoplot(auc.curves)
@@ -69,8 +72,8 @@ auc.calculate <- function(weightList = NULL,
     auroc <- ggplot2::ggplot(aurocDf, ggplot2::aes(x = x, y = y)) +
       ggplot2::geom_line() +
       ggplot2::geom_abline(slope = 1, color = "gray", linetype = "dotted") +
-      ggplot2::ggtitle(paste("AUROC:", auc$aucs[1])) +
-      ggplot2::labs(x = "FPR", y = "TPR") +
+      ggplot2::ggtitle(paste("AUROC:", aucMetric[1])) +
+      ggplot2::labs(x = "False positive rate", y = "True positive rate") +
       ggplot2::coord_fixed() +
       ggplot2::theme_bw()
 
@@ -78,8 +81,8 @@ auc.calculate <- function(weightList = NULL,
     auprc <- ggplot2::ggplot(auprcDf, ggplot2::aes(x = x, y = y)) +
       ggplot2::geom_line() +
       ggplot2::geom_hline(yintercept = 0.5, color = "gray", linetype = "dotted") +
-      ggplot2::ggtitle(paste("AUPRC:", auc$aucs[2])) +
-      ggplot2::labs(x = "TPR", y = "PPV") +
+      ggplot2::ggtitle(paste("AUPRC:", aucMetric[1])) +
+      ggplot2::labs(x = "Recall", y = "Precision") +
       ggplot2::ylim(0, 1) +
       ggplot2::coord_fixed() +
       ggplot2::theme_bw()
@@ -91,23 +94,19 @@ auc.calculate <- function(weightList = NULL,
     # Save figure
     if (!is.null(fileSave)) {
       if (figure.format(fileSave)) {
-        cowplot::ggsave2(file = fileSave,
-                         p,
-                         width = 18,
-                         height = 10,
-                         units = "cm",
-                         dpi = 600)
+        newFileSave <- fileSave
       } else {
-        cowplot::ggsave2(file = paste0(fileSave, ".png"),
-                         p,
-                         width = 18,
-                         height = 10,
-                         units = "cm",
-                         dpi = 600)
+        newFileSave <- paste0(fileSave, ".png")
       }
+      cowplot::ggsave2(file = newFileSave,
+                       p,
+                       width = 18,
+                       height = 10,
+                       units = "cm",
+                       dpi = 600)
     }
   }
-  return(auc.metric)
+  return(aucMetric)
 }
 
 #' @title figure.format
@@ -118,7 +117,6 @@ auc.calculate <- function(weightList = NULL,
 #' @export
 #'
 figure.format <- function(string) {
-  formats <- c("pdf", "png", "jpg", "jpeg")
-  logic <- grepl(paste(formats, collapse = "|"), string, ignore.case=TRUE)
+  logic <- grepl(".*\\.(pdf|png|jpe?g)$", string)
   return(logic)
 }

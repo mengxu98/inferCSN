@@ -27,8 +27,8 @@ globalVariables(c("target"))
 #'
 #' @examples
 #' data("exampleDataMatrix")
-#' weightList <- inferCSN(exampleDataMatrix, verbose = TRUE)
-#' head(weightList)
+#' weightDT <- inferCSN(exampleDataMatrix, verbose = TRUE)
+#' head(weightDT)
 inferCSN <- function(data = NULL,
                      normalize = FALSE,
                      penalty = NULL,
@@ -110,7 +110,7 @@ inferCSN <- function(data = NULL,
       )
     }
 
-    weightList <- c()
+    weightDT <- c()
     for (i in 1:length(targets)) {
       if (verbose) {
         # Print progress
@@ -127,7 +127,7 @@ inferCSN <- function(data = NULL,
                                       nFolds = nFolds,
                                       maxSuppSize = maxSuppSize,
                                       verbose = verbose)
-      weightList <- rbind(weightList, sub_weight_list)
+      weightDT <- rbind(weightDT, sub_weight_list)
     }
 
   } else {
@@ -143,7 +143,7 @@ inferCSN <- function(data = NULL,
     progress <- function(n) setTxtProgressBar(pb, n)
     opts <- list(progress = progress)
     "%dopar%" <- foreach::"%dopar%"
-    weightList <- foreach::foreach(
+    weightDT <- foreach::foreach(
       target = targets,
       .combine = "rbind",
       .export = c("sparse.regression", "sub.inferCSN"),
@@ -165,8 +165,8 @@ inferCSN <- function(data = NULL,
     parallel::stopCluster(cl)
   }
 
-  attr(weightList, "rng") <- NULL
-  attr(weightList, "doRNG_version") <- NULL
-  weightList <- weightList[order(weightList$weight, decreasing = TRUE), ]
-  return(weightList)
+  attr(weightDT, "rng") <- NULL
+  attr(weightDT, "doRNG_version") <- NULL
+  weightDT <- weightDT[order(abs(weightDT$weight), decreasing = TRUE), ]
+  return(weightDT)
 }

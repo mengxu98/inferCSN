@@ -3,7 +3,7 @@ globalVariables(c("x", "y", "xend", "yend", "weight", "Interaction", "name"))
 #' @title dynamic.networks
 #' @description Plot of dynamic networks
 #'
-#' @param weightList weightList
+#' @param weightDT weightDT
 #' @param regulators regulators
 #' @param legend.position legend.position
 #'
@@ -12,20 +12,20 @@ globalVariables(c("x", "y", "xend", "yend", "weight", "Interaction", "name"))
 #'
 #' @examples
 #' data("exampleDataMatrix")
-#' weightList <- inferCSN(exampleDataMatrix)
-#' p <- dynamic.networks(weightList)
+#' weightDT <- inferCSN(exampleDataMatrix)
+#' p <- dynamic.networks(weightDT)
 #' p
-dynamic.networks <- function(weightList,
+dynamic.networks <- function(weightDT,
                              regulators = NULL,
                              legend.position = "right") {
   # Format input data
-  weightList <- net.format(
-    weightList,
+  weightDT <- net.format(
+    weightDT,
     regulators = regulators
   )
 
   net <- igraph::graph_from_data_frame(
-    weightList[, c("regulator", "target", "weight", "Interaction")],
+    weightDT[, c("regulator", "target", "weight", "Interaction")],
     directed = FALSE
   )
 
@@ -77,32 +77,32 @@ dynamic.networks <- function(weightList,
       color = "black"
     ) +
     ggnetwork::theme_blank()
-  # ggtitle(names(weightList)[i])
+  # ggtitle(names(weightDT)[i])
   g <- g + ggplot2::theme(legend.position = legend.position)
 }
 
 #' @title net.format
 #' @description Format weight table
 #'
-#' @param weightList weightList of CSN
-#' @param regulators Regulators list
+#' @param weightDT The weight data table of network.
+#' @param regulators Regulators list.
 #'
-#' @return Format weight table
+#' @return Format weight table.
 #' @export
 #'
-net.format <- function(weightList,
+net.format <- function(weightDT,
                        regulators = NULL) {
-  colnames(weightList) <- c("regulator", "target", "weight")
+  colnames(weightDT) <- c("regulator", "target", "weight")
   if (!is.null(regulators)) {
-    weightList <- purrr::map_dfr(
+    weightDT <- purrr::map_dfr(
       regulators, function(x) {
-        weightList[which(weightList$regulator == x), ]
+        weightDT[which(weightDT$regulator == x), ]
       }
     )
   }
-  weightList$weight <- as.numeric(weightList$weight)
-  weightList$Interaction <- "Activation"
-  weightList$Interaction[weightList$weight < 0] <- "Repression"
-  weightList$weight <- abs(weightList$weight)
-  return(weightList)
+  weightDT$weight <- as.numeric(weightDT$weight)
+  weightDT$Interaction <- "Activation"
+  weightDT$Interaction[weightDT$weight < 0] <- "Repression"
+  weightDT$weight <- abs(weightDT$weight)
+  return(weightDT)
 }
