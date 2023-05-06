@@ -34,6 +34,7 @@ Imports:
     snow,
     Matrix,
     methods,
+    ggplot2,
     tradeSeq
 Suggests: 
     cowplot,
@@ -42,7 +43,6 @@ Suggests:
     precrec,
     MASS,
     gam,
-    ggplot2,
     ggnetwork,
     graphics,
     ROCR,
