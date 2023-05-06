@@ -42,7 +42,6 @@ inferCSN <- function(data = NULL,
                      cores = 1) {
   # Data processing
   if (!is.null(data)) {
-    if (verbose) message("Data processing......")
     matrix <- data.processing(data,
                               normalize = normalize,
                               verbose = verbose)
@@ -62,13 +61,11 @@ inferCSN <- function(data = NULL,
     penalty <- "L0"
   }
 
-  if (verbose) message(paste("Using", penalty, "penalty regression......"))
-
   # Check whether cross validation is used
   if (verbose & crossValidation) {
-    if (verbose) message(paste("Using", penalty, "cross validation......"))
+    if (verbose) message(paste("Using", penalty, "penalty and cross validation......"))
   } else {
-    if (verbose) message(paste("Using", penalty, "fit......"))
+    if (verbose) message(paste("Using", penalty, "penalty......"))
   }
 
   # Check the algorithm of the regression model
@@ -76,7 +73,7 @@ inferCSN <- function(data = NULL,
     if (!any(c("CD", "CDPSI") == algorithm)) {
       stop(paste(
         "Note: inferCSN does not support", algorithm, "algorithm......\n",
-        "Please set algorithm item as 'CD' or 'CDPSI'......"
+        "Please set algorithm as 'CD' or 'CDPSI'......"
       ))
     }
   } else {

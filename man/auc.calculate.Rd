@@ -7,7 +7,6 @@
 auc.calculate(
   weightDT = NULL,
   groundTruth = NULL,
-  groundTruthTPath = NULL,
   plot = FALSE,
   fileSave = NULL,
   interaction = FALSE
@@ -17,8 +16,6 @@ auc.calculate(
 \item{weightDT}{The weight data table of network.}
 
 \item{groundTruth}{Ground truth for calculate AUC.}
-
-\item{groundTruthTPath}{Ground truth file.}
 
 \item{plot}{If true, draw and print figure of AUC.}
 

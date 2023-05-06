@@ -8,6 +8,8 @@
 data.processing <- function(data,
                             normalize = FALSE,
                             verbose = FALSE) {
+  if (verbose) message("Data processing......")
+
   if (class(data)[1] == "matrix") {
     matrix <- t(data)
   } else if (class(data)[1] == "data.frame") {

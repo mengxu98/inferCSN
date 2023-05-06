@@ -5,7 +5,6 @@ globalVariables(c("curvetype"))
 #'
 #' @param weightDT The weight data table of network.
 #' @param groundTruth Ground truth for calculate AUC.
-#' @param groundTruthTPath Ground truth file.
 #' @param plot If true, draw and print figure of AUC.
 #' @param fileSave The figure name
 #' @param interaction If true, consider the positivity and negativity of interaction.
@@ -23,7 +22,6 @@ globalVariables(c("curvetype"))
 #' head(auc)
 auc.calculate <- function(weightDT = NULL,
                           groundTruth = NULL,
-                          groundTruthTPath = NULL,
                           plot = FALSE,
                           fileSave = NULL,
                           interaction = FALSE) {
@@ -35,40 +33,28 @@ auc.calculate <- function(weightDT = NULL,
     stop("Please provide a data table of regulatory relationships......")
   }
 
-  if (!is.null(groundTruth)) {
-    goldRef <- groundTruth
-  } else if (!is.null(groundTruthTPath)) {
-    goldRef <- read.table(
-      file = groundTruthTPath,
-      header = TRUE,
-      sep = ",",
-      stringsAsFactors = FALSE
-    )
-  } else {
-    stop("Please provide a reference data or path of ground-truth......")
-  }
+  if (is.null(groundTruth)) stop("Please provide the ground-truth......")
+  if (ncol(groundTruth) > 2) groundTruth <- groundTruth[, 1:2]
+  names(groundTruth) <- c("regulator", "target")
 
-  if (ncol(goldRef) > 2) goldRef <- goldRef[, 1:2]
-  names(goldRef) <- c("regulator", "target")
-
-  aucMetric <- data.frame(AUROC = rep(0.000, 1), AUPRC = rep(0.000, 1))
-  goldRef$gold <- rep(1, nrow(goldRef))
-  gold <- merge(weightDT, goldRef, by = c("regulator", "target"), all.x = TRUE)
+  groundTruth$gold <- rep(1, nrow(groundTruth))
+  gold <- merge(weightDT, groundTruth, by = c("regulator", "target"), all.x = TRUE)
   gold$gold[is.na(gold$gold)] <- 0
-  auc.curves <- precrec::evalmod(scores = gold$weight, labels = gold$gold)
+  aucCurves <- precrec::evalmod(scores = gold$weight, labels = gold$gold)
 
-  auc <- attr(auc.curves, "auc")
+  auc <- attr(aucCurves, "auc")
+  aucMetric <- data.frame(AUROC = rep(0.000, 1), AUPRC = rep(0.000, 1))
   aucMetric[1, "AUROC"] <- sprintf("%0.3f", auc$aucs[1])
   aucMetric[1, "AUPRC"] <- sprintf("%0.3f", auc$aucs[2])
 
   if (plot) {
-    # p <- ggplot2::autoplot(auc.curves)
+    # p <- ggplot2::autoplot(aucCurves)
 
     # Subset data to separate prc and roc
-    auprcDf <- subset(ggplot2::fortify(auc.curves), curvetype == "PRC")
-    aurocDf <- subset(ggplot2::fortify(auc.curves), curvetype == "ROC")
+    auprcDf <- subset(ggplot2::fortify(aucCurves), curvetype == "PRC")
+    aurocDf <- subset(ggplot2::fortify(aucCurves), curvetype == "ROC")
 
-    # AUROC
+    # AUROC plot
     auroc <- ggplot2::ggplot(aurocDf, ggplot2::aes(x = x, y = y)) +
       ggplot2::geom_line() +
       ggplot2::geom_abline(slope = 1, color = "gray", linetype = "dotted") +
@@ -77,11 +63,11 @@ auc.calculate <- function(weightDT = NULL,
       ggplot2::coord_fixed() +
       ggplot2::theme_bw()
 
-    # AUPRC
+    # AUPRC plot
     auprc <- ggplot2::ggplot(auprcDf, ggplot2::aes(x = x, y = y)) +
       ggplot2::geom_line() +
       ggplot2::geom_hline(yintercept = 0.5, color = "gray", linetype = "dotted") +
-      ggplot2::ggtitle(paste("AUPRC:", aucMetric[1])) +
+      ggplot2::ggtitle(paste("AUPRC:", aucMetric[2])) +
       ggplot2::labs(x = "Recall", y = "Precision") +
       ggplot2::ylim(0, 1) +
       ggplot2::coord_fixed() +
