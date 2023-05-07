@@ -1,5 +1,3 @@
-globalVariables(c("curvetype"))
-
 #' @title auc.calculate
 #' @description AUC value calculate
 #'
@@ -30,14 +28,14 @@ auc.calculate <- function(weightDT = NULL,
     names(weightDT) <- c("regulator", "target", "weight")
     if (!interaction) weightDT$weight <- abs(weightDT$weight)
   } else {
-    stop("Please provide a data table of regulatory relationships......")
+    stop("Please provide the data of regulatory relationships......")
   }
 
   if (is.null(groundTruth)) stop("Please provide the ground-truth......")
   if (ncol(groundTruth) > 2) groundTruth <- groundTruth[, 1:2]
   names(groundTruth) <- c("regulator", "target")
-
   groundTruth$gold <- rep(1, nrow(groundTruth))
+
   gold <- merge(weightDT, groundTruth, by = c("regulator", "target"), all.x = TRUE)
   gold$gold[is.na(gold$gold)] <- 0
   aucCurves <- precrec::evalmod(scores = gold$weight, labels = gold$gold)

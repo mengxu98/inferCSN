@@ -1,5 +1,3 @@
-globalVariables(c("."))
-
 #' @title sparse.regression
 #'
 #' @param X The data matrix
@@ -8,7 +6,7 @@ globalVariables(c("."))
 #'
 #' @importFrom stats coef
 #'
-#' @return The vector of coefficients.
+#' @return The coefficients
 #' @export
 #'
 sparse.regression <- function(X, y,
@@ -29,14 +27,10 @@ sparse.regression <- function(X, y,
       )
       gamma <- fit$fit$gamma[which(unlist(lapply(fit$cvMeans, min)) == min(unlist(lapply(fit$cvMeans, min))))]
       lambdaList <- print(fit) %>% dplyr::filter(gamma == gamma, )
-      if (is.null(maxSuppSize)) {
-        lambda <- min(lambdaList$lambda)
+      if (maxSuppSize %in% lambdaList$maxSuppSize) {
+        lambda <- lambdaList$maxSuppSize[which(lambdaList$maxSuppSize == maxSuppSize)]
       } else {
-        if (maxSuppSize %in% lambdaList$maxSuppSize) {
-          lambda <- lambdaList$maxSuppSize[which(lambdaList$maxSuppSize == maxSuppSize)]
-        } else {
-          lambda <- min(lambdaList$lambda)
-        }
+        lambda <- min(lambdaList$lambda)
       }
     },
     error = function(e) {
@@ -87,6 +81,8 @@ sub.inferCSN <- function(regulatorsMatrix = NULL,
                          verbose = FALSE) {
   X <- as.matrix(regulatorsMatrix[, setdiff(colnames(regulatorsMatrix), target)])
   y <- targetsMatrix[, target]
+
+  if (is.null(maxSuppSize)) maxSuppSize <- ncol(X)
 
   coefficients <- sparse.regression(
     X, y,

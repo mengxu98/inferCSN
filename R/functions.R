@@ -1,3 +1,5 @@
+utils::globalVariables(c("x", "y", "xend", "yend", "weight", "Interaction", "name", ".", "target", "curvetype"))
+
 # import C++ compiled code
 #' @useDynLib inferCSN
 #' @importFrom Rcpp evalCpp

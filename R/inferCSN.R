@@ -1,5 +1,3 @@
-globalVariables(c("target"))
-
 #' @title inferCSN
 #' @description A method for inferring cell-type-specific gene regulatory network
 #' from single-cell transcriptome data.
@@ -41,13 +39,10 @@ inferCSN <- function(data = NULL,
                      verbose = FALSE,
                      cores = 1) {
   # Data processing
-  if (!is.null(data)) {
-    matrix <- data.processing(data,
-                              normalize = normalize,
-                              verbose = verbose)
-  } else {
-    stop("Please ensure provide an object......")
-  }
+  if (is.null(data)) stop("Please ensure provide an object......")
+  matrix <- data.processing(data,
+                            normalize = normalize,
+                            verbose = verbose)
 
   # Check the penalty terms of the regression model
   if (!is.null(penalty)) {
@@ -94,8 +89,6 @@ inferCSN <- function(data = NULL,
   }
   targets <- colnames(targetsMatrix)
 
-  if (is.null(maxSuppSize)) maxSuppSize <- ncol(targetsMatrix)
-
   if (cores == 1) {
     if (verbose) {
       # Format progress information
@@ -114,17 +107,17 @@ inferCSN <- function(data = NULL,
         pb$tick()
         Sys.sleep(0.05)
       }
-      target <- targets[i]
-      sub_weight_list <- sub.inferCSN(regulatorsMatrix = regulatorsMatrix,
+      # target <- targets[i]
+      subWeightDT <- sub.inferCSN(regulatorsMatrix = regulatorsMatrix,
                                       targetsMatrix = targetsMatrix,
-                                      target = target,
+                                      target = targets[i],
                                       crossValidation = crossValidation,
                                       penalty = penalty,
                                       algorithm = algorithm,
                                       nFolds = nFolds,
                                       maxSuppSize = maxSuppSize,
                                       verbose = verbose)
-      weightDT <- rbind(weightDT, sub_weight_list)
+      weightDT <- rbind(weightDT, subWeightDT)
     }
 
   } else {

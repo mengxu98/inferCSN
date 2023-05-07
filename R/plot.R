@@ -1,5 +1,3 @@
-globalVariables(c("x", "y", "xend", "yend", "weight", "Interaction", "name"))
-
 #' @title dynamic.networks
 #' @description Plot of dynamic networks
 #'
@@ -77,7 +75,6 @@ dynamic.networks <- function(weightDT,
       color = "black"
     ) +
     ggnetwork::theme_blank()
-  # ggtitle(names(weightDT)[i])
   g <- g + ggplot2::theme(legend.position = legend.position)
 }
 

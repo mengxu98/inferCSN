@@ -31,7 +31,6 @@ dynamic.genes <- function(matrix,
   } else if (method == "tradeseq"){
     if (is.null(matrixRaw)) {
       matrixRaw <- matrix
-      # stop("Must provide matrixRaw for TradeSeq.")
     }
     # subset raw data based on normalized data
     matrixRaw <- matrixRaw[, rownames(metadata)]
