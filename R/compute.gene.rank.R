@@ -13,13 +13,10 @@
 #' ranks <- compute.gene.rank(weightDT)
 #' head(ranks)
 compute.gene.rank <- function(weightDT,
-                              directedGraph = FALSE) {
-  if (!is.null(weightDT)) {
-    if (nrow(weightDT) > 3) weightDT <- weightDT[, 1:3]
-    colnames(weightDT) <- c("regulatoryGene", "targetGene", "weight")
-  } else {
-    stop("Please input data......")
-  }
+                               directedGraph = FALSE) {
+  if (is.null(weightDT)) stop("Please input data......")
+  if (nrow(weightDT) > 3) weightDT <- weightDT[, 1:3]
+  colnames(weightDT) <- c("regulatory", "target", "weight")
   tfnet <- igraph::graph_from_data_frame(weightDT, directed = directedGraph)
   pageRank <- data.frame(igraph::page_rank(tfnet, directed = directedGraph)$vector)
   colnames(pageRank) <- c("pageRank")
@@ -27,6 +24,6 @@ compute.gene.rank <- function(weightDT,
   pageRank <- pageRank[, c("gene", "pageRank")]
   pageRank <- pageRank[order(pageRank$pageRank, decreasing = TRUE), ]
   pageRank$is_regulator <- FALSE
-  pageRank$is_regulator[pageRank$gene %in% unique(weightDT$regulatoryGene)] <- TRUE
+  pageRank$is_regulator[pageRank$gene %in% unique(weightDT$regulatory)] <- TRUE
   return(pageRank)
 }

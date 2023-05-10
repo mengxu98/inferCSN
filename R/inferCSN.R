@@ -107,7 +107,6 @@ inferCSN <- function(data = NULL,
         pb$tick()
         Sys.sleep(0.05)
       }
-      # target <- targets[i]
       subWeightDT <- sub.inferCSN(regulatorsMatrix = regulatorsMatrix,
                                       targetsMatrix = targetsMatrix,
                                       target = targets[i],
