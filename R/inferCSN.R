@@ -11,8 +11,8 @@
 #' The CDPSI algorithm may yield better results, but it also increases running time.
 #' @param crossValidation [Default = FALSE] Check whether cross validation is used.
 #' @param nFolds [Default = 10] The number of folds for cross-validation.
-#' @param regulators [Default = NULL] Regulator genes
-#' @param targets [Default = NULL] Target genes
+#' @param regulators [Default = NULL] Regulator genes.
+#' @param targets [Default = NULL] Target genes.
 #' @param maxSuppSize [Default = NULL] The number of non-zore coef, this value will affect the final performance.
 #' @param verbose [Default = FALSE] Print detailed information.
 #' @param cores [Default = 1] CPU cores.
