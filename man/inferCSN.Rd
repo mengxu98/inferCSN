@@ -34,9 +34,9 @@ The CDPSI algorithm may yield better results, but it also increases running time
 
 \item{nFolds}{[Default = 10] The number of folds for cross-validation.}
 
-\item{regulators}{[Default = NULL] Regulator genes}
+\item{regulators}{[Default = NULL] Regulator genes.}
 
-\item{targets}{[Default = NULL] Target genes}
+\item{targets}{[Default = NULL] Target genes.}
 
 \item{maxSuppSize}{[Default = NULL] The number of non-zore coef, this value will affect the final performance.}
 
