@@ -14,11 +14,12 @@ devtools::install_github("wiscstatman/EBSeq")
 devtools::install_github("mengxu98/inferCSN")
 ```
 
-### Using `clone`
+### Using `git clone`
 
 ``` bash
 git clone https://github.com/mengxu98/inferCSN.git
 cd inferCSN
+Rscript packages.R
 sudo R CMD INSTALL .
 # Some packages may prompt not available, please install.
 ```
