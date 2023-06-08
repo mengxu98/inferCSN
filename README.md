@@ -19,7 +19,7 @@ devtools::install_github("mengxu98/inferCSN")
 ``` bash
 git clone https://github.com/mengxu98/inferCSN.git
 cd inferCSN
-Rscript packages.R
+Rscript scripts/packages.R
 sudo R CMD INSTALL .
 # Some packages may prompt not available, please install.
 ```
