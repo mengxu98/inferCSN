@@ -17,4 +17,3 @@ install.packages("RcppArmadillo")
 BiocManager::install("edgeR")
 BiocManager::install("SingleCellExperiment")
 devtools::install_github("statOmics/tradeSeq")
-
