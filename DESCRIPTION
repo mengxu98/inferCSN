@@ -17,15 +17,11 @@ LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.2.3
 Encoding: UTF-8
 Imports:
-    doParallel,
-    doRNG,
     doSNOW,
     dplyr,
     foreach,
     igraph,
-    Kendall,
     magrittr,
-    modEvA,
     patchwork,
     parallel,
     progress,
@@ -38,10 +34,14 @@ Imports:
     tradeSeq
 Suggests: 
     cowplot,
+    doParallel,
+    doRNG,
+    Kendall,
     Seurat,
     reshape2,
     precrec,
     MASS,
+    modEvA,
     gam,
     ggnetwork,
     graphics,
