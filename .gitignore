@@ -6,3 +6,4 @@ docs
 *.o
 .DS_Store
 renv/settings.json
+src/inferCSN.so
