@@ -5,8 +5,7 @@
 \title{inferCSN}
 \usage{
 inferCSN(
-  data = NULL,
-  normalize = FALSE,
+  matrix = NULL,
   penalty = NULL,
   algorithm = NULL,
   crossValidation = FALSE,
@@ -19,10 +18,6 @@ inferCSN(
 )
 }
 \arguments{
-\item{data}{A matrix, data table, Seurat or SingleCellExperiment object.}
-
-\item{normalize}{[Default = FALSE] Data normalize.}
-
 \item{penalty}{[Default = "L0"] The type of regularization.
 This can take either one of the following choices: "L0"and "L0L2".
 For high-dimensional and sparse data, such as single-cell transcriptome data, "L0L2" is more effective.}
@@ -43,6 +38,10 @@ The CDPSI algorithm may yield better results, but it also increases running time
 \item{verbose}{[Default = FALSE] Print detailed information.}
 
 \item{cores}{[Default = 1] CPU cores.}
+
+\item{data}{A matrix, data table, Seurat or SingleCellExperiment object.}
+
+\item{normalize}{[Default = FALSE] Data normalize.}
 }
 \value{
 A data table of gene-gene regulatory relationship
