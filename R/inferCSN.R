@@ -2,8 +2,7 @@
 #' @description A method for inferring cell-type-specific gene regulatory network
 #' from single-cell transcriptome data.
 #'
-#' @param data A matrix, data table, Seurat or SingleCellExperiment object.
-#' @param normalize [Default = FALSE] Data normalize.
+#' @param matrix An expression matrix, cells by genes.
 #' @param penalty [Default = "L0"] The type of regularization.
 #' This can take either one of the following choices: "L0"and "L0L2".
 #' For high-dimensional and sparse data, such as single-cell transcriptome data, "L0L2" is more effective.
@@ -27,8 +26,7 @@
 #' data("exampleDataMatrix")
 #' weightDT <- inferCSN(exampleDataMatrix, verbose = TRUE)
 #' head(weightDT)
-inferCSN <- function(data = NULL,
-                     normalize = FALSE,
+inferCSN <- function(matrix = NULL,
                      penalty = NULL,
                      algorithm = NULL,
                      crossValidation = FALSE,
@@ -39,10 +37,7 @@ inferCSN <- function(data = NULL,
                      verbose = FALSE,
                      cores = 1) {
   # Data processing
-  if (is.null(data)) stop("Please ensure provide an object......")
-  matrix <- data.processing(data,
-                            normalize = normalize,
-                            verbose = verbose)
+  if (is.null(matrix)) stop("Please ensure provide an expression matrix......")
 
   # Check the penalty terms of the regression model
   if (!is.null(penalty)) {
