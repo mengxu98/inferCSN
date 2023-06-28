@@ -73,7 +73,11 @@ from single-cell transcriptome data.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>penalty</dt>
+    <dl><dt>matrix</dt>
+<dd><p>An expression matrix, cells by genes.</p></dd>
+
+
+<dt>penalty</dt>
 <dd><p>[Default = "L0"] The type of regularization.
 This can take either one of the following choices: "L0"and "L0L2".
 For high-dimensional and sparse data, such as single-cell transcriptome data, "L0L2" is more effective.</p></dd>
@@ -110,14 +114,6 @@ The CDPSI algorithm may yield better results, but it also increases running time
 
 <dt>cores</dt>
 <dd><p>[Default = 1] CPU cores.</p></dd>
-
-
-<dt>data</dt>
-<dd><p>A matrix, data table, Seurat or SingleCellExperiment object.</p></dd>
-
-
-<dt>normalize</dt>
-<dd><p>[Default = FALSE] Data normalize.</p></dd>
 
 </dl></div>
     <div class="section level2">
