@@ -1,5 +1,349 @@
 utils::globalVariables(c("x", "y", "xend", "yend", "weight", "Interaction", "name", ".", "target", "curvetype"))
 
+#' @title sparse.regression
+#'
+#' @param X The data matrix
+#' @param y The response vector
+#' @inheritParams inferCSN
+#'
+#' @importFrom stats coef
+#'
+#' @return The coefficients
+#' @export
+#'
+sparse.regression <- function(X, y,
+                              crossValidation = FALSE,
+                              penalty = "L0",
+                              algorithm = "CD",
+                              maxSuppSize = NULL,
+                              nFolds = 10,
+                              verbose = FALSE) {
+  if (crossValidation) {
+    tryCatch({
+      fit <- inferCSN.cvfit(
+        X, y,
+        penalty = penalty,
+        algorithm = algorithm,
+        maxSuppSize = maxSuppSize,
+        nFolds = nFolds
+      )
+      gamma <- fit$fit$gamma[which(unlist(lapply(fit$cvMeans, min)) == min(unlist(lapply(fit$cvMeans, min))))]
+      lambdaList <- print(fit) %>% dplyr::filter(gamma == gamma, )
+      if (maxSuppSize %in% lambdaList$maxSuppSize) {
+        lambda <- lambdaList$maxSuppSize[which(lambdaList$maxSuppSize == maxSuppSize)]
+      } else {
+        lambda <- min(lambdaList$lambda)
+      }
+    },
+    error = function(e) {
+      if (verbose) message("Cross validation error, used fit instead......")
+      fit <- inferCSN.fit(
+        X, y,
+        penalty = penalty,
+        algorithm = algorithm,
+        maxSuppSize = maxSuppSize
+      )
+      fitInf <- print(fit)
+      lambda <- fitInf$lambda[fitInf$suppSize %>% which.max()]
+      gamma <- fitInf$gamma[fitInf$suppSize %>% which.max()]
+    }
+    )
+  } else {
+    fit <- inferCSN.fit(
+      X, y,
+      penalty = penalty,
+      algorithm = algorithm,
+      maxSuppSize = maxSuppSize
+    )
+    fitInf <- print(fit)
+    lambda <- fitInf$lambda[fitInf$suppSize %>% which.max()]
+    gamma <- fitInf$gamma[fitInf$suppSize %>% which.max()]
+  }
+  return(coef(fit, lambda = lambda, gamma = gamma) %>% as.vector() %>% .[-1])
+}
+
+#' sub.inferCSN
+#'
+#' @param regulatorsMatrix regulatorsMatrix
+#' @param targetsMatrix targetsMatrix
+#' @param target target
+#' @inheritParams inferCSN
+#'
+#' @return The weight data table of sub-network.
+#' @export
+#'
+sub.inferCSN <- function(regulatorsMatrix = NULL,
+                         targetsMatrix = NULL,
+                         target = NULL,
+                         crossValidation = FALSE,
+                         penalty = "L0",
+                         algorithm = "CD",
+                         maxSuppSize = NULL,
+                         nFolds = 10,
+                         verbose = FALSE) {
+  X <- as.matrix(regulatorsMatrix[, setdiff(colnames(regulatorsMatrix), target)])
+  y <- targetsMatrix[, target]
+
+  if (is.null(maxSuppSize)) maxSuppSize <- ncol(X)
+
+  coefficients <- sparse.regression(
+    X, y,
+    crossValidation = crossValidation,
+    penalty = penalty,
+    algorithm = algorithm,
+    maxSuppSize = maxSuppSize,
+    nFolds = nFolds,
+    verbose = verbose
+  )
+  coefficients <- coefficients / sum(abs(coefficients))
+  if (length(coefficients) != ncol(X)) coefficients <- 0
+  return(data.frame(regulator = colnames(X), target = target, weight = coefficients))
+}
+
+
+#' @title auc.calculate
+#' @description AUC value calculate
+#'
+#' @param weightDT The weight data table of network.
+#' @param groundTruth Ground truth for calculate AUC.
+#' @param plot If true, draw and print figure of AUC.
+#' @param fileSave The figure name
+#' @param interaction If true, consider the positivity and negativity of interaction.
+#'
+#' @import patchwork
+#'
+#' @return AUC values and figure
+#' @export
+#'
+#' @examples
+#' data("exampleDataMatrix")
+#' data("exampleDataGroundTruth")
+#' weightDT <- inferCSN(exampleDataMatrix, cores = 1, verbose = TRUE, algorithm = "CDPSI")
+#' auc <- auc.calculate(weightDT, exampleDataGroundTruth, plot = TRUE)
+#' head(auc)
+auc.calculate <- function(weightDT = NULL,
+                          groundTruth = NULL,
+                          plot = FALSE,
+                          fileSave = NULL,
+                          interaction = FALSE) {
+  # Check input data
+  if (!is.null(weightDT) & ncol(weightDT) == 3) {
+    names(weightDT) <- c("regulator", "target", "weight")
+    if (!interaction) weightDT$weight <- abs(weightDT$weight)
+  } else {
+    stop("Please provide the data of regulatory relationships......")
+  }
+
+  if (is.null(groundTruth)) stop("Please provide the ground-truth......")
+  if (ncol(groundTruth) > 2) groundTruth <- groundTruth[, 1:2]
+  names(groundTruth) <- c("regulator", "target")
+  groundTruth$gold <- rep(1, nrow(groundTruth))
+
+  gold <- merge(weightDT, groundTruth, by = c("regulator", "target"), all.x = TRUE)
+  gold$gold[is.na(gold$gold)] <- 0
+  aucCurves <- precrec::evalmod(scores = gold$weight, labels = gold$gold)
+
+  auc <- attr(aucCurves, "auc")
+  aucMetric <- data.frame(AUROC = rep(0.000, 1), AUPRC = rep(0.000, 1))
+  aucMetric[1, "AUROC"] <- sprintf("%0.3f", auc$aucs[1])
+  aucMetric[1, "AUPRC"] <- sprintf("%0.3f", auc$aucs[2])
+
+  if (plot) {
+    # p <- ggplot2::autoplot(aucCurves)
+
+    # Subset data to separate prc and roc
+    auprcDf <- subset(ggplot2::fortify(aucCurves), curvetype == "PRC")
+    aurocDf <- subset(ggplot2::fortify(aucCurves), curvetype == "ROC")
+
+    # AUROC plot
+    auroc <- ggplot2::ggplot(aurocDf, ggplot2::aes(x = x, y = y)) +
+      ggplot2::geom_line() +
+      ggplot2::geom_abline(slope = 1, color = "gray", linetype = "dotted") +
+      ggplot2::ggtitle(paste("AUROC:", aucMetric[1])) +
+      ggplot2::labs(x = "False positive rate", y = "True positive rate") +
+      ggplot2::coord_fixed() +
+      ggplot2::theme_bw()
+
+    # AUPRC plot
+    auprc <- ggplot2::ggplot(auprcDf, ggplot2::aes(x = x, y = y)) +
+      ggplot2::geom_line() +
+      ggplot2::geom_hline(yintercept = 0.5, color = "gray", linetype = "dotted") +
+      ggplot2::ggtitle(paste("AUPRC:", aucMetric[2])) +
+      ggplot2::labs(x = "Recall", y = "Precision") +
+      ggplot2::ylim(0, 1) +
+      ggplot2::coord_fixed() +
+      ggplot2::theme_bw()
+
+    # Combine two plots by patchwork
+    p <- auroc + auprc
+    print(p)
+
+    # Save figure
+    if (!is.null(fileSave)) {
+      if (figure.format(fileSave)) {
+        newFileSave <- fileSave
+      } else {
+        newFileSave <- paste0(fileSave, ".png")
+      }
+      cowplot::ggsave2(file = newFileSave,
+                       p,
+                       width = 18,
+                       height = 10,
+                       units = "cm",
+                       dpi = 600)
+    }
+  }
+  return(aucMetric)
+}
+
+#' @title figure.format
+#' @description Check figure format
+#' @param string A string of file name
+#'
+#' @return Logic value
+#' @export
+#'
+figure.format <- function(string) {
+  logic <- grepl(".*\\.(pdf|png|jpe?g)$", string)
+  return(logic)
+}
+
+#' @title dynamic.networks
+#' @description Plot of dynamic networks
+#'
+#' @param weightDT weightDT
+#' @param regulators regulators
+#' @param legend.position legend.position
+#'
+#' @return A list of ggplot2 objects
+#' @export
+#'
+#' @examples
+#' data("exampleDataMatrix")
+#' weightDT <- inferCSN(exampleDataMatrix)
+#' p <- dynamic.networks(weightDT)
+#' p
+dynamic.networks <- function(weightDT,
+                             regulators = NULL,
+                             legend.position = "right") {
+  # Format input data
+  weightDT <- net.format(
+    weightDT,
+    regulators = regulators
+  )
+
+  net <- igraph::graph_from_data_frame(
+    weightDT[, c("regulator", "target", "weight", "Interaction")],
+    directed = FALSE
+  )
+
+  layout <- igraph::layout_with_fr(net)
+  rownames(layout) <- igraph::V(net)$name
+  layout_ordered <- layout[igraph::V(net)$name,]
+  regulatorNet <- ggnetwork::ggnetwork(
+    net,
+    layout = layout_ordered,
+    cell.jitter = 0
+  )
+  regulatorNet$is_regulator <- as.character(regulatorNet$name %in% regulators)
+  cols <- c("Activation" = "#3366cc", "Repression" = "#ff0066")
+
+  # Plot
+  g <- ggplot2::ggplot() +
+    ggnetwork::geom_edges(
+      data = regulatorNet,
+      ggplot2::aes(x = x, y = y, xend = xend, yend = yend, size = weight, color = Interaction),
+      size = 0.75,
+      curvature = 0.1,
+      alpha = .6
+    ) +
+    ggnetwork::geom_nodes(
+      data = regulatorNet[regulatorNet$is_regulator == "FALSE", ],
+      ggplot2::aes(x = x, y = y),
+      color = "darkgray",
+      size = 3,
+      alpha = .5
+    ) +
+    ggnetwork::geom_nodes(
+      data = regulatorNet[regulatorNet$is_regulator == "TRUE", ],
+      ggplot2::aes(x = x, y = y),
+      color = "#8C4985",
+      size = 6,
+      alpha = .8
+    ) +
+    ggplot2::scale_color_manual(values = cols) +
+    ggnetwork::geom_nodelabel_repel(
+      data = regulatorNet[regulatorNet$is_regulator == "FALSE", ],
+      ggplot2::aes(x = x, y = y, label = name),
+      size = 2,
+      color = "#5A8BAD"
+    ) +
+    ggnetwork::geom_nodelabel_repel(
+      data = regulatorNet[regulatorNet$is_regulator == "TRUE", ],
+      ggplot2::aes(x = x, y = y, label = name),
+      size = 3.5,
+      color = "black"
+    ) +
+    ggnetwork::theme_blank()
+  g <- g + ggplot2::theme(legend.position = legend.position)
+}
+
+#' @title net.format
+#' @description Format weight table
+#'
+#' @param weightDT The weight data table of network.
+#' @param regulators Regulators list.
+#'
+#' @return Format weight table.
+#' @export
+#'
+net.format <- function(weightDT,
+                       regulators = NULL) {
+  colnames(weightDT) <- c("regulator", "target", "weight")
+  if (!is.null(regulators)) {
+    weightDT <- purrr::map_dfr(
+      regulators, function(x) {
+        weightDT[which(weightDT$regulator == x), ]
+      }
+    )
+  }
+  weightDT$weight <- as.numeric(weightDT$weight)
+  weightDT$Interaction <- "Activation"
+  weightDT$Interaction[weightDT$weight < 0] <- "Repression"
+  weightDT$weight <- abs(weightDT$weight)
+  return(weightDT)
+}
+
+#' @title compute.gene.rank
+#' @details Function to compute page rank of TF+target networks
+#'
+#' @param weightDT The weight data table of network.
+#' @param directedGraph If GRN is directed or not
+#'
+#' @return A data.table with three columns
+#' @export
+#'
+#' @examples
+#' data("exampleDataMatrix")
+#' weightDT <- inferCSN(exampleDataMatrix)
+#' ranks <- compute.gene.rank(weightDT)
+#' head(ranks)
+compute.gene.rank <- function(weightDT,
+                              directedGraph = FALSE) {
+  if (is.null(weightDT)) stop("Please input data......")
+  if (nrow(weightDT) > 3) weightDT <- weightDT[, 1:3]
+  colnames(weightDT) <- c("regulatory", "target", "weight")
+  tfnet <- igraph::graph_from_data_frame(weightDT, directed = directedGraph)
+  pageRank <- data.frame(igraph::page_rank(tfnet, directed = directedGraph)$vector)
+  colnames(pageRank) <- c("pageRank")
+  pageRank$gene <- rownames(pageRank)
+  pageRank <- pageRank[, c("gene", "pageRank")]
+  pageRank <- pageRank[order(pageRank$pageRank, decreasing = TRUE), ]
+  pageRank$is_regulator <- FALSE
+  pageRank$is_regulator[pageRank$gene %in% unique(weightDT$regulatory)] <- TRUE
+  return(pageRank)
+}
+
 # import C++ compiled code
 #' @useDynLib inferCSN
 #' @importFrom Rcpp evalCpp
