@@ -49,3 +49,4 @@ Suggests:
     EBSeq
 biocViews: tradeSeq
 Config/Needs/website: mengxu98/mxpkgdown
+LazyData: true
