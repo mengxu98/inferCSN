@@ -46,10 +46,10 @@ A data table of gene-gene regulatory relationship
 }
 \description{
 A method for inferring cell-type-specific gene regulatory network
-from single-cell transcriptome data.
+from single-cell RNA data.
 }
 \examples{
-data("exampleDataMatrix")
-weightDT <- inferCSN(exampleDataMatrix, verbose = TRUE)
+data("exampleMatrix")
+weightDT <- inferCSN(exampleMatrix, verbose = TRUE)
 head(weightDT)
 }
