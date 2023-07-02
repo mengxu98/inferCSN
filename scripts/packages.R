@@ -1,5 +1,6 @@
 # Required packages
 install.packages("BiocManager")
+install.packages('digest', repos = c('https://eddelbuettel.r-universe.dev', 'https://cloud.r-project.org'))
 install.packages("devtools")
 install.packages("doParallel")
 install.packages("doRNG")

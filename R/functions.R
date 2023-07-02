@@ -116,10 +116,10 @@ sub.inferCSN <- function(regulatorsMatrix = NULL,
 #' @export
 #'
 #' @examples
-#' data("exampleDataMatrix")
-#' data("exampleDataGroundTruth")
-#' weightDT <- inferCSN(exampleDataMatrix, cores = 1, verbose = TRUE, algorithm = "CDPSI")
-#' auc <- auc.calculate(weightDT, exampleDataGroundTruth, plot = TRUE)
+#' data("exampleMatrix")
+#' data("exampleGroundTruth")
+#' weightDT <- inferCSN(exampleMatrix, cores = 1, verbose = TRUE, algorithm = "CDPSI")
+#' auc <- auc.calculate(weightDT, exampleGroundTruth, plot = TRUE)
 #' head(auc)
 auc.calculate <- function(weightDT = NULL,
                           groundTruth = NULL,
@@ -219,8 +219,8 @@ figure.format <- function(string) {
 #' @export
 #'
 #' @examples
-#' data("exampleDataMatrix")
-#' weightDT <- inferCSN(exampleDataMatrix)
+#' data("exampleMatrix")
+#' weightDT <- inferCSN(exampleMatrix)
 #' p <- dynamic.networks(weightDT)
 #' p
 dynamic.networks <- function(weightDT,
@@ -324,8 +324,8 @@ net.format <- function(weightDT,
 #' @export
 #'
 #' @examples
-#' data("exampleDataMatrix")
-#' weightDT <- inferCSN(exampleDataMatrix)
+#' data("exampleMatrix")
+#' weightDT <- inferCSN(exampleMatrix)
 #' ranks <- compute.gene.rank(weightDT)
 #' head(ranks)
 compute.gene.rank <- function(weightDT,

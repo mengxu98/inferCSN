@@ -21,8 +21,8 @@ compute.gene.rank
 Function to compute page rank of TF+target networks
 }
 \examples{
-data("exampleDataMatrix")
-weightDT <- inferCSN(exampleDataMatrix)
+data("exampleMatrix")
+weightDT <- inferCSN(exampleMatrix)
 ranks <- compute.gene.rank(weightDT)
 head(ranks)
 }

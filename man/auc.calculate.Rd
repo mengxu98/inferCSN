@@ -30,9 +30,9 @@ AUC values and figure
 AUC value calculate
 }
 \examples{
-data("exampleDataMatrix")
-data("exampleDataGroundTruth")
-weightDT <- inferCSN(exampleDataMatrix, cores = 1, verbose = TRUE, algorithm = "CDPSI")
-auc <- auc.calculate(weightDT, exampleDataGroundTruth, plot = TRUE)
+data("exampleMatrix")
+data("exampleGroundTruth")
+weightDT <- inferCSN(exampleMatrix, cores = 1, verbose = TRUE, algorithm = "CDPSI")
+auc <- auc.calculate(weightDT, exampleGroundTruth, plot = TRUE)
 head(auc)
 }

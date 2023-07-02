@@ -1,5 +1,5 @@
 #' @docType data
-#' @name exampleDataMatrix
+#' @name exampleMatrix
 #'
 #' @title Test data
 #' @description A dataset
@@ -15,7 +15,7 @@
 NULL
 
 #' @docType data
-#' @name exampleDataGroundTruth
+#' @name exampleGroundTruth
 #'
 #' @title Test data
 #' @description A dataset
