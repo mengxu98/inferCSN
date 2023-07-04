@@ -8,3 +8,41 @@ navbar:
     github:
       icon: fab fa-github fa-lg
       href: https://github.com/mengxu98/inferCSN
+
+reference:
+- title: "Inferring gene regulatory network"
+
+- subtitle: "inferCSN"
+- contents:
+  - inferCSN
+
+- subtitle: "Sparse regression model"
+- contents:
+  - sparse.regression
+  - sub.inferCSN
+  - inferCSN.fit
+  - inferCSN.cvfit
+
+- subtitle: "Auc calculate and plot"
+- contents:
+  - auc.calculate
+
+- subtitle: "PageRank"
+- contents:
+  - compute.gene.rank
+
+- subtitle: "Plots"
+- contents:
+  - compute.gene.rank
+  - figure.format
+  - net.format
+
+- subtitle: "Others functions"
+- contents:
+  - coef
+  - print
+
+- subtitle: "Test data"
+- contents:
+  - exampleMatrix
+  - exampleGroundTruth
