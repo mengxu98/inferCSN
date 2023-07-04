@@ -39,8 +39,7 @@ reference:
 
 - subtitle: "Others functions"
 - contents:
-  - coef
-  - print
+  - inferCSNObject
 
 - subtitle: "Test data"
 - contents:
