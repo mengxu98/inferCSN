@@ -3,10 +3,6 @@ url: https://mengxu98.github.io/inferCSN/
 template:
   package: mxpkgdown
 
-authors:
-  Mengxu:
-    href: https://github.com/mengxu98
-
 navbar:
   components:
     github:
