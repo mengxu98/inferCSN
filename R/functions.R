@@ -589,7 +589,7 @@ inferCSN.fit <- function(x, y,
     varnames <- colnames(x)
   }
   G$varnames <- varnames
-  class(G) <- "inferCSNObject"
+  class(G) <- "inferCSN"
   G$n <- dim(x)[1]
   G$p <- dim(x)[2]
   G
@@ -814,11 +814,11 @@ inferCSN.cvfit <- function(x, y,
     varnames <- colnames(x)
   }
   fit$varnames <- varnames
-  class(fit) <- "inferCSNObject"
+  class(fit) <- "inferCSN"
   fit$n <- dim(x)[1]
   fit$p <- dim(x)[2]
   G <- list(fit = fit, cvMeans = M$CVMeans, cvSDs = M$CVSDs)
-  class(G) <- "inferCSNCVObject"
+  class(G) <- "inferCSNCV"
   G
 }
 
@@ -831,10 +831,10 @@ inferCSN.cvfit <- function(x, y,
 #' @param supportSize The number of non-zeros each solution extracted will contain
 #' @param ... ignore
 #'
-#' @method coef inferCSNObject
+#' @method coef inferCSN
 #'
 #' @export
-coef.inferCSNObject <- function(object,
+coef.inferCSN <- function(object,
                           lambda = NULL,
                           gamma = NULL,
                           supportSize = NULL, ...) {
@@ -890,13 +890,13 @@ coef.inferCSNObject <- function(object,
   t
 }
 
-#' @rdname coef.inferCSNObject
-#' @method coef inferCSNCVObject
+#' @rdname coef.inferCSN
+#' @method coef inferCSNCV
 #' @export
-coef.inferCSNCVObject <- function(object,
+coef.inferCSNCV <- function(object,
                             lambda = NULL,
                             gamma = NULL, ...) {
-  coef.inferCSNObject(object$fit, lambda, gamma, ...)
+  coef.inferCSN(object$fit, lambda, gamma, ...)
 }
 
 #' @title Print inferCSN.fit object
@@ -904,9 +904,9 @@ coef.inferCSNCVObject <- function(object,
 #'
 #' @param x The output of inferCSN.fit or inferCSN.cvfit
 #' @param ... ignore
-#' @method print inferCSNObject
+#' @method print inferCSN
 #' @export
-print.inferCSNObject <- function(x, ...) {
+print.inferCSN <- function(x, ...) {
   gammas <- rep(x$gamma, times = lapply(x$lambda, length))
   data.frame(
     lambda = unlist(x["lambda"]),
@@ -916,9 +916,9 @@ print.inferCSNObject <- function(x, ...) {
   )
 }
 
-#' @rdname print.inferCSNObject
-#' @method print inferCSNCVObject
+#' @rdname print.inferCSN
+#' @method print inferCSNCV
 #' @export
-print.inferCSNCVObject <- function(x, ...) {
-  print.inferCSNObject(x$fit)
+print.inferCSNCV <- function(x, ...) {
+  print.inferCSN(x$fit)
 }
