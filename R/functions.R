@@ -221,7 +221,7 @@ figure.format <- function(string) {
 #' @examples
 #' data("exampleMatrix")
 #' weightDT <- inferCSN(exampleMatrix)
-#' p <- dynamic.networks(weightDT)
+#' p <- dynamic.networks(weightDT, "g6")
 #' p
 dynamic.networks <- function(weightDT,
                              regulators = NULL,
