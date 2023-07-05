@@ -46,6 +46,9 @@ reference:
   - exampleMatrix
   - exampleGroundTruth
 
-# - subtitle: "Others functions"
-# - contents:
-#   - inferCSN
+- subtitle: "Others functions"
+- contents:
+  - coef.inferCSN
+  - coef.inferCSNCV
+  - print.inferCSN
+  - print.inferCSNCV
