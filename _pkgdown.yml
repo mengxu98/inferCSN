@@ -3,6 +3,10 @@ url: https://mengxu98.github.io/inferCSN/
 template:
   package: mxpkgdown
 
+authors:
+  Mengxu:
+    href: https://github.com/mengxu98
+
 navbar:
   components:
     github:
@@ -31,17 +35,17 @@ reference:
 - contents:
   - compute.gene.rank
 
-- subtitle: "Plots"
+- subtitle: "Network Visualization"
 - contents:
-  - compute.gene.rank
+  - dynamic.networks
   - figure.format
   - net.format
-
-- subtitle: "Others functions"
-- contents:
-  - inferCSNObject
 
 - subtitle: "Test data"
 - contents:
   - exampleMatrix
   - exampleGroundTruth
+
+# - subtitle: "Others functions"
+# - contents:
+#   - inferCSN
