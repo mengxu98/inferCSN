@@ -102,16 +102,18 @@ inferCSN <- function(matrix = NULL,
         pb$tick()
         Sys.sleep(0.05)
       }
-      subWeightDT <- sub.inferCSN(regulatorsMatrix = regulatorsMatrix,
-                                      targetsMatrix = targetsMatrix,
-                                      target = targets[i],
-                                      crossValidation = crossValidation,
-                                      penalty = penalty,
-                                      algorithm = algorithm,
-                                      nFolds = nFolds,
-                                      maxSuppSize = maxSuppSize,
-                                      verbose = verbose)
-      weightDT <- rbind(weightDT, subWeightDT)
+
+      weightDT <- rbind(weightDT,
+                        sub.inferCSN(regulatorsMatrix = regulatorsMatrix,
+                                     targetsMatrix = targetsMatrix,
+                                     target = targets[i],
+                                     crossValidation = crossValidation,
+                                     penalty = penalty,
+                                     algorithm = algorithm,
+                                     nFolds = nFolds,
+                                     maxSuppSize = maxSuppSize,
+                                     verbose = verbose)
+      )
     }
 
   } else {
@@ -124,13 +126,14 @@ inferCSN <- function(matrix = NULL,
       width = 100,
       style = 3
     )
+
     progress <- function(n) setTxtProgressBar(pb, n)
     opts <- list(progress = progress)
     "%dopar%" <- foreach::"%dopar%"
     weightDT <- foreach::foreach(
       target = targets,
       .combine = "rbind",
-      .export = c("sparse.regression", "sub.inferCSN"),
+      .export = c("sub.inferCSN", "sparse.regression"),
       .packages = "Kendall",
       .options.snow = opts
     ) %dopar% {
