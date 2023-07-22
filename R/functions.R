@@ -100,7 +100,6 @@ sub.inferCSN <- function(regulatorsMatrix = NULL,
   return(data.frame(regulator = colnames(X), target = target, weight = coefficients))
 }
 
-
 #' @title auc.calculate
 #' @description AUC value calculate
 #'
@@ -206,6 +205,107 @@ auc.calculate <- function(weightDT = NULL,
 figure.format <- function(string) {
   logic <- grepl(".*\\.(pdf|png|jpe?g)$", string)
   return(logic)
+}
+
+#' @title network.heatmap
+#'
+#' @param weightDT The weight data table of network.
+#' @param heatmapSize heatmapSize
+#' @param heatmapTitle heatmapTitle
+#' @param heatmapColor heatmapColor
+#' @param showNames showNames
+#'
+#' @return heatmap
+#' @export
+#'
+#' @examples
+#' data("exampleMatrix")
+#' data("exampleGroundTruth")
+#' weightDT <- inferCSN(exampleMatrix)
+#' p1 <- network.heatmap(exampleGroundTruth,
+#'                       heatmapTitle = "Ground truth")
+#' p1
+#' p2 <- network.heatmap(weightDT,
+#'                       heatmapTitle = "inferCSN")
+#' p2
+#' p3 <- network.heatmap(weightDT,
+#'                       heatmapTitle = "inferCSN",
+#'                       heatmapColor = c("#20a485", "#410054", "#fee81f"))
+#' p3
+#' p4 <- network.heatmap(weightDT,
+#'                       heatmapTitle = "inferCSN",
+#'                       heatmapColor = c("#20a485", "white", "#fee81f"))
+#' p4
+#' p5 <- network.heatmap(weightDT,
+#'                       heatmapTitle = "inferCSN",
+#'                       showNames = TRUE)
+#' p5
+network.heatmap <- function(weightDT = NULL,
+                            heatmapSize = NULL,
+                            heatmapTitle = NULL,
+                            heatmapColor = NULL,
+                            showNames = FALSE) {
+  colnames(weightDT) <- c("regulator", "target", "weight")
+  genes <- unique(c(weightDT$regulator, weightDT$target))
+
+  if (showNames) {
+    if (is.null(heatmapSize)) heatmapSize <- length(genes) / 2
+  } else {
+    heatmapSize <- 6
+  }
+
+  if (is.null(heatmapColor)) heatmapColor <- c("#1966ad", "white", "#bb141a")
+
+  weightMatrix <- DT2Matrix(weightDT)
+
+  minWeight <- min(weightMatrix)
+  maxWeight <- max(weightMatrix)
+  if (minWeight >= 0) {
+    colorFun <- circlize::colorRamp2(c(minWeight, maxWeight), heatmapColor[-1])
+  } else if (maxWeight <= 0) {
+    colorFun <- circlize::colorRamp2(c(minWeight, maxWeight), heatmapColor[-3])
+  } else {
+    colorFun <- circlize::colorRamp2(c(minWeight, 0, maxWeight), heatmapColor)
+  }
+
+  p <- ComplexHeatmap::Heatmap(weightMatrix,
+                               name = "Weight",
+                               col = colorFun,
+                               column_title = heatmapTitle,
+                               cluster_rows = F,
+                               cluster_columns = F,
+                               show_row_names = showNames,
+                               show_column_names = showNames,
+                               column_order = gtools::mixedsort(colnames(weightMatrix)),
+                               row_order = gtools::mixedsort(rownames(weightMatrix)),
+                               # rect_gp = grid::gpar(col = "gray80", lwd = 2),
+                               width = ggnetwork::unit(heatmapSize, "cm"),
+                               height = ggnetwork::unit(heatmapSize, "cm"),
+                               border = "black")
+  return(p)
+}
+
+#' @title DT2Matrix
+#'
+#' @param weightDT The weight data table of network.
+#'
+#' @return Weight matrix
+#' @export
+#'
+DT2Matrix <- function(weightDT = NULL) {
+  colnames(weightDT) <- c("regulator", "target", "weight")
+  genes <- unique(c(weightDT$regulator, weightDT$target))
+
+  weightMatrix <- matrix(0,
+                         nrow = length(genes),
+                         ncol = length(genes),
+                         dimnames = list(genes, genes))
+
+  for (i in 1:nrow(weightDT)) {
+    weightMatrix[weightDT$regulator[i], weightDT$target[i]] <- weightDT$weight[i]
+  }
+
+  return(weightMatrix)
 }
 
 #' @title dynamic.networks
