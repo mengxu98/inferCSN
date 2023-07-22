@@ -34,17 +34,19 @@ reference:
 - subtitle: "Network Visualization"
 - contents:
   - dynamic.networks
+  - network.heatmap
+
+- subtitle: "Others functions"
+- contents:
   - figure.format
   - net.format
+  - DT2Matrix
+  - coef.inferCSN
+  - coef.inferCSNCV
+  - print.inferCSN
+  - print.inferCSNCV
 
 - subtitle: "Test data"
 - contents:
   - exampleMatrix
   - exampleGroundTruth
-
-- subtitle: "Others functions"
-- contents:
-  - coef.inferCSN
-  - coef.inferCSNCV
-  - print.inferCSN
-  - print.inferCSNCV
