@@ -8,3 +8,4 @@ docs
 renv/settings.json
 src/inferCSN.so
 src/inferCSN.dll
+scripts/test.R
