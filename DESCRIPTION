@@ -34,6 +34,10 @@ Imports:
     tradeSeq
 Suggests: 
     cowplot,
+    ComplexHeatmap,
+    gtools,
+    grid,
+    circlize,
     doParallel,
     doRNG,
     Kendall,
@@ -47,6 +51,7 @@ Suggests:
     graphics,
     ROCR,
     EBSeq
-biocViews: tradeSeq
+biocViews: tradeSeq,
+           ComplexHeatmap
 Config/Needs/website: mengxu98/mxpkgdown
 LazyData: true
