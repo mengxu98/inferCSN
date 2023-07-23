@@ -152,8 +152,6 @@ inferCSN <- function(matrix = NULL,
     parallel::stopCluster(cl)
   }
 
-  attr(weightDT, "rng") <- NULL
-  attr(weightDT, "doRNG_version") <- NULL
   weightDT <- weightDT[order(abs(weightDT$weight), decreasing = TRUE), ]
   return(weightDT)
 }
