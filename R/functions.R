@@ -278,7 +278,6 @@ network.heatmap <- function(weightDT = NULL,
                                show_column_names = showNames,
                                column_order = gtools::mixedsort(colnames(weightMatrix)),
                                row_order = gtools::mixedsort(rownames(weightMatrix)),
-                               # rect_gp = grid::gpar(col = "gray80", lwd = 2),
                                width = ggnetwork::unit(heatmapSize, "cm"),
                                height = ggnetwork::unit(heatmapSize, "cm"),
                                border = "black")
