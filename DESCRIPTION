@@ -30,27 +30,15 @@ Imports:
     snow,
     Matrix,
     methods,
-    ggplot2,
-    tradeSeq
+    ggplot2
 Suggests: 
     cowplot,
     ComplexHeatmap,
     gtools,
-    grid,
     circlize,
-    doParallel,
-    doRNG,
     Kendall,
-    reshape2,
     precrec,
-    MASS,
-    modEvA,
-    gam,
-    ggnetwork,
-    graphics,
-    ROCR,
-    EBSeq
-biocViews: tradeSeq,
-           ComplexHeatmap
+    ggnetwork
+biocViews: ComplexHeatmap
 Config/Needs/website: mengxu98/mxpkgdown
 LazyData: true
