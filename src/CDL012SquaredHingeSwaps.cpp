@@ -25,7 +25,10 @@ FitResult<T> CDL012SquaredHingeSwaps<T>::_Fit() {
 
     this->objective = result.Objective;
     double Fmin = this->objective;
-    std::size_t maxindex;
+    // std::size_t maxindex;
+    std::size_t maxindex = 0;
+    // Fix warning:
+      // warning: 'maxindex' may be used uninitialized in this function [-Wmaybe-uninitialized]
     double Bmaxindex;
 
     this->P.Init = 'u';
