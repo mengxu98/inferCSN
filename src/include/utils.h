@@ -41,7 +41,11 @@ arma::sp_mat inline matrix_rows_get(const arma::sp_mat &mat, const T1 vector_of_
     // 1 - N without permutations splitting at floor(N/n_folds)
     arma::sp_mat row_mat = arma::sp_mat(vector_of_row_indices.n_elem, mat.n_cols);
 
-    for (auto i = 0; i < vector_of_row_indices.n_elem; i++){
+    // for (auto i = 0; i < vector_of_row_indices.n_elem; i++){
+    for (int i = 0; i < static_cast<int>(vector_of_row_indices.n_elem); i++){
+    // Fix this warning:
+      // warning: comparison of integer expressions of different signedness:
+      // 'int' and 'const uword' {aka 'const unsigned int'} [-Wsign-compare]
         auto row_index = vector_of_row_indices(i);
         arma::sp_mat::const_row_iterator begin = mat.begin_row(row_index);
         arma::sp_mat::const_row_iterator end = mat.end_row(row_index);

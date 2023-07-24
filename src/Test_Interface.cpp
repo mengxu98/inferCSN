@@ -1,4 +1,4 @@
-#include "Test_Interface.h" 
+#include "Test_Interface.h"
 // [[Rcpp::depends(RcppArmadillo)]]
 
 
@@ -16,7 +16,7 @@ arma::vec R_matrix_column_get_sparse(const arma::sp_mat &mat, int col) {
 arma::mat R_matrix_rows_get_dense(const arma::mat &mat, const arma::ucolvec rows){
     return matrix_rows_get(mat, rows);
 }
-    
+
 // [[Rcpp::export]]
 arma::sp_mat R_matrix_rows_get_sparse(const arma::sp_mat &mat, const arma::ucolvec rows){
     return matrix_rows_get(mat, rows);
@@ -79,25 +79,25 @@ Rcpp::List R_matrix_normalize_dense(arma::mat mat_norm){
     arma::rowvec ScaleX = matrix_normalize(mat_norm);
     return Rcpp::List::create(Rcpp::Named("mat_norm") = mat_norm,
                               Rcpp::Named("ScaleX") = ScaleX);
-};
+} // ; // Fix this warning: extra ';' [-Wpedantic]
 
 // [[Rcpp::export]]
 Rcpp::List R_matrix_normalize_sparse(arma::sp_mat mat_norm){
     arma::rowvec ScaleX = matrix_normalize(mat_norm);
     return Rcpp::List::create(Rcpp::Named("mat_norm") = mat_norm,
                               Rcpp::Named("ScaleX") = ScaleX);
-};
+} // ; // Fix this warning: extra ';' [-Wpedantic]
 
 // [[Rcpp::export]]
 Rcpp::List R_matrix_center_dense(const arma::mat mat, arma::mat X_normalized, bool intercept){
     arma::rowvec meanX = matrix_center(mat, X_normalized, intercept);
     return Rcpp::List::create(Rcpp::Named("mat_norm") = X_normalized,
                               Rcpp::Named("MeanX") = meanX);
-};
+} // ; // Fix this warning: extra ';' [-Wpedantic]
 
 // [[Rcpp::export]]
 Rcpp::List R_matrix_center_sparse(const arma::sp_mat mat, arma::sp_mat X_normalized,bool intercept){
     arma::rowvec meanX = matrix_center(mat, X_normalized, intercept);
     return Rcpp::List::create(Rcpp::Named("mat_norm") = X_normalized,
                               Rcpp::Named("MeanX") = meanX);
-};
+} // ; // Fix this warning: extra ';' [-Wpedantic]

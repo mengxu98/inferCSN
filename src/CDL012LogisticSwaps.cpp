@@ -72,8 +72,8 @@ FitResult<T> CDL012LogisticSwaps<T>::_Fit() {
             // for(std::size_t ll = 0; ll < std::min(50, (int) this->p); ++ll) {
             for (std::size_t ll = 0; ll < std::min(static_cast<std::size_t>(50), static_cast<std::size_t>(this->p)); ++ll) {
             // Fix this warning:
-                // warning: comparison of integer expressions of different signedness:
-                // 'std::size_t' {aka 'long long unsigned int'} and 'const int' [-Wsign-compare]
+              // warning: comparison of integer expressions of different signedness:
+              // 'std::size_t' {aka 'long long unsigned int'} and 'const int' [-Wsign-compare]
                 std::size_t i = indices(ll);
 
                 if(this->B[i] == 0 && i >= this->NoSelectK) {

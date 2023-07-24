@@ -3,7 +3,7 @@
 template <class T>
 Grid1D<T>::Grid1D(const T& Xi, const arma::vec& yi, const GridParams<T>& PG) {
     // automatically selects lambda_0 (but assumes other lambdas are given in PG.P.ModelParams)
-    
+
     X = &Xi;
     y = &yi;
     p = Xi.n_cols;
@@ -17,15 +17,15 @@ Grid1D<T>::Grid1D(const T& Xi, const arma::vec& yi, const GridParams<T>& PG) {
     Xtr = P.Xtr;
     ytX = P.ytX;
     NoSelectK = P.NoSelectK;
-    
+
     LambdaU = PG.LambdaU;
-    
+
     if (!LambdaU) {
         G_ncols = PG.G_ncols;
     } else {
         G_ncols = PG.Lambdas.n_rows; // override the user's ncols if LambdaU = 1
     }
-    
+
     G.reserve(G_ncols);
     if (LambdaU) {
         Lambdas = PG.Lambdas;
@@ -57,10 +57,10 @@ Grid1D<T>::~Grid1D() {
 
 template <class T>
 std::vector<std::unique_ptr<FitResult<T>>> Grid1D<T>::Fit() {
-    
+
     if (P.Specs.L0 || P.Specs.L0L2 || P.Specs.L0L1) {
         bool scaledown = false;
-        
+
         double Lipconst;
         arma::vec Xtrarma;
         if (P.Specs.Logistic) {
@@ -72,7 +72,7 @@ std::vector<std::unique_ptr<FitResult<T>>> Grid1D<T>::Fit() {
             if (!XtrAvailable) {
                 // gradient of loss function at zero
                 Xtrarma = 2 * arma::abs(y->t() * *X).t();
-            } 
+            }
             Lipconst = 2 + 2 * P.ModelParams[2];
         } else {
             if (!XtrAvailable) {
@@ -82,7 +82,7 @@ std::vector<std::unique_ptr<FitResult<T>>> Grid1D<T>::Fit() {
             Lipconst = 1 + 2 * P.ModelParams[2];
             *P.r = *y - P.b0; // B = 0 initially
         }
-        
+
         double ytXmax;
         if (!XtrAvailable) {
             *Xtr = arma::conv_to< std::vector<double> >::from(Xtrarma);
@@ -90,28 +90,28 @@ std::vector<std::unique_ptr<FitResult<T>>> Grid1D<T>::Fit() {
         } else {
             ytXmax = ytXmax2d;
         }
-        
+
         double lambdamax = ((ytXmax - P.ModelParams[1]) * (ytXmax - P.ModelParams[1])) / (2 * (Lipconst));
-        
+
         // Rcpp::Rcout << "lambdamax: " << lambdamax << "\n";
-        
+
         if (!LambdaU) {
             P.ModelParams[0] = lambdamax;
         } else {
             P.ModelParams[0] = Lambdas[0];
         }
-        
+
         // Rcpp::Rcout << "P ModelParams: {" << P.ModelParams[0] << ", " << P.ModelParams[1] << ", " << P.ModelParams[2] << ", " << P.ModelParams[3] <<   "}\n";
-        
+
         P.Init = 'z';
-        
-        
+
+
         //std::cout<< "Lambda max: "<< lambdamax << std::endl;
         //double lambdamin = lambdamax*LambdaMinFactor;
         //Lambdas = arma::logspace(std::log10(lambdamin), std::log10(lambdamax), G_ncols);
         //Lambdas = arma::flipud(Lambdas);
-        
-        
+
+
         //std::size_t StopNum = (X->n_rows < NnzStopNum) ? X->n_rows : NnzStopNum;
         std::size_t StopNum = NnzStopNum;
         //std::vector<double>* Xtr = P.Xtr;
@@ -119,7 +119,7 @@ std::vector<std::unique_ptr<FitResult<T>>> Grid1D<T>::Fit() {
         double Xrmax;
         bool prevskip = false; //previous grid point was skipped
         bool currentskip = false; // current grid point should be skipped
-        
+
         for (std::size_t i = 0; i < G_ncols; ++i) {
             Rcpp::checkUserInterrupt();
             // Rcpp::Rcout << "Grid1D: " << i << "\n";
@@ -128,13 +128,13 @@ std::vector<std::unique_ptr<FitResult<T>>> Grid1D<T>::Fit() {
             if (i > 0) {
                 //prevresult = std::move(G.back());
                 *prevresult = *(G.back());
-                
+
             }
-      
+
             currentskip = false;
-            
+
             if (!prevskip) {
-                
+
                 std::iota(idx.begin(), idx.end(), 0); // make global class var later
                 // Exclude the first NoSelectK features from sorting.
                 if (PartialSort && p > 5000 + NoSelectK)
@@ -143,13 +143,13 @@ std::vector<std::unique_ptr<FitResult<T>>> Grid1D<T>::Fit() {
                     std::sort(idx.begin() + NoSelectK, idx.end(), [this](std::size_t i1, std::size_t i2) {return (*Xtr)[i1] > (*Xtr)[i2] ;});
                 P.CyclingOrder = 'u';
                 P.Uorder = idx; // can be made faster
-                
+
                 //
                 Xrmax = (*Xtr)[idx[NoSelectK]];
-                
+
                 if (i > 0) {
                     std::vector<std::size_t> Sp = nnzIndicies(prevresult->B);
-                    
+
                     for(std::size_t l = NoSelectK; l < p; ++l) {
                         if ( std::binary_search(Sp.begin(), Sp.end(), idx[l]) == false ) {
                             Xrmax = (*Xtr)[idx[l]];
@@ -159,11 +159,11 @@ std::vector<std::unique_ptr<FitResult<T>>> Grid1D<T>::Fit() {
                     }
                 }
             }
-            
+
             // Following part assumes that lambda_0 has been set to the new value
             if(i >= 1 && !scaledown && !LambdaU) {
                 P.ModelParams[0] = (((Xrmax - P.ModelParams[1]) * (Xrmax - P.ModelParams[1])) / (2 * (Lipconst))) * 0.99; // for numerical stability issues.
-                
+
                 if (P.ModelParams[0] >= prevresult->ModelParams[0]) {
                     P.ModelParams[0] = prevresult->ModelParams[0] * 0.97;
                 } // handles numerical instability.
@@ -173,42 +173,40 @@ std::vector<std::unique_ptr<FitResult<T>>> Grid1D<T>::Fit() {
             } else if (i >= 1 && LambdaU) {
                 P.ModelParams[0] = Lambdas[i];
             }
-            
+
             // Rcpp::Rcout << "P.ModelParams[0]: " << P.ModelParams[0] << "\n";
-           
+
             if (!currentskip) {
-            
+
                 auto Model = make_CD(*X, *y, P);
-                
+
                 std::unique_ptr<FitResult<T>> result(new FitResult<T>);
                 *result = Model->Fit();
-    
+
                 delete Model;
-                
+
                 scaledown = false;
                 if (i >= 1) {
                     std::vector<std::size_t> Spold = nnzIndicies(prevresult->B);
-      
+
                     std::vector<std::size_t> Spnew = nnzIndicies(result->B);
-                   
+
                     bool samesupp = false;
-                    
+
                     if (Spold == Spnew) {
                         samesupp = true;
                         scaledown = true;
                     }
-                    
-                    // //
-                    // 
+
                     // if (samesupp) {
                     //     scaledown = true;
                     // } // got same solution
                 }
-                
+
                 //else {scaledown = false;}
                 G.push_back(std::move(result));
-                
-                
+
+
                 if(n_nonzero(G.back()->B) >= StopNum) {
                     break;
                 }
@@ -217,18 +215,18 @@ std::vector<std::unique_ptr<FitResult<T>>> Grid1D<T>::Fit() {
                 P.b0 = G.back()->b0;
                 // Udate: After 1.1.0, P.r is automatically updated by the previous call to CD
                 //*P.r = G.back()->r;
-                
+
             }
-            
+
             delete prevresult;
-            
-            
+
+
             P.Init = 'u';
             P.Iter += 1;
             prevskip = currentskip;
         }
     }
-    
+
     return std::move(G);
 }
 
