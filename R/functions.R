@@ -345,7 +345,7 @@ dynamic.networks <- function(weightDT,
     layout = layout_ordered,
     cell.jitter = 0
   )
-  regulatorNet$is_regulator <- as.character(regulatorNet$name %in% regulators)
+  regulatorNet$isRegulator <- as.character(regulatorNet$name %in% regulators)
   cols <- c("Activation" = "#3366cc", "Repression" = "#ff0066")
 
   # Plot
@@ -358,14 +358,14 @@ dynamic.networks <- function(weightDT,
       alpha = .6
     ) +
     ggnetwork::geom_nodes(
-      data = regulatorNet[regulatorNet$is_regulator == "FALSE", ],
+      data = regulatorNet[regulatorNet$isRegulator == "FALSE", ],
       ggplot2::aes(x = x, y = y),
       color = "darkgray",
       size = 3,
       alpha = .5
     ) +
     ggnetwork::geom_nodes(
-      data = regulatorNet[regulatorNet$is_regulator == "TRUE", ],
+      data = regulatorNet[regulatorNet$isRegulator == "TRUE", ],
       ggplot2::aes(x = x, y = y),
       color = "#8C4985",
       size = 6,
@@ -373,13 +373,13 @@ dynamic.networks <- function(weightDT,
     ) +
     ggplot2::scale_color_manual(values = cols) +
     ggnetwork::geom_nodelabel_repel(
-      data = regulatorNet[regulatorNet$is_regulator == "FALSE", ],
+      data = regulatorNet[regulatorNet$isRegulator == "FALSE", ],
       ggplot2::aes(x = x, y = y, label = name),
       size = 2,
       color = "#5A8BAD"
     ) +
     ggnetwork::geom_nodelabel_repel(
-      data = regulatorNet[regulatorNet$is_regulator == "TRUE", ],
+      data = regulatorNet[regulatorNet$isRegulator == "TRUE", ],
       ggplot2::aes(x = x, y = y, label = name),
       size = 3.5,
       color = "black"
@@ -439,8 +439,8 @@ compute.gene.rank <- function(weightDT,
   pageRank$gene <- rownames(pageRank)
   pageRank <- pageRank[, c("gene", "pageRank")]
   pageRank <- pageRank[order(pageRank$pageRank, decreasing = TRUE), ]
-  pageRank$is_regulator <- FALSE
-  pageRank$is_regulator[pageRank$gene %in% unique(weightDT$regulatory)] <- TRUE
+  pageRank$isRegulator <- FALSE
+  pageRank$isRegulator[pageRank$gene %in% unique(weightDT$regulatory)] <- TRUE
   return(pageRank)
 }
 
