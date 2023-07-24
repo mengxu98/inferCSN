@@ -27,7 +27,7 @@ network.heatmap(
 heatmap
 }
 \description{
-network.heatmap
+The heatmap of network
 }
 \examples{
 data("exampleMatrix")

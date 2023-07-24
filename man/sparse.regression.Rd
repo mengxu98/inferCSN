@@ -39,5 +39,5 @@ The CDPSI algorithm may yield better results, but it also increases running time
 The coefficients
 }
 \description{
-sparse.regression
+Sparse regression model
 }

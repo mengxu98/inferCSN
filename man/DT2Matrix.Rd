@@ -13,5 +13,5 @@ DT2Matrix(weightDT = NULL)
 Weight matrix
 }
 \description{
-DT2Matrix
+Switch weight data table to weight matrix
 }

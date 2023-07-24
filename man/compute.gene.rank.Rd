@@ -15,9 +15,6 @@ compute.gene.rank(weightDT, directedGraph = FALSE)
 A data.table with three columns
 }
 \description{
-compute.gene.rank
-}
-\details{
 Function to compute page rank of TF+target networks
 }
 \examples{

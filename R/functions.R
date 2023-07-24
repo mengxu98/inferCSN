@@ -1,6 +1,7 @@
 utils::globalVariables(c("x", "y", "xend", "yend", "weight", "Interaction", "name", ".", "target", "curvetype"))
 
 #' @title sparse.regression
+#' @description Sparse regression model
 #'
 #' @param X The data matrix
 #' @param y The response vector
@@ -62,7 +63,8 @@ sparse.regression <- function(X, y,
   return(coef(fit, lambda = lambda, gamma = gamma) %>% as.vector() %>% .[-1])
 }
 
-#' sub.inferCSN
+#' @title sub.inferCSN
+#' @description Sparse regression model for single gene
 #'
 #' @param regulatorsMatrix regulatorsMatrix
 #' @param targetsMatrix targetsMatrix
@@ -197,6 +199,7 @@ auc.calculate <- function(weightDT = NULL,
 
 #' @title figure.format
 #' @description Check figure format
+#'
 #' @param string A string of file name
 #'
 #' @return Logic value
@@ -208,6 +211,7 @@ figure.format <- function(string) {
 }
 
 #' @title network.heatmap
+#' @description The heatmap of network
 #'
 #' @param weightDT The weight data table of network.
 #' @param heatmapSize heatmapSize
@@ -285,6 +289,7 @@ network.heatmap <- function(weightDT = NULL,
 }
 
 #' @title DT2Matrix
+#' @description Switch weight data table to weight matrix
 #'
 #' @param weightDT The weight data table of network.
 #'
@@ -415,7 +420,7 @@ net.format <- function(weightDT,
 }
 
 #' @title compute.gene.rank
-#' @details Function to compute page rank of TF+target networks
+#' @description Function to compute page rank of TF+target networks
 #'
 #' @param weightDT The weight data table of network.
 #' @param directedGraph If GRN is directed or not
@@ -451,8 +456,8 @@ compute.gene.rank <- function(weightDT,
 #' @importFrom methods is
 #' @import Matrix
 
-#' @title Fit a sparse regression model
-#' @description Computes the regularization path for the specified loss function and penalty function
+#' @title inferCSN.fit
+#' @description Fit a sparse regression model. Computes the regularization path for the specified loss function and penalty function
 #'
 #' @param x The data matrix
 #' @param y The response vector
@@ -695,7 +700,7 @@ inferCSN.fit <- function(x, y,
   G
 }
 
-#' @title Cross Validation
+#' @title inferCSN.cvfit
 #' @description Computes a regularization path and performs K-fold cross-validation
 #'
 #' @inheritParams inferCSN.fit
@@ -922,7 +927,7 @@ inferCSN.cvfit <- function(x, y,
   G
 }
 
-#' @title Extract Solutions
+#' @title coef.inferCSN
 #' @description Extracts a specific solution in the regularization path.
 #'
 #' @param object The output of inferCSN.fit or inferCSN.cvfit
@@ -999,7 +1004,7 @@ coef.inferCSNCV <- function(object,
   coef.inferCSN(object$fit, lambda, gamma, ...)
 }
 
-#' @title Print inferCSN.fit object
+#' @title print.inferCSN
 #' @description Prints a summary of inferCSN.fit
 #'
 #' @param x The output of inferCSN.fit or inferCSN.cvfit

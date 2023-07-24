@@ -42,5 +42,5 @@ The CDPSI algorithm may yield better results, but it also increases running time
 The weight data table of sub-network.
 }
 \description{
-sub.inferCSN
+Sparse regression model for single gene
 }

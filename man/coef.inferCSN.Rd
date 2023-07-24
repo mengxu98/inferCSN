@@ -3,7 +3,7 @@
 \name{coef.inferCSN}
 \alias{coef.inferCSN}
 \alias{coef.inferCSNCV}
-\title{Extract Solutions}
+\title{coef.inferCSN}
 \usage{
 \method{coef}{inferCSN}(object, lambda = NULL, gamma = NULL, supportSize = NULL, ...)
 

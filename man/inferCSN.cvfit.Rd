@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{inferCSN.cvfit}
 \alias{inferCSN.cvfit}
-\title{Cross Validation}
+\title{inferCSN.cvfit}
 \usage{
 inferCSN.cvfit(
   x,

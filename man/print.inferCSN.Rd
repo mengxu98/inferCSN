@@ -3,7 +3,7 @@
 \name{print.inferCSN}
 \alias{print.inferCSN}
 \alias{print.inferCSNCV}
-\title{Print inferCSN.fit object}
+\title{print.inferCSN}
 \usage{
 \method{print}{inferCSN}(x, ...)
 
