@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{sub.inferCSN}
 \alias{sub.inferCSN}
-\title{sub.inferCSN}
+\title{Sparse regression model for single gene}
 \usage{
 sub.inferCSN(
   regulatorsMatrix = NULL,

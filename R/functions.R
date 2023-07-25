@@ -1,7 +1,6 @@
 utils::globalVariables(c("x", "y", "xend", "yend", "weight", "Interaction", "name", ".", "target", "curvetype"))
 
-#' @title sparse.regression
-#' @description Sparse regression model
+#' @title Sparse regression model
 #'
 #' @param X The data matrix
 #' @param y The response vector
@@ -63,8 +62,7 @@ sparse.regression <- function(X, y,
   return(coef(fit, lambda = lambda, gamma = gamma) %>% as.vector() %>% .[-1])
 }
 
-#' @title sub.inferCSN
-#' @description Sparse regression model for single gene
+#' @title Sparse regression model for single gene
 #'
 #' @param regulatorsMatrix regulatorsMatrix
 #' @param targetsMatrix targetsMatrix
@@ -102,8 +100,7 @@ sub.inferCSN <- function(regulatorsMatrix = NULL,
   return(data.frame(regulator = colnames(X), target = target, weight = coefficients))
 }
 
-#' @title auc.calculate
-#' @description AUC value calculate
+#' @title AUC value calculate
 #'
 #' @param weightDT The weight data table of network.
 #' @param groundTruth Ground truth for calculate AUC.
@@ -197,8 +194,7 @@ auc.calculate <- function(weightDT = NULL,
   return(aucMetric)
 }
 
-#' @title figure.format
-#' @description Check figure format
+#' @title Checking figure format
 #'
 #' @param string A string of file name
 #'
@@ -210,8 +206,7 @@ figure.format <- function(string) {
   return(logic)
 }
 
-#' @title network.heatmap
-#' @description The heatmap of network
+#' @title The heatmap of network
 #'
 #' @param weightDT The weight data table of network.
 #' @param heatmapSize heatmapSize
@@ -288,8 +283,7 @@ network.heatmap <- function(weightDT = NULL,
   return(p)
 }
 
-#' @title DT2Matrix
-#' @description Switch weight data table to weight matrix
+#' @title Switch weight data table to weight matrix
 #'
 #' @param weightDT The weight data table of network.
 #'
@@ -312,8 +306,7 @@ DT2Matrix <- function(weightDT = NULL) {
   return(weightMatrix)
 }
 
-#' @title dynamic.networks
-#' @description Plot of dynamic networks
+#' @title Plot of dynamic networks
 #'
 #' @param weightDT weightDT
 #' @param regulators regulators
@@ -393,8 +386,7 @@ dynamic.networks <- function(weightDT,
   g <- g + ggplot2::theme(legend.position = legend.position)
 }
 
-#' @title net.format
-#' @description Format weight table
+#' @title Format weight table
 #'
 #' @param weightDT The weight data table of network.
 #' @param regulators Regulators list.
@@ -419,8 +411,7 @@ net.format <- function(weightDT,
   return(weightDT)
 }
 
-#' @title compute.gene.rank
-#' @description Function to compute page rank of TF+target networks
+#' @title Compute and rank TFs in network
 #'
 #' @param weightDT The weight data table of network.
 #' @param directedGraph If GRN is directed or not
@@ -456,8 +447,8 @@ compute.gene.rank <- function(weightDT,
 #' @importFrom methods is
 #' @import Matrix
 
-#' @title inferCSN.fit
-#' @description Fit a sparse regression model. Computes the regularization path for the specified loss function and penalty function
+#' @title Fit a sparse regression model
+#' @description Computes the regularization path for the specified loss function and penalty function
 #'
 #' @param x The data matrix
 #' @param y The response vector
@@ -700,8 +691,7 @@ inferCSN.fit <- function(x, y,
   G
 }
 
-#' @title inferCSN.cvfit
-#' @description Computes a regularization path and performs K-fold cross-validation
+#' @title Computes a regularization path and performs K-fold cross-validation
 #'
 #' @inheritParams inferCSN.fit
 #' @param nFolds The number of folds for cross-validation.
@@ -927,8 +917,7 @@ inferCSN.cvfit <- function(x, y,
   G
 }
 
-#' @title coef.inferCSN
-#' @description Extracts a specific solution in the regularization path.
+#' @title Extracts a specific solution in the regularization path.
 #'
 #' @param object The output of inferCSN.fit or inferCSN.cvfit
 #' @param lambda The value of lambda at which to extract the solution.
@@ -1004,8 +993,7 @@ coef.inferCSNCV <- function(object,
   coef.inferCSN(object$fit, lambda, gamma, ...)
 }
 
-#' @title print.inferCSN
-#' @description Prints a summary of inferCSN.fit
+#' @title Prints a summary of inferCSN.fit
 #'
 #' @param x The output of inferCSN.fit or inferCSN.cvfit
 #' @param ... ignore

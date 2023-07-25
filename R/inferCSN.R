@@ -1,6 +1,4 @@
-#' @title inferCSN
-#' @description A method for inferring cell-type-specific gene regulatory network
-#' from single-cell RNA data.
+#' @title Inferring cell-specific gene regulatory network
 #'
 #' @param matrix An expression matrix, cells by genes.
 #' @param penalty [Default = "L0"] The type of regularization.

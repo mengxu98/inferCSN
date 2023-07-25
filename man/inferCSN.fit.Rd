@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{inferCSN.fit}
 \alias{inferCSN.fit}
-\title{inferCSN.fit}
+\title{Fit a sparse regression model}
 \usage{
 inferCSN.fit(
   x,
@@ -89,5 +89,5 @@ portion of non-zeros}
 An S3 object of type "inferCSN" describing the regularization path
 }
 \description{
-Fit a sparse regression model. Computes the regularization path for the specified loss function and penalty function
+Computes the regularization path for the specified loss function and penalty function
 }

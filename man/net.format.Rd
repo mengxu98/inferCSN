@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{net.format}
 \alias{net.format}
-\title{net.format}
+\title{Format weight table}
 \usage{
 net.format(weightDT, regulators = NULL)
 }

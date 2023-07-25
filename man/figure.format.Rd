@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{figure.format}
 \alias{figure.format}
-\title{figure.format}
+\title{Checking figure format}
 \usage{
 figure.format(string)
 }
@@ -13,5 +13,5 @@ figure.format(string)
 Logic value
 }
 \description{
-Check figure format
+Checking figure format
 }

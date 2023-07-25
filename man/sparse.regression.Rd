@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{sparse.regression}
 \alias{sparse.regression}
-\title{sparse.regression}
+\title{Sparse regression model}
 \usage{
 sparse.regression(
   X,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{network.heatmap}
 \alias{network.heatmap}
-\title{network.heatmap}
+\title{The heatmap of network}
 \usage{
 network.heatmap(
   weightDT = NULL,

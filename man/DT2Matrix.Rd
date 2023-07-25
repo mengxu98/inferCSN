@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{DT2Matrix}
 \alias{DT2Matrix}
-\title{DT2Matrix}
+\title{Switch weight data table to weight matrix}
 \usage{
 DT2Matrix(weightDT = NULL)
 }

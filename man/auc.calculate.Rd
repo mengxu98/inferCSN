@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{auc.calculate}
 \alias{auc.calculate}
-\title{auc.calculate}
+\title{AUC value calculate}
 \usage{
 auc.calculate(
   weightDT = NULL,

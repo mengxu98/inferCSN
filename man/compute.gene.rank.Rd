@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{compute.gene.rank}
 \alias{compute.gene.rank}
-\title{compute.gene.rank}
+\title{Compute and rank TFs in network}
 \usage{
 compute.gene.rank(weightDT, directedGraph = FALSE)
 }
@@ -15,7 +15,7 @@ compute.gene.rank(weightDT, directedGraph = FALSE)
 A data.table with three columns
 }
 \description{
-Function to compute page rank of TF+target networks
+Compute and rank TFs in network
 }
 \examples{
 data("exampleMatrix")

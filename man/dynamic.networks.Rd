@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{dynamic.networks}
 \alias{dynamic.networks}
-\title{dynamic.networks}
+\title{Plot of dynamic networks}
 \usage{
 dynamic.networks(weightDT, regulators = NULL, legend.position = "right")
 }

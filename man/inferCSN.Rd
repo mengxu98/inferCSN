@@ -2,7 +2,7 @@
 % Please edit documentation in R/inferCSN.R
 \name{inferCSN}
 \alias{inferCSN}
-\title{inferCSN}
+\title{Inferring cell-specific gene regulatory network}
 \usage{
 inferCSN(
   matrix = NULL,
@@ -45,8 +45,7 @@ The CDPSI algorithm may yield better results, but it also increases running time
 A data table of gene-gene regulatory relationship
 }
 \description{
-A method for inferring cell-type-specific gene regulatory network
-from single-cell RNA data.
+Inferring cell-specific gene regulatory network
 }
 \examples{
 data("exampleMatrix")

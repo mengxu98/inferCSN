@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{inferCSN.cvfit}
 \alias{inferCSN.cvfit}
-\title{inferCSN.cvfit}
+\title{Computes a regularization path and performs K-fold cross-validation}
 \usage{
 inferCSN.cvfit(
   x,

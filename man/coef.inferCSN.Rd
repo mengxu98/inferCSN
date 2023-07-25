@@ -3,7 +3,7 @@
 \name{coef.inferCSN}
 \alias{coef.inferCSN}
 \alias{coef.inferCSNCV}
-\title{coef.inferCSN}
+\title{Extracts a specific solution in the regularization path.}
 \usage{
 \method{coef}{inferCSN}(object, lambda = NULL, gamma = NULL, supportSize = NULL, ...)
 
