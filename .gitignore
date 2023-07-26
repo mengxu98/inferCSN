@@ -5,8 +5,6 @@
 docs
 *.o
 .DS_Store
-renv/settings.json
 src/inferCSN.so
 src/inferCSN.dll
 scripts/test.R
-renv.lock
