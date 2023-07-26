@@ -4,10 +4,11 @@
 check_r_installed() {
     if command -v R >/dev/null 2>&1; then
         echo "R is already installed......"
-        exit 0
+        install_packages
     else
         echo "R is not installed......"
-        return 1
+        install_r
+        install_packages
     fi
 }
 
@@ -20,39 +21,18 @@ install_r() {
     sudo apt-get install -y r-base
 }
 
+# Function to check and install required packages......
+install_packages() {
+	echo "Checking and install required packages......"
+
+	# Required packages
+	Rscript -e 'install.packages(c("BiocManager", "devtools", "doSNOW", "dplyr", "foreach", "igraph", "magritte", "patchwork", "progress", "purrr", "Rcpp", "snow", "ggplot2", "RcppArmadillo", "cowplot", "gtools", "circlize", "Kendall", "precrec", "ggnetwork"), repos = "https://cloud.r-project.org")'
+
+	Rscript -e 'install.packages("digest", repos = c("https://eddelbuettel.r-universe.dev", "https://cloud.r-project.org"))'
+
+	Rscript -e 'BiocManager::install(c("ComplexHeatmap"))'
+}
+
 # Check if R is installed
-check_r_installed || install_r
-
-# Checking and install required packages......
-echo "Checking and install required packages......"
-
-# Required packages
-Rscript -e 'install.packages(c("BiocManager", \
-                               "devtools", \
-                               "doSNOW", \
-                               "dplyr", \
-                               "foreach", \
-                               "igraph", \
-                               "magritte", \
-                               "patchwork", \
-                               "progress", \
-                               "purr", \
-                               "Rcpp", \
-                               "snow", \
-                               "ggplot2", \
-                               "RcppArmadillo", \
-                               "cowplot", \
-                               "gtools", \
-                               "circlize", \
-                               "Kendall", \
-                               "precrec", \
-                               "ggnetwork"), \
-                             repos = "https://cloud.r-project.org")'
-
-Rscript -e 'install.packages("digest", \
-                             repos = c("https://eddelbuettel.r-universe.dev", \
-                                       "https://cloud.r-project.org"))'
-
-Rscript -e 'BiocManager::install(c("ComplexHeatmap"))'
-
+check_r_installed
 
