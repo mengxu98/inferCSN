@@ -43,10 +43,6 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
-      - name: Restore renv.lock
-        if: matrix.config.os != 'macos-latest'
-        run: Rscript -e 'install.packages("remotes"); remotes::install_github("rstudio/renv@0.14.0"); renv::restore()'
-
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
