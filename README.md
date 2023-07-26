@@ -10,7 +10,6 @@
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("wiscstatman/EBSeq")
 devtools::install_github("mengxu98/inferCSN")
 ```
 
@@ -19,7 +18,7 @@ devtools::install_github("mengxu98/inferCSN")
 ``` bash
 git clone https://github.com/mengxu98/inferCSN.git
 cd inferCSN
-Rscript scripts/packages.R
+sh scripts/requirements.sh
 sudo R CMD INSTALL .
 # Some packages may prompt not available, please install.
 ```
