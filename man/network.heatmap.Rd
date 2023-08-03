@@ -5,7 +5,8 @@
 \title{The heatmap of network}
 \usage{
 network.heatmap(
-  weightDT = NULL,
+  weightDT,
+  switchMatrix = TRUE,
   heatmapSize = NULL,
   heatmapTitle = NULL,
   heatmapColor = NULL,
@@ -13,7 +14,9 @@ network.heatmap(
 )
 }
 \arguments{
-\item{weightDT}{The weight data table of network.}
+\item{weightDT}{The weight data table of network}
+
+\item{switchMatrix}{switchMatrix}
 
 \item{heatmapSize}{heatmapSize}
 

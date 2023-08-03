@@ -208,7 +208,8 @@ figure.format <- function(string) {
 
 #' @title The heatmap of network
 #'
-#' @param weightDT The weight data table of network.
+#' @param weightDT The weight data table of network
+#' @param switchMatrix switchMatrix
 #' @param heatmapSize heatmapSize
 #' @param heatmapTitle heatmapTitle
 #' @param heatmapColor heatmapColor
@@ -239,23 +240,28 @@ figure.format <- function(string) {
 #'                       heatmapTitle = "inferCSN",
 #'                       showNames = TRUE)
 #' p5
-network.heatmap <- function(weightDT = NULL,
+network.heatmap <- function(weightDT,
+                            switchMatrix = TRUE,
                             heatmapSize = NULL,
                             heatmapTitle = NULL,
                             heatmapColor = NULL,
                             showNames = FALSE) {
-  colnames(weightDT) <- c("regulator", "target", "weight")
-  genes <- unique(c(weightDT$regulator, weightDT$target))
+  if (switchMatrix) {
+    genes <- unique(c(weightDT$regulator, weightDT$target))
+    colnames(weightDT) <- c("regulator", "target", "weight")
+    weightMatrix <- DT2Matrix(weightDT)
+  } else {
+    genes <- unique(c(rownames(weightDT), colnames(weightDT)))
+    weightMatrix <- weightDT
+  }
+
+  if (is.null(heatmapColor)) heatmapColor <- c("#1966ad", "white", "#bb141a")
 
   if (showNames) {
     if (is.null(heatmapSize)) heatmapSize <- length(genes) / 2
   } else {
     heatmapSize <- 6
   }
-
-  if (is.null(heatmapColor)) heatmapColor <- c("#1966ad", "white", "#bb141a")
-
-  weightMatrix <- DT2Matrix(weightDT)
 
   minWeight <- min(weightMatrix)
   maxWeight <- max(weightMatrix)
@@ -271,8 +277,8 @@ network.heatmap <- function(weightDT = NULL,
                                name = "Weight",
                                col = colorFun,
                                column_title = heatmapTitle,
-                               cluster_rows = F,
-                               cluster_columns = F,
+                               cluster_rows = FALSE,
+                               cluster_columns = FALSE,
                                show_row_names = showNames,
                                show_column_names = showNames,
                                column_order = gtools::mixedsort(colnames(weightMatrix)),
@@ -290,7 +296,7 @@ network.heatmap <- function(weightDT = NULL,
 #' @return Weight matrix
 #' @export
 #'
-DT2Matrix <- function(weightDT = NULL) {
+DT2Matrix <- function(weightDT) {
   colnames(weightDT) <- c("regulator", "target", "weight")
   genes <- unique(c(weightDT$regulator, weightDT$target))
 

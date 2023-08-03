@@ -4,7 +4,7 @@
 \alias{DT2Matrix}
 \title{Switch weight data table to weight matrix}
 \usage{
-DT2Matrix(weightDT = NULL)
+DT2Matrix(weightDT)
 }
 \arguments{
 \item{weightDT}{The weight data table of network.}
