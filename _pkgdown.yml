@@ -1,7 +1,7 @@
 url: https://mengxu98.github.io/inferCSN/
 
 template:
-  package: mxpkgdown
+  package: mxtemplate
 
 navbar:
   components:

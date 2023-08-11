@@ -39,5 +39,5 @@ Suggests:
     precrec,
     ggnetwork
 biocViews: ComplexHeatmap
-Config/Needs/website: mengxu98/mxpkgdown
+Config/Needs/website: mengxu98/mxtemplate
 LazyData: true
