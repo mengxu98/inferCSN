@@ -26,8 +26,9 @@ install_packages() {
 	echo "Checking and install required packages......"
 
 	# Required packages
-	Rscript -e 'install.packages(c("BiocManager", "devtools", "doSNOW", "dplyr", "foreach", "igraph", "magritte", "patchwork", "progress", "purrr", "Rcpp", "snow", "ggplot2", "RcppArmadillo", "cowplot", "gtools", "circlize", "Kendall", "precrec", "ggnetwork"), repos = "https://cloud.r-project.org")'
+	Rscript -e 'install.packages(c("BiocManager", "devtools", "doSNOW", "dplyr", "foreach", "igraph", "magritte", "patchwork", "progress", "purrr", "Rcpp", "snow", "ggplot2", "RcppArmadillo", "cowplot", "gtools", "circlize", "precrec", "ggnetwork"), repos = "https://cloud.r-project.org")'
 
+	# Note: the package 'digest' may cause errors during the installation process on the macOS system
 	Rscript -e 'install.packages("digest", repos = c("https://eddelbuettel.r-universe.dev", "https://cloud.r-project.org"))'
 
 	Rscript -e 'BiocManager::install(c("ComplexHeatmap"))'
@@ -35,4 +36,3 @@ install_packages() {
 
 # Check if R is installed
 check_r_installed
-

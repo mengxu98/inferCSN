@@ -18,8 +18,10 @@ A data.table with three columns
 Compute and rank TFs in network
 }
 \examples{
+library(inferCSN)
 data("exampleMatrix")
 weightDT <- inferCSN(exampleMatrix)
 ranks <- compute.gene.rank(weightDT)
 head(ranks)
+
 }

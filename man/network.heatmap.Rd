@@ -10,7 +10,8 @@ network.heatmap(
   heatmapSize = NULL,
   heatmapTitle = NULL,
   heatmapColor = NULL,
-  showNames = FALSE
+  showNames = FALSE,
+  legendName = NULL
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ network.heatmap(
 \item{heatmapColor}{heatmapColor}
 
 \item{showNames}{showNames}
+
+\item{legendName}{legendName}
 }
 \value{
 heatmap
@@ -33,25 +36,31 @@ heatmap
 The heatmap of network
 }
 \examples{
+library(inferCSN)
 data("exampleMatrix")
 data("exampleGroundTruth")
 weightDT <- inferCSN(exampleMatrix)
 p1 <- network.heatmap(exampleGroundTruth,
                       heatmapTitle = "Ground truth")
-p1
+
 p2 <- network.heatmap(weightDT,
                       heatmapTitle = "inferCSN")
-p2
+
 p3 <- network.heatmap(weightDT,
                       heatmapTitle = "inferCSN",
                       heatmapColor = c("#20a485", "#410054", "#fee81f"))
-p3
+
 p4 <- network.heatmap(weightDT,
                       heatmapTitle = "inferCSN",
                       heatmapColor = c("#20a485", "white", "#fee81f"))
-p4
+
+ComplexHeatmap::draw(p1 + p2 + p3 + p4,
+                     merge_legends = TRUE,
+                     heatmap_legend_side = "right")
+
 p5 <- network.heatmap(weightDT,
                       heatmapTitle = "inferCSN",
                       showNames = TRUE)
 p5
+
 }

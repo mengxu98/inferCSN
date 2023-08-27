@@ -20,20 +20,20 @@ sparse.regression(
 
 \item{y}{The response vector}
 
-\item{crossValidation}{[Default = FALSE] Check whether cross validation is used.}
+\item{crossValidation}{[Default = FALSE] Check whether cross validation is used}
 
 \item{penalty}{[Default = "L0"] The type of regularization.
 This can take either one of the following choices: "L0"and "L0L2".
-For high-dimensional and sparse data, such as single-cell transcriptome data, "L0L2" is more effective.}
+For high-dimensional and sparse data, such as single-cell transcriptome data, "L0L2" is more effective}
 
 \item{algorithm}{[Default = "CD"] Currently "CD" and "CDPSI" are supported.
-The CDPSI algorithm may yield better results, but it also increases running time.}
+The CDPSI algorithm may yield better results, but it also increases running time}
 
-\item{maxSuppSize}{[Default = NULL] The number of non-zore coef, this value will affect the final performance.}
+\item{maxSuppSize}{[Default = NULL] The number of non-zore coef, this value will affect the final performance}
 
-\item{nFolds}{[Default = 10] The number of folds for cross-validation.}
+\item{nFolds}{[Default = 10] The number of folds for cross-validation}
 
-\item{verbose}{[Default = FALSE] Print detailed information.}
+\item{verbose}{[Default = FALSE] Print detailed information}
 }
 \value{
 The coefficients

@@ -20,9 +20,11 @@ A list of ggplot2 objects
 Plot of dynamic networks
 }
 \examples{
+library(inferCSN)
 data("exampleMatrix")
 weightDT <- inferCSN(exampleMatrix)
 ranks <- compute.gene.rank(weightDT)
 p <- dynamic.networks(weightDT, ranks[1, 1])
 p
+
 }

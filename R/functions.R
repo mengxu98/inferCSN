@@ -20,13 +20,12 @@ sparse.regression <- function(X, y,
                               verbose = FALSE) {
   if (crossValidation) {
     tryCatch({
-      fit <- inferCSN.cvfit(
-        X, y,
-        penalty = penalty,
-        algorithm = algorithm,
-        maxSuppSize = maxSuppSize,
-        nFolds = nFolds
-      )
+      fit <- inferCSN.cvfit(X, y,
+                            penalty = penalty,
+                            algorithm = algorithm,
+                            maxSuppSize = maxSuppSize,
+                            nFolds = nFolds)
+
       gamma <- fit$fit$gamma[which(unlist(lapply(fit$cvMeans, min)) == min(unlist(lapply(fit$cvMeans, min))))]
       lambdaList <- print(fit) %>% dplyr::filter(gamma == gamma, )
       if (maxSuppSize %in% lambdaList$maxSuppSize) {
@@ -37,24 +36,22 @@ sparse.regression <- function(X, y,
     },
     error = function(e) {
       if (verbose) message("Cross validation error, used fit instead......")
-      fit <- inferCSN.fit(
-        X, y,
-        penalty = penalty,
-        algorithm = algorithm,
-        maxSuppSize = maxSuppSize
-      )
+      fit <- inferCSN.fit(X, y,
+                          penalty = penalty,
+                          algorithm = algorithm,
+                          maxSuppSize = maxSuppSize)
+
       fitInf <- print(fit)
       lambda <- fitInf$lambda[fitInf$suppSize %>% which.max()]
       gamma <- fitInf$gamma[fitInf$suppSize %>% which.max()]
-    }
-    )
+    })
+
   } else {
-    fit <- inferCSN.fit(
-      X, y,
-      penalty = penalty,
-      algorithm = algorithm,
-      maxSuppSize = maxSuppSize
-    )
+    fit <- inferCSN.fit(X, y,
+                        penalty = penalty,
+                        algorithm = algorithm,
+                        maxSuppSize = maxSuppSize)
+
     fitInf <- print(fit)
     lambda <- fitInf$lambda[fitInf$suppSize %>% which.max()]
     gamma <- fitInf$gamma[fitInf$suppSize %>% which.max()]
@@ -69,7 +66,7 @@ sparse.regression <- function(X, y,
 #' @param target target
 #' @inheritParams inferCSN
 #'
-#' @return The weight data table of sub-network.
+#' @return The weight data table of sub-network
 #' @export
 #'
 sub.inferCSN <- function(regulatorsMatrix = NULL,
@@ -86,15 +83,14 @@ sub.inferCSN <- function(regulatorsMatrix = NULL,
 
   if (is.null(maxSuppSize)) maxSuppSize <- ncol(X)
 
-  coefficients <- sparse.regression(
-    X, y,
-    crossValidation = crossValidation,
-    penalty = penalty,
-    algorithm = algorithm,
-    maxSuppSize = maxSuppSize,
-    nFolds = nFolds,
-    verbose = verbose
-  )
+  coefficients <- sparse.regression(X, y,
+                                    crossValidation = crossValidation,
+                                    penalty = penalty,
+                                    algorithm = algorithm,
+                                    maxSuppSize = maxSuppSize,
+                                    nFolds = nFolds,
+                                    verbose = verbose)
+
   coefficients <- coefficients / sum(abs(coefficients))
   if (length(coefficients) != ncol(X)) coefficients <- 0
   return(data.frame(regulator = colnames(X), target = target, weight = coefficients))
@@ -102,11 +98,11 @@ sub.inferCSN <- function(regulatorsMatrix = NULL,
 
 #' @title AUC value calculate
 #'
-#' @param weightDT The weight data table of network.
-#' @param groundTruth Ground truth for calculate AUC.
-#' @param plot If true, draw and print figure of AUC.
+#' @param weightDT The weight data table of network
+#' @param groundTruth Ground truth for calculate AUC
+#' @param plot If true, draw and print figure of AUC
 #' @param fileSave The figure name
-#' @param interaction If true, consider the positivity and negativity of interaction.
+#' @param interaction If true, consider the positivity or negativity of interaction
 #'
 #' @import patchwork
 #'
@@ -114,11 +110,13 @@ sub.inferCSN <- function(regulatorsMatrix = NULL,
 #' @export
 #'
 #' @examples
+#' library(inferCSN)
 #' data("exampleMatrix")
 #' data("exampleGroundTruth")
 #' weightDT <- inferCSN(exampleMatrix, cores = 1, verbose = TRUE, algorithm = "CDPSI")
 #' auc <- auc.calculate(weightDT, exampleGroundTruth, plot = TRUE)
 #' head(auc)
+#'
 auc.calculate <- function(weightDT = NULL,
                           groundTruth = NULL,
                           plot = FALSE,
@@ -147,8 +145,6 @@ auc.calculate <- function(weightDT = NULL,
   aucMetric[1, "AUPRC"] <- sprintf("%0.3f", auc$aucs[2])
 
   if (plot) {
-    # p <- ggplot2::autoplot(aucCurves)
-
     # Subset data to separate prc and roc
     auprcDf <- subset(ggplot2::fortify(aucCurves), curvetype == "PRC")
     aurocDf <- subset(ggplot2::fortify(aucCurves), curvetype == "ROC")
@@ -168,7 +164,7 @@ auc.calculate <- function(weightDT = NULL,
       ggplot2::geom_hline(yintercept = 0.5, color = "gray", linetype = "dotted") +
       ggplot2::ggtitle(paste("AUPRC:", aucMetric[2])) +
       ggplot2::labs(x = "Recall", y = "Precision") +
-      ggplot2::ylim(0, 1) +
+      # ggplot2::ylim(0, 1) +
       ggplot2::coord_fixed() +
       ggplot2::theme_bw()
 
@@ -214,46 +210,60 @@ figure.format <- function(string) {
 #' @param heatmapTitle heatmapTitle
 #' @param heatmapColor heatmapColor
 #' @param showNames showNames
+#' @param legendName legendName
 #'
 #' @return heatmap
 #' @export
 #'
 #' @examples
+#' library(inferCSN)
 #' data("exampleMatrix")
 #' data("exampleGroundTruth")
 #' weightDT <- inferCSN(exampleMatrix)
 #' p1 <- network.heatmap(exampleGroundTruth,
 #'                       heatmapTitle = "Ground truth")
-#' p1
+#'
 #' p2 <- network.heatmap(weightDT,
 #'                       heatmapTitle = "inferCSN")
-#' p2
+#'
 #' p3 <- network.heatmap(weightDT,
 #'                       heatmapTitle = "inferCSN",
 #'                       heatmapColor = c("#20a485", "#410054", "#fee81f"))
-#' p3
+#'
 #' p4 <- network.heatmap(weightDT,
 #'                       heatmapTitle = "inferCSN",
 #'                       heatmapColor = c("#20a485", "white", "#fee81f"))
-#' p4
+#'
+#' ComplexHeatmap::draw(p1 + p2 + p3 + p4,
+#'                      merge_legends = TRUE,
+#'                      heatmap_legend_side = "right")
+#'
 #' p5 <- network.heatmap(weightDT,
 #'                       heatmapTitle = "inferCSN",
 #'                       showNames = TRUE)
 #' p5
+#'
 network.heatmap <- function(weightDT,
                             switchMatrix = TRUE,
                             heatmapSize = NULL,
                             heatmapTitle = NULL,
                             heatmapColor = NULL,
-                            showNames = FALSE) {
+                            showNames = FALSE,
+                            legendName = NULL) {
   if (switchMatrix) {
-    genes <- unique(c(weightDT$regulator, weightDT$target))
     colnames(weightDT) <- c("regulator", "target", "weight")
-    weightMatrix <- DT2Matrix(weightDT)
+    genes <- unique(c(weightDT$regulator, weightDT$target))
+    # weightMatrix <- DT2Matrix(weightDT)
+    weightMatrix <- .Call("_inferCSN_DT2Matrix", PACKAGE = "inferCSN", weightDT)
   } else {
     genes <- unique(c(rownames(weightDT), colnames(weightDT)))
     weightMatrix <- weightDT
   }
+
+  weightMatrix <- weightMatrix[gtools::mixedsort(rownames(weightMatrix)),
+                               gtools::mixedsort(colnames(weightMatrix))]
+
+  if (is.null(legendName)) legendName <- "Weight"
 
   if (is.null(heatmapColor)) heatmapColor <- c("#1966ad", "white", "#bb141a")
 
@@ -274,42 +284,17 @@ network.heatmap <- function(weightDT,
   }
 
   p <- ComplexHeatmap::Heatmap(weightMatrix,
-                               name = "Weight",
+                               name = legendName,
                                col = colorFun,
                                column_title = heatmapTitle,
                                cluster_rows = FALSE,
                                cluster_columns = FALSE,
                                show_row_names = showNames,
                                show_column_names = showNames,
-                               column_order = gtools::mixedsort(colnames(weightMatrix)),
-                               row_order = gtools::mixedsort(rownames(weightMatrix)),
                                width = ggnetwork::unit(heatmapSize, "cm"),
                                height = ggnetwork::unit(heatmapSize, "cm"),
                                border = "black")
   return(p)
-}
-
-#' @title Switch weight data table to weight matrix
-#'
-#' @param weightDT The weight data table of network.
-#'
-#' @return Weight matrix
-#' @export
-#'
-DT2Matrix <- function(weightDT) {
-  colnames(weightDT) <- c("regulator", "target", "weight")
-  genes <- unique(c(weightDT$regulator, weightDT$target))
-
-  weightMatrix <- matrix(0,
-                         nrow = length(genes),
-                         ncol = length(genes),
-                         dimnames = list(genes, genes))
-
-  for (i in 1:nrow(weightDT)) {
-    weightMatrix[weightDT$regulator[i], weightDT$target[i]] <- weightDT$weight[i]
-  }
-
-  return(weightMatrix)
 }
 
 #' @title Plot of dynamic networks
@@ -322,72 +307,59 @@ DT2Matrix <- function(weightDT) {
 #' @export
 #'
 #' @examples
+#' library(inferCSN)
 #' data("exampleMatrix")
 #' weightDT <- inferCSN(exampleMatrix)
 #' ranks <- compute.gene.rank(weightDT)
 #' p <- dynamic.networks(weightDT, ranks[1, 1])
 #' p
+#'
 dynamic.networks <- function(weightDT,
                              regulators = NULL,
                              legend.position = "right") {
   # Format input data
-  weightDT <- net.format(
-    weightDT,
-    regulators = regulators
-  )
+  weightDT <- net.format(weightDT,
+                         regulators = regulators)
 
-  net <- igraph::graph_from_data_frame(
-    weightDT[, c("regulator", "target", "weight", "Interaction")],
-    directed = FALSE
-  )
+  net <- igraph::graph_from_data_frame(weightDT[, c("regulator", "target", "weight", "Interaction")],
+                                       directed = FALSE)
 
   layout <- igraph::layout_with_fr(net)
   rownames(layout) <- igraph::V(net)$name
   layout_ordered <- layout[igraph::V(net)$name,]
-  regulatorNet <- ggnetwork::ggnetwork(
-    net,
-    layout = layout_ordered,
-    cell.jitter = 0
-  )
+  regulatorNet <- ggnetwork::ggnetwork(net,
+                                       layout = layout_ordered,
+                                       cell.jitter = 0)
+
   regulatorNet$isRegulator <- as.character(regulatorNet$name %in% regulators)
   cols <- c("Activation" = "#3366cc", "Repression" = "#ff0066")
 
   # Plot
   g <- ggplot2::ggplot() +
-    ggnetwork::geom_edges(
-      data = regulatorNet,
-      ggplot2::aes(x = x, y = y, xend = xend, yend = yend, size = weight, color = Interaction),
-      size = 0.75,
-      curvature = 0.1,
-      alpha = .6
-    ) +
-    ggnetwork::geom_nodes(
-      data = regulatorNet[regulatorNet$isRegulator == "FALSE", ],
-      ggplot2::aes(x = x, y = y),
-      color = "darkgray",
-      size = 3,
-      alpha = .5
-    ) +
-    ggnetwork::geom_nodes(
-      data = regulatorNet[regulatorNet$isRegulator == "TRUE", ],
-      ggplot2::aes(x = x, y = y),
-      color = "#8C4985",
-      size = 6,
-      alpha = .8
-    ) +
+    ggnetwork::geom_edges(data = regulatorNet,
+                          ggplot2::aes(x = x, y = y, xend = xend, yend = yend, size = weight, color = Interaction),
+                          size = 0.75,
+                          curvature = 0.1,
+                          alpha = .6) +
+    ggnetwork::geom_nodes(data = regulatorNet[regulatorNet$isRegulator == "FALSE", ],
+                          ggplot2::aes(x = x, y = y),
+                          color = "darkgray",
+                          size = 3,
+                          alpha = .5) +
+    ggnetwork::geom_nodes(data = regulatorNet[regulatorNet$isRegulator == "TRUE", ],
+                          ggplot2::aes(x = x, y = y),
+                          color = "#8C4985",
+                          size = 6,
+                          alpha = .8) +
     ggplot2::scale_color_manual(values = cols) +
-    ggnetwork::geom_nodelabel_repel(
-      data = regulatorNet[regulatorNet$isRegulator == "FALSE", ],
-      ggplot2::aes(x = x, y = y, label = name),
-      size = 2,
-      color = "#5A8BAD"
-    ) +
-    ggnetwork::geom_nodelabel_repel(
-      data = regulatorNet[regulatorNet$isRegulator == "TRUE", ],
-      ggplot2::aes(x = x, y = y, label = name),
-      size = 3.5,
-      color = "black"
-    ) +
+    ggnetwork::geom_nodelabel_repel(data = regulatorNet[regulatorNet$isRegulator == "FALSE", ],
+                                    ggplot2::aes(x = x, y = y, label = name),
+                                    size = 2,
+                                    color = "#5A8BAD") +
+    ggnetwork::geom_nodelabel_repel(data = regulatorNet[regulatorNet$isRegulator == "TRUE", ],
+                                    ggplot2::aes(x = x, y = y, label = name),
+                                    size = 3.5,
+                                    color = "black") +
     ggnetwork::theme_blank()
   g <- g + ggplot2::theme(legend.position = legend.position)
 }
@@ -426,10 +398,12 @@ net.format <- function(weightDT,
 #' @export
 #'
 #' @examples
+#' library(inferCSN)
 #' data("exampleMatrix")
 #' weightDT <- inferCSN(exampleMatrix)
 #' ranks <- compute.gene.rank(weightDT)
 #' head(ranks)
+#'
 compute.gene.rank <- function(weightDT,
                               directedGraph = FALSE) {
   if (is.null(weightDT)) stop("Please input data......")
@@ -600,7 +574,9 @@ inferCSN.fit <- function(x, y,
     }
   }
 
-  is.scalar <- function(x) is.atomic(x) && length(x) == 1L && !is.character(x) && Im(x) == 0 && !is.nan(x) && !is.na(x)
+  is.scalar <- function(x) {
+    is.atomic(x) && length(x) == 1L && !is.character(x) && Im(x) == 0 && !is.nan(x) && !is.na(x)
+  }
 
   p <- dim(x)[[2]]
 
@@ -635,20 +611,18 @@ inferCSN.fit <- function(x, y,
   M <- list()
   if (is(x, "sparseMatrix")) {
     M <- .Call("_inferCSN_inferCSNFit_sparse",
-      PACKAGE = "inferCSN", x, y, loss, penalty,
-      algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
-      partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
-      scaleDownFactor, screenSize, !autoLambda, lambdaGrid,
-      excludeFirstK, intercept, withBounds, lows, highs
-    )
+               PACKAGE = "inferCSN", x, y, loss, penalty,
+               algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
+               partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
+               scaleDownFactor, screenSize, !autoLambda, lambdaGrid,
+               excludeFirstK, intercept, withBounds, lows, highs)
   } else {
     M <- .Call("_inferCSN_inferCSNFit_dense",
-      PACKAGE = "inferCSN", x, y, loss, penalty,
-      algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
-      partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
-      scaleDownFactor, screenSize, !autoLambda, lambdaGrid,
-      excludeFirstK, intercept, withBounds, lows, highs
-    )
+               PACKAGE = "inferCSN", x, y, loss, penalty,
+               algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
+               partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
+               scaleDownFactor, screenSize, !autoLambda, lambdaGrid,
+               excludeFirstK, intercept, withBounds, lows, highs)
   }
 
   settings <- list()
@@ -673,17 +647,15 @@ inferCSN.fit <- function(x, y,
     }
   }
 
-  G <- list(
-    beta = M$beta,
-    lambda = lapply(M$lambda, signif, digits = 6),
-    a0 = M$a0,
-    converged = M$Converged,
-    suppSize = M$SuppSize,
-    gamma = M$gamma,
-    penalty = penalty,
-    loss = loss,
-    settings = settings
-  )
+  G <- list(beta = M$beta,
+            lambda = lapply(M$lambda, signif, digits = 6),
+            a0 = M$a0,
+            converged = M$Converged,
+            suppSize = M$SuppSize,
+            gamma = M$gamma,
+            penalty = penalty,
+            loss = loss,
+            settings = settings)
 
   if (is.null(colnames(x))) {
     varnames <- 1:dim(x)[2]
@@ -742,7 +714,7 @@ inferCSN.cvfit <- function(x, y,
     if (dim(table(y)) != 2) {
       stop("Only binary classification is supported. Make sure y has only 2 unique values.")
     }
-    y <- factor(y, labels = c(-1, 1)) # returns a vector of strings
+    y <- factor(y, labels = c(-1, 1)) # Returns a vector of strings
     y <- as.numeric(levels(y))[y]
 
     if (penalty == "L0") {
@@ -858,20 +830,18 @@ inferCSN.cvfit <- function(x, y,
   M <- list()
   if (is(x, "sparseMatrix")) {
     M <- .Call("_inferCSN_inferCSNCV_sparse",
-      PACKAGE = "inferCSN", x, y, loss, penalty,
-      algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
-      partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
-      scaleDownFactor, screenSize, !autoLambda, lambdaGrid, nFolds,
-      seed, excludeFirstK, intercept, withBounds, lows, highs
-    )
+               PACKAGE = "inferCSN", x, y, loss, penalty,
+               algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
+               partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
+               scaleDownFactor, screenSize, !autoLambda, lambdaGrid, nFolds,
+               seed, excludeFirstK, intercept, withBounds, lows, highs)
   } else {
     M <- .Call("_inferCSN_inferCSNCV_dense",
-      PACKAGE = "inferCSN", x, y, loss, penalty,
-      algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
-      partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
-      scaleDownFactor, screenSize, !autoLambda, lambdaGrid, nFolds,
-      seed, excludeFirstK, intercept, withBounds, lows, highs
-    )
+               PACKAGE = "inferCSN", x, y, loss, penalty,
+               algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
+               partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
+               scaleDownFactor, screenSize, !autoLambda, lambdaGrid, nFolds,
+               seed, excludeFirstK, intercept, withBounds, lows, highs)
   }
 
   settings <- list()
@@ -884,7 +854,7 @@ inferCSN.cvfit <- function(x, y,
     if (M$SuppSize[[i]][last] > maxSuppSize) {
       if (last == 1) {
         warning("Warning! Only 1 element in path with support size > maxSuppSize. \n
-                Try increasing maxSuppSize to resolve the issue.")
+                Try increasing maxSuppSize to resolve the issue......")
       } else {
         M$SuppSize[[i]] <- M$SuppSize[[i]][-last]
         M$Converged[[i]] <- M$Converged[[i]][-last]
@@ -897,17 +867,15 @@ inferCSN.cvfit <- function(x, y,
     }
   }
 
-  fit <- list(
-    beta = M$beta,
-    lambda = lapply(M$lambda, signif, digits = 6),
-    a0 = M$a0,
-    converged = M$Converged,
-    suppSize = M$SuppSize,
-    gamma = M$gamma,
-    penalty = penalty,
-    loss = loss,
-    settings = settings
-  )
+  fit <- list(beta = M$beta,
+              lambda = lapply(M$lambda, signif, digits = 6),
+              a0 = M$a0,
+              converged = M$Converged,
+              suppSize = M$SuppSize,
+              gamma = M$gamma,
+              penalty = penalty,
+              loss = loss,
+              settings = settings)
 
   if (is.null(colnames(x))) {
     varnames <- 1:dim(x)[2]
@@ -939,7 +907,7 @@ coef.inferCSN <- function(object,
                           gamma = NULL,
                           supportSize = NULL, ...) {
   if (!is.null(supportSize) && !is.null(lambda)) {
-    stop("If `supportSize` is provided to `coef` only `gamma` can also be provided.")
+    stop("If `supportSize` is provided to `coef` only `gamma` can also be provided......")
   }
 
   if (is.null(lambda) && is.null(gamma) && is.null(supportSize)) {
@@ -969,23 +937,13 @@ coef.inferCSN <- function(object,
   }
 
   if (object$settings$intercept) {
-    t <- rbind(
-      object$a0[[gammaindex]][indices],
-      object$beta[[gammaindex]][, indices, drop = FALSE]
-    )
-    rownames(t) <- c(
-      "Intercept",
-      paste(rep("V", object$p),
-        1:object$p,
-        sep = ""
-      )
-    )
+    t <- rbind(object$a0[[gammaindex]][indices],
+               object$beta[[gammaindex]][, indices, drop = FALSE])
+    rownames(t) <- c("Intercept",
+                     paste0(rep("V", object$p), 1:object$p))
   } else {
     t <- object$beta[[gammaindex]][, indices, drop = FALSE]
-    rownames(t) <- paste(rep("V", object$p),
-      1:object$p,
-      sep = ""
-    )
+    rownames(t) <- paste0(rep("V", object$p), 1:object$p)
   }
   t
 }
@@ -1005,19 +963,19 @@ coef.inferCSNCV <- function(object,
 #' @param ... ignore
 #' @method print inferCSN
 #' @export
+#'
 print.inferCSN <- function(x, ...) {
   gammas <- rep(x$gamma, times = lapply(x$lambda, length))
-  data.frame(
-    lambda = unlist(x["lambda"]),
-    gamma = gammas,
-    suppSize = unlist(x["suppSize"]),
-    row.names = NULL
-  )
+  data.frame(lambda = unlist(x["lambda"]),
+             gamma = gammas,
+             suppSize = unlist(x["suppSize"]),
+             row.names = NULL)
 }
 
 #' @rdname print.inferCSN
 #' @method print inferCSNCV
 #' @export
+#'
 print.inferCSNCV <- function(x, ...) {
   print.inferCSN(x$fit)
 }

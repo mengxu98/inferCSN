@@ -40,7 +40,7 @@ reference:
 - contents:
   - figure.format
   - net.format
-  - DT2Matrix
+  # - DT2Matrix
   - coef.inferCSN
   - coef.inferCSNCV
   - print.inferCSN

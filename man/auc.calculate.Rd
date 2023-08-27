@@ -13,15 +13,15 @@ auc.calculate(
 )
 }
 \arguments{
-\item{weightDT}{The weight data table of network.}
+\item{weightDT}{The weight data table of network}
 
-\item{groundTruth}{Ground truth for calculate AUC.}
+\item{groundTruth}{Ground truth for calculate AUC}
 
-\item{plot}{If true, draw and print figure of AUC.}
+\item{plot}{If true, draw and print figure of AUC}
 
 \item{fileSave}{The figure name}
 
-\item{interaction}{If true, consider the positivity and negativity of interaction.}
+\item{interaction}{If true, consider the positivity or negativity of interaction}
 }
 \value{
 AUC values and figure
@@ -30,9 +30,11 @@ AUC values and figure
 AUC value calculate
 }
 \examples{
+library(inferCSN)
 data("exampleMatrix")
 data("exampleGroundTruth")
 weightDT <- inferCSN(exampleMatrix, cores = 1, verbose = TRUE, algorithm = "CDPSI")
 auc <- auc.calculate(weightDT, exampleGroundTruth, plot = TRUE)
 head(auc)
+
 }
