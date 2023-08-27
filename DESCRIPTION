@@ -35,7 +35,6 @@ Suggests:
     ComplexHeatmap,
     gtools,
     circlize,
-    Kendall,
     precrec,
     ggnetwork
 biocViews: ComplexHeatmap
