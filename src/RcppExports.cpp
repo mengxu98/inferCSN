@@ -11,6 +11,17 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// DT2Matrix
+NumericMatrix DT2Matrix(DataFrame weightDT);
+RcppExport SEXP _inferCSN_DT2Matrix(SEXP weightDTSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type weightDT(weightDTSEXP);
+    rcpp_result_gen = Rcpp::wrap(DT2Matrix(weightDT));
+    return rcpp_result_gen;
+END_RCPP
+}
 // inferCSNFit_sparse
 Rcpp::List inferCSNFit_sparse(const arma::sp_mat& X, const arma::vec& y, const std::string Loss, const std::string Penalty, const std::string Algorithm, const std::size_t NnzStopNum, const std::size_t G_ncols, const std::size_t G_nrows, const double Lambda2Max, const double Lambda2Min, const bool PartialSort, const std::size_t MaxIters, const double rtol, const double atol, const bool ActiveSet, const std::size_t ActiveSetNum, const std::size_t MaxNumSwaps, const double ScaleDownFactor, const std::size_t ScreenSize, const bool LambdaU, const std::vector< std::vector<double> > Lambdas, const std::size_t ExcludeFirstK, const bool Intercept, const bool withBounds, const arma::vec& Lows, const arma::vec& Highs);
 RcppExport SEXP _inferCSN_inferCSNFit_sparse(SEXP XSEXP, SEXP ySEXP, SEXP LossSEXP, SEXP PenaltySEXP, SEXP AlgorithmSEXP, SEXP NnzStopNumSEXP, SEXP G_ncolsSEXP, SEXP G_nrowsSEXP, SEXP Lambda2MaxSEXP, SEXP Lambda2MinSEXP, SEXP PartialSortSEXP, SEXP MaxItersSEXP, SEXP rtolSEXP, SEXP atolSEXP, SEXP ActiveSetSEXP, SEXP ActiveSetNumSEXP, SEXP MaxNumSwapsSEXP, SEXP ScaleDownFactorSEXP, SEXP ScreenSizeSEXP, SEXP LambdaUSEXP, SEXP LambdasSEXP, SEXP ExcludeFirstKSEXP, SEXP InterceptSEXP, SEXP withBoundsSEXP, SEXP LowsSEXP, SEXP HighsSEXP) {
@@ -391,6 +402,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_inferCSN_DT2Matrix", (DL_FUNC) &_inferCSN_DT2Matrix, 1},
     {"_inferCSN_inferCSNFit_sparse", (DL_FUNC) &_inferCSN_inferCSNFit_sparse, 26},
     {"_inferCSN_inferCSNFit_dense", (DL_FUNC) &_inferCSN_inferCSNFit_dense, 26},
     {"_inferCSN_inferCSNCV_sparse", (DL_FUNC) &_inferCSN_inferCSNCV_sparse, 28},
