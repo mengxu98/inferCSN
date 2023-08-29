@@ -46,6 +46,10 @@ p1 <- network.heatmap(exampleGroundTruth,
 p2 <- network.heatmap(weightDT,
                       heatmapTitle = "inferCSN")
 
+ComplexHeatmap::draw(p1 + p2,
+                     merge_legends = TRUE,
+                     heatmap_legend_side = "right")
+
 p3 <- network.heatmap(weightDT,
                       heatmapTitle = "inferCSN",
                       heatmapColor = c("#20a485", "#410054", "#fee81f"))
@@ -54,7 +58,7 @@ p4 <- network.heatmap(weightDT,
                       heatmapTitle = "inferCSN",
                       heatmapColor = c("#20a485", "white", "#fee81f"))
 
-ComplexHeatmap::draw(p1 + p2 + p3 + p4,
+ComplexHeatmap::draw(p3 + p4,
                      merge_legends = TRUE,
                      heatmap_legend_side = "right")
 
