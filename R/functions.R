@@ -224,11 +224,10 @@ figure.format <- function(string) {
 #'                       heatmapTitle = "Ground truth")
 #'
 #' p2 <- network.heatmap(weightDT,
+#'                       legendName = "Weight2",
 #'                       heatmapTitle = "inferCSN")
 #'
-#' ComplexHeatmap::draw(p1 + p2,
-#'                      merge_legends = TRUE,
-#'                      heatmap_legend_side = "right")
+#' ComplexHeatmap::draw(p1 + p2)
 #'
 #' p3 <- network.heatmap(weightDT,
 #'                       heatmapTitle = "inferCSN",
@@ -236,11 +235,10 @@ figure.format <- function(string) {
 #'
 #' p4 <- network.heatmap(weightDT,
 #'                       heatmapTitle = "inferCSN",
+#'                       legendName = "Weight2",
 #'                       heatmapColor = c("#20a485", "white", "#fee81f"))
 #'
-#' ComplexHeatmap::draw(p3 + p4,
-#'                      merge_legends = TRUE,
-#'                      heatmap_legend_side = "right")
+#' ComplexHeatmap::draw(p3 + p4)
 #'
 #' p5 <- network.heatmap(weightDT,
 #'                       heatmapTitle = "inferCSN",
