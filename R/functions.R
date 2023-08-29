@@ -226,6 +226,10 @@ figure.format <- function(string) {
 #' p2 <- network.heatmap(weightDT,
 #'                       heatmapTitle = "inferCSN")
 #'
+#' ComplexHeatmap::draw(p1 + p2,
+#'                      merge_legends = TRUE,
+#'                      heatmap_legend_side = "right")
+#'
 #' p3 <- network.heatmap(weightDT,
 #'                       heatmapTitle = "inferCSN",
 #'                       heatmapColor = c("#20a485", "#410054", "#fee81f"))
@@ -234,7 +238,7 @@ figure.format <- function(string) {
 #'                       heatmapTitle = "inferCSN",
 #'                       heatmapColor = c("#20a485", "white", "#fee81f"))
 #'
-#' ComplexHeatmap::draw(p1 + p2 + p3 + p4,
+#' ComplexHeatmap::draw(p3 + p4,
 #'                      merge_legends = TRUE,
 #'                      heatmap_legend_side = "right")
 #'
@@ -252,16 +256,14 @@ network.heatmap <- function(weightDT,
                             legendName = NULL) {
   if (switchMatrix) {
     colnames(weightDT) <- c("regulator", "target", "weight")
-    genes <- unique(c(weightDT$regulator, weightDT$target))
-    # weightMatrix <- DT2Matrix(weightDT)
+    genes <- c(weightDT$regulator, weightDT$target)
     weightMatrix <- .Call("_inferCSN_DT2Matrix", PACKAGE = "inferCSN", weightDT)
   } else {
-    genes <- unique(c(rownames(weightDT), colnames(weightDT)))
+    genes <- c(rownames(weightDT), colnames(weightDT))
     weightMatrix <- weightDT
   }
-
-  weightMatrix <- weightMatrix[gtools::mixedsort(rownames(weightMatrix)),
-                               gtools::mixedsort(colnames(weightMatrix))]
+  genes <- gtools::mixedsort(unique(genes))
+  weightMatrix <- weightMatrix[genes, genes]
 
   if (is.null(legendName)) legendName <- "Weight"
 
