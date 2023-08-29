@@ -3,13 +3,14 @@ using namespace Rcpp;
 
 // [[Rcpp::export]]
 NumericMatrix DT2Matrix(DataFrame weightDT) {
-  CharacterVector regulator = weightDT["regulator"];
-  CharacterVector target = weightDT["target"];
-  NumericVector weight = weightDT["weight"];
+  CharacterVector regulator = weightDT[0];
+  CharacterVector target = weightDT[1];
+  NumericVector weight = weightDT[2];
 
   CharacterVector genes = union_(regulator, target);
 
   int numGenes = genes.size();
+
   NumericMatrix weightMatrix(numGenes, numGenes);
   colnames(weightMatrix) = genes;
   rownames(weightMatrix) = genes;
@@ -23,17 +24,27 @@ NumericMatrix DT2Matrix(DataFrame weightDT) {
   return weightMatrix;
 }
 
-// R code
-// #' @title Switch weight data table to weight matrix
-// #'
+// #' R code
+// #' @title DT2MatrixR
+// #'  Switch weight data table to weight matrix
 // #' @param weightDT The weight data table of network
 // #'
 // #' @return Weight matrix
 // #' @export
 // #'
-// DT2Matrix <- function(weightDT) {
+// #' @examples
+// #' Rcpp::sourceCpp("src/DT2Matrix.cpp")
+// #' library(inferCSN)
+// #' data("exampleMatrix")
+// #' weightDT <- inferCSN(exampleMatrix, verbose = TRUE)
+// #' weightMatrix <- DT2Matrix(weightDT)
+// #' genes <- gtools::mixedsort(unique(c(weightDT$regulator, weightDT$target)))
+// #' weightMatrix <- weightMatrix[genes, genes]
+// #' weightMatrixR <- DT2MatrixR(weightDT)
+// #'
+// DT2MatrixR <- function(weightDT) {
 //   colnames(weightDT) <- c("regulator", "target", "weight")
-//   genes <- unique(c(weightDT$regulator, weightDT$target))
+//   genes <- gtools::mixedsort(unique(c(weightDT$regulator, weightDT$target)))
 //
 //   weightMatrix <- matrix(0,
 //                          nrow = length(genes),
