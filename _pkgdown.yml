@@ -16,12 +16,10 @@ reference:
 - contents:
   - inferCSN
 
-- subtitle: "Sparse regression model"
+- subtitle: "Network Visualization"
 - contents:
-  - sparse.regression
-  - sub.inferCSN
-  - inferCSN.fit
-  - inferCSN.cvfit
+  - dynamic.networks
+  - network.heatmap
 
 - subtitle: "Auc calculate and plot"
 - contents:
@@ -31,16 +29,17 @@ reference:
 - contents:
   - compute.gene.rank
 
-- subtitle: "Network Visualization"
+- subtitle: "Sparse regression model"
 - contents:
-  - dynamic.networks
-  - network.heatmap
+  - sparse.regression
+  - sub.inferCSN
+  - inferCSN.fit
+  - inferCSN.cvfit
 
 - subtitle: "Others functions"
 - contents:
   - figure.format
   - net.format
-  # - DT2Matrix
   - coef.inferCSN
   - coef.inferCSNCV
   - print.inferCSN
