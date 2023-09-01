@@ -38,7 +38,6 @@ reference:
 
 - subtitle: "Others functions"
 - contents:
-  - figure.format
   - net.format
   - coef.inferCSN
   - coef.inferCSNCV
