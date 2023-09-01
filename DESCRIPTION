@@ -19,24 +19,24 @@ Imports:
     doSNOW,
     dplyr,
     foreach,
+    ggnetwork,
+    ggplot2,
     igraph,
+    Matrix,
     magrittr,
+    methods,
     patchwork,
     parallel,
     progress,
     purrr,
     Rcpp (>= 0.12.13),
-    snow,
-    Matrix,
-    methods,
-    ggplot2
+    snow
 Suggests: 
-    cowplot,
     ComplexHeatmap,
-    gtools,
+    cowplot,
     circlize,
-    precrec,
-    ggnetwork
+    gtools,
+    precrec
 biocViews: ComplexHeatmap
 Config/Needs/website: mengxu98/mxtemplate
 LazyData: true
