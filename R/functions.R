@@ -19,22 +19,12 @@ sparse.regression <- function(X, y,
                               nFolds = 10,
                               verbose = FALSE) {
   if (crossValidation) {
-    tryCatch({
-      fit <- inferCSN.cvfit(X, y,
-                            penalty = penalty,
-                            algorithm = algorithm,
-                            maxSuppSize = maxSuppSize,
-                            nFolds = nFolds)
-
-      gamma <- fit$fit$gamma[which(unlist(lapply(fit$cvMeans, min)) == min(unlist(lapply(fit$cvMeans, min))))]
-      lambdaList <- print(fit) %>% dplyr::filter(gamma == gamma, )
-      if (maxSuppSize %in% lambdaList$maxSuppSize) {
-        lambda <- lambdaList$maxSuppSize[which(lambdaList$maxSuppSize == maxSuppSize)]
-      } else {
-        lambda <- min(lambdaList$lambda)
-      }
-    },
-    error = function(e) {
+    fit <- try(inferCSN.cvfit(X, y,
+                              penalty = penalty,
+                              algorithm = algorithm,
+                              maxSuppSize = maxSuppSize,
+                              nFolds = nFolds))
+    if (class(fit)[1] == "try-error") {
       if (verbose) message("Cross validation error, used fit instead......")
       fit <- inferCSN.fit(X, y,
                           penalty = penalty,
@@ -44,8 +34,15 @@ sparse.regression <- function(X, y,
       fitInf <- print(fit)
       lambda <- fitInf$lambda[fitInf$suppSize %>% which.max()]
       gamma <- fitInf$gamma[fitInf$suppSize %>% which.max()]
-    })
-
+    } else {
+      gamma <- fit$fit$gamma[which(unlist(lapply(fit$cvMeans, min)) == min(unlist(lapply(fit$cvMeans, min))))]
+      lambdaList <- print(fit) %>% dplyr::filter(gamma == gamma, )
+      if (maxSuppSize %in% lambdaList$maxSuppSize) {
+        lambda <- lambdaList$maxSuppSize[which(lambdaList$maxSuppSize == maxSuppSize)]
+      } else {
+        lambda <- min(lambdaList$lambda)
+      }
+    }
   } else {
     fit <- inferCSN.fit(X, y,
                         penalty = penalty,
@@ -105,6 +102,7 @@ sub.inferCSN <- function(regulatorsMatrix = NULL,
 #' @param interaction If true, consider the positivity or negativity of interaction
 #'
 #' @import patchwork
+#' @import ggplot2
 #'
 #' @return AUC values and figure
 #' @export
@@ -123,18 +121,15 @@ auc.calculate <- function(weightDT = NULL,
                           fileSave = NULL,
                           interaction = FALSE) {
   # Check input data
-  if (!is.null(weightDT) & ncol(weightDT) == 3) {
-    names(weightDT) <- c("regulator", "target", "weight")
-    if (!interaction) weightDT$weight <- abs(weightDT$weight)
-  } else {
-    stop("Please provide the data of regulatory relationships......")
-  }
+  if (is.null(weightDT)) stop("Please provide the data of regulatory relationships......")
+  if (ncol(weightDT) == 3) names(weightDT) <- c("regulator", "target", "weight")
+  if (!interaction) weightDT$weight <- abs(weightDT$weight)
 
   if (is.null(groundTruth)) stop("Please provide the ground-truth......")
   if (ncol(groundTruth) > 2) groundTruth <- groundTruth[, 1:2]
   names(groundTruth) <- c("regulator", "target")
-  groundTruth$gold <- rep(1, nrow(groundTruth))
 
+  groundTruth$gold <- rep(1, nrow(groundTruth))
   gold <- merge(weightDT, groundTruth, by = c("regulator", "target"), all.x = TRUE)
   gold$gold[is.na(gold$gold)] <- 0
   aucCurves <- precrec::evalmod(scores = gold$weight, labels = gold$gold)
@@ -146,27 +141,32 @@ auc.calculate <- function(weightDT = NULL,
 
   if (plot) {
     # Subset data to separate prc and roc
-    auprcDf <- subset(ggplot2::fortify(aucCurves), curvetype == "PRC")
-    aurocDf <- subset(ggplot2::fortify(aucCurves), curvetype == "ROC")
+    auprcDf <- subset(fortify(aucCurves), curvetype == "PRC")
+    aurocDf <- subset(fortify(aucCurves), curvetype == "ROC")
 
-    # AUROC plot
-    auroc <- ggplot2::ggplot(aurocDf, ggplot2::aes(x = x, y = y)) +
-      ggplot2::geom_line() +
-      ggplot2::geom_abline(slope = 1, color = "gray", linetype = "dotted") +
-      ggplot2::ggtitle(paste("AUROC:", aucMetric[1])) +
-      ggplot2::labs(x = "False positive rate", y = "True positive rate") +
-      ggplot2::coord_fixed() +
-      ggplot2::theme_bw()
+    # Plot
+    auroc <- ggplot(aurocDf, aes(x = x, y = y)) +
+      geom_line() +
+      geom_abline(slope = 1,
+                  color = "gray",
+                  linetype = "dotted", linewidth = 1) +
+      labs(title = paste("AUROC:", aucMetric[1]),
+           x = "False positive rate",
+           y = "True positive rate") +
+      xlim(0, 1) +
+      ylim(0, 1) +
+      coord_fixed() +
+      theme_bw()
 
-    # AUPRC plot
-    auprc <- ggplot2::ggplot(auprcDf, ggplot2::aes(x = x, y = y)) +
-      ggplot2::geom_line() +
-      ggplot2::geom_hline(yintercept = 0.5, color = "gray", linetype = "dotted") +
-      ggplot2::ggtitle(paste("AUPRC:", aucMetric[2])) +
-      ggplot2::labs(x = "Recall", y = "Precision") +
-      # ggplot2::ylim(0, 1) +
-      ggplot2::coord_fixed() +
-      ggplot2::theme_bw()
+    auprc <- ggplot(auprcDf, aes(x = x, y = y)) +
+      geom_line() +
+      labs(title = paste("AUPRC:", aucMetric[2]),
+           x = "Recall",
+           y = "Precision") +
+      xlim(0, 1) +
+      ylim(0, 1) +
+      coord_fixed() +
+      theme_bw()
 
     # Combine two plots by patchwork
     p <- auroc + auprc
@@ -174,32 +174,15 @@ auc.calculate <- function(weightDT = NULL,
 
     # Save figure
     if (!is.null(fileSave)) {
-      if (figure.format(fileSave)) {
-        newFileSave <- fileSave
-      } else {
-        newFileSave <- paste0(fileSave, ".png")
-      }
-      cowplot::ggsave2(file = newFileSave,
+      if (!grepl(".*\\.(pdf|png|jpe?g)$", fileSave)) fileSave <- paste0(fileSave, ".png")
+      cowplot::ggsave2(file = fileSave,
                        p,
-                       width = 18,
-                       height = 10,
-                       units = "cm",
+                       width = 7,
+                       height = 3,
                        dpi = 600)
     }
   }
   return(aucMetric)
-}
-
-#' @title Checking figure format
-#'
-#' @param string A string of file name
-#'
-#' @return Logic value
-#' @export
-#'
-figure.format <- function(string) {
-  logic <- grepl(".*\\.(pdf|png|jpe?g)$", string)
-  return(logic)
 }
 
 #' @title The heatmap of network
@@ -267,7 +250,7 @@ network.heatmap <- function(weightDT,
 
   if (is.null(heatmapColor)) heatmapColor <- c("#1966ad", "white", "#bb141a")
 
-  if (showNames) {
+  if (!showNames) {
     if (is.null(heatmapSize)) heatmapSize <- length(genes) / 2
   } else {
     heatmapSize <- 6
@@ -291,8 +274,8 @@ network.heatmap <- function(weightDT,
                                cluster_columns = FALSE,
                                show_row_names = showNames,
                                show_column_names = showNames,
-                               width = ggnetwork::unit(heatmapSize, "cm"),
-                               height = ggnetwork::unit(heatmapSize, "cm"),
+                               width = unit(heatmapSize, "cm"),
+                               height = unit(heatmapSize, "cm"),
                                border = "black")
   return(p)
 }
@@ -302,6 +285,9 @@ network.heatmap <- function(weightDT,
 #' @param weightDT weightDT
 #' @param regulators regulators
 #' @param legend.position legend.position
+#'
+#' @import ggplot2
+#' @import ggnetwork
 #'
 #' @return A list of ggplot2 objects
 #' @export
@@ -327,41 +313,41 @@ dynamic.networks <- function(weightDT,
   layout <- igraph::layout_with_fr(net)
   rownames(layout) <- igraph::V(net)$name
   layout_ordered <- layout[igraph::V(net)$name,]
-  regulatorNet <- ggnetwork::ggnetwork(net,
-                                       layout = layout_ordered,
-                                       cell.jitter = 0)
+  regulatorNet <- ggnetwork(net,
+                            layout = layout_ordered,
+                            cell.jitter = 0)
 
   regulatorNet$isRegulator <- as.character(regulatorNet$name %in% regulators)
   cols <- c("Activation" = "#3366cc", "Repression" = "#ff0066")
 
   # Plot
-  g <- ggplot2::ggplot() +
-    ggnetwork::geom_edges(data = regulatorNet,
-                          ggplot2::aes(x = x, y = y, xend = xend, yend = yend, size = weight, color = Interaction),
-                          size = 0.75,
-                          curvature = 0.1,
-                          alpha = .6) +
-    ggnetwork::geom_nodes(data = regulatorNet[regulatorNet$isRegulator == "FALSE", ],
-                          ggplot2::aes(x = x, y = y),
-                          color = "darkgray",
-                          size = 3,
-                          alpha = .5) +
-    ggnetwork::geom_nodes(data = regulatorNet[regulatorNet$isRegulator == "TRUE", ],
-                          ggplot2::aes(x = x, y = y),
-                          color = "#8C4985",
-                          size = 6,
-                          alpha = .8) +
-    ggplot2::scale_color_manual(values = cols) +
-    ggnetwork::geom_nodelabel_repel(data = regulatorNet[regulatorNet$isRegulator == "FALSE", ],
-                                    ggplot2::aes(x = x, y = y, label = name),
-                                    size = 2,
-                                    color = "#5A8BAD") +
-    ggnetwork::geom_nodelabel_repel(data = regulatorNet[regulatorNet$isRegulator == "TRUE", ],
-                                    ggplot2::aes(x = x, y = y, label = name),
-                                    size = 3.5,
-                                    color = "black") +
-    ggnetwork::theme_blank()
-  g <- g + ggplot2::theme(legend.position = legend.position)
+  g <- ggplot() +
+    geom_edges(data = regulatorNet,
+               aes(x = x, y = y, xend = xend, yend = yend, size = weight, color = Interaction),
+               size = 0.75,
+               curvature = 0.1,
+               alpha = .6) +
+    geom_nodes(data = regulatorNet[regulatorNet$isRegulator == "FALSE", ],
+               aes(x = x, y = y),
+               color = "darkgray",
+               size = 3,
+               alpha = .5) +
+    geom_nodes(data = regulatorNet[regulatorNet$isRegulator == "TRUE", ],
+               aes(x = x, y = y),
+               color = "#8C4985",
+               size = 6,
+               alpha = .8) +
+    scale_color_manual(values = cols) +
+    geom_nodelabel_repel(data = regulatorNet[regulatorNet$isRegulator == "FALSE", ],
+                         aes(x = x, y = y, label = name),
+                         size = 2,
+                         color = "#5A8BAD") +
+    geom_nodelabel_repel(data = regulatorNet[regulatorNet$isRegulator == "TRUE", ],
+                         aes(x = x, y = y, label = name),
+                         size = 3.5,
+                         color = "black") +
+    theme_blank()
+  g <- g + theme(legend.position = legend.position)
 }
 
 #' @title Format weight table
