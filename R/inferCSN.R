@@ -64,6 +64,9 @@ inferCSN <- function(matrix,
   }
   targets <- colnames(targetsMatrix)
 
+  if (verbose & crossValidation) message("Using '", penalty, "' penalty......")
+  if (verbose) message("Using '", penalty, "' penalty and cross validation......")
+
   cores <- min(parallel::detectCores(logical = FALSE), cores, length(targets))
   if (cores == 1) {
     # Format progress information
@@ -74,11 +77,7 @@ inferCSN <- function(matrix,
 
     weightDT <- c()
     for (i in 1:length(targets)) {
-      if (verbose) {
-        # Print progress
-        pb$tick()
-        Sys.sleep(0.05)
-      }
+      if (verbose) pb$tick()
 
       weightDT <- rbind(weightDT,
                         sub.inferCSN(regulatorsMatrix = regulatorsMatrix,

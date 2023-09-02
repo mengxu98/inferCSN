@@ -19,7 +19,6 @@ sparse.regression <- function(X, y,
                               nFolds = 10,
                               verbose = FALSE) {
   if (crossValidation) {
-    message("Using '", penalty, "' penalty and cross validation......")
     fit <- try(inferCSN.cvfit(X, y,
                               penalty = penalty,
                               algorithm = algorithm,
@@ -45,7 +44,6 @@ sparse.regression <- function(X, y,
       }
     }
   } else {
-    message("Using '", penalty, "' penalty......")
     fit <- inferCSN.fit(X, y,
                         penalty = penalty,
                         algorithm = algorithm,
