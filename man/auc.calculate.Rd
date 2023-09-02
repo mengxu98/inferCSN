@@ -5,8 +5,8 @@
 \title{AUC value calculate}
 \usage{
 auc.calculate(
-  weightDT = NULL,
-  groundTruth = NULL,
+  weightDT,
+  groundTruth,
   plot = FALSE,
   fileSave = NULL,
   interaction = FALSE

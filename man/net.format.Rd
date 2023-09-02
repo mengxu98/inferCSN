@@ -7,12 +7,12 @@
 net.format(weightDT, regulators = NULL)
 }
 \arguments{
-\item{weightDT}{The weight data table of network.}
+\item{weightDT}{The weight data table of network}
 
-\item{regulators}{Regulators list.}
+\item{regulators}{Regulators list}
 }
 \value{
-Format weight table.
+Format weight table
 }
 \description{
 Format weight table

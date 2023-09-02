@@ -5,8 +5,8 @@
 \title{Sparse regression model for single gene}
 \usage{
 sub.inferCSN(
-  regulatorsMatrix = NULL,
-  targetsMatrix = NULL,
+  regulatorsMatrix,
+  targetsMatrix,
   target = NULL,
   crossValidation = FALSE,
   penalty = "L0",

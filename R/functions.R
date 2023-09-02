@@ -19,6 +19,7 @@ sparse.regression <- function(X, y,
                               nFolds = 10,
                               verbose = FALSE) {
   if (crossValidation) {
+    message("Using '", penalty, "' penalty and cross validation......")
     fit <- try(inferCSN.cvfit(X, y,
                               penalty = penalty,
                               algorithm = algorithm,
@@ -44,6 +45,7 @@ sparse.regression <- function(X, y,
       }
     }
   } else {
+    message("Using '", penalty, "' penalty......")
     fit <- inferCSN.fit(X, y,
                         penalty = penalty,
                         algorithm = algorithm,
@@ -66,8 +68,8 @@ sparse.regression <- function(X, y,
 #' @return The weight data table of sub-network
 #' @export
 #'
-sub.inferCSN <- function(regulatorsMatrix = NULL,
-                         targetsMatrix = NULL,
+sub.inferCSN <- function(regulatorsMatrix,
+                         targetsMatrix,
                          target = NULL,
                          crossValidation = FALSE,
                          penalty = "L0",
@@ -115,17 +117,15 @@ sub.inferCSN <- function(regulatorsMatrix = NULL,
 #' auc <- auc.calculate(weightDT, exampleGroundTruth, plot = TRUE)
 #' head(auc)
 #'
-auc.calculate <- function(weightDT = NULL,
-                          groundTruth = NULL,
+auc.calculate <- function(weightDT,
+                          groundTruth,
                           plot = FALSE,
                           fileSave = NULL,
                           interaction = FALSE) {
   # Check input data
-  if (is.null(weightDT)) stop("Please provide the data of regulatory relationships......")
-  if (ncol(weightDT) == 3) names(weightDT) <- c("regulator", "target", "weight")
+  colnames(weightDT) <- c("regulator", "target", "weight")
   if (!interaction) weightDT$weight <- abs(weightDT$weight)
 
-  if (is.null(groundTruth)) stop("Please provide the ground-truth......")
   if (ncol(groundTruth) > 2) groundTruth <- groundTruth[, 1:2]
   names(groundTruth) <- c("regulator", "target")
 
@@ -250,7 +250,7 @@ network.heatmap <- function(weightDT,
 
   if (is.null(heatmapColor)) heatmapColor <- c("#1966ad", "white", "#bb141a")
 
-  if (!showNames) {
+  if (showNames) {
     if (is.null(heatmapSize)) heatmapSize <- length(genes) / 2
   } else {
     heatmapSize <- 6
@@ -323,7 +323,10 @@ dynamic.networks <- function(weightDT,
   # Plot
   g <- ggplot() +
     geom_edges(data = regulatorNet,
-               aes(x = x, y = y, xend = xend, yend = yend, size = weight, color = Interaction),
+               aes(x = x, y = y,
+                   xend = xend, yend = yend,
+                   size = weight,
+                   color = Interaction),
                size = 0.75,
                curvature = 0.1,
                alpha = .6) +
@@ -348,14 +351,15 @@ dynamic.networks <- function(weightDT,
                          color = "black") +
     theme_blank()
   g <- g + theme(legend.position = legend.position)
+  return(g)
 }
 
 #' @title Format weight table
 #'
-#' @param weightDT The weight data table of network.
-#' @param regulators Regulators list.
+#' @param weightDT The weight data table of network
+#' @param regulators Regulators list
 #'
-#' @return Format weight table.
+#' @return Format weight table
 #' @export
 #'
 net.format <- function(weightDT,
@@ -392,8 +396,6 @@ net.format <- function(weightDT,
 #'
 compute.gene.rank <- function(weightDT,
                               directedGraph = FALSE) {
-  if (is.null(weightDT)) stop("Please input data......")
-  if (nrow(weightDT) > 3) weightDT <- weightDT[, 1:3]
   colnames(weightDT) <- c("regulatory", "target", "weight")
   tfnet <- igraph::graph_from_data_frame(weightDT, directed = directedGraph)
   pageRank <- data.frame(igraph::page_rank(tfnet, directed = directedGraph)$vector)

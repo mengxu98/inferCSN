@@ -5,9 +5,9 @@
 \title{Inferring cell-specific gene regulatory network}
 \usage{
 inferCSN(
-  matrix = NULL,
-  penalty = NULL,
-  algorithm = NULL,
+  matrix,
+  penalty = "L0",
+  algorithm = "CD",
   crossValidation = FALSE,
   nFolds = 10,
   regulators = NULL,

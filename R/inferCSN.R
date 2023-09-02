@@ -28,9 +28,9 @@
 #' weightDT <- inferCSN(exampleMatrix, cores = 2)
 #' head(weightDT)
 #'
-inferCSN <- function(matrix = NULL,
-                     penalty = NULL,
-                     algorithm = NULL,
+inferCSN <- function(matrix,
+                     penalty = "L0",
+                     algorithm = "CD",
                      crossValidation = FALSE,
                      nFolds = 10,
                      regulators = NULL,
@@ -38,38 +38,16 @@ inferCSN <- function(matrix = NULL,
                      maxSuppSize = NULL,
                      verbose = FALSE,
                      cores = 1) {
-  # Data processing
-  if (is.null(matrix)) stop("Please ensure provide an expression matrix......")
-
   # Check the penalty term of the regression model
-  if (!is.null(penalty)) {
-    if (!any(c("L0", "L0L2") == penalty)) {
-      stop(paste(
-        "Note: inferCSN does not support", penalty, "penalty regression......\n",
-        "Please set penalty item as 'L0' or 'L0L2'......"
-      ))
-    }
-  } else {
-    penalty <- "L0"
-  }
-
-  # Check whether cross validation is used
-  if (verbose & crossValidation) {
-    if (verbose) message(paste("Using", penalty, "penalty and cross validation......"))
-  } else {
-    if (verbose) message(paste("Using", penalty, "penalty......"))
+  if (!any(c("L0", "L0L2") == penalty)) {
+    stop("inferCSN does not support '", penalty, "' penalty regression......\n",
+         "Please set penalty item as 'L0' or 'L0L2'......")
   }
 
   # Check the algorithm of the regression model
-  if (!is.null(algorithm)) {
-    if (!any(c("CD", "CDPSI") == algorithm)) {
-      stop(paste(
-        "Note: inferCSN does not support", algorithm, "algorithm......\n",
-        "Please set algorithm as 'CD' or 'CDPSI'......"
-      ))
-    }
-  } else {
-    algorithm <- "CD"
+  if (!any(c("CD", "CDPSI") == algorithm)) {
+    stop("inferCSN does not support '", algorithm, "' algorithm......\n",
+         "Please set algorithm as 'CD' or 'CDPSI'......")
   }
 
   if (!is.null(regulators)) {
