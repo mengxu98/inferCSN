@@ -10,11 +10,11 @@
 
 ## **Install**
 
-### Using [*`devtools`*](https://github.com/r-lib/devtools)
+### Using [*`pak`*](https://github.com/r-lib/pak)
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("mengxu98/inferCSN")
+# install.packages("pak")
+pak::pak("mengxu98/inferCSN")
 ```
 
 ### Using *`git clone`*
