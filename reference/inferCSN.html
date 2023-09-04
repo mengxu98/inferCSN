@@ -75,42 +75,42 @@
 
 
 <dt>penalty</dt>
-<dd><p>[Default = "L0"] The type of regularization.
+<dd><p>The type of regularization.
 This can take either one of the following choices: "L0"and "L0L2".
 For high-dimensional and sparse data, such as single-cell transcriptome data, "L0L2" is more effective</p></dd>
 
 
 <dt>algorithm</dt>
-<dd><p>[Default = "CD"] Currently "CD" and "CDPSI" are supported.
+<dd><p>Currently "CD" and "CDPSI" are supported.
 The CDPSI algorithm may yield better results, but it also increases running time</p></dd>
 
 
 <dt>crossValidation</dt>
-<dd><p>[Default = FALSE] Check whether cross validation is used</p></dd>
+<dd><p>Check whether cross validation is used</p></dd>
 
 
 <dt>nFolds</dt>
-<dd><p>[Default = 10] The number of folds for cross-validation</p></dd>
+<dd><p>The number of folds for cross-validation</p></dd>
 
 
 <dt>regulators</dt>
-<dd><p>[Default = NULL] Regulator genes</p></dd>
+<dd><p>Regulator genes</p></dd>
 
 
 <dt>targets</dt>
-<dd><p>[Default = NULL] Target genes</p></dd>
+<dd><p>Target genes</p></dd>
 
 
 <dt>maxSuppSize</dt>
-<dd><p>[Default = NULL] The number of non-zore coef, this value will affect the final performance</p></dd>
+<dd><p>The number of non-zore coef, this value will affect the final performance</p></dd>
 
 
 <dt>verbose</dt>
-<dd><p>[Default = FALSE] Print detailed information</p></dd>
+<dd><p>Print detailed information</p></dd>
 
 
 <dt>cores</dt>
-<dd><p>[Default = 1] CPU cores</p></dd>
+<dd><p>CPU cores</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -125,7 +125,7 @@ The CDPSI algorithm may yield better results, but it also increases running time
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mengxu98.github.io/inferCSN/">inferCSN</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"exampleMatrix"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">weightDT</span> <span class="op">&lt;-</span> <span class="fu">inferCSN</span><span class="op">(</span><span class="va">exampleMatrix</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using 'L0' penalty and cross validation......</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using 'L0' penalty......</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">weightDT</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     regulator target     weight</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 162       g17    g18  0.6777506</span>
