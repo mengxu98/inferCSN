@@ -75,7 +75,8 @@ sub.inferCSN <- function(regulatorsMatrix,
                          maxSuppSize = NULL,
                          nFolds = 10,
                          verbose = FALSE) {
-  X <- as.matrix(regulatorsMatrix[, setdiff(colnames(regulatorsMatrix), target)])
+  X <- regulatorsMatrix[, setdiff(colnames(regulatorsMatrix), target)]
+  if (is(X, "sparseMatrix")) X <- as.matrix(X)
   y <- targetsMatrix[, target]
 
   if (is.null(maxSuppSize)) maxSuppSize <- ncol(X)
@@ -612,11 +613,11 @@ inferCSN.fit <- function(x, y,
   }
 
   settings <- list()
-  settings[[1]] <- intercept # Settings only contains intercept for now. Might include additional elements later.
+  settings[[1]] <- intercept
   names(settings) <- c("intercept")
 
-  # Find potential support sizes exceeding maxSuppSize and remove them (this is due to
-  # the C++ core whose last solution can exceed maxSuppSize
+  # Find potential support sizes exceeding maxSuppSize and remove them
+  # The C++ core whose last solution can exceed maxSuppSize
   for (i in 1:length(M$SuppSize)) {
     last <- length(M$SuppSize[[i]])
     if (M$SuppSize[[i]][last] > maxSuppSize) {
@@ -846,7 +847,8 @@ inferCSN.cvfit <- function(x, y,
         M$Converged[[i]] <- M$Converged[[i]][-last]
         M$lambda[[i]] <- M$lambda[[i]][-last]
         M$a0[[i]] <- M$a0[[i]][-last]
-        M$beta[[i]] <- as(M$beta[[i]][, -last], "sparseMatrix") # conversion to sparseMatrix is necessary to handle the case of a single column
+        # Conversion to sparseMatrix is necessary to handle the case of a single column
+        M$beta[[i]] <- as(M$beta[[i]][, -last], "sparseMatrix")
         M$CVMeans[[i]] <- M$CVMeans[[i]][-last]
         M$CVSDs[[i]] <- M$CVSDs[[i]][-last]
       }
