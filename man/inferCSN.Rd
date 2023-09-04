@@ -20,26 +20,26 @@ inferCSN(
 \arguments{
 \item{matrix}{An expression matrix, cells by genes}
 
-\item{penalty}{[Default = "L0"] The type of regularization.
+\item{penalty}{The type of regularization.
 This can take either one of the following choices: "L0"and "L0L2".
 For high-dimensional and sparse data, such as single-cell transcriptome data, "L0L2" is more effective}
 
-\item{algorithm}{[Default = "CD"] Currently "CD" and "CDPSI" are supported.
+\item{algorithm}{Currently "CD" and "CDPSI" are supported.
 The CDPSI algorithm may yield better results, but it also increases running time}
 
-\item{crossValidation}{[Default = FALSE] Check whether cross validation is used}
+\item{crossValidation}{Check whether cross validation is used}
 
-\item{nFolds}{[Default = 10] The number of folds for cross-validation}
+\item{nFolds}{The number of folds for cross-validation}
 
-\item{regulators}{[Default = NULL] Regulator genes}
+\item{regulators}{Regulator genes}
 
-\item{targets}{[Default = NULL] Target genes}
+\item{targets}{Target genes}
 
-\item{maxSuppSize}{[Default = NULL] The number of non-zore coef, this value will affect the final performance}
+\item{maxSuppSize}{The number of non-zore coef, this value will affect the final performance}
 
-\item{verbose}{[Default = FALSE] Print detailed information}
+\item{verbose}{Print detailed information}
 
-\item{cores}{[Default = 1] CPU cores}
+\item{cores}{CPU cores}
 }
 \value{
 A data table of gene-gene regulatory relationship

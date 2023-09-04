@@ -1,18 +1,18 @@
 #' @title Inferring cell-specific gene regulatory network
 #'
 #' @param matrix An expression matrix, cells by genes
-#' @param penalty [Default = "L0"] The type of regularization.
+#' @param penalty The type of regularization.
 #' This can take either one of the following choices: "L0"and "L0L2".
 #' For high-dimensional and sparse data, such as single-cell transcriptome data, "L0L2" is more effective
-#' @param algorithm [Default = "CD"] Currently "CD" and "CDPSI" are supported.
+#' @param algorithm Currently "CD" and "CDPSI" are supported.
 #' The CDPSI algorithm may yield better results, but it also increases running time
-#' @param crossValidation [Default = FALSE] Check whether cross validation is used
-#' @param nFolds [Default = 10] The number of folds for cross-validation
-#' @param regulators [Default = NULL] Regulator genes
-#' @param targets [Default = NULL] Target genes
-#' @param maxSuppSize [Default = NULL] The number of non-zore coef, this value will affect the final performance
-#' @param verbose [Default = FALSE] Print detailed information
-#' @param cores [Default = 1] CPU cores
+#' @param crossValidation Check whether cross validation is used
+#' @param nFolds The number of folds for cross-validation
+#' @param regulators Regulator genes
+#' @param targets Target genes
+#' @param maxSuppSize The number of non-zore coef, this value will affect the final performance
+#' @param verbose Print detailed information
+#' @param cores CPU cores
 #'
 #' @import magrittr
 #' @importFrom utils methods read.table setTxtProgressBar txtProgressBar
@@ -64,8 +64,8 @@ inferCSN <- function(matrix,
   }
   targets <- colnames(targetsMatrix)
 
-  if (verbose & crossValidation) message("Using '", penalty, "' penalty......")
-  if (verbose) message("Using '", penalty, "' penalty and cross validation......")
+  if (verbose) message("Using '", penalty, "' penalty......")
+  if (verbose & crossValidation) message("Using '", penalty, "' penalty and cross validation......")
 
   cores <- min(parallel::detectCores(logical = FALSE), cores, length(targets))
   if (cores == 1) {
@@ -75,21 +75,18 @@ inferCSN <- function(matrix,
                                      clear = TRUE,
                                      width = 100)
 
-    weightDT <- c()
-    for (i in 1:length(targets)) {
+    weightDT <- purrr::map_dfr(regulators, function(x) {
       if (verbose) pb$tick()
-
-      weightDT <- rbind(weightDT,
-                        sub.inferCSN(regulatorsMatrix = regulatorsMatrix,
-                                     targetsMatrix = targetsMatrix,
-                                     target = targets[i],
-                                     crossValidation = crossValidation,
-                                     penalty = penalty,
-                                     algorithm = algorithm,
-                                     nFolds = nFolds,
-                                     maxSuppSize = maxSuppSize,
-                                     verbose = verbose))
-    }
+      sub.inferCSN(regulatorsMatrix = regulatorsMatrix,
+                   targetsMatrix = targetsMatrix,
+                   target = x,
+                   crossValidation = crossValidation,
+                   penalty = penalty,
+                   algorithm = algorithm,
+                   nFolds = nFolds,
+                   maxSuppSize = maxSuppSize,
+                   verbose = verbose)
+    })
 
   } else {
     cl <- snow::makeSOCKcluster(cores)
