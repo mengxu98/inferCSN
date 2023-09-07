@@ -252,7 +252,7 @@ network.heatmap <- function(weightDT,
   if (showNames) {
     if (is.null(heatmapSize)) heatmapSize <- length(genes) / 2
   } else {
-    heatmapSize <- 6
+    if (is.null(heatmapSize)) heatmapSize <- 6
   }
 
   minWeight <- min(weightMatrix)
