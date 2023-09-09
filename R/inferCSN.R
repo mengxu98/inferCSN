@@ -14,7 +14,6 @@
 #' @param verbose Print detailed information
 #' @param cores CPU cores
 #'
-#' @import magrittr
 #' @importFrom utils methods read.table setTxtProgressBar txtProgressBar
 #'
 #' @return A data table of gene-gene regulatory relationship
@@ -89,40 +88,40 @@ inferCSN <- function(matrix,
     })
 
   } else {
-    cl <- snow::makeSOCKcluster(cores)
+    cl <- parallel::makeCluster(cores)
     doSNOW::registerDoSNOW(cl)
-    pb <- txtProgressBar(min = 1,
-                         max = length(targets),
-                         width = 100,
-                         style = 3)
 
-    progress <- function(n) setTxtProgressBar(pb, n)
-    opts <- list(progress = progress)
-    "%dopar%" <- foreach::"%dopar%"
     if (verbose) {
-      multipleCoresSetting <- foreach::foreach(target = targets,
-                                               .combine = "rbind",
-                                               .export = c("sub.inferCSN", "sparse.regression"),
-                                               .options.snow = opts)
+      pb <- txtProgressBar(min = 1,
+                           max = length(targets),
+                           width = 100,
+                           style = 3)
+
+      progress <- function(n) setTxtProgressBar(pb, n)
+      opts <- list(progress = progress)
     } else {
-      multipleCoresSetting <- foreach::foreach(target = targets,
-                                               .combine = "rbind",
-                                               .export = c("sub.inferCSN", "sparse.regression"))
+      opts <- NULL
     }
 
-    weightDT <- multipleCoresSetting %dopar% {
-      sub.inferCSN(regulatorsMatrix = regulatorsMatrix,
-                   targetsMatrix = targetsMatrix,
-                   target = target,
-                   crossValidation = crossValidation,
-                   penalty = penalty,
-                   algorithm = algorithm,
-                   nFolds = nFolds,
-                   maxSuppSize = maxSuppSize,
-                   verbose = verbose)
-    }
+    "%dopar%" <- foreach::"%dopar%"
+    weightDT <- foreach::foreach(target = targets,
+                                 .export = c("sub.inferCSN", "sparse.regression"),
+                                 .options.snow = opts) %dopar% {
+                                   sub.inferCSN(regulatorsMatrix = regulatorsMatrix,
+                                                targetsMatrix = targetsMatrix,
+                                                target = target,
+                                                crossValidation = crossValidation,
+                                                penalty = penalty,
+                                                algorithm = algorithm,
+                                                nFolds = nFolds,
+                                                maxSuppSize = maxSuppSize,
+                                                verbose = verbose)
+                                 }
+    weightDT <- purrr::list_rbind(weightDT)
 
     if (verbose) close(pb)
+
+    doParallel::stopImplicitCluster()
     parallel::stopCluster(cl)
   }
 

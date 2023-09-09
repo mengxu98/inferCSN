@@ -16,6 +16,7 @@ LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.2.3
 Encoding: UTF-8
 Imports:
+    doParallel,
     doSNOW,
     dplyr,
     foreach,
@@ -29,8 +30,7 @@ Imports:
     parallel,
     progress,
     purrr,
-    Rcpp (>= 0.12.13),
-    snow
+    Rcpp (>= 0.12.13)
 Suggests: 
     ComplexHeatmap,
     cowplot,

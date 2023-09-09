@@ -32,11 +32,11 @@ sparse.regression <- function(X, y,
                           maxSuppSize = maxSuppSize)
 
       fitInf <- print(fit)
-      lambda <- fitInf$lambda[fitInf$suppSize %>% which.max()]
-      gamma <- fitInf$gamma[fitInf$suppSize %>% which.max()]
+      lambda <- fitInf$lambda[which.max(fitInf$suppSize)]
+      gamma <- fitInf$gamma[which.max(fitInf$suppSize)]
     } else {
       gamma <- fit$fit$gamma[which(unlist(lapply(fit$cvMeans, min)) == min(unlist(lapply(fit$cvMeans, min))))]
-      lambdaList <- print(fit) %>% dplyr::filter(gamma == gamma, )
+      lambdaList <- dplyr::filter(print(fit), gamma == gamma, )
       if (maxSuppSize %in% lambdaList$maxSuppSize) {
         lambda <- lambdaList$maxSuppSize[which(lambdaList$maxSuppSize == maxSuppSize)]
       } else {
@@ -50,10 +50,10 @@ sparse.regression <- function(X, y,
                         maxSuppSize = maxSuppSize)
 
     fitInf <- print(fit)
-    lambda <- fitInf$lambda[fitInf$suppSize %>% which.max()]
-    gamma <- fitInf$gamma[fitInf$suppSize %>% which.max()]
+    lambda <- fitInf$lambda[which.max(fitInf$suppSize)]
+    gamma <- fitInf$gamma[which.max(fitInf$suppSize)]
   }
-  return(coef(fit, lambda = lambda, gamma = gamma) %>% as.vector() %>% .[-1])
+  return(as.vector(coef(fit, lambda = lambda, gamma = gamma))[-1])
 }
 
 #' @title Sparse regression model for single gene
@@ -295,8 +295,7 @@ network.heatmap <- function(weightDT,
 #' library(inferCSN)
 #' data("exampleMatrix")
 #' weightDT <- inferCSN(exampleMatrix)
-#' ranks <- compute.gene.rank(weightDT)
-#' p <- dynamic.networks(weightDT, ranks[1, 1])
+#' p <- dynamic.networks(weightDT, regulators = weightDT[1, 1])
 #' p
 #'
 dynamic.networks <- function(weightDT,
@@ -396,6 +395,7 @@ net.format <- function(weightDT,
 compute.gene.rank <- function(weightDT,
                               directedGraph = FALSE) {
   colnames(weightDT) <- c("regulatory", "target", "weight")
+  weightDT$weight <- abs(weightDT$weight)
   tfnet <- igraph::graph_from_data_frame(weightDT, directed = directedGraph)
   pageRank <- data.frame(igraph::page_rank(tfnet, directed = directedGraph)$vector)
   colnames(pageRank) <- c("pageRank")

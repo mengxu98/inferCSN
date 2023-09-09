@@ -23,8 +23,7 @@ Plot of dynamic networks
 library(inferCSN)
 data("exampleMatrix")
 weightDT <- inferCSN(exampleMatrix)
-ranks <- compute.gene.rank(weightDT)
-p <- dynamic.networks(weightDT, ranks[1, 1])
+p <- dynamic.networks(weightDT, regulators = weightDT[1, 1])
 p
 
 }
