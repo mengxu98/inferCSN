@@ -1,4 +1,4 @@
-utils::globalVariables(c("x", "y", "xend", "yend", "weight", "Interaction", "name", ".", "target", "curvetype"))
+utils::globalVariables(c("x", "y", "xend", "yend", "weight", "Interaction", "name", "target", "curvetype"))
 
 #' @title Sparse regression model
 #'
@@ -6,7 +6,7 @@ utils::globalVariables(c("x", "y", "xend", "yend", "weight", "Interaction", "nam
 #' @param y The response vector
 #' @inheritParams inferCSN
 #'
-#' @importFrom stats coef
+#' @importFrom stats coef predict
 #'
 #' @return The coefficients
 #' @export
@@ -18,6 +18,12 @@ sparse.regression <- function(X, y,
                               maxSuppSize = NULL,
                               nFolds = 10,
                               verbose = FALSE) {
+  samples <- sample(0.6 * nrow(X))
+  testX <- X[-samples, ]
+  X <- X[samples, ]
+  testy <- y[-samples]
+  y <- y[samples]
+
   if (crossValidation) {
     fit <- try(inferCSN.cvfit(X, y,
                               penalty = penalty,
@@ -53,7 +59,16 @@ sparse.regression <- function(X, y,
     lambda <- fitInf$lambda[which.max(fitInf$suppSize)]
     gamma <- fitInf$gamma[which.max(fitInf$suppSize)]
   }
-  return(as.vector(coef(fit, lambda = lambda, gamma = gamma))[-1])
+  y_hat <- as.numeric(predict(fit,
+                              newx = testX,
+                              lambda = lambda,
+                              gamma = gamma))
+  r <- stats::cor(testy, y_hat)
+  if (r > 0) {
+    return(as.vector(coef(fit, lambda = lambda, gamma = gamma))[-1])
+  } else {
+    return(0)
+  }
 }
 
 #' @title Sparse regression model for single gene
@@ -90,6 +105,7 @@ sub.inferCSN <- function(regulatorsMatrix,
                                     verbose = verbose)
 
   coefficients <- coefficients / sum(abs(coefficients))
+
   if (length(coefficients) != ncol(X)) coefficients <- 0
   return(data.frame(regulator = colnames(X), target = target, weight = coefficients))
 }
@@ -123,7 +139,7 @@ auc.calculate <- function(weightDT,
                           interaction = FALSE) {
   # Check input data
   colnames(weightDT) <- c("regulator", "target", "weight")
-  if (!interaction) weightDT$weight <- abs(weightDT$weight)
+  if (!interaction) weightDT$weight <- abs(as.numeric(weightDT$weight))
 
   if (ncol(groundTruth) > 2) groundTruth <- groundTruth[, 1:2]
   names(groundTruth) <- c("regulator", "target")
@@ -966,4 +982,53 @@ print.inferCSN <- function(x, ...) {
 #'
 print.inferCSNCV <- function(x, ...) {
   print.inferCSN(x$fit)
+}
+
+#' @title Predict Response
+#'
+#' @description Predicts the response for a given sample
+#' @param object The output of inferCSN.fit or inferCSN.cvfit
+#' @param newx A matrix on which predictions are made. The matrix should have p columns
+#' @param lambda The value of lambda to use for prediction. A summary of the lambdas in the regularization
+#' path can be obtained using \code{print(fit)}
+#' @param gamma The value of gamma to use for prediction. A summary of the gammas in the regularization
+#' path can be obtained using \code{print(fit)}
+#' @param ... ignore
+#'
+#' @method predict inferCSN
+#' @details
+#' If both lambda and gamma are not supplied, then a matrix of predictions
+#' for all the solutions in the regularization path is returned. If lambda is
+#' supplied but gamma is not, the smallest value of gamma is used. In case of
+#' of logistic regression, probability values are returned
+#'
+#' @export
+#'
+predict.inferCSN <- function(object,
+                             newx,
+                             lambda=NULL,
+                             gamma=NULL, ...) {
+  beta = coef.inferCSN(object, lambda, gamma)
+  if (object$settings$intercept){
+    # add a column of ones for the intercept
+    x = cbind(1,newx)
+  }	else{
+    x = newx
+  }
+  prediction = x%*%beta
+  if (object$loss == "Logistic"){
+    prediction = 1 / (1 + exp(-prediction))
+  }
+  prediction
+}
+
+#' @rdname predict.inferCSN
+#' @method predict inferCSNCV
+#' @export
+#'
+predict.inferCSNCV <- function(object,
+                               newx,
+                               lambda=NULL,
+                               gamma=NULL, ...) {
+  predict.inferCSN(object$fit,newx,lambda,gamma, ...)
 }

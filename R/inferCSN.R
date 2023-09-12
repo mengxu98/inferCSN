@@ -125,6 +125,6 @@ inferCSN <- function(matrix,
     parallel::stopCluster(cl)
   }
 
-  weightDT <- weightDT[order(abs(weightDT$weight), decreasing = TRUE), ]
+  weightDT <- weightDT[order(abs(as.numeric(weightDT$weight)), decreasing = TRUE), ]
   return(weightDT)
 }

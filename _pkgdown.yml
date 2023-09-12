@@ -43,6 +43,8 @@ reference:
   - coef.inferCSNCV
   - print.inferCSN
   - print.inferCSNCV
+  - predict.inferCSN
+  - predict.inferCSNCV
 
 - subtitle: "Test data"
 - contents:
