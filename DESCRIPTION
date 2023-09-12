@@ -22,6 +22,7 @@ Imports:
     foreach,
     ggnetwork,
     ggplot2,
+    ggraph,
     igraph,
     Matrix,
     magrittr,
@@ -30,7 +31,8 @@ Imports:
     parallel,
     progress,
     purrr,
-    Rcpp (>= 0.12.13)
+    Rcpp (>= 0.12.13),
+    tidygraph
 Suggests: 
     ComplexHeatmap,
     cowplot,

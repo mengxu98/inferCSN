@@ -1,4 +1,7 @@
-utils::globalVariables(c("x", "y", "xend", "yend", "weight", "Interaction", "name", "target", "curvetype"))
+utils::globalVariables(c("x", "y", "xend", "yend",
+                         "weight", "Interaction",
+                         "name", "target", "degree",
+                         "edges", "curvetype"))
 
 #' @title Sparse regression model
 #'
@@ -311,8 +314,8 @@ network.heatmap <- function(weightDT,
 #' library(inferCSN)
 #' data("exampleMatrix")
 #' weightDT <- inferCSN(exampleMatrix)
-#' p <- dynamic.networks(weightDT, regulators = weightDT[1, 1])
-#' p
+#' g <- dynamic.networks(weightDT, regulators = weightDT[1, 1])
+#' g
 #'
 dynamic.networks <- function(weightDT,
                              regulators = NULL,
@@ -363,10 +366,64 @@ dynamic.networks <- function(weightDT,
                          aes(x = x, y = y, label = name),
                          size = 3.5,
                          color = "black") +
-    theme_blank()
-  g <- g + theme(legend.position = legend.position)
+    theme_blank() +
+    theme(legend.position = legend.position)
   return(g)
 }
+
+#' @title compare.networks
+#' @description
+#'  Ref: https://mp.weixin.qq.com/s/f3Hquw0m4ucGUieSjMyang
+#'
+#' @param weightDT weightDT
+#' @param degreeValue degreeValue
+#' @param weightValue weightValue
+#' @param legend.position legend.position
+#'
+#' @import ggplot2
+#' @import ggraph
+#' @import magrittr
+#'
+#' @return ggplot2 object
+#' @export
+#'
+#' @examples
+#' library(inferCSN)
+#' data("exampleMatrix")
+#' weightDT <- inferCSN(exampleMatrix)
+#' g <- compare.networks(weightDT[1:50, ])
+#' g
+#'
+compare.networks <- function(weightDT,
+                             degreeValue = 0,
+                             weightValue = 0,
+                             legend.position = "bottom") {
+  weightDT <- net.format(weightDT)
+  graph <- tidygraph::as_tbl_graph(weightDT) %>%
+    dplyr::mutate(degree = tidygraph::centrality_degree(mode = 'out')) %>%
+    dplyr::filter(degree > degreeValue) %>%
+    tidygraph::activate(edges)
+
+  g <- ggraph(graph, layout = 'linear', circular = TRUE) +
+    geom_edge_arc(aes(colour = Interaction,
+                      filter = weight > weightValue,
+                      edge_width = weight),
+                  arrow = arrow(length = unit(3, 'mm')),
+                  start_cap = square(3, 'mm'),
+                  end_cap = circle(3, 'mm')) +
+    scale_edge_width(range=c(0, 1)) +
+    facet_edges(~Interaction) +
+    geom_node_point(aes(size = degree), colour = '#A1B7CE') +
+    geom_node_text(aes(label = name), repel = TRUE) +
+    coord_fixed() +
+    theme_graph(base_family = "serif",
+                foreground = 'steelblue',
+                fg_text_colour = 'white') +
+    theme(legend.position = legend.position)
+
+  return(g)
+}
+
 
 #' @title Format weight table
 #'
