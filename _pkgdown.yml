@@ -22,11 +22,11 @@ reference:
   - compare.networks
   - network.heatmap
 
-- subtitle: "Auc calculate and plot"
+- subtitle: "Network evaluation"
 - contents:
   - auc.calculate
 
-- subtitle: "PageRank"
+- subtitle: "Compute gene rank"
 - contents:
   - compute.gene.rank
 
@@ -37,8 +37,9 @@ reference:
   - inferCSN.fit
   - inferCSN.cvfit
 
-- subtitle: "Others functions"
+- subtitle: "Utils functions"
 - contents:
+  - check.arguments
   - net.format
   - coef.inferCSN
   - coef.inferCSNCV
