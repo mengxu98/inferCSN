@@ -2,6 +2,11 @@
 % Please edit documentation in R/inferCSN.R
 \name{inferCSN}
 \alias{inferCSN}
+\alias{inferCSN,data.frame-method}
+\alias{inferCSN,}
+\alias{data.frame-method}
+\alias{inferCSN,matrix-method}
+\alias{matrix-method}
 \title{Inferring cell-specific gene regulatory network}
 \usage{
 inferCSN(
@@ -10,6 +15,38 @@ inferCSN(
   algorithm = "CD",
   crossValidation = FALSE,
   nFolds = 10,
+  kFolds = NULL,
+  rThreshold = 0,
+  regulators = NULL,
+  targets = NULL,
+  maxSuppSize = NULL,
+  verbose = FALSE,
+  cores = 1
+)
+
+\S4method{inferCSN}{data.frame}(
+  matrix,
+  penalty = "L0",
+  algorithm = "CD",
+  crossValidation = FALSE,
+  nFolds = 10,
+  kFolds = NULL,
+  rThreshold = 0,
+  regulators = NULL,
+  targets = NULL,
+  maxSuppSize = NULL,
+  verbose = FALSE,
+  cores = 1
+)
+
+\S4method{inferCSN}{matrix}(
+  matrix,
+  penalty = "L0",
+  algorithm = "CD",
+  crossValidation = FALSE,
+  nFolds = 10,
+  kFolds = NULL,
+  rThreshold = 0,
   regulators = NULL,
   targets = NULL,
   maxSuppSize = NULL,
@@ -30,6 +67,10 @@ The CDPSI algorithm may yield better results, but it also increases running time
 \item{crossValidation}{Check whether cross validation is used}
 
 \item{nFolds}{The number of folds for cross-validation}
+
+\item{kFolds}{The number of folds for sample split}
+
+\item{rThreshold}{rThreshold}
 
 \item{regulators}{Regulator genes}
 

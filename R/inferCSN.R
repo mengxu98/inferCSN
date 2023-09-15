@@ -8,6 +8,8 @@
 #' The CDPSI algorithm may yield better results, but it also increases running time
 #' @param crossValidation Check whether cross validation is used
 #' @param nFolds The number of folds for cross-validation
+#' @param kFolds The number of folds for sample split
+#' @param rThreshold rThreshold
 #' @param regulators Regulator genes
 #' @param targets Target genes
 #' @param maxSuppSize The number of non-zore coef, this value will affect the final performance
@@ -27,27 +29,118 @@
 #' weightDT <- inferCSN(exampleMatrix, cores = 2)
 #' head(weightDT)
 #'
-inferCSN <- function(matrix,
-                     penalty = "L0",
-                     algorithm = "CD",
-                     crossValidation = FALSE,
-                     nFolds = 10,
-                     regulators = NULL,
-                     targets = NULL,
-                     maxSuppSize = NULL,
-                     verbose = FALSE,
-                     cores = 1) {
-  # Check the penalty term of the regression model
-  if (!any(c("L0", "L0L2") == penalty)) {
-    stop("inferCSN does not support '", penalty, "' penalty regression......\n",
-         "Please set penalty item as 'L0' or 'L0L2'......")
-  }
 
-  # Check the algorithm of the regression model
-  if (!any(c("CD", "CDPSI") == algorithm)) {
-    stop("inferCSN does not support '", algorithm, "' algorithm......\n",
-         "Please set algorithm as 'CD' or 'CDPSI'......")
-  }
+# @docType methods
+#' @rdname inferCSN
+#' @export
+#'
+setGeneric("inferCSN",
+           signature = "matrix",
+           function(matrix,
+                    penalty = "L0",
+                    algorithm = "CD",
+                    crossValidation = FALSE,
+                    nFolds = 10,
+                    kFolds = NULL,
+                    rThreshold = 0,
+                    regulators = NULL,
+                    targets = NULL,
+                    maxSuppSize = NULL,
+                    verbose = FALSE,
+                    cores = 1) {
+             standardGeneric("inferCSN")
+           })
+
+#' @rdname inferCSN
+#' @aliases inferCSN, data.frame-method
+#' @export
+#'
+setMethod("inferCSN",
+          "data.frame",
+          function(matrix,
+                   penalty = "L0",
+                   algorithm = "CD",
+                   crossValidation = FALSE,
+                   nFolds = 10,
+                   kFolds = NULL,
+                   rThreshold = 0,
+                   regulators = NULL,
+                   targets = NULL,
+                   maxSuppSize = NULL,
+                   verbose = FALSE,
+                   cores = 1) {
+            matrix <- as.matrix(matrix)
+            .inferCSN(matrix = matrix,
+                      penalty = penalty,
+                      algorithm = algorithm,
+                      crossValidation = crossValidation,
+                      nFolds = nFolds,
+                      kFolds = kFolds,
+                      rThreshold = rThreshold,
+                      regulators = regulators,
+                      targets = targets,
+                      maxSuppSize = maxSuppSize,
+                      verbose = verbose,
+                      cores = cores)
+          })
+
+#' @rdname inferCSN
+#' @aliases inferCSN, matrix-method
+#' @export
+#'
+setMethod("inferCSN",
+          "matrix",
+          function(matrix,
+                   penalty = "L0",
+                   algorithm = "CD",
+                   crossValidation = FALSE,
+                   nFolds = 10,
+                   kFolds = NULL,
+                   rThreshold = 0,
+                   regulators = NULL,
+                   targets = NULL,
+                   maxSuppSize = NULL,
+                   verbose = FALSE,
+                   cores = 1) {
+            .inferCSN(matrix = matrix,
+                      penalty = penalty,
+                      algorithm = algorithm,
+                      crossValidation = crossValidation,
+                      nFolds = nFolds,
+                      kFolds = kFolds,
+                      rThreshold = rThreshold,
+                      regulators = regulators,
+                      targets = targets,
+                      maxSuppSize = maxSuppSize,
+                      verbose = verbose,
+                      cores = cores)
+          })
+
+.inferCSN <- function(matrix,
+                      penalty,
+                      algorithm,
+                      crossValidation,
+                      nFolds,
+                      kFolds,
+                      rThreshold,
+                      regulators,
+                      targets,
+                      maxSuppSize,
+                      verbose,
+                      cores) {
+  # Check input arguments
+  check.arguments(matrix = matrix,
+                  penalty = penalty,
+                  algorithm = algorithm,
+                  crossValidation = crossValidation,
+                  nFolds = nFolds,
+                  kFolds = kFolds,
+                  rThreshold = rThreshold,
+                  regulators = regulators,
+                  targets = targets,
+                  maxSuppSize = maxSuppSize,
+                  verbose = verbose,
+                  cores = cores)
 
   if (!is.null(regulators)) {
     regulatorsMatrix <- matrix[, intersect(colnames(matrix), regulators)]
@@ -62,6 +155,7 @@ inferCSN <- function(matrix,
     targetsMatrix <- matrix
   }
   targets <- colnames(targetsMatrix)
+  rm(matrix)
 
   if (verbose) message("Using '", penalty, "' penalty......")
   if (verbose & crossValidation) message("Using '", penalty, "' penalty and cross validation......")
@@ -83,6 +177,8 @@ inferCSN <- function(matrix,
                    penalty = penalty,
                    algorithm = algorithm,
                    nFolds = nFolds,
+                   kFolds = kFolds,
+                   rThreshold = rThreshold,
                    maxSuppSize = maxSuppSize,
                    verbose = verbose)
     })
@@ -114,13 +210,14 @@ inferCSN <- function(matrix,
                                                 penalty = penalty,
                                                 algorithm = algorithm,
                                                 nFolds = nFolds,
+                                                kFolds = kFolds,
+                                                rThreshold = rThreshold,
                                                 maxSuppSize = maxSuppSize,
                                                 verbose = verbose)
                                  }
     weightDT <- purrr::list_rbind(weightDT)
 
     if (verbose) close(pb)
-
     doParallel::stopImplicitCluster()
     parallel::stopCluster(cl)
   }
