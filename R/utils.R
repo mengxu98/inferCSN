@@ -10,34 +10,30 @@ utils::globalVariables(c("x",
                          "edges",
                          "curvetype"))
 
-#' Check input arguments
+#' Check input parameters
 #'
 #' @inheritParams inferCSN
 #'
 #' @return NULL
 #' @export
 #'
-check.arguments <- function(matrix,
-                            penalty,
-                            algorithm,
-                            crossValidation,
-                            nFolds,
-                            kFolds,
-                            rThreshold,
-                            regulators,
-                            targets,
-                            maxSuppSize,
-                            verbose,
-                            cores) {
-  matrixMessage <- paste0("Parameter matrix must be a two-dimensional matrix,
-                          where each column corresponds to a gene and each row corresponds to a sample/cell......")
-  if (!is.matrix(matrix) && !is.array(matrix)) {
-    stop(matrixMessage)
-  }
+check.parameters <- function(matrix,
+                             penalty,
+                             algorithm,
+                             crossValidation,
+                             nFolds,
+                             kFolds,
+                             rThreshold,
+                             regulators,
+                             targets,
+                             maxSuppSize,
+                             verbose,
+                             cores) {
+  matrixErrorMessage <- paste0("Parameter matrix must be a two-dimensional matrix,
+                               where each column corresponds to a gene and each row corresponds to a sample/cell......")
+  if (!is.matrix(matrix) && !is.array(matrix)) stop(matrixErrorMessage)
 
-  if (length(dim(matrix)) != 2) {
-    stop(matrixMessage)
-  }
+  if (length(dim(matrix)) != 2) stop(matrixErrorMessage)
 
   if (is.null(colnames(matrix))) {
     stop("Parameter matrix must contain the names of the genes as colnames......")
@@ -65,7 +61,7 @@ check.arguments <- function(matrix,
       if(min(targets) <= 0) stop("The indexes in 'targets' should be >=1......")
     }
 
-    if(any(table(targets) > 1)) stop("Please, provide each target (name/ID) only once......")
+    if(any(table(targets) > 1)) stop("Please provide each target only once......")
 
     if(is.character(targets)){
       targetsInMatrix <- intersect(targets, colnames(matrix))
@@ -74,8 +70,8 @@ check.arguments <- function(matrix,
       }
 
       if(length(targetsInMatrix) < length(targets)) {
-        warning("Only", length(targetsInMatrix), "out of", length(targets),
-                "target genes are in the expression matrix......")
+        warning("Only ", length(targetsInMatrix), " out of ", length(targets),
+                " target genes are in the expression matrix......")
       }
     }
   }
@@ -101,7 +97,7 @@ check.arguments <- function(matrix,
         if(min(regulators) <= 0) stop("The indexes in 'regulators' should be >=1......")
       }
 
-      if(any(table(regulators) > 1)) stop("Please, provide each regulator only once......")
+      if(any(table(regulators) > 1)) stop("Please provide each regulator only once......")
 
       if (is.character(regulators)) {
         regulatorsInMatrix <- intersect(regulators, colnames(matrix))
@@ -121,7 +117,7 @@ check.arguments <- function(matrix,
     stop("Parameter cores should be a stricly positive integer......")
   }
 
-  if (verbose) message("All arguments check done......")
+  if (verbose) message("All parameters check done......")
 }
 
 #' @title Format weight table
@@ -135,27 +131,26 @@ check.arguments <- function(matrix,
 net.format <- function(weightDT,
                        regulators = NULL) {
   colnames(weightDT) <- c("regulator", "target", "weight")
-  if (!is.null(regulators)) {
-    weightDT <- purrr::map_dfr(
-      regulators, function(x) {
-        weightDT[which(weightDT$regulator == x), ]
-      }
-    )
-  }
   weightDT$weight <- as.numeric(weightDT$weight)
+  weightDT <- dplyr::filter(weightDT, weight !=0)
+  if (!is.null(regulators)) {
+    weightDT <- purrr::map_dfr(regulators, function(x) {
+      dplyr::filter(weightDT, regulator == x)
+    })
+  }
   weightDT$Interaction <- "Activation"
   weightDT$Interaction[weightDT$weight < 0] <- "Repression"
   weightDT$weight <- abs(weightDT$weight)
   return(weightDT)
 }
 
-#' @title Extracts a specific solution in the regularization path.
+#' @title Extracts a specific solution in the regularization path
 #'
 #' @param object The output of inferCSN.fit or inferCSN.cvfit
-#' @param lambda The value of lambda at which to extract the solution.
-#' @param gamma The value of gamma at which to extract the solution.
+#' @param lambda The value of lambda at which to extract the solution
+#' @param gamma The value of gamma at which to extract the solution
 #' @param supportSize The number of non-zeros each solution extracted will contain
-#' @param ... ignore
+#' @param ... Other parameters
 #'
 #' @method coef inferCSN
 #'
@@ -222,8 +217,10 @@ coef.inferCSNCV <- function(object,
 #' @title Prints a summary of inferCSN.fit
 #'
 #' @param x The output of inferCSN.fit or inferCSN.cvfit
-#' @param ... ignore
+#' @param ... Other parameters
+#'
 #' @method print inferCSN
+#'
 #' @export
 #'
 print.inferCSN <- function(x, ...) {
@@ -254,7 +251,7 @@ print.inferCSNCV <- function(x, ...) {
 #' path can be obtained using \code{print(fit)}
 #' @param gamma The value of gamma to use for prediction. A summary of the gammas in the regularization
 #' path can be obtained using \code{print(fit)}
-#' @param ... ignore
+#' @param ... Other parameters
 #'
 #' @method predict inferCSN
 #'
@@ -295,4 +292,15 @@ predict.inferCSNCV <- function(object,
                                lambda=NULL,
                                gamma=NULL, ...) {
   predict.inferCSN(object$fit, newx, lambda, gamma, ...)
+}
+
+#' @title is.scalar
+#'
+#' @param x Value
+#'
+#' @return Null
+#' @export
+#'
+is.scalar <- function(x) {
+  is.atomic(x) && length(x) == 1L && !is.character(x) && Im(x) == 0 && !is.nan(x) && !is.na(x)
 }
