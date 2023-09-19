@@ -7,7 +7,7 @@
 compute.gene.rank(weightDT, directedGraph = FALSE)
 }
 \arguments{
-\item{weightDT}{The weight data table of network.}
+\item{weightDT}{The weight data table of network}
 
 \item{directedGraph}{If GRN is directed or not}
 }

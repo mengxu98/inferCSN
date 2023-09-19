@@ -28,10 +28,13 @@ sparse.regression(
 This can take either one of the following choices: "L0"and "L0L2".
 For high-dimensional and sparse data, such as single-cell transcriptome data, "L0L2" is more effective}
 
-\item{algorithm}{Currently "CD" and "CDPSI" are supported.
+\item{algorithm}{The type of algorithm used to minimize the objective function.
+Currently "CD" and "CDPSI" are supported.
 The CDPSI algorithm may yield better results, but it also increases running time}
 
-\item{maxSuppSize}{The number of non-zore coef, this value will affect the final performance}
+\item{maxSuppSize}{The number of non-zore coef, this value will affect the final performance.
+The maximum support size at which to terminate the regularization path.
+Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros}
 
 \item{nFolds}{The number of folds for cross-validation}
 

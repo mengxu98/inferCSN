@@ -21,7 +21,7 @@ auc.calculate(
 
 \item{fileSave}{The figure name}
 
-\item{interaction}{If true, consider the positivity or negativity of interaction}
+\item{interaction}{If true, consider the positivity/negativity of interaction}
 }
 \value{
 AUC values and figure

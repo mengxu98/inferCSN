@@ -3,7 +3,7 @@
 \name{coef.inferCSN}
 \alias{coef.inferCSN}
 \alias{coef.inferCSNCV}
-\title{Extracts a specific solution in the regularization path.}
+\title{Extracts a specific solution in the regularization path}
 \usage{
 \method{coef}{inferCSN}(object, lambda = NULL, gamma = NULL, supportSize = NULL, ...)
 
@@ -12,14 +12,14 @@
 \arguments{
 \item{object}{The output of inferCSN.fit or inferCSN.cvfit}
 
-\item{lambda}{The value of lambda at which to extract the solution.}
+\item{lambda}{The value of lambda at which to extract the solution}
 
-\item{gamma}{The value of gamma at which to extract the solution.}
+\item{gamma}{The value of gamma at which to extract the solution}
 
 \item{supportSize}{The number of non-zeros each solution extracted will contain}
 
 \item{...}{ignore}
 }
 \description{
-Extracts a specific solution in the regularization path.
+Extracts a specific solution in the regularization path
 }

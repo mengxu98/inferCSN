@@ -1,6 +1,6 @@
 #' @title Compute and rank TFs in network
 #'
-#' @param weightDT The weight data table of network.
+#' @param weightDT The weight data table of network
 #' @param directedGraph If GRN is directed or not
 #'
 #' @return A data.table with three columns

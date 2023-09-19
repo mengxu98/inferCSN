@@ -1,10 +1,13 @@
+#' @useDynLib inferCSN
+
 #' @title Inferring cell-specific gene regulatory network
 #'
 #' @param matrix An expression matrix, cells by genes
 #' @param penalty The type of regularization.
 #' This can take either one of the following choices: "L0"and "L0L2".
 #' For high-dimensional and sparse data, such as single-cell transcriptome data, "L0L2" is more effective
-#' @param algorithm Currently "CD" and "CDPSI" are supported.
+#' @param algorithm The type of algorithm used to minimize the objective function.
+#' Currently "CD" and "CDPSI" are supported.
 #' The CDPSI algorithm may yield better results, but it also increases running time
 #' @param crossValidation Check whether cross validation is used
 #' @param nFolds The number of folds for cross-validation
@@ -12,11 +15,18 @@
 #' @param rThreshold rThreshold
 #' @param regulators Regulator genes
 #' @param targets Target genes
-#' @param maxSuppSize The number of non-zore coef, this value will affect the final performance
+#' @param maxSuppSize The number of non-zore coef, this value will affect the final performance.
+#' The maximum support size at which to terminate the regularization path.
+#' Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros
 #' @param verbose Print detailed information
 #' @param cores CPU cores
 #'
-#' @importFrom utils methods read.table setTxtProgressBar txtProgressBar
+#' @import Matrix
+#'
+#' @importFrom methods as is
+#' @importFrom Rcpp evalCpp
+#' @importFrom stats coef predict
+#' @importFrom utils methods
 #'
 #' @return A data table of gene-gene regulatory relationship
 #' @export
@@ -28,9 +38,8 @@
 #' head(weightDT)
 #' weightDT <- inferCSN(exampleMatrix, cores = 2)
 #' head(weightDT)
-#'
 
-# @docType methods
+#' @docType methods
 #' @rdname inferCSN
 #' @export
 #'
@@ -128,8 +137,8 @@ setMethod("inferCSN",
                       maxSuppSize,
                       verbose,
                       cores) {
-  # Check input arguments
-  check.arguments(matrix = matrix,
+  # Check input parameters
+  check.parameters(matrix = matrix,
                   penalty = penalty,
                   algorithm = algorithm,
                   crossValidation = crossValidation,
@@ -188,12 +197,12 @@ setMethod("inferCSN",
     doSNOW::registerDoSNOW(cl)
 
     if (verbose) {
-      pb <- txtProgressBar(min = 1,
-                           max = length(targets),
-                           width = 100,
-                           style = 3)
+      pb <- utils::txtProgressBar(min = 1,
+                                  max = length(targets),
+                                  width = 100,
+                                  style = 3)
 
-      progress <- function(n) setTxtProgressBar(pb, n)
+      progress <- function(n) utils::setTxtProgressBar(pb, n)
       opts <- list(progress = progress)
     } else {
       opts <- NULL

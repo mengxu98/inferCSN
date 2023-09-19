@@ -37,56 +37,60 @@ inferCSN.fit(
 
 \item{y}{The response vector}
 
-\item{loss}{The loss function. Currently support the choices "SquaredError" (for regression), "Logistic" (for logistic regression), and "SquaredHinge" (for smooth SVM).}
+\item{loss}{The loss function}
 
-\item{penalty}{The type of regularization.}
+\item{penalty}{The type of regularization.
+This can take either one of the following choices: "L0"and "L0L2".
+For high-dimensional and sparse data, such as single-cell transcriptome data, "L0L2" is more effective}
 
-\item{algorithm}{The type of algorithm used to minimize the objective function.}
+\item{algorithm}{The type of algorithm used to minimize the objective function.
+Currently "CD" and "CDPSI" are supported.
+The CDPSI algorithm may yield better results, but it also increases running time}
 
-\item{maxSuppSize}{The maximum support size at which to terminate the regularization path. Recommend setting
-this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small
-portion of non-zeros}
+\item{maxSuppSize}{The number of non-zore coef, this value will affect the final performance.
+The maximum support size at which to terminate the regularization path.
+Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros}
 
 \item{nLambda}{The number of Lambda values to select}
 
 \item{nGamma}{The number of Gamma values to select}
 
-\item{gammaMax}{The maximum value of Gamma when using the L0L2 penalty.}
+\item{gammaMax}{The maximum value of Gamma when using the L0L2 penalty}
 
-\item{gammaMin}{The minimum value of Gamma when using the L0L2 penalty.}
+\item{gammaMin}{The minimum value of Gamma when using the L0L2 penalty}
 
-\item{partialSort}{If TRUE partial sorting will be used for sorting the coordinates to do greedy cycling. Otherwise, full sorting is used.}
+\item{partialSort}{If TRUE, partial sorting will be used for sorting the coordinates to do greedy cycling. Otherwise, full sorting is used}
 
-\item{maxIters}{The maximum number of iterations (full cycles) for CD per grid point.}
+\item{maxIters}{The maximum number of iterations (full cycles) for CD per grid point}
 
-\item{rtol}{The relative tolerance which decides when to terminate optimization (based on the relative change in the objective between iterations).}
+\item{rtol}{The relative tolerance which decides when to terminate optimization (based on the relative change in the objective between iterations)}
 
-\item{atol}{The absolute tolerance which decides when to terminate optimization (based on the absolute L2 norm of the residuals).}
+\item{atol}{The absolute tolerance which decides when to terminate optimization (based on the absolute L2 norm of the residuals)}
 
-\item{activeSet}{If TRUE, performs active set updates.}
+\item{activeSet}{If TRUE, performs active set updates}
 
-\item{activeSetNum}{The number of consecutive times a support should appear before declaring support stabilization.}
+\item{activeSetNum}{The number of consecutive times a support should appear before declaring support stabilization}
 
-\item{maxSwaps}{The maximum number of swaps used by CDPSI for each grid point.}
+\item{maxSwaps}{The maximum number of swaps used by CDPSI for each grid point}
 
-\item{scaleDownFactor}{This parameter decides how close the selected Lambda values are.}
+\item{scaleDownFactor}{This parameter decides how close the selected Lambda values are}
 
-\item{screenSize}{The number of coordinates to cycle over when performing initial correlation screening.}
+\item{screenSize}{The number of coordinates to cycle over when performing initial correlation screening}
 
-\item{autoLambda}{Ignored parameter. Kept for backwards compatibility.}
+\item{autoLambda}{Ignored parameter. Kept for backwards compatibility}
 
-\item{lambdaGrid}{A grid of Lambda values to use in computing the regularization path.}
+\item{lambdaGrid}{A grid of Lambda values to use in computing the regularization path}
 
-\item{excludeFirstK}{This parameter takes non-negative integers.}
+\item{excludeFirstK}{This parameter takes non-negative integers}
 
-\item{intercept}{If FALSE, no intercept term is included in the model.}
+\item{intercept}{If FALSE, no intercept term is included in the model}
 
-\item{lows}{Lower bounds for coefficients.}
+\item{lows}{Lower bounds for coefficients}
 
-\item{highs}{Upper bounds for coefficients.}
+\item{highs}{Upper bounds for coefficients}
 }
 \value{
-An S3 object of type "inferCSN" describing the regularization path
+An S3 object describing the regularization path
 }
 \description{
 Computes the regularization path for the specified loss function and penalty function

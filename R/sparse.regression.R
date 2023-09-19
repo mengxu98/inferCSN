@@ -5,8 +5,6 @@
 #'
 #' @inheritParams inferCSN
 #'
-#' @importFrom stats coef predict
-#'
 #' @return The coefficients
 #' @export
 #'
@@ -82,9 +80,9 @@ sparse.regression <- function(X, y,
 
 #' @title Sparse regression model for single gene
 #'
-#' @param regulatorsMatrix regulatorsMatrix
-#' @param targetsMatrix targetsMatrix
-#' @param target target
+#' @param regulatorsMatrix Regulators matrix
+#' @param targetsMatrix Targets matrix
+#' @param target Target genes
 #'
 #' @inheritParams inferCSN
 #'
@@ -124,48 +122,36 @@ sub.inferCSN <- function(regulatorsMatrix,
   return(data.frame(regulator = colnames(X), target = target, weight = coefficients))
 }
 
-# import C++ compiled code
-#' @useDynLib inferCSN
-#'
-#' @importFrom Rcpp evalCpp
-#' @importFrom methods as
-#' @importFrom methods is
-#'
-#' @import Matrix
-
 #' @title Fit a sparse regression model
 #'
 #' @description Computes the regularization path for the specified loss function and penalty function
 #'
 #' @param x The data matrix
 #' @param y The response vector
-#' @param loss The loss function. Currently support the choices "SquaredError" (for regression), "Logistic" (for logistic regression), and "SquaredHinge" (for smooth SVM).
-#' @param penalty The type of regularization.
-#' @param algorithm The type of algorithm used to minimize the objective function.
-#' @param maxSuppSize The maximum support size at which to terminate the regularization path. Recommend setting
-#' this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small
-#' portion of non-zeros
+#' @param loss The loss function
 #' @param nLambda The number of Lambda values to select
 #' @param nGamma The number of Gamma values to select
-#' @param gammaMax The maximum value of Gamma when using the L0L2 penalty.
-#' @param gammaMin The minimum value of Gamma when using the L0L2 penalty.
-#' @param partialSort If TRUE partial sorting will be used for sorting the coordinates to do greedy cycling. Otherwise, full sorting is used.
-#' @param maxIters The maximum number of iterations (full cycles) for CD per grid point.
-#' @param rtol The relative tolerance which decides when to terminate optimization (based on the relative change in the objective between iterations).
-#' @param atol The absolute tolerance which decides when to terminate optimization (based on the absolute L2 norm of the residuals).
-#' @param activeSet If TRUE, performs active set updates.
-#' @param activeSetNum The number of consecutive times a support should appear before declaring support stabilization.
-#' @param maxSwaps The maximum number of swaps used by CDPSI for each grid point.
-#' @param scaleDownFactor This parameter decides how close the selected Lambda values are.
-#' @param screenSize The number of coordinates to cycle over when performing initial correlation screening.
-#' @param autoLambda Ignored parameter. Kept for backwards compatibility.
-#' @param lambdaGrid A grid of Lambda values to use in computing the regularization path.
-#' @param excludeFirstK This parameter takes non-negative integers.
-#' @param intercept If FALSE, no intercept term is included in the model.
-#' @param lows Lower bounds for coefficients.
-#' @param highs Upper bounds for coefficients.
+#' @param gammaMax The maximum value of Gamma when using the L0L2 penalty
+#' @param gammaMin The minimum value of Gamma when using the L0L2 penalty
+#' @param partialSort If TRUE, partial sorting will be used for sorting the coordinates to do greedy cycling. Otherwise, full sorting is used
+#' @param maxIters The maximum number of iterations (full cycles) for CD per grid point
+#' @param rtol The relative tolerance which decides when to terminate optimization (based on the relative change in the objective between iterations)
+#' @param atol The absolute tolerance which decides when to terminate optimization (based on the absolute L2 norm of the residuals)
+#' @param activeSet If TRUE, performs active set updates
+#' @param activeSetNum The number of consecutive times a support should appear before declaring support stabilization
+#' @param maxSwaps The maximum number of swaps used by CDPSI for each grid point
+#' @param scaleDownFactor This parameter decides how close the selected Lambda values are
+#' @param screenSize The number of coordinates to cycle over when performing initial correlation screening
+#' @param autoLambda Ignored parameter. Kept for backwards compatibility
+#' @param lambdaGrid A grid of Lambda values to use in computing the regularization path
+#' @param excludeFirstK This parameter takes non-negative integers
+#' @param intercept If FALSE, no intercept term is included in the model
+#' @param lows Lower bounds for coefficients
+#' @param highs Upper bounds for coefficients
 #'
-#' @return An S3 object of type "inferCSN" describing the regularization path
+#' @inheritParams inferCSN
+#'
+#' @return An S3 object describing the regularization path
 #' @export
 #'
 inferCSN.fit <- function(x, y,
@@ -192,16 +178,14 @@ inferCSN.fit <- function(x, y,
                          intercept = TRUE,
                          lows = -Inf,
                          highs = Inf) {
-  if ((rtol < 0) || (rtol >= 1)) stop("The specified rtol parameter must exist in [0, 1)")
+  if ((rtol < 0) || (rtol >= 1)) stop("The specified rtol parameter must exist in [0, 1)......")
   if (atol < 0) stop("The specified atol parameter must exist in [0, INF)")
-  if (!(loss %in% c("SquaredError", "Logistic", "SquaredHinge"))) stop("The specified loss function is not supported.")
-  if (!(penalty %in% c("L0", "L0L2", "L0L1"))) stop("The specified penalty is not supported.")
-  if (!(algorithm %in% c("CD", "CDPSI"))) stop("The specified algorithm is not supported.")
+  if (!(loss %in% c("SquaredError", "Logistic", "SquaredHinge"))) stop("The specified loss function is not supported......")
   if (loss == "Logistic" | loss == "SquaredHinge") {
     if (dim(table(y)) != 2) {
-      stop("Only binary classification is supported. Make sure y has only 2 unique values.")
+      stop("Only binary classification is supported. Make sure y has only 2 unique values......")
     }
-    y <- factor(y, labels = c(-1, 1)) # returns a vector of strings
+    y <- factor(y, labels = c(-1, 1)) # Returns a vector of strings
     y <- as.numeric(levels(y))[y]
 
     if (penalty == "L0") {
@@ -277,10 +261,6 @@ inferCSN.fit <- function(x, y,
       stop("L0L1 or L0L2 Penalty requires 'lambdaGrid' to be a list of length 'nGamma'.
                  Where lambdaGrid[[i]] is a list or vector of decreasing positive values.")
     }
-  }
-
-  is.scalar <- function(x) {
-    is.atomic(x) && length(x) == 1L && !is.character(x) && Im(x) == 0 && !is.nan(x) && !is.na(x)
   }
 
   p <- dim(x)[[2]]
@@ -382,7 +362,7 @@ inferCSN.fit <- function(x, y,
 #' @param nFolds The number of folds for cross-validation.
 #' @param seed The seed used in randomly shuffling the data for cross-validation
 #'
-#' @return An S3 object of type "inferCSNCV" describing the regularization path
+#' @return An S3 object describing the regularization path
 #' @export
 #'
 inferCSN.cvfit <- function(x, y,
@@ -405,21 +385,19 @@ inferCSN.cvfit <- function(x, y,
                            screenSize = 1000,
                            autoLambda = NULL,
                            lambdaGrid = list(),
-                           nFolds = 10,
-                           seed = 1,
                            excludeFirstK = 0,
                            intercept = TRUE,
                            lows = -Inf,
-                           highs = Inf) {
+                           highs = Inf,
+                           nFolds = 10,
+                           seed = 1) {
   set.seed(seed)
-  if ((rtol < 0) || (rtol >= 1)) stop("The specified rtol parameter must exist in [0, 1)")
-  if (atol < 0) stop("The specified atol parameter must exist in [0, INF)")
-  if (!(loss %in% c("SquaredError", "Logistic", "SquaredHinge"))) stop("The specified loss function is not supported.")
-  if (!(penalty %in% c("L0", "L0L2", "L0L1"))) stop("The specified penalty is not supported.")
-  if (!(algorithm %in% c("CD", "CDPSI"))) stop("The specified algorithm is not supported.")
+  if ((rtol < 0) || (rtol >= 1)) stop("The specified rtol parameter must exist in [0, 1)......")
+  if (atol < 0) stop("The specified atol parameter must exist in [0, INF)......")
+  if (!(loss %in% c("SquaredError", "Logistic", "SquaredHinge"))) stop("The specified loss function is not supported......")
   if (loss == "Logistic" | loss == "SquaredHinge") {
     if (dim(table(y)) != 2) {
-      stop("Only binary classification is supported. Make sure y has only 2 unique values.")
+      stop("Only binary classification is supported. Make sure y has only 2 unique values......")
     }
     y <- factor(y, labels = c(-1, 1)) # Returns a vector of strings
     y <- as.numeric(levels(y))[y]
@@ -427,7 +405,7 @@ inferCSN.cvfit <- function(x, y,
     if (penalty == "L0") {
       if ((length(lambdaGrid) != 0) && (length(lambdaGrid) != 1)) {
         stop("L0 Penalty requires 'lambdaGrid' to be a list of length 1.
-    			             Where lambdaGrid[[1]] is a list or vector of decreasing positive values.")
+    			             Where lambdaGrid[[1]] is a list or vector of decreasing positive values......")
       }
       penalty <- "L0L2"
       nGamma <- 1
@@ -467,7 +445,7 @@ inferCSN.cvfit <- function(x, y,
 
     if (bad_lambdaGrid) {
       stop("L0 Penalty requires 'lambdaGrid' to be a list of length 1.
-                 Where lambdaGrid[[1]] is a list or vector of decreasing positive values.")
+                 Where lambdaGrid[[1]] is a list or vector of decreasing positive values......")
     }
   }
 
@@ -498,11 +476,9 @@ inferCSN.cvfit <- function(x, y,
 
     if (bad_lambdaGrid) {
       stop("L0L1 or L0L2 Penalty requires 'lambdaGrid' to be a list of length 'nGamma'.
-                 Where lambdaGrid[[i]] is a list or vector of decreasing positive values.")
+                 Where lambdaGrid[[i]] is a list or vector of decreasing positive values......")
     }
   }
-
-  is.scalar <- function(x) is.atomic(x) && length(x) == 1L && !is.character(x) && Im(x) == 0 && !is.nan(x) && !is.na(x)
 
   p <- dim(x)[[2]]
 
@@ -512,24 +488,24 @@ inferCSN.cvfit <- function(x, y,
 
     if (algorithm == "CDPSI") {
       if (any(lows != -Inf) || any(highs != Inf)) {
-        stop("Bounds are not YET supported for CDPSI algorithm.")
+        stop("Bounds are not YET supported for CDPSI algorithm......")
       }
     }
 
     if (is.scalar(lows)) {
       lows <- lows * rep(1, p)
     } else if (!all(sapply(lows, is.scalar)) || length(lows) != p) {
-      stop("Lows must be a vector of real values of length p")
+      stop("Lows must be a vector of real values of length p......")
     }
 
     if (is.scalar(highs)) {
       highs <- highs * rep(1, p)
     } else if (!all(sapply(highs, is.scalar)) || length(highs) != p) {
-      stop("Highs must be a vector of real values of length p")
+      stop("Highs must be a vector of real values of length p......")
     }
 
     if (any(lows >= highs) || any(lows > 0) || any(highs < 0)) {
-      stop("Bounds must conform to the following conditions: Lows <= 0, Highs >= 0, Lows < Highs")
+      stop("Bounds must conform to the following conditions: Lows <= 0, Highs >= 0, Lows < Highs......")
     }
   }
 
@@ -554,7 +530,6 @@ inferCSN.cvfit <- function(x, y,
   settings[[1]] <- intercept
   names(settings) <- c("intercept")
 
-  # The C++ core whose last solution can exceed maxSuppSize
   for (i in 1:length(M$SuppSize)) {
     last <- length(M$SuppSize[[i]])
     if (M$SuppSize[[i]][last] > maxSuppSize) {

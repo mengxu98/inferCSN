@@ -47,6 +47,7 @@ reference:
   - print.inferCSNCV
   - predict.inferCSN
   - predict.inferCSNCV
+  - is.scalar
 
 - subtitle: "Test data"
 - contents:

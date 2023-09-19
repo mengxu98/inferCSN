@@ -4,7 +4,7 @@
 #' @param groundTruth Ground truth for calculate AUC
 #' @param plot If true, draw and print figure of AUC
 #' @param fileSave The figure name
-#' @param interaction If true, consider the positivity or negativity of interaction
+#' @param interaction If true, consider the positivity/negativity of interaction
 #'
 #' @import patchwork
 #' @import ggplot2
@@ -52,7 +52,8 @@ auc.calculate <- function(weightDT,
       geom_line() +
       geom_abline(slope = 1,
                   color = "gray",
-                  linetype = "dotted", linewidth = 1) +
+                  linetype = "dotted",
+                  linewidth = 1) +
       labs(title = paste("AUROC:", aucMetric[1]),
            x = "False positive rate",
            y = "True positive rate") +
@@ -77,7 +78,9 @@ auc.calculate <- function(weightDT,
 
     # Save figure
     if (!is.null(fileSave)) {
-      if (!grepl(".*\\.(pdf|png|jpe?g)$", fileSave)) fileSave <- paste0(fileSave, ".png")
+      if (!grepl(".*\\.(pdf|png|jpe?g)$", fileSave)) {
+        fileSave <- paste0(fileSave, ".png")
+      }
       cowplot::ggsave2(file = fileSave,
                        p,
                        width = 7,
