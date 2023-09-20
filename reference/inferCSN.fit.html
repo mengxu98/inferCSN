@@ -57,10 +57,13 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">inferCSN.fit</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
 <span>  <span class="va">y</span>,</span>
-<span>  loss <span class="op">=</span> <span class="st">"SquaredError"</span>,</span>
 <span>  penalty <span class="op">=</span> <span class="st">"L0"</span>,</span>
 <span>  algorithm <span class="op">=</span> <span class="st">"CD"</span>,</span>
 <span>  maxSuppSize <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  crossValidation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  nFolds <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  loss <span class="op">=</span> <span class="st">"SquaredError"</span>,</span>
 <span>  nLambda <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  nGamma <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  gammaMax <span class="op">=</span> <span class="fl">10</span>,</span>
@@ -93,22 +96,38 @@
 <dd><p>The response vector</p></dd>
 
 
-<dt>loss</dt>
-<dd><p>The loss function. Currently support the choices "SquaredError" (for regression), "Logistic" (for logistic regression), and "SquaredHinge" (for smooth SVM).</p></dd>
-
-
 <dt>penalty</dt>
-<dd><p>The type of regularization.</p></dd>
+<dd><p>The type of regularization.
+This can take either one of the following choices: "L0"and "L0L2".
+For high-dimensional and sparse data, such as single-cell transcriptome data, "L0L2" is more effective</p></dd>
 
 
 <dt>algorithm</dt>
-<dd><p>The type of algorithm used to minimize the objective function.</p></dd>
+<dd><p>The type of algorithm used to minimize the objective function.
+Currently "CD" and "CDPSI" are supported.
+The CDPSI algorithm may yield better results, but it also increases running time</p></dd>
 
 
 <dt>maxSuppSize</dt>
-<dd><p>The maximum support size at which to terminate the regularization path. Recommend setting
-this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small
-portion of non-zeros</p></dd>
+<dd><p>The number of non-zore coef, this value will affect the final performance.
+The maximum support size at which to terminate the regularization path.
+Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros</p></dd>
+
+
+<dt>crossValidation</dt>
+<dd><p>Check whether cross validation is used</p></dd>
+
+
+<dt>nFolds</dt>
+<dd><p>The number of folds for cross-validation</p></dd>
+
+
+<dt>seed</dt>
+<dd><p>The seed used in randomly shuffling the data for cross-validation</p></dd>
+
+
+<dt>loss</dt>
+<dd><p>The loss function</p></dd>
 
 
 <dt>nLambda</dt>
@@ -120,78 +139,78 @@ portion of non-zeros</p></dd>
 
 
 <dt>gammaMax</dt>
-<dd><p>The maximum value of Gamma when using the L0L2 penalty.</p></dd>
+<dd><p>The maximum value of Gamma when using the L0L2 penalty</p></dd>
 
 
 <dt>gammaMin</dt>
-<dd><p>The minimum value of Gamma when using the L0L2 penalty.</p></dd>
+<dd><p>The minimum value of Gamma when using the L0L2 penalty</p></dd>
 
 
 <dt>partialSort</dt>
-<dd><p>If TRUE partial sorting will be used for sorting the coordinates to do greedy cycling. Otherwise, full sorting is used.</p></dd>
+<dd><p>If TRUE, partial sorting will be used for sorting the coordinates to do greedy cycling. Otherwise, full sorting is used</p></dd>
 
 
 <dt>maxIters</dt>
-<dd><p>The maximum number of iterations (full cycles) for CD per grid point.</p></dd>
+<dd><p>The maximum number of iterations (full cycles) for CD per grid point</p></dd>
 
 
 <dt>rtol</dt>
-<dd><p>The relative tolerance which decides when to terminate optimization (based on the relative change in the objective between iterations).</p></dd>
+<dd><p>The relative tolerance which decides when to terminate optimization (based on the relative change in the objective between iterations)</p></dd>
 
 
 <dt>atol</dt>
-<dd><p>The absolute tolerance which decides when to terminate optimization (based on the absolute L2 norm of the residuals).</p></dd>
+<dd><p>The absolute tolerance which decides when to terminate optimization (based on the absolute L2 norm of the residuals)</p></dd>
 
 
 <dt>activeSet</dt>
-<dd><p>If TRUE, performs active set updates.</p></dd>
+<dd><p>If TRUE, performs active set updates</p></dd>
 
 
 <dt>activeSetNum</dt>
-<dd><p>The number of consecutive times a support should appear before declaring support stabilization.</p></dd>
+<dd><p>The number of consecutive times a support should appear before declaring support stabilization</p></dd>
 
 
 <dt>maxSwaps</dt>
-<dd><p>The maximum number of swaps used by CDPSI for each grid point.</p></dd>
+<dd><p>The maximum number of swaps used by CDPSI for each grid point</p></dd>
 
 
 <dt>scaleDownFactor</dt>
-<dd><p>This parameter decides how close the selected Lambda values are.</p></dd>
+<dd><p>This parameter decides how close the selected Lambda values are</p></dd>
 
 
 <dt>screenSize</dt>
-<dd><p>The number of coordinates to cycle over when performing initial correlation screening.</p></dd>
+<dd><p>The number of coordinates to cycle over when performing initial correlation screening</p></dd>
 
 
 <dt>autoLambda</dt>
-<dd><p>Ignored parameter. Kept for backwards compatibility.</p></dd>
+<dd><p>Ignored parameter. Kept for backwards compatibility</p></dd>
 
 
 <dt>lambdaGrid</dt>
-<dd><p>A grid of Lambda values to use in computing the regularization path.</p></dd>
+<dd><p>A grid of Lambda values to use in computing the regularization path</p></dd>
 
 
 <dt>excludeFirstK</dt>
-<dd><p>This parameter takes non-negative integers.</p></dd>
+<dd><p>This parameter takes non-negative integers</p></dd>
 
 
 <dt>intercept</dt>
-<dd><p>If FALSE, no intercept term is included in the model.</p></dd>
+<dd><p>If FALSE, no intercept term is included in the model</p></dd>
 
 
 <dt>lows</dt>
-<dd><p>Lower bounds for coefficients.</p></dd>
+<dd><p>Lower bounds for coefficients</p></dd>
 
 
 <dt>highs</dt>
-<dd><p>Upper bounds for coefficients.</p></dd>
+<dd><p>Upper bounds for coefficients</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>An S3 object of type "inferCSN" describing the regularization path</p>
+<p>An S3 object describing the regularization path</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

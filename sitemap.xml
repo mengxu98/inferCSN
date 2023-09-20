@@ -19,7 +19,7 @@
     <loc>https://mengxu98.github.io/inferCSN/reference/auc.calculate.html</loc>
   </url>
   <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/check.arguments.html</loc>
+    <loc>https://mengxu98.github.io/inferCSN/reference/check.parameters.html</loc>
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/coef.inferCSN.html</loc>
@@ -43,13 +43,13 @@
     <loc>https://mengxu98.github.io/inferCSN/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/inferCSN.cvfit.html</loc>
-  </url>
-  <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/inferCSN.fit.html</loc>
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/inferCSN.html</loc>
+  </url>
+  <url>
+    <loc>https://mengxu98.github.io/inferCSN/reference/is.scalar.html</loc>
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/net.format.html</loc>

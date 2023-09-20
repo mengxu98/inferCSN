@@ -64,7 +64,7 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>object</dt>
-<dd><p>The output of inferCSN.fit or inferCSN.cvfit</p></dd>
+<dd><p>The output of inferCSN.fit</p></dd>
 
 
 <dt>newx</dt>
@@ -72,25 +72,24 @@
 
 
 <dt>lambda</dt>
-<dd><p>The value of lambda to use for prediction. A summary of the lambdas in the regularization
-path can be obtained using <code>print(fit)</code></p></dd>
+<dd><p>The value of lambda to use for prediction.
+A summary of the lambdas in the regularization path can be obtained using <code>print(fit)</code></p></dd>
 
 
 <dt>gamma</dt>
-<dd><p>The value of gamma to use for prediction. A summary of the gammas in the regularization
-path can be obtained using <code>print(fit)</code></p></dd>
+<dd><p>The value of gamma to use for prediction.
+A summary of the gammas in the regularization path can be obtained using <code>print(fit)</code></p></dd>
 
 
 <dt>...</dt>
-<dd><p>ignore</p></dd>
+<dd><p>Other parameters</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>If both lambda and gamma are not supplied, then a matrix of predictions
-for all the solutions in the regularization path is returned. If lambda is
-supplied but gamma is not, the smallest value of gamma is used. In case of
-of logistic regression, probability values are returned</p>
+    <p>If both lambda and gamma are not supplied, then a matrix of predictions for all the solutions in the regularization path is returned.
+If lambda is supplied but gamma is not, the smallest value of gamma is used.
+In case of logistic regression, probability values are returned</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

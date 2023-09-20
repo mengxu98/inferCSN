@@ -58,6 +58,7 @@
 <span>  <span class="va">X</span>,</span>
 <span>  <span class="va">y</span>,</span>
 <span>  crossValidation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  penalty <span class="op">=</span> <span class="st">"L0"</span>,</span>
 <span>  algorithm <span class="op">=</span> <span class="st">"CD"</span>,</span>
 <span>  maxSuppSize <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -82,6 +83,10 @@
 <dd><p>Check whether cross validation is used</p></dd>
 
 
+<dt>seed</dt>
+<dd><p>The seed used in randomly shuffling the data for cross-validation</p></dd>
+
+
 <dt>penalty</dt>
 <dd><p>The type of regularization.
 This can take either one of the following choices: "L0"and "L0L2".
@@ -89,12 +94,15 @@ For high-dimensional and sparse data, such as single-cell transcriptome data, "L
 
 
 <dt>algorithm</dt>
-<dd><p>Currently "CD" and "CDPSI" are supported.
+<dd><p>The type of algorithm used to minimize the objective function.
+Currently "CD" and "CDPSI" are supported.
 The CDPSI algorithm may yield better results, but it also increases running time</p></dd>
 
 
 <dt>maxSuppSize</dt>
-<dd><p>The number of non-zore coef, this value will affect the final performance</p></dd>
+<dd><p>The number of non-zore coef, this value will affect the final performance.
+The maximum support size at which to terminate the regularization path.
+Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros</p></dd>
 
 
 <dt>nFolds</dt>
