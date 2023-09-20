@@ -18,7 +18,7 @@
 
 \item{supportSize}{The number of non-zeros each solution extracted will contain}
 
-\item{...}{ignore}
+\item{...}{Other parameters}
 }
 \description{
 Extracts a specific solution in the regularization path

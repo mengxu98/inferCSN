@@ -35,11 +35,10 @@ reference:
   - sparse.regression
   - sub.inferCSN
   - inferCSN.fit
-  - inferCSN.cvfit
 
 - subtitle: "Utils functions"
 - contents:
-  - check.arguments
+  - check.parameters
   - net.format
   - coef.inferCSN
   - coef.inferCSNCV

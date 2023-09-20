@@ -12,7 +12,7 @@
 \arguments{
 \item{x}{The output of inferCSN.fit or inferCSN.cvfit}
 
-\item{...}{ignore}
+\item{...}{Other parameters}
 }
 \description{
 Prints a summary of inferCSN.fit

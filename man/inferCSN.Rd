@@ -15,6 +15,7 @@ inferCSN(
   penalty = "L0",
   algorithm = "CD",
   crossValidation = FALSE,
+  seed = 1,
   nFolds = 10,
   kFolds = NULL,
   rThreshold = 0,
@@ -30,6 +31,7 @@ inferCSN(
   penalty = "L0",
   algorithm = "CD",
   crossValidation = FALSE,
+  seed = 1,
   nFolds = 10,
   kFolds = NULL,
   rThreshold = 0,
@@ -45,6 +47,7 @@ inferCSN(
   penalty = "L0",
   algorithm = "CD",
   crossValidation = FALSE,
+  seed = 1,
   nFolds = 10,
   kFolds = NULL,
   rThreshold = 0,
@@ -67,6 +70,8 @@ Currently "CD" and "CDPSI" are supported.
 The CDPSI algorithm may yield better results, but it also increases running time}
 
 \item{crossValidation}{Check whether cross validation is used}
+
+\item{seed}{The seed used in randomly shuffling the data for cross-validation}
 
 \item{nFolds}{The number of folds for cross-validation}
 

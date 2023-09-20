@@ -10,24 +10,23 @@
 \method{predict}{inferCSNCV}(object, newx, lambda = NULL, gamma = NULL, ...)
 }
 \arguments{
-\item{object}{The output of inferCSN.fit or inferCSN.cvfit}
+\item{object}{The output of inferCSN.fit}
 
 \item{newx}{A matrix on which predictions are made. The matrix should have p columns}
 
-\item{lambda}{The value of lambda to use for prediction. A summary of the lambdas in the regularization
-path can be obtained using \code{print(fit)}}
+\item{lambda}{The value of lambda to use for prediction.
+A summary of the lambdas in the regularization path can be obtained using \code{print(fit)}}
 
-\item{gamma}{The value of gamma to use for prediction. A summary of the gammas in the regularization
-path can be obtained using \code{print(fit)}}
+\item{gamma}{The value of gamma to use for prediction.
+A summary of the gammas in the regularization path can be obtained using \code{print(fit)}}
 
-\item{...}{ignore}
+\item{...}{Other parameters}
 }
 \description{
 Predicts the response for a given sample
 }
 \details{
-If both lambda and gamma are not supplied, then a matrix of predictions
-for all the solutions in the regularization path is returned. If lambda is
-supplied but gamma is not, the smallest value of gamma is used. In case of
-of logistic regression, probability values are returned
+If both lambda and gamma are not supplied, then a matrix of predictions for all the solutions in the regularization path is returned.
+If lambda is supplied but gamma is not, the smallest value of gamma is used.
+In case of logistic regression, probability values are returned
 }

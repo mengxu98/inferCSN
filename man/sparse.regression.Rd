@@ -8,6 +8,7 @@ sparse.regression(
   X,
   y,
   crossValidation = FALSE,
+  seed = 1,
   penalty = "L0",
   algorithm = "CD",
   maxSuppSize = NULL,
@@ -23,6 +24,8 @@ sparse.regression(
 \item{y}{The response vector}
 
 \item{crossValidation}{Check whether cross validation is used}
+
+\item{seed}{The seed used in randomly shuffling the data for cross-validation}
 
 \item{penalty}{The type of regularization.
 This can take either one of the following choices: "L0"and "L0L2".

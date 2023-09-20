@@ -5,6 +5,7 @@ utils::globalVariables(c("x",
                          "weight",
                          "Interaction",
                          "name",
+                         "regulator",
                          "target",
                          "degree",
                          "edges",
@@ -21,6 +22,7 @@ check.parameters <- function(matrix,
                              penalty,
                              algorithm,
                              crossValidation,
+                             seed,
                              nFolds,
                              kFolds,
                              rThreshold,
@@ -29,6 +31,9 @@ check.parameters <- function(matrix,
                              maxSuppSize,
                              verbose,
                              cores) {
+
+  if (verbose) message("Check input parameters......")
+
   matrixErrorMessage <- paste0("Parameter matrix must be a two-dimensional matrix,
                                where each column corresponds to a gene and each row corresponds to a sample/cell......")
   if (!is.matrix(matrix) && !is.array(matrix)) stop(matrixErrorMessage)
@@ -49,6 +54,11 @@ check.parameters <- function(matrix,
   if (!any(c("CD", "CDPSI") == algorithm)) {
     stop("inferCSN does not support '", algorithm, "' algorithm......\n",
          "Please set algorithm as 'CD' or 'CDPSI'......")
+  }
+
+  if (!is.numeric(seed)) {
+    seed <- 1
+    warning("Supplied seed is not a valid integer, initialize seed to 1......")
   }
 
   if (!is.null(targets)) {
@@ -118,6 +128,9 @@ check.parameters <- function(matrix,
   }
 
   if (verbose) message("All parameters check done......")
+
+  if (verbose) message("Using '", penalty, "' penalty......")
+  if (verbose & crossValidation) message("Using cross validation......")
 }
 
 #' @title Format weight table
@@ -245,21 +258,20 @@ print.inferCSNCV <- function(x, ...) {
 #'
 #' @description Predicts the response for a given sample
 #'
-#' @param object The output of inferCSN.fit or inferCSN.cvfit
+#' @param object The output of inferCSN.fit
 #' @param newx A matrix on which predictions are made. The matrix should have p columns
-#' @param lambda The value of lambda to use for prediction. A summary of the lambdas in the regularization
-#' path can be obtained using \code{print(fit)}
-#' @param gamma The value of gamma to use for prediction. A summary of the gammas in the regularization
-#' path can be obtained using \code{print(fit)}
+#' @param lambda The value of lambda to use for prediction.
+#' A summary of the lambdas in the regularization path can be obtained using \code{print(fit)}
+#' @param gamma The value of gamma to use for prediction.
+#' A summary of the gammas in the regularization path can be obtained using \code{print(fit)}
 #' @param ... Other parameters
 #'
 #' @method predict inferCSN
 #'
 #' @details
-#' If both lambda and gamma are not supplied, then a matrix of predictions
-#' for all the solutions in the regularization path is returned. If lambda is
-#' supplied but gamma is not, the smallest value of gamma is used. In case of
-#' of logistic regression, probability values are returned
+#' If both lambda and gamma are not supplied, then a matrix of predictions for all the solutions in the regularization path is returned.
+#' If lambda is supplied but gamma is not, the smallest value of gamma is used.
+#' In case of logistic regression, probability values are returned
 #'
 #' @export
 #'

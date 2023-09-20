@@ -9,6 +9,7 @@ check.parameters(
   penalty,
   algorithm,
   crossValidation,
+  seed,
   nFolds,
   kFolds,
   rThreshold,
@@ -31,6 +32,8 @@ Currently "CD" and "CDPSI" are supported.
 The CDPSI algorithm may yield better results, but it also increases running time}
 
 \item{crossValidation}{Check whether cross validation is used}
+
+\item{seed}{The seed used in randomly shuffling the data for cross-validation}
 
 \item{nFolds}{The number of folds for cross-validation}
 

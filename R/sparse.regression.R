@@ -10,6 +10,7 @@
 #'
 sparse.regression <- function(X, y,
                               crossValidation = FALSE,
+                              seed = 1,
                               penalty = "L0",
                               algorithm = "CD",
                               maxSuppSize = NULL,
@@ -27,11 +28,13 @@ sparse.regression <- function(X, y,
   }
 
   if (crossValidation) {
-    fit <- try(inferCSN.cvfit(X, y,
-                              penalty = penalty,
-                              algorithm = algorithm,
-                              maxSuppSize = maxSuppSize,
-                              nFolds = nFolds))
+    fit <- try(inferCSN.fit(X, y,
+                            crossValidation = crossValidation,
+                            seed = seed,
+                            penalty = penalty,
+                            algorithm = algorithm,
+                            maxSuppSize = maxSuppSize,
+                            nFolds = nFolds))
     if (class(fit)[1] == "try-error") {
       if (verbose) message("Cross validation error, used fit instead......")
       fit <- inferCSN.fit(X, y,
@@ -93,6 +96,7 @@ sub.inferCSN <- function(regulatorsMatrix,
                          targetsMatrix,
                          target = NULL,
                          crossValidation = FALSE,
+                         seed = 1,
                          penalty = "L0",
                          algorithm = "CD",
                          maxSuppSize = NULL,
@@ -108,6 +112,7 @@ sub.inferCSN <- function(regulatorsMatrix,
 
   coefficients <- sparse.regression(X, y,
                                     crossValidation = crossValidation,
+                                    seed = seed,
                                     penalty = penalty,
                                     algorithm = algorithm,
                                     maxSuppSize = maxSuppSize,
@@ -155,10 +160,13 @@ sub.inferCSN <- function(regulatorsMatrix,
 #' @export
 #'
 inferCSN.fit <- function(x, y,
-                         loss = "SquaredError",
                          penalty = "L0",
                          algorithm = "CD",
                          maxSuppSize = 100,
+                         crossValidation = FALSE,
+                         nFolds = 10,
+                         seed = 1,
+                         loss = "SquaredError",
                          nLambda = 100,
                          nGamma = 5,
                          gammaMax = 10,
@@ -178,9 +186,18 @@ inferCSN.fit <- function(x, y,
                          intercept = TRUE,
                          lows = -Inf,
                          highs = Inf) {
-  if ((rtol < 0) || (rtol >= 1)) stop("The specified rtol parameter must exist in [0, 1)......")
-  if (atol < 0) stop("The specified atol parameter must exist in [0, INF)")
-  if (!(loss %in% c("SquaredError", "Logistic", "SquaredHinge"))) stop("The specified loss function is not supported......")
+  # Check parameter values
+  if ((rtol < 0) || (rtol >= 1)) {
+    stop("The specified rtol parameter must exist in [0, 1)......")
+  }
+  if (atol < 0) {
+    stop("The specified atol parameter must exist in [0, INF)......")
+  }
+  if (!(loss %in% c("SquaredError", "Logistic", "SquaredHinge"))) {
+    stop("The specified loss function is not supported......")
+  }
+
+  # Check binary classification for logistic and squared hinge loss
   if (loss == "Logistic" | loss == "SquaredHinge") {
     if (dim(table(y)) != 2) {
       stop("Only binary classification is supported. Make sure y has only 2 unique values......")
@@ -188,10 +205,11 @@ inferCSN.fit <- function(x, y,
     y <- factor(y, labels = c(-1, 1)) # Returns a vector of strings
     y <- as.numeric(levels(y))[y]
 
+    # Adjust parameters for L0 penalty
     if (penalty == "L0") {
       if ((length(lambdaGrid) != 0) && (length(lambdaGrid) != 1)) {
         stop("L0 Penalty requires 'lambdaGrid' to be a list of length 1.
-    			             Where lambdaGrid[[1]] is a list or vector of decreasing positive values.")
+                Where lambdaGrid[[1]] is a list or vector of decreasing positive values.")
       }
       penalty <- "L0L2"
       nGamma <- 1
@@ -200,9 +218,9 @@ inferCSN.fit <- function(x, y,
     }
   }
 
-  # Handle Lambda Grids:
+  # Handle Lambda Grids
   if (length(lambdaGrid) != 0) {
-    if (!is.null(autoLambda)) {
+    if (!is.null(autoLambda) && !autoLambda) {
       warning("autoLambda is ignored and inferred if 'lambdaGrid' is supplied", call. = FALSE)
     }
     autoLambda <- FALSE
@@ -211,6 +229,7 @@ inferCSN.fit <- function(x, y,
     lambdaGrid <- list(0)
   }
 
+  # Check lambda grid for L0 penalty
   if (penalty == "L0" && !autoLambda) {
     bad_lambdaGrid <- FALSE
     if (length(lambdaGrid) != 1) bad_lambdaGrid <- TRUE
@@ -226,21 +245,19 @@ inferCSN.fit <- function(x, y,
       }
       current <- nxt
     }
-
     if (bad_lambdaGrid) {
       stop("L0 Penalty requires 'lambdaGrid' to be a list of length 1.
-                 Where lambdaGrid[[1]] is a list or vector of decreasing positive values.")
+           Where lambdaGrid[[1]] is a list or vector of decreasing positive values.")
     }
   }
 
+  # Check lambda grid for L0L1 and L0L2 penalties
   if (penalty != "L0" && !autoLambda) {
-    # Covers L0L1, L0L2 cases
     bad_lambdaGrid <- FALSE
     if (length(lambdaGrid) != nGamma) {
       warning("nGamma is ignored and replaced with length(lambdaGrid)", call. = FALSE)
       nGamma <- length(lambdaGrid)
     }
-
     for (i in 1:length(lambdaGrid)) {
       current <- Inf
       for (nxt in lambdaGrid[[i]]) {
@@ -256,26 +273,27 @@ inferCSN.fit <- function(x, y,
       }
       if (bad_lambdaGrid) break
     }
-
     if (bad_lambdaGrid) {
       stop("L0L1 or L0L2 Penalty requires 'lambdaGrid' to be a list of length 'nGamma'.
-                 Where lambdaGrid[[i]] is a list or vector of decreasing positive values.")
+           Where lambdaGrid[[i]] is a list or vector of decreasing positive values.")
     }
   }
 
   p <- dim(x)[[2]]
-
   withBounds <- FALSE
 
+  # Check if bounds are specified
   if ((!identical(lows, -Inf)) || (!identical(highs, Inf))) {
     withBounds <- TRUE
 
+    # Check bounds for CDPSI algorithm
     if (algorithm == "CDPSI") {
       if (any(lows != -Inf) || any(highs != Inf)) {
         stop("Bounds are not YET supported for CDPSI algorithm.")
       }
     }
 
+    # Adjust lows and highs to vectors if scalar is provided
     if (is.scalar(lows)) {
       lows <- lows * rep(1, p)
     } else if (!all(sapply(lows, is.scalar)) || length(lows) != p) {
@@ -288,39 +306,59 @@ inferCSN.fit <- function(x, y,
       stop("Highs must be a vector of real values of length p")
     }
 
+    # Check bounds conditions
     if (any(lows >= highs) || any(lows > 0) || any(highs < 0)) {
       stop("Bounds must conform to the following conditions: Lows <= 0, Highs >= 0, Lows < Highs")
     }
   }
 
+  # Call appropriate C++ function based on matrix type
   M <- list()
-  if (is(x, "sparseMatrix")) {
-    M <- .Call("_inferCSN_inferCSNFit_sparse",
-               PACKAGE = "inferCSN", x, y, loss, penalty,
-               algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
-               partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
-               scaleDownFactor, screenSize, !autoLambda, lambdaGrid,
-               excludeFirstK, intercept, withBounds, lows, highs)
+  if (!crossValidation) {
+    if (is(x, "sparseMatrix")) {
+      M <- .Call("_inferCSN_inferCSNFit_sparse",
+                 PACKAGE = "inferCSN", x, y, loss, penalty,
+                 algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
+                 partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
+                 scaleDownFactor, screenSize, !autoLambda, lambdaGrid,
+                 excludeFirstK, intercept, withBounds, lows, highs)
+    } else {
+      M <- .Call("_inferCSN_inferCSNFit_dense",
+                 PACKAGE = "inferCSN", x, y, loss, penalty,
+                 algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
+                 partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
+                 scaleDownFactor, screenSize, !autoLambda, lambdaGrid,
+                 excludeFirstK, intercept, withBounds, lows, highs)
+    }
   } else {
-    M <- .Call("_inferCSN_inferCSNFit_dense",
-               PACKAGE = "inferCSN", x, y, loss, penalty,
-               algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
-               partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
-               scaleDownFactor, screenSize, !autoLambda, lambdaGrid,
-               excludeFirstK, intercept, withBounds, lows, highs)
+    set.seed(seed)
+    if (is(x, "sparseMatrix")) {
+      M <- .Call("_inferCSN_inferCSNCV_sparse",
+                 PACKAGE = "inferCSN", x, y, loss, penalty,
+                 algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
+                 partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
+                 scaleDownFactor, screenSize, !autoLambda, lambdaGrid, nFolds,
+                 seed, excludeFirstK, intercept, withBounds, lows, highs)
+    } else {
+      M <- .Call("_inferCSN_inferCSNCV_dense",
+                 PACKAGE = "inferCSN", x, y, loss, penalty,
+                 algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
+                 partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
+                 scaleDownFactor, screenSize, !autoLambda, lambdaGrid, nFolds,
+                 seed, excludeFirstK, intercept, withBounds, lows, highs)
+    }
   }
 
   settings <- list()
   settings[[1]] <- intercept
   names(settings) <- c("intercept")
 
-  # Find potential support sizes exceeding maxSuppSize and remove them
-  # The C++ core whose last solution can exceed maxSuppSize
+  # Remove potential support sizes exceeding maxSuppSize
   for (i in 1:length(M$SuppSize)) {
     last <- length(M$SuppSize[[i]])
     if (M$SuppSize[[i]][last] > maxSuppSize) {
       if (last == 1) {
-        warning("Warning! Only 1 element in path with support size > maxSuppSize. \n
+        warning("Warning! Only 1 element in path with support size > maxSuppSize.
                 Try increasing maxSuppSize to resolve the issue.")
       } else {
         M$SuppSize[[i]] <- M$SuppSize[[i]][-last]
@@ -328,223 +366,10 @@ inferCSN.fit <- function(x, y,
         M$lambda[[i]] <- M$lambda[[i]][-last]
         M$a0[[i]] <- M$a0[[i]][-last]
         M$beta[[i]] <- as(M$beta[[i]][, -last], "sparseMatrix")
-      }
-    }
-  }
-
-  G <- list(beta = M$beta,
-            lambda = lapply(M$lambda, signif, digits = 6),
-            a0 = M$a0,
-            converged = M$Converged,
-            suppSize = M$SuppSize,
-            gamma = M$gamma,
-            penalty = penalty,
-            loss = loss,
-            settings = settings)
-
-  if (is.null(colnames(x))) {
-    varnames <- 1:dim(x)[2]
-  } else {
-    varnames <- colnames(x)
-  }
-
-  G$varnames <- varnames
-  class(G) <- "inferCSN"
-  G$n <- dim(x)[1]
-  G$p <- dim(x)[2]
-  G
-}
-
-#' @title Computes a regularization path and performs K-fold cross-validation
-#'
-#' @inheritParams inferCSN.fit
-#'
-#' @param nFolds The number of folds for cross-validation.
-#' @param seed The seed used in randomly shuffling the data for cross-validation
-#'
-#' @return An S3 object describing the regularization path
-#' @export
-#'
-inferCSN.cvfit <- function(x, y,
-                           loss = "SquaredError",
-                           penalty = "L0",
-                           algorithm = "CD",
-                           maxSuppSize = 100,
-                           nLambda = 100,
-                           nGamma = 10,
-                           gammaMax = 10,
-                           gammaMin = 0.0001,
-                           partialSort = TRUE,
-                           maxIters = 200,
-                           rtol = 1e-6,
-                           atol = 1e-9,
-                           activeSet = TRUE,
-                           activeSetNum = 3,
-                           maxSwaps = 100,
-                           scaleDownFactor = 0.8,
-                           screenSize = 1000,
-                           autoLambda = NULL,
-                           lambdaGrid = list(),
-                           excludeFirstK = 0,
-                           intercept = TRUE,
-                           lows = -Inf,
-                           highs = Inf,
-                           nFolds = 10,
-                           seed = 1) {
-  set.seed(seed)
-  if ((rtol < 0) || (rtol >= 1)) stop("The specified rtol parameter must exist in [0, 1)......")
-  if (atol < 0) stop("The specified atol parameter must exist in [0, INF)......")
-  if (!(loss %in% c("SquaredError", "Logistic", "SquaredHinge"))) stop("The specified loss function is not supported......")
-  if (loss == "Logistic" | loss == "SquaredHinge") {
-    if (dim(table(y)) != 2) {
-      stop("Only binary classification is supported. Make sure y has only 2 unique values......")
-    }
-    y <- factor(y, labels = c(-1, 1)) # Returns a vector of strings
-    y <- as.numeric(levels(y))[y]
-
-    if (penalty == "L0") {
-      if ((length(lambdaGrid) != 0) && (length(lambdaGrid) != 1)) {
-        stop("L0 Penalty requires 'lambdaGrid' to be a list of length 1.
-    			             Where lambdaGrid[[1]] is a list or vector of decreasing positive values......")
-      }
-      penalty <- "L0L2"
-      nGamma <- 1
-      gammaMax <- 1e-7
-      gammaMin <- 1e-7
-    }
-  }
-
-  # Handle Lambda Grids:
-  if (length(lambdaGrid) != 0) {
-    if (!is.null(autoLambda) && !autoLambda) {
-      warning("autoLambda is ignored and inferred if 'lambdaGrid' is supplied", call. = FALSE)
-    }
-    autoLambda <- FALSE
-  } else {
-    autoLambda <- TRUE
-    lambdaGrid <- list(0)
-  }
-
-  if (penalty == "L0" && !autoLambda) {
-    bad_lambdaGrid <- FALSE
-    if (length(lambdaGrid) != 1) {
-      bad_lambdaGrid <- TRUE
-    }
-    current <- Inf
-    for (nxt in lambdaGrid[[1]]) {
-      if (nxt > current) {
-        bad_lambdaGrid <- TRUE
-        break
-      }
-      if (nxt < 0) {
-        bad_lambdaGrid <- TRUE
-        break
-      }
-      current <- nxt
-    }
-
-    if (bad_lambdaGrid) {
-      stop("L0 Penalty requires 'lambdaGrid' to be a list of length 1.
-                 Where lambdaGrid[[1]] is a list or vector of decreasing positive values......")
-    }
-  }
-
-  if (penalty != "L0" && !autoLambda) {
-    # Covers L0L1, L0L2 cases
-    bad_lambdaGrid <- FALSE
-    if (length(lambdaGrid) != nGamma) {
-      warning("nGamma is ignored and replaced with length(lambdaGrid)", call. = FALSE)
-      nGamma <- length(lambdaGrid)
-    }
-
-    for (i in 1:length(lambdaGrid)) {
-      current <- Inf
-      for (nxt in lambdaGrid[[i]]) {
-        if (nxt > current) {
-          # This must be > instead of >= to allow first iteration L0L1 lambdas of all 0s to be valid
-          bad_lambdaGrid <- TRUE
-          break
+        if (!crossValidation) {
+          M$CVMeans[[i]] <- M$CVMeans[[i]][-last]
+          M$CVSDs[[i]] <- M$CVSDs[[i]][-last]
         }
-        if (nxt < 0) {
-          bad_lambdaGrid <- TRUE
-          break
-        }
-        current <- nxt
-      }
-      if (bad_lambdaGrid) break
-    }
-
-    if (bad_lambdaGrid) {
-      stop("L0L1 or L0L2 Penalty requires 'lambdaGrid' to be a list of length 'nGamma'.
-                 Where lambdaGrid[[i]] is a list or vector of decreasing positive values......")
-    }
-  }
-
-  p <- dim(x)[[2]]
-
-  withBounds <- FALSE
-  if ((!identical(lows, -Inf)) || (!identical(highs, Inf))) {
-    withBounds <- TRUE
-
-    if (algorithm == "CDPSI") {
-      if (any(lows != -Inf) || any(highs != Inf)) {
-        stop("Bounds are not YET supported for CDPSI algorithm......")
-      }
-    }
-
-    if (is.scalar(lows)) {
-      lows <- lows * rep(1, p)
-    } else if (!all(sapply(lows, is.scalar)) || length(lows) != p) {
-      stop("Lows must be a vector of real values of length p......")
-    }
-
-    if (is.scalar(highs)) {
-      highs <- highs * rep(1, p)
-    } else if (!all(sapply(highs, is.scalar)) || length(highs) != p) {
-      stop("Highs must be a vector of real values of length p......")
-    }
-
-    if (any(lows >= highs) || any(lows > 0) || any(highs < 0)) {
-      stop("Bounds must conform to the following conditions: Lows <= 0, Highs >= 0, Lows < Highs......")
-    }
-  }
-
-  M <- list()
-  if (is(x, "sparseMatrix")) {
-    M <- .Call("_inferCSN_inferCSNCV_sparse",
-               PACKAGE = "inferCSN", x, y, loss, penalty,
-               algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
-               partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
-               scaleDownFactor, screenSize, !autoLambda, lambdaGrid, nFolds,
-               seed, excludeFirstK, intercept, withBounds, lows, highs)
-  } else {
-    M <- .Call("_inferCSN_inferCSNCV_dense",
-               PACKAGE = "inferCSN", x, y, loss, penalty,
-               algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
-               partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
-               scaleDownFactor, screenSize, !autoLambda, lambdaGrid, nFolds,
-               seed, excludeFirstK, intercept, withBounds, lows, highs)
-  }
-
-  settings <- list()
-  settings[[1]] <- intercept
-  names(settings) <- c("intercept")
-
-  for (i in 1:length(M$SuppSize)) {
-    last <- length(M$SuppSize[[i]])
-    if (M$SuppSize[[i]][last] > maxSuppSize) {
-      if (last == 1) {
-        warning("Warning! Only 1 element in path with support size > maxSuppSize. \n
-                Try increasing maxSuppSize to resolve the issue......")
-      } else {
-        M$SuppSize[[i]] <- M$SuppSize[[i]][-last]
-        M$Converged[[i]] <- M$Converged[[i]][-last]
-        M$lambda[[i]] <- M$lambda[[i]][-last]
-        M$a0[[i]] <- M$a0[[i]][-last]
-        # Conversion to sparseMatrix is necessary to handle the case of a single column
-        M$beta[[i]] <- as(M$beta[[i]][, -last], "sparseMatrix")
-        M$CVMeans[[i]] <- M$CVMeans[[i]][-last]
-        M$CVSDs[[i]] <- M$CVSDs[[i]][-last]
       }
     }
   }
@@ -568,7 +393,12 @@ inferCSN.cvfit <- function(x, y,
   class(fit) <- "inferCSN"
   fit$n <- dim(x)[1]
   fit$p <- dim(x)[2]
-  G <- list(fit = fit, cvMeans = M$CVMeans, cvSDs = M$CVSDs)
-  class(G) <- "inferCSNCV"
-  G
+
+  if (!crossValidation) {
+    G <- fit
+  } else {
+    G <- list(fit = fit, cvMeans = M$CVMeans, cvSDs = M$CVSDs)
+    class(G) <- "inferCSNCV"
+  }
+  return(G)
 }
