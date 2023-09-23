@@ -5,7 +5,7 @@
 #' @param matrix An expression matrix, cells by genes
 #' @param penalty The type of regularization.
 #' This can take either one of the following choices: "L0"and "L0L2".
-#' For high-dimensional and sparse data, such as single-cell transcriptome data, "L0L2" is more effective
+#' For high-dimensional and sparse data, such as single-cell sequencing data, "L0L2" is more effective
 #' @param algorithm The type of algorithm used to minimize the objective function.
 #' Currently "CD" and "CDPSI" are supported.
 #' The CDPSI algorithm may yield better results, but it also increases running time
@@ -146,18 +146,18 @@ setMethod("inferCSN",
                       cores) {
   # Check input parameters
   check.parameters(matrix = matrix,
-                  penalty = penalty,
-                  algorithm = algorithm,
-                  crossValidation = crossValidation,
-                  seed = seed,
-                  nFolds = nFolds,
-                  kFolds = kFolds,
-                  rThreshold = rThreshold,
-                  regulators = regulators,
-                  targets = targets,
-                  maxSuppSize = maxSuppSize,
-                  verbose = verbose,
-                  cores = cores)
+                   penalty = penalty,
+                   algorithm = algorithm,
+                   crossValidation = crossValidation,
+                   seed = seed,
+                   nFolds = nFolds,
+                   kFolds = kFolds,
+                   rThreshold = rThreshold,
+                   regulators = regulators,
+                   targets = targets,
+                   maxSuppSize = maxSuppSize,
+                   verbose = verbose,
+                   cores = cores)
 
   if (!is.null(regulators)) {
     regulatorsMatrix <- matrix[, intersect(colnames(matrix), regulators)]

@@ -11,7 +11,7 @@ utils::globalVariables(c("x",
                          "edges",
                          "curvetype"))
 
-#' Check input parameters
+#' @title Check input parameters
 #'
 #' @inheritParams inferCSN
 #'
@@ -31,7 +31,6 @@ check.parameters <- function(matrix,
                              maxSuppSize,
                              verbose,
                              cores) {
-
   if (verbose) message("Check input parameters......")
 
   matrixErrorMessage <- paste0("Parameter matrix must be a two-dimensional matrix,

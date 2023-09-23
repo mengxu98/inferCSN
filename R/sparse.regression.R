@@ -19,7 +19,9 @@ sparse.regression <- function(X, y,
                               rThreshold = 0,
                               verbose = FALSE) {
   if (!is.null(kFolds)) {
-    if (!(kFolds > 0 & kFolds <= 10)) stop("Please set kFolds value between: (0, 1]......")
+    if (!(kFolds > 0 && kFolds < 10 && is.integer(kFolds))) {
+      stop("Please set 'kFolds' value as an integer between: (0, 10)......")
+    }
     samples <- sample(kFolds / 10 * nrow(X))
     testX <- X[-samples, ]
     X <- X[samples, ]
@@ -47,7 +49,7 @@ sparse.regression <- function(X, y,
       gamma <- fitInf$gamma[which.max(fitInf$suppSize)]
     } else {
       gamma <- fit$fit$gamma[which(unlist(lapply(fit$cvMeans, min)) == min(unlist(lapply(fit$cvMeans, min))))]
-      lambdaList <- dplyr::filter(print(fit), gamma == gamma, )
+      lambdaList <- dplyr::filter(print(fit), gamma == gamma)
       if (maxSuppSize %in% lambdaList$maxSuppSize) {
         lambda <- lambdaList$maxSuppSize[which(lambdaList$maxSuppSize == maxSuppSize)]
       } else {
@@ -221,7 +223,7 @@ inferCSN.fit <- function(x, y,
   # Handle Lambda Grids
   if (length(lambdaGrid) != 0) {
     if (!is.null(autoLambda) && !autoLambda) {
-      warning("autoLambda is ignored and inferred if 'lambdaGrid' is supplied", call. = FALSE)
+      warning("'autoLambda' is ignored and inferred if 'lambdaGrid' is supplied......", call. = FALSE)
     }
     autoLambda <- FALSE
   } else {
@@ -247,15 +249,15 @@ inferCSN.fit <- function(x, y,
     }
     if (bad_lambdaGrid) {
       stop("L0 Penalty requires 'lambdaGrid' to be a list of length 1.
-           Where lambdaGrid[[1]] is a list or vector of decreasing positive values.")
+           Where 'lambdaGrid[[1]]' is a list or vector of decreasing positive values......")
     }
   }
 
-  # Check lambda grid for L0L1 and L0L2 penalties
+  # Check lambda grid for L0L2 penalties
   if (penalty != "L0" && !autoLambda) {
     bad_lambdaGrid <- FALSE
     if (length(lambdaGrid) != nGamma) {
-      warning("nGamma is ignored and replaced with length(lambdaGrid)", call. = FALSE)
+      warning("'nGamma' is ignored and replaced with length(lambdaGrid).....", call. = FALSE)
       nGamma <- length(lambdaGrid)
     }
     for (i in 1:length(lambdaGrid)) {
@@ -274,8 +276,8 @@ inferCSN.fit <- function(x, y,
       if (bad_lambdaGrid) break
     }
     if (bad_lambdaGrid) {
-      stop("L0L1 or L0L2 Penalty requires 'lambdaGrid' to be a list of length 'nGamma'.
-           Where lambdaGrid[[i]] is a list or vector of decreasing positive values.")
+      stop("L0L2 Penalty requires 'lambdaGrid' to be a list of length 'nGamma'.
+           Where 'lambdaGrid[[i]]' is a list or vector of decreasing positive values......")
     }
   }
 
@@ -289,7 +291,7 @@ inferCSN.fit <- function(x, y,
     # Check bounds for CDPSI algorithm
     if (algorithm == "CDPSI") {
       if (any(lows != -Inf) || any(highs != Inf)) {
-        stop("Bounds are not YET supported for CDPSI algorithm.")
+        stop("Bounds are not YET supported for CDPSI algorithm......")
       }
     }
 
@@ -297,18 +299,18 @@ inferCSN.fit <- function(x, y,
     if (is.scalar(lows)) {
       lows <- lows * rep(1, p)
     } else if (!all(sapply(lows, is.scalar)) || length(lows) != p) {
-      stop("Lows must be a vector of real values of length p")
+      stop("Lows must be a vector of real values of length p.....")
     }
 
     if (is.scalar(highs)) {
       highs <- highs * rep(1, p)
     } else if (!all(sapply(highs, is.scalar)) || length(highs) != p) {
-      stop("Highs must be a vector of real values of length p")
+      stop("Highs must be a vector of real values of length p.....")
     }
 
     # Check bounds conditions
     if (any(lows >= highs) || any(lows > 0) || any(highs < 0)) {
-      stop("Bounds must conform to the following conditions: Lows <= 0, Highs >= 0, Lows < Highs")
+      stop("Bounds must conform to the following conditions: Lows <= 0, Highs >= 0, Lows < Highs.....")
     }
   }
 
@@ -359,7 +361,7 @@ inferCSN.fit <- function(x, y,
     if (M$SuppSize[[i]][last] > maxSuppSize) {
       if (last == 1) {
         warning("Warning! Only 1 element in path with support size > maxSuppSize.
-                Try increasing maxSuppSize to resolve the issue.")
+                Try increasing maxSuppSize to resolve the issue......")
       } else {
         M$SuppSize[[i]] <- M$SuppSize[[i]][-last]
         M$Converged[[i]] <- M$Converged[[i]][-last]

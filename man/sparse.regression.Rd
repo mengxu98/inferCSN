@@ -29,7 +29,7 @@ sparse.regression(
 
 \item{penalty}{The type of regularization.
 This can take either one of the following choices: "L0"and "L0L2".
-For high-dimensional and sparse data, such as single-cell transcriptome data, "L0L2" is more effective}
+For high-dimensional and sparse data, such as single-cell sequencing data, "L0L2" is more effective}
 
 \item{algorithm}{The type of algorithm used to minimize the objective function.
 Currently "CD" and "CDPSI" are supported.

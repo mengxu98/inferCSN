@@ -8,8 +8,9 @@ auc.calculate(
   weightDT,
   groundTruth,
   plot = FALSE,
-  fileSave = NULL,
-  interaction = FALSE
+  lineColor = "#1563cc",
+  lineWidth = 1,
+  fileSave = NULL
 )
 }
 \arguments{
@@ -19,9 +20,11 @@ auc.calculate(
 
 \item{plot}{If true, draw and print figure of AUC}
 
-\item{fileSave}{The figure name}
+\item{lineColor}{The color of line in the figure}
 
-\item{interaction}{If true, consider the positivity/negativity of interaction}
+\item{lineWidth}{The width of line in the figure}
+
+\item{fileSave}{The figure name}
 }
 \value{
 AUC values and figure
