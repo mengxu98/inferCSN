@@ -19,8 +19,8 @@ sparse.regression <- function(X, y,
                               rThreshold = 0,
                               verbose = FALSE) {
   if (!is.null(kFolds)) {
-    if (!(kFolds > 0 && kFolds < 10 && is.integer(kFolds))) {
-      stop("Please set 'kFolds' value as an integer between: (0, 10)......")
+    if (!(kFolds > 0 && kFolds < 10)) {
+      stop("Please set 'kFolds' value between: (0, 10)......")
     }
     samples <- sample(kFolds / 10 * nrow(X))
     testX <- X[-samples, ]
