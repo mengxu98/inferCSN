@@ -177,9 +177,10 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mengxu98.github.io/inferCSN/">inferCSN</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"exampleMatrix"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">weightDT</span> <span class="op">&lt;-</span> <span class="fu">inferCSN</span><span class="op">(</span><span class="va">exampleMatrix</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Check input parameters......</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> All parameters check done......</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using 'L0' penalty......</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #00BBBB;">Checking input parameters.</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #00BBBB;">All parameters check done.</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #00BBBB;">Using 'L0' penalty.</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #00BBBB;">Run done.</span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">weightDT</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     regulator target     weight</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 162       g17    g18  0.6777506</span>
