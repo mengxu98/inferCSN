@@ -44,11 +44,13 @@ auc.calculate <- function(weightDT,
                                 labels = gold$label)
 
   auc <- attr(aucCurves, "auc")
+
   aucMetric <- data.frame(AUROC = rep(0.000, 1),
-                          AUPRC = rep(0.000, 1))
+                          AUPRC = rep(0.000, 1),
+                          ACC = rep(0.000, 1))
   aucMetric[1, "AUROC"] <- sprintf("%0.3f", auc$aucs[1])
   aucMetric[1, "AUPRC"] <- sprintf("%0.3f", auc$aucs[2])
-
+  aucMetric[1, "ACC"] <- sprintf("%0.3f", acc.calculate(gold))
   if (plot) {
     # Separate data
     aurocDf <- subset(fortify(aucCurves),
@@ -100,4 +102,41 @@ auc.calculate <- function(weightDT,
     }
   }
   return(aucMetric)
+}
+
+#' ACC calculate
+#'
+#' @param gold Data
+#'
+#' @return ACC
+#' @export
+#'
+acc.calculate <- function(gold) {
+  # Reference from: https://github.com/cran/reportROC/blob/master/R/reportROC.R
+  results <- pROC::roc(gold$label ~ gold$weight,
+                       direction = "<",
+                       levels = c(0, 1))
+
+  # After this operation, '0' indicate positive
+  reverseLabel <- 2 - as.numeric(as.factor(gold$label))
+
+  sensitivities <- results$sensitivities
+  specificities <- results$specificities
+  selectValue <- sensitivities + specificities - 1
+  cutValueResults <- results$thresholds[selectValue == max(selectValue)]
+  selectSensitivities <- sensitivities[selectValue == max(selectValue)]
+
+  cutValue <- cutValueResults[selectSensitivities == max(selectSensitivities)]
+
+  predictorBinary <- rep(0, length(results$predictor))
+  predictorBinary[results$predictor >= cutValue] <- 1
+  predictorBinary <- as.factor(predictorBinary)
+  levels(predictorBinary) <- c("0", "1")
+  predictorBinary <- factor(predictorBinary, levels = c(1, 0))
+
+  pre <- as.vector(table(predictorBinary, reverseLabel))
+
+  acc <- (pre[1] + pre[4]) / sum(pre)
+
+  return(acc)
 }

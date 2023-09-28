@@ -177,13 +177,15 @@ setMethod("inferCSN",
   cores <- min(parallel::detectCores(logical = FALSE), cores, length(targets))
   if (cores == 1) {
     # Format progress information
-    pb <- progress::progress_bar$new(format = "Running [:bar] :percent, No.:current of :total gene,:elapsed......",
+    format <- cli::col_green("Running [:bar] :percent, No.:current of :total gene,:elapsed.")
+    pb <- progress::progress_bar$new(format = format,
                                      total = length(targets),
                                      clear = TRUE,
                                      width = 100)
 
     weightDT <- purrr::map_dfr(regulators, function(x) {
       if (verbose) pb$tick()
+
       sub.inferCSN(regulatorsMatrix = regulatorsMatrix,
                    targetsMatrix = targetsMatrix,
                    target = x,
@@ -239,5 +241,6 @@ setMethod("inferCSN",
   }
 
   weightDT <- weightDT[order(abs(as.numeric(weightDT$weight)), decreasing = TRUE), ]
+  if (verbose) message.success("Run done.")
   return(weightDT)
 }

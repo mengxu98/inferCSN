@@ -16,6 +16,7 @@ LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.2.3
 Encoding: UTF-8
 Imports:
+    cli,
     doParallel,
     doSNOW,
     dplyr,
@@ -38,7 +39,8 @@ Suggests:
     cowplot,
     circlize,
     gtools,
-    precrec
+    precrec,
+    pROC
 biocViews: ComplexHeatmap
 Config/Needs/website: mengxu98/mxtemplate
 LazyData: true

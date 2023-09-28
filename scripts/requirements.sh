@@ -284,6 +284,7 @@ install_packages() {
     # List of required packages
     required_packages=(
         "BiocManager"
+        "cli"
         "doSNOW"
         "doParallel"
         "parallel"
@@ -305,6 +306,7 @@ install_packages() {
         "precrec"
         "magrittr"
         "tidygraph"
+        "pROC"
     )
 
     # Install 'devtools' using BiocManager

@@ -25,6 +25,7 @@ reference:
 - subtitle: "Network evaluation"
 - contents:
   - auc.calculate
+  - acc.calculate
 
 - subtitle: "Compute gene rank"
 - contents:
@@ -39,6 +40,8 @@ reference:
 - subtitle: "Utils functions"
 - contents:
   - check.parameters
+  - message.success
+  - message.warning
   - net.format
   - coef.inferCSN
   - coef.inferCSNCV
