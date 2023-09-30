@@ -5,6 +5,7 @@
 docs
 *.o
 .DS_Store
+src-i386
 src/inferCSN.so
 src/inferCSN.dll
 scripts/test.R
