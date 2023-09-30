@@ -47,8 +47,8 @@ jobs:
         with:
           upload-snapshots: true
 
-      - name: Run Shell Script
+      - name: run cleanup 🚀
         run: |
           cd scripts
-          chmod +x scripts/cleanup.sh
+          chmod +x cleanup.sh
           ./cleanup.sh
