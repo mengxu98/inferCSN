@@ -4,27 +4,10 @@
 \name{inferCSN}
 \alias{inferCSN}
 \alias{inferCSN,data.frame-method}
-\alias{inferCSN,}
-\alias{data.frame-method}
 \alias{inferCSN,matrix-method}
-\alias{matrix-method}
 \title{Inferring cell-specific gene regulatory network}
 \usage{
-inferCSN(
-  matrix,
-  penalty = "L0",
-  algorithm = "CD",
-  crossValidation = FALSE,
-  seed = 1,
-  nFolds = 10,
-  kFolds = NULL,
-  rThreshold = 0,
-  regulators = NULL,
-  targets = NULL,
-  maxSuppSize = NULL,
-  verbose = FALSE,
-  cores = 1
-)
+inferCSN(matrix, ...)
 
 \S4method{inferCSN}{data.frame}(
   matrix,

@@ -47,27 +47,15 @@
 setGeneric("inferCSN",
            signature = "matrix",
            function(matrix,
-                    penalty = "L0",
-                    algorithm = "CD",
-                    crossValidation = FALSE,
-                    seed = 1,
-                    nFolds = 10,
-                    kFolds = NULL,
-                    rThreshold = 0,
-                    regulators = NULL,
-                    targets = NULL,
-                    maxSuppSize = NULL,
-                    verbose = FALSE,
-                    cores = 1) {
+                    ...) {
              standardGeneric("inferCSN")
            })
 
 #' @rdname inferCSN
-#' @aliases inferCSN, data.frame-method
 #' @export
 #'
 setMethod("inferCSN",
-          "data.frame",
+          signature = "data.frame",
           function(matrix,
                    penalty = "L0",
                    algorithm = "CD",
@@ -81,6 +69,7 @@ setMethod("inferCSN",
                    maxSuppSize = NULL,
                    verbose = FALSE,
                    cores = 1) {
+            message.warning("Converting the class type of input data from {.cls {'data.frame'}} to {.cls {'matrix'}}.")
             matrix <- as.matrix(matrix)
             .inferCSN(matrix = matrix,
                       penalty = penalty,
@@ -98,11 +87,10 @@ setMethod("inferCSN",
           })
 
 #' @rdname inferCSN
-#' @aliases inferCSN, matrix-method
 #' @export
 #'
 setMethod("inferCSN",
-          "matrix",
+          signature = "matrix",
           function(matrix,
                    penalty = "L0",
                    algorithm = "CD",

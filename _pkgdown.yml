@@ -32,6 +32,7 @@ reference:
 
 - subtitle: "inferCSN"
 - contents:
+  - inferCSN-package
   - inferCSN
 
 - subtitle: "Network Visualization"
