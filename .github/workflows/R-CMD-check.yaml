@@ -46,3 +46,9 @@ jobs:
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
+
+      - name: Run Shell Script
+        run: |
+          cd scripts
+          chmod +x scripts/cleanup.sh
+          ./cleanup.sh
