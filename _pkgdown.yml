@@ -1,13 +1,31 @@
+destination: docs
+
+toc:
+  depth: 3
+
 url: https://mengxu98.github.io/inferCSN/
 
 template:
   package: mxtemplate
 
 navbar:
+  structure:
+    left:  [articles, reference, tutorials, news]
+    right: [github, mengxu]
+
   components:
     github:
       icon: fab fa-github fa-lg
       href: https://github.com/mengxu98/inferCSN
+
+    mengxu:
+      icon: fas fa-home fa-lg
+      href: https://github.com/mengxu98
+      title: MengXu
+
+    reference:
+      text: Reference
+      href: reference/index.html
 
 reference:
 - title: "Inferring gene regulatory network"
@@ -51,7 +69,7 @@ reference:
   - predict.inferCSNCV
   - is.scalar
 
-- subtitle: "Test data"
+- subtitle: "Example data"
 - contents:
   - exampleMatrix
   - exampleGroundTruth
