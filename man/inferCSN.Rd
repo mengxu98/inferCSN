@@ -5,7 +5,7 @@
 \alias{inferCSN}
 \alias{inferCSN,data.frame-method}
 \alias{inferCSN,matrix-method}
-\title{Inferring cell-specific gene regulatory network}
+\title{Inferring Cell-Specific Gene Regulatory Network}
 \usage{
 inferCSN(
   matrix,
@@ -92,13 +92,16 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 A data table of gene-gene regulatory relationship
 }
 \description{
-Inferring cell-specific gene regulatory network
+Inferring Cell-Specific Gene Regulatory Network
 }
 \examples{
 library(inferCSN)
 data("exampleMatrix")
 weightDT <- inferCSN(exampleMatrix, verbose = TRUE)
 head(weightDT)
+
+\dontrun{
 weightDT <- inferCSN(exampleMatrix, cores = 2)
-head(weightDT)
+}
+
 }

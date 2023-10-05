@@ -1,6 +1,6 @@
 #' @useDynLib inferCSN
 
-#' @title Inferring cell-specific gene regulatory network
+#' @title Inferring Cell-Specific Gene Regulatory Network
 #'
 #' @param matrix An expression matrix, cells by genes
 #' @param penalty The type of regularization.
@@ -37,8 +37,11 @@
 #' data("exampleMatrix")
 #' weightDT <- inferCSN(exampleMatrix, verbose = TRUE)
 #' head(weightDT)
+#'
+#' \dontrun{
 #' weightDT <- inferCSN(exampleMatrix, cores = 2)
-#' head(weightDT)
+#' }
+#'
 
 #' @docType methods
 #' @rdname inferCSN
@@ -143,6 +146,8 @@ setMethod("inferCSN",
                       maxSuppSize,
                       verbose,
                       cores) {
+  if(verbose) message.success("Runing start.")
+
   # Check input parameters
   check.parameters(matrix = matrix,
                    penalty = penalty,
@@ -175,6 +180,7 @@ setMethod("inferCSN",
 
   cores <- min(parallel::detectCores(logical = FALSE), cores, length(targets))
   if (cores == 1) {
+    if(verbose) message.success("Using 1 core.")
     # Format progress information
     format <- cli::col_green("Running [:bar] :percent, No.:current of :total gene,:elapsed.")
     pb <- progress::progress_bar$new(format = format,
@@ -184,7 +190,6 @@ setMethod("inferCSN",
 
     weightDT <- purrr::map_dfr(regulators, function(x) {
       if (verbose) pb$tick()
-
       sub.inferCSN(regulatorsMatrix = regulatorsMatrix,
                    targetsMatrix = targetsMatrix,
                    target = x,
@@ -200,25 +205,12 @@ setMethod("inferCSN",
     })
 
   } else {
-    cl <- parallel::makeCluster(cores)
-    doSNOW::registerDoSNOW(cl)
-
-    if (verbose) {
-      pb <- utils::txtProgressBar(min = 1,
-                                  max = length(targets),
-                                  width = 100,
-                                  style = 3)
-
-      progress <- function(n) utils::setTxtProgressBar(pb, n)
-      opts <- list(progress = progress)
-    } else {
-      opts <- NULL
-    }
+    doParallel::registerDoParallel(cores = cores)
+    if(verbose) message.success("Using ", foreach::getDoParWorkers(), " cores.")
 
     "%dopar%" <- foreach::"%dopar%"
     weightDT <- foreach::foreach(target = targets,
-                                 .export = c("sub.inferCSN", "sparse.regression"),
-                                 .options.snow = opts) %dopar% {
+                                 .export = c("sub.inferCSN", "sparse.regression")) %dopar% {
                                    sub.inferCSN(regulatorsMatrix = regulatorsMatrix,
                                                 targetsMatrix = targetsMatrix,
                                                 target = target,
@@ -234,9 +226,7 @@ setMethod("inferCSN",
                                  }
     weightDT <- purrr::list_rbind(weightDT)
 
-    if (verbose) close(pb)
     doParallel::stopImplicitCluster()
-    parallel::stopCluster(cl)
   }
 
   weightDT <- weightDT[order(abs(as.numeric(weightDT$weight)), decreasing = TRUE), ]
