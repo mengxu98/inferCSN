@@ -9,6 +9,7 @@ Authors@R:
 Maintainer: Meng Xu <mengxu98@qq.com>
 Description: A method for inferring cell-specific gene regulatory network
     from single-cell sequencing data.
+biocViews: CellBiology, GeneExpression
 License: MIT + file LICENSE
 URL: https://mengxu98.github.io/inferCSN/
 BugReports: https://github.com/mengxu98/inferCSN/issues
