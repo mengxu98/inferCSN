@@ -1,8 +1,8 @@
 Type: Package
 Package: inferCSN
-Title: Inferring cell-specific gene regulatory network
-Version: 0.1.1
-Date: 2023-04-10
+Title: Inferring Cell-Specific Gene Regulatory Network
+Version: 0.99.0
+Date: 2023-10-5
 Authors@R: 
     person("Meng", "Xu", , "mengxu98@qq.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-8300-1054"))
@@ -16,6 +16,7 @@ Depends:
     R (>= 3.3.0)
 Imports:
     cli,
+    ComplexHeatmap,
     doParallel,
     dplyr,
     foreach,
@@ -34,7 +35,6 @@ Imports:
     utils
 Suggests: 
     circlize,
-    ComplexHeatmap,
     cowplot,
     gtools,
     igraph,

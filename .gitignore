@@ -10,3 +10,4 @@ src/inferCSN.so
 src/inferCSN.dll
 scripts/test.R
 renv.lock
+revdep/

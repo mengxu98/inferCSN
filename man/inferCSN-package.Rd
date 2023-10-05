@@ -3,7 +3,7 @@
 \docType{package}
 \name{inferCSN-package}
 \alias{inferCSN-package}
-\title{inferCSN: Inferring cell-specific gene regulatory network}
+\title{inferCSN: Inferring Cell-Specific Gene Regulatory Network}
 \source{
 \url{https://github.com/mengxu98/inferCSN}
 }

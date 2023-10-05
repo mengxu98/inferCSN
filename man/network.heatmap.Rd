@@ -49,6 +49,7 @@ p2 <- network.heatmap(weightDT,
 
 ComplexHeatmap::draw(p1 + p2)
 
+\dontrun{
 p3 <- network.heatmap(weightDT,
                       heatmapTitle = "inferCSN",
                       heatmapColor = c("#20a485", "#410054", "#fee81f"))
@@ -64,5 +65,6 @@ p5 <- network.heatmap(weightDT,
                       heatmapTitle = "inferCSN",
                       showNames = TRUE)
 p5
+}
 
 }

@@ -25,6 +25,7 @@
 #'
 #' ComplexHeatmap::draw(p1 + p2)
 #'
+#' \dontrun{
 #' p3 <- network.heatmap(weightDT,
 #'                       heatmapTitle = "inferCSN",
 #'                       heatmapColor = c("#20a485", "#410054", "#fee81f"))
@@ -40,6 +41,7 @@
 #'                       heatmapTitle = "inferCSN",
 #'                       showNames = TRUE)
 #' p5
+#' }
 #'
 network.heatmap <- function(weightDT,
                             switchMatrix = TRUE,
@@ -90,6 +92,7 @@ network.heatmap <- function(weightDT,
                                width = unit(heatmapSize, "cm"),
                                height = unit(heatmapSize, "cm"),
                                border = "black")
+
   return(p)
 }
 
@@ -166,7 +169,7 @@ dynamic.networks <- function(weightDT,
   return(g)
 }
 
-#' @title compare.networks
+#' @title contrast.networks
 #' @description
 #'  Ref: https://mp.weixin.qq.com/s/f3Hquw0m4ucGUieSjMyang
 #'
@@ -186,13 +189,13 @@ dynamic.networks <- function(weightDT,
 #' library(inferCSN)
 #' data("exampleMatrix")
 #' weightDT <- inferCSN(exampleMatrix)
-#' g <- compare.networks(weightDT[1:50, ])
+#' g <- contrast.networks(weightDT[1:50, ])
 #' g
 #'
-compare.networks <- function(weightDT,
-                             degreeValue = 0,
-                             weightValue = 0,
-                             legend.position = "bottom") {
+contrast.networks <- function(weightDT,
+                              degreeValue = 0,
+                              weightValue = 0,
+                              legend.position = "bottom") {
   weightDT <- net.format(weightDT)
   graph <- tidygraph::as_tbl_graph(weightDT) %>%
     dplyr::mutate(degree = tidygraph::centrality_degree(mode = 'out')) %>%

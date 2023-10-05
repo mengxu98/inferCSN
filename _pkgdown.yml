@@ -38,7 +38,7 @@ reference:
 - subtitle: "Network Visualization"
 - contents:
   - dynamic.networks
-  - compare.networks
+  - contrast.networks
   - network.heatmap
 
 - subtitle: "Network evaluation"

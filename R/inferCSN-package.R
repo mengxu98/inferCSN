@@ -1,4 +1,4 @@
-#' inferCSN: Inferring cell-specific gene regulatory network
+#' inferCSN: Inferring Cell-Specific Gene Regulatory Network
 #'
 #' A method for inferring cell-specific gene regulatory network from single-cell sequencing data.
 #'

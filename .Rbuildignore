@@ -10,3 +10,6 @@
 ^.*\.sh$
 ^scripts$
 ^packages\.R$
+^dev$
+^revdep$
+^cran-comments\.md$
