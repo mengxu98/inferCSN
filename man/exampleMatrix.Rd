@@ -3,21 +3,7 @@
 \docType{data}
 \name{exampleMatrix}
 \alias{exampleMatrix}
-\title{Test data}
-\format{
-A matrix with 5000 rows and 18 variables:
-\describe{
-  \item{matrix}{The matrix used for reconstruct gene regulatory network}
-  ...
-}
-}
-\source{
-\url{NULL}
-}
+\title{Example matrix data}
 \description{
-A dataset
-diamonds.
-}
-\details{
-Success!!
+The matrix used for reconstruct gene regulatory network.
 }
