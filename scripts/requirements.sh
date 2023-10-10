@@ -284,14 +284,12 @@ install_packages() {
     # List of required packages
     required_packages=(
         "BiocManager"
-        "cli"
-        "doSNOW"
+        "data.table"
         "doParallel"
         "parallel"
         "dplyr"
         "foreach"
         "igraph"
-        "magritte"
         "patchwork"
         "progress"
         "purrr"
@@ -300,16 +298,15 @@ install_packages() {
         "ggplot2"
         "ggraph"
         "RcppArmadillo"
-        "cowplot"
         "gtools"
         "circlize"
         "precrec"
-        "magrittr"
         "tidygraph"
         "pROC"
+        "spelling"
     )
 
-    # Install 'devtools' using BiocManager
+    # Install 'devtools'
     if is_package_installed "devtools"; then
         echo "'devtools' is already installed......"
     else
@@ -317,8 +314,8 @@ install_packages() {
         Rscript -e "install.packages("devtools", repos = 'https://cloud.r-project.org')"
     fi
 
-    # Install 'digest' using BiocManager
-  	# Note: the package 'digest' may cause errors during the installation process on the macOS system
+    # Install 'digest'
+  	# Note: the package 'digest' may encounter errors during the installation process on the macOS system of M1/M2 chip machines
     if is_package_installed "digest"; then
         echo "'digest' is already installed......"
     else
