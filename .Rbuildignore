@@ -4,13 +4,14 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^_pkgdown\.yml$
-^docs$
-^pkgdown$
 ^\.github$
 ^.*\.sh$
 ^scripts$
-^packages\.R$
 ^dev$
 ^revdep$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
+^libs
+^.*\.o$
+^.*\.so$
+^.*\.dll$
