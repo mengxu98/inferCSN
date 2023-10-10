@@ -4,11 +4,9 @@ Title: Inferring Cell-Specific Gene Regulatory Network
 Version: 0.99.0
 Date: 2023-10-5
 Authors@R: 
-    person("Meng", "Xu", , "mengxu98@qq.com", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-8300-1054"))
+    person("Meng", "Xu", email = "mengxu98@qq.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-8300-1054"))
 Maintainer: Meng Xu <mengxu98@qq.com>
-Description: A method for inferring cell-specific gene regulatory network
-    from single-cell sequencing data.
+Description: A method for inferring cell-specific gene regulatory network from single-cell sequencing data.
 biocViews: CellBiology, GeneExpression
 License: MIT + file LICENSE
 URL: https://mengxu98.github.io/inferCSN/
@@ -16,15 +14,14 @@ BugReports: https://github.com/mengxu98/inferCSN/issues
 Depends: 
     R (>= 3.3.0)
 Imports:
-    cli,
     ComplexHeatmap,
+    data.table,
     doParallel,
     dplyr,
     foreach,
     ggnetwork,
     ggplot2,
     ggraph,
-    magrittr,
     Matrix,
     methods,
     parallel,
@@ -36,12 +33,10 @@ Imports:
     utils
 Suggests: 
     circlize,
-    cowplot,
     gtools,
     igraph,
     precrec,
     pROC,
-    spelling,
     testthat (>= 3.0.0),
     tidygraph
 LinkingTo: 
