@@ -30,7 +30,7 @@ network.heatmap(
 \item{legendName}{legendName}
 }
 \value{
-heatmap
+Return a heatmap of ggplot2 object
 }
 \description{
 The heatmap of network
@@ -49,7 +49,6 @@ p2 <- network.heatmap(weightDT,
 
 ComplexHeatmap::draw(p1 + p2)
 
-\dontrun{
 p3 <- network.heatmap(weightDT,
                       heatmapTitle = "inferCSN",
                       heatmapColor = c("#20a485", "#410054", "#fee81f"))
@@ -65,6 +64,5 @@ p5 <- network.heatmap(weightDT,
                       heatmapTitle = "inferCSN",
                       showNames = TRUE)
 p5
-}
 
 }

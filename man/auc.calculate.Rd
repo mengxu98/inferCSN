@@ -9,8 +9,7 @@ auc.calculate(
   groundTruth,
   plot = FALSE,
   lineColor = "#1563cc",
-  lineWidth = 1,
-  fileSave = NULL
+  lineWidth = 1
 )
 }
 \arguments{
@@ -23,8 +22,6 @@ auc.calculate(
 \item{lineColor}{The color of line in the figure}
 
 \item{lineWidth}{The width of line in the figure}
-
-\item{fileSave}{The figure name}
 }
 \value{
 AUC values and figure

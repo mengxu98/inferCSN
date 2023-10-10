@@ -5,7 +5,6 @@
 #' @param plot If true, draw and print figure of AUC
 #' @param lineColor The color of line in the figure
 #' @param lineWidth The width of line in the figure
-#' @param fileSave The figure name
 #'
 #' @import patchwork
 #' @import ggplot2
@@ -25,8 +24,7 @@ auc.calculate <- function(weightDT,
                           groundTruth,
                           plot = FALSE,
                           lineColor = "#1563cc",
-                          lineWidth = 1,
-                          fileSave = NULL) {
+                          lineWidth = 1) {
   # Check input data
   colnames(weightDT) <- c("regulator", "target", "weight")
   weightDT$weight <- abs(as.numeric(weightDT$weight))
@@ -88,19 +86,8 @@ auc.calculate <- function(weightDT,
     # Combine two plots by `patchwork` package
     p <- auroc + auprc
     print(p)
-
-    # Save figure
-    if (!is.null(fileSave)) {
-      if (!grepl(".*\\.(pdf|png|jpe?g)$", fileSave)) {
-        fileSave <- paste0(fileSave, ".png")
-      }
-      cowplot::ggsave2(file = fileSave,
-                       p,
-                       width = 7,
-                       height = 3,
-                       dpi = 600)
-    }
   }
+
   return(aucMetric)
 }
 
@@ -112,7 +99,6 @@ auc.calculate <- function(weightDT,
 #' @export
 #'
 acc.calculate <- function(gold) {
-  # Reference from: https://github.com/cran/reportROC/blob/master/R/reportROC.R
   results <- pROC::roc(gold$label ~ gold$weight,
                        direction = "<",
                        levels = c(0, 1))

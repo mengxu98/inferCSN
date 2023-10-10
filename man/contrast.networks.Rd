@@ -21,10 +21,10 @@ contrast.networks(
 \item{legend.position}{legend.position}
 }
 \value{
-ggplot2 object
+Return a ggplot2 object
 }
 \description{
-Ref: https://mp.weixin.qq.com/s/f3Hquw0m4ucGUieSjMyang
+contrast.networks
 }
 \examples{
 library(inferCSN)

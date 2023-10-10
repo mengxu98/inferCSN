@@ -14,6 +14,11 @@
 
 \item{...}{Other parameters}
 }
+\value{
+Return the information of inferCSN.fit
+
+Return the information of inferCSN.fit
+}
 \description{
 Prints a summary of inferCSN.fit
 }

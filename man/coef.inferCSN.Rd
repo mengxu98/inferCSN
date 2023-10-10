@@ -20,6 +20,11 @@
 
 \item{...}{Other parameters}
 }
+\value{
+Return the specific solution
+
+Return the specific solution
+}
 \description{
 Extracts a specific solution in the regularization path
 }

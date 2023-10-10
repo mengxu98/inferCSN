@@ -187,19 +187,19 @@ inferCSN.fit <- function(x, y,
                          highs = Inf) {
   # Check parameter values
   if ((rtol < 0) || (rtol >= 1)) {
-    cli::cli_abort(c(x = "The specified rtol parameter must exist in [0, 1)."))
+    stop("The specified rtol parameter must exist in [0, 1).")
   }
   if (atol < 0) {
-    cli::cli_abort(c(x = "The specified atol parameter must exist in [0, INF)."))
+    stop("The specified atol parameter must exist in [0, INF).")
   }
   if (!(loss %in% c("SquaredError", "Logistic", "SquaredHinge"))) {
-    cli::cli_abort(c(x = "The specified loss function is not supported."))
+    stop("The specified loss function is not supported.")
   }
 
   # Check binary classification for logistic and squared hinge loss
   if (loss == "Logistic" | loss == "SquaredHinge") {
     if (dim(table(y)) != 2) {
-      cli::cli_abort(c(x = "Only binary classification is supported. Make sure y has only 2 unique values."))
+      stop("Only binary classification is supported. Make sure y has only 2 unique values.")
     }
     y <- factor(y, labels = c(-1, 1)) # Returns a vector of strings
     y <- as.numeric(levels(y))[y]
@@ -207,8 +207,8 @@ inferCSN.fit <- function(x, y,
     # Adjust parameters for L0 penalty
     if (penalty == "L0") {
       if ((length(lambdaGrid) != 0) && (length(lambdaGrid) != 1)) {
-        cli::cli_abort(c(x = "L0 Penalty requires 'lambdaGrid' to be a list of length 1.
-                Where lambdaGrid[[1]] is a list or vector of decreasing positive values."))
+        stop("L0 Penalty requires 'lambdaGrid' to be a list of length 1.
+                Where lambdaGrid[[1]] is a list or vector of decreasing positive values.")
       }
       penalty <- "L0L2"
       nGamma <- 1
@@ -220,7 +220,7 @@ inferCSN.fit <- function(x, y,
   # Handle Lambda Grids
   if (length(lambdaGrid) != 0) {
     if (!is.null(autoLambda) && !autoLambda) {
-      message.warning("'autoLambda' is ignored and inferred if 'lambdaGrid' is supplied.")
+      warning("'autoLambda' is ignored and inferred if 'lambdaGrid' is supplied.")
     }
     autoLambda <- FALSE
   } else {
@@ -245,8 +245,8 @@ inferCSN.fit <- function(x, y,
       current <- nxt
     }
     if (bad_lambdaGrid) {
-      cli::cli_abort(c(x = "L0 Penalty requires 'lambdaGrid' to be a list of length 1.
-           Where 'lambdaGrid[[1]]' is a list or vector of decreasing positive values."))
+      stop("L0 Penalty requires 'lambdaGrid' to be a list of length 1.
+           Where 'lambdaGrid[[1]]' is a list or vector of decreasing positive values.")
     }
   }
 
@@ -254,7 +254,7 @@ inferCSN.fit <- function(x, y,
   if (penalty != "L0" && !autoLambda) {
     bad_lambdaGrid <- FALSE
     if (length(lambdaGrid) != nGamma) {
-      message.warning("'nGamma' is ignored and replaced with length(lambdaGrid).....")
+      warning("'nGamma' is ignored and replaced with length(lambdaGrid).....")
       nGamma <- length(lambdaGrid)
     }
     for (i in 1:length(lambdaGrid)) {
@@ -273,8 +273,8 @@ inferCSN.fit <- function(x, y,
       if (bad_lambdaGrid) break
     }
     if (bad_lambdaGrid) {
-      cli::cli_abort(c(x = "L0L2 Penalty requires 'lambdaGrid' to be a list of length 'nGamma'.
-           Where 'lambdaGrid[[i]]' is a list or vector of decreasing positive values."))
+      stop("L0L2 Penalty requires 'lambdaGrid' to be a list of length 'nGamma'.
+           Where 'lambdaGrid[[i]]' is a list or vector of decreasing positive values.")
     }
   }
 
@@ -288,7 +288,7 @@ inferCSN.fit <- function(x, y,
     # Check bounds for CDPSI algorithm
     if (algorithm == "CDPSI") {
       if (any(lows != -Inf) || any(highs != Inf)) {
-        cli::cli_abort(c(x = "Bounds are not YET supported for CDPSI algorithm."))
+        stop("Bounds are not YET supported for CDPSI algorithm.")
       }
     }
 
@@ -296,18 +296,18 @@ inferCSN.fit <- function(x, y,
     if (is.scalar(lows)) {
       lows <- lows * rep(1, p)
     } else if (!all(sapply(lows, is.scalar)) || length(lows) != p) {
-      cli::cli_abort(c(x = "Lows must be a vector of real values of length p....."))
+      stop("Lows must be a vector of real values of length p.")
     }
 
     if (is.scalar(highs)) {
       highs <- highs * rep(1, p)
     } else if (!all(sapply(highs, is.scalar)) || length(highs) != p) {
-      cli::cli_abort(c(x = "Highs must be a vector of real values of length p....."))
+      stop("Highs must be a vector of real values of length p.")
     }
 
     # Check bounds conditions
     if (any(lows >= highs) || any(lows > 0) || any(highs < 0)) {
-      cli::cli_abort(c(x = "Bounds must conform to the following conditions: Lows <= 0, Highs >= 0, Lows < Highs....."))
+      stop("Bounds must conform to the following conditions: Lows <= 0, Highs >= 0, Lows < Highs.")
     }
   }
 
@@ -357,7 +357,7 @@ inferCSN.fit <- function(x, y,
     last <- length(M$SuppSize[[i]])
     if (M$SuppSize[[i]][last] > maxSuppSize) {
       if (last == 1) {
-        message.warning("Warning! Only 1 element in path with support size > maxSuppSize.
+        warning("Warning! Only 1 element in path with support size > maxSuppSize.
                 Try increasing maxSuppSize to resolve the issue.")
       } else {
         M$SuppSize[[i]] <- M$SuppSize[[i]][-last]

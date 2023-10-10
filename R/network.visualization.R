@@ -8,7 +8,7 @@
 #' @param showNames showNames
 #' @param legendName legendName
 #'
-#' @return heatmap
+#' @return Return a heatmap of ggplot2 object
 #' @export
 #'
 #' @examples
@@ -25,7 +25,6 @@
 #'
 #' ComplexHeatmap::draw(p1 + p2)
 #'
-#' \dontrun{
 #' p3 <- network.heatmap(weightDT,
 #'                       heatmapTitle = "inferCSN",
 #'                       heatmapColor = c("#20a485", "#410054", "#fee81f"))
@@ -41,7 +40,6 @@
 #'                       heatmapTitle = "inferCSN",
 #'                       showNames = TRUE)
 #' p5
-#' }
 #'
 network.heatmap <- function(weightDT,
                             switchMatrix = TRUE,
@@ -170,8 +168,6 @@ dynamic.networks <- function(weightDT,
 }
 
 #' @title contrast.networks
-#' @description
-#'  Ref: https://mp.weixin.qq.com/s/f3Hquw0m4ucGUieSjMyang
 #'
 #' @param weightDT weightDT
 #' @param degreeValue degreeValue
@@ -180,9 +176,8 @@ dynamic.networks <- function(weightDT,
 #'
 #' @import ggplot2
 #' @import ggraph
-#' @import magrittr
 #'
-#' @return ggplot2 object
+#' @return Return a ggplot2 object
 #' @export
 #'
 #' @examples
@@ -197,10 +192,11 @@ contrast.networks <- function(weightDT,
                               weightValue = 0,
                               legend.position = "bottom") {
   weightDT <- net.format(weightDT)
-  graph <- tidygraph::as_tbl_graph(weightDT) %>%
-    dplyr::mutate(degree = tidygraph::centrality_degree(mode = 'out')) %>%
-    dplyr::filter(degree > degreeValue) %>%
-    tidygraph::activate(edges)
+
+  graph <- tidygraph::as_tbl_graph(weightDT)
+  graph <- dplyr::mutate(graph, degree = tidygraph::centrality_degree(mode = 'out'))
+  graph <- dplyr::filter(graph, degree > degreeValue)
+  graph <- tidygraph::activate(graph, edges)
 
   g <- ggraph(graph, layout = 'linear', circular = TRUE) +
     geom_edge_arc(aes(colour = Interaction,

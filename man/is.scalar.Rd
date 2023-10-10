@@ -10,7 +10,7 @@ is.scalar(x)
 \item{x}{Value}
 }
 \value{
-Null
+No return value, called for check input parameters
 }
 \description{
 is.scalar

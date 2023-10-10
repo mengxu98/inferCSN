@@ -4,23 +4,23 @@
 #'
 #' @param matrix An expression matrix, cells by genes
 #' @param penalty The type of regularization.
-#' This can take either one of the following choices: "L0"and "L0L2".
-#' For high-dimensional and sparse data, such as single-cell sequencing data, "L0L2" is more effective
+#' This can take either one of the following choices: "L0" and "L0L2".
+#' For high-dimensional and sparse data, such as single-cell sequencing data, "L0L2" is more effective.
 #' @param algorithm The type of algorithm used to minimize the objective function.
 #' Currently "CD" and "CDPSI" are supported.
-#' The CDPSI algorithm may yield better results, but it also increases running time
-#' @param crossValidation Check whether cross validation is used
-#' @param nFolds The number of folds for cross-validation
-#' @param seed The seed used in randomly shuffling the data for cross-validation
-#' @param kFolds The number of folds for sample split
-#' @param rThreshold rThreshold
-#' @param regulators Regulator genes
-#' @param targets Target genes
+#' The CDPSI algorithm may yield better results, but it also increases running time.
+#' @param crossValidation Check whether cross validation is used.
+#' @param nFolds The number of folds for cross-validation.
+#' @param seed The seed used in randomly shuffling the data for cross-validation.
+#' @param kFolds The number of folds for sample split.
+#' @param rThreshold rThreshold.
+#' @param regulators Regulator genes.
+#' @param targets Target genes.
 #' @param maxSuppSize The number of non-zore coef, this value will affect the final performance.
 #' The maximum support size at which to terminate the regularization path.
-#' Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros
-#' @param verbose Print detailed information
-#' @param cores CPU cores
+#' Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.
+#' @param verbose Print detailed information.
+#' @param cores CPU cores.
 #'
 #' @import Matrix
 #'
@@ -38,9 +38,8 @@
 #' weightDT <- inferCSN(exampleMatrix, verbose = TRUE)
 #' head(weightDT)
 #'
-#' \dontrun{
-#' weightDT <- inferCSN(exampleMatrix, cores = 2)
-#' }
+#' weightDT <- inferCSN(exampleMatrix, verbose = TRUE, cores = 2)
+#' head(weightDT)
 #'
 
 #' @docType methods
@@ -83,7 +82,7 @@ setMethod("inferCSN",
                    maxSuppSize = NULL,
                    verbose = FALSE,
                    cores = 1) {
-            message.warning("Converting the class type of input data from {.cls {'data.frame'}} to {.cls {'matrix'}}.")
+            warning("Converting the class type of input data from <data.frame> to <matrix>.")
             matrix <- as.matrix(matrix)
             .inferCSN(matrix = matrix,
                       penalty = penalty,
@@ -146,7 +145,7 @@ setMethod("inferCSN",
                       maxSuppSize,
                       verbose,
                       cores) {
-  if(verbose) message.success("Runing start.")
+  if(verbose) message("Runing start.")
 
   # Check input parameters
   check.parameters(matrix = matrix,
@@ -180,9 +179,9 @@ setMethod("inferCSN",
 
   cores <- min(parallel::detectCores(logical = FALSE), cores, length(targets))
   if (cores == 1) {
-    if(verbose) message.success("Using 1 core.")
+    if(verbose) message("Using 1 core.")
     # Format progress information
-    format <- cli::col_green("Running [:bar] :percent, No.:current of :total gene,:elapsed.")
+    format <- "Running [:bar] :percent, No.:current of :total gene,:elapsed."
     pb <- progress::progress_bar$new(format = format,
                                      total = length(targets),
                                      clear = TRUE,
@@ -206,7 +205,7 @@ setMethod("inferCSN",
 
   } else {
     doParallel::registerDoParallel(cores = cores)
-    if(verbose) message.success("Using ", foreach::getDoParWorkers(), " cores.")
+    if(verbose) message("Using ", foreach::getDoParWorkers(), " cores.")
 
     "%dopar%" <- foreach::"%dopar%"
     weightDT <- foreach::foreach(target = targets,
@@ -224,12 +223,12 @@ setMethod("inferCSN",
                                                 maxSuppSize = maxSuppSize,
                                                 verbose = verbose)
                                  }
-    weightDT <- purrr::list_rbind(weightDT)
-
+    weightDT <- data.table::rbindlist(weightDT)
+    attr(weightDT, ".internal.selfref") <- NULL
     doParallel::stopImplicitCluster()
   }
 
   weightDT <- weightDT[order(abs(as.numeric(weightDT$weight)), decreasing = TRUE), ]
-  if (verbose) message.success("Run done.")
+  if (verbose) message("Run done.")
   return(weightDT)
 }

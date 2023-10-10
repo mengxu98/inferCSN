@@ -26,29 +26,29 @@ sub.inferCSN(
 
 \item{target}{Target genes}
 
-\item{crossValidation}{Check whether cross validation is used}
+\item{crossValidation}{Check whether cross validation is used.}
 
-\item{seed}{The seed used in randomly shuffling the data for cross-validation}
+\item{seed}{The seed used in randomly shuffling the data for cross-validation.}
 
 \item{penalty}{The type of regularization.
-This can take either one of the following choices: "L0"and "L0L2".
-For high-dimensional and sparse data, such as single-cell sequencing data, "L0L2" is more effective}
+This can take either one of the following choices: "L0" and "L0L2".
+For high-dimensional and sparse data, such as single-cell sequencing data, "L0L2" is more effective.}
 
 \item{algorithm}{The type of algorithm used to minimize the objective function.
 Currently "CD" and "CDPSI" are supported.
-The CDPSI algorithm may yield better results, but it also increases running time}
+The CDPSI algorithm may yield better results, but it also increases running time.}
 
 \item{maxSuppSize}{The number of non-zore coef, this value will affect the final performance.
 The maximum support size at which to terminate the regularization path.
-Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros}
+Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.}
 
-\item{nFolds}{The number of folds for cross-validation}
+\item{nFolds}{The number of folds for cross-validation.}
 
-\item{kFolds}{The number of folds for sample split}
+\item{kFolds}{The number of folds for sample split.}
 
-\item{rThreshold}{rThreshold}
+\item{rThreshold}{rThreshold.}
 
-\item{verbose}{Print detailed information}
+\item{verbose}{Print detailed information.}
 }
 \value{
 The weight data table of sub-network
