@@ -81,58 +81,64 @@
 
 <dt>penalty</dt>
 <dd><p>The type of regularization.
-This can take either one of the following choices: "L0"and "L0L2".
-For high-dimensional and sparse data, such as single-cell sequencing data, "L0L2" is more effective</p></dd>
+This can take either one of the following choices: "L0" and "L0L2".
+For high-dimensional and sparse data, such as single-cell sequencing data, "L0L2" is more effective.</p></dd>
 
 
 <dt>algorithm</dt>
 <dd><p>The type of algorithm used to minimize the objective function.
 Currently "CD" and "CDPSI" are supported.
-The CDPSI algorithm may yield better results, but it also increases running time</p></dd>
+The CDPSI algorithm may yield better results, but it also increases running time.</p></dd>
 
 
 <dt>crossValidation</dt>
-<dd><p>Check whether cross validation is used</p></dd>
+<dd><p>Check whether cross validation is used.</p></dd>
 
 
 <dt>seed</dt>
-<dd><p>The seed used in randomly shuffling the data for cross-validation</p></dd>
+<dd><p>The seed used in randomly shuffling the data for cross-validation.</p></dd>
 
 
 <dt>nFolds</dt>
-<dd><p>The number of folds for cross-validation</p></dd>
+<dd><p>The number of folds for cross-validation.</p></dd>
 
 
 <dt>kFolds</dt>
-<dd><p>The number of folds for sample split</p></dd>
+<dd><p>The number of folds for sample split.</p></dd>
 
 
 <dt>rThreshold</dt>
-<dd><p>rThreshold</p></dd>
+<dd><p>rThreshold.</p></dd>
 
 
 <dt>regulators</dt>
-<dd><p>Regulator genes</p></dd>
+<dd><p>Regulator genes.</p></dd>
 
 
 <dt>targets</dt>
-<dd><p>Target genes</p></dd>
+<dd><p>Target genes.</p></dd>
 
 
 <dt>maxSuppSize</dt>
 <dd><p>The number of non-zore coef, this value will affect the final performance.
 The maximum support size at which to terminate the regularization path.
-Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros</p></dd>
+Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.</p></dd>
 
 
 <dt>verbose</dt>
-<dd><p>Print detailed information</p></dd>
+<dd><p>Print detailed information.</p></dd>
 
 
 <dt>cores</dt>
-<dd><p>CPU cores</p></dd>
+<dd><p>CPU cores.</p></dd>
 
 </dl></div>
+    <div id="value">
+    <h2>Value</h2>
+    
+
+<p>No return value, called for check input parameters</p>
+    </div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -115,56 +115,56 @@
 
 <dt>penalty</dt>
 <dd><p>The type of regularization.
-This can take either one of the following choices: "L0"and "L0L2".
-For high-dimensional and sparse data, such as single-cell sequencing data, "L0L2" is more effective</p></dd>
+This can take either one of the following choices: "L0" and "L0L2".
+For high-dimensional and sparse data, such as single-cell sequencing data, "L0L2" is more effective.</p></dd>
 
 
 <dt>algorithm</dt>
 <dd><p>The type of algorithm used to minimize the objective function.
 Currently "CD" and "CDPSI" are supported.
-The CDPSI algorithm may yield better results, but it also increases running time</p></dd>
+The CDPSI algorithm may yield better results, but it also increases running time.</p></dd>
 
 
 <dt>crossValidation</dt>
-<dd><p>Check whether cross validation is used</p></dd>
+<dd><p>Check whether cross validation is used.</p></dd>
 
 
 <dt>seed</dt>
-<dd><p>The seed used in randomly shuffling the data for cross-validation</p></dd>
+<dd><p>The seed used in randomly shuffling the data for cross-validation.</p></dd>
 
 
 <dt>nFolds</dt>
-<dd><p>The number of folds for cross-validation</p></dd>
+<dd><p>The number of folds for cross-validation.</p></dd>
 
 
 <dt>kFolds</dt>
-<dd><p>The number of folds for sample split</p></dd>
+<dd><p>The number of folds for sample split.</p></dd>
 
 
 <dt>rThreshold</dt>
-<dd><p>rThreshold</p></dd>
+<dd><p>rThreshold.</p></dd>
 
 
 <dt>regulators</dt>
-<dd><p>Regulator genes</p></dd>
+<dd><p>Regulator genes.</p></dd>
 
 
 <dt>targets</dt>
-<dd><p>Target genes</p></dd>
+<dd><p>Target genes.</p></dd>
 
 
 <dt>maxSuppSize</dt>
 <dd><p>The number of non-zore coef, this value will affect the final performance.
 The maximum support size at which to terminate the regularization path.
-Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros</p></dd>
+Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.</p></dd>
 
 
 <dt>verbose</dt>
-<dd><p>Print detailed information</p></dd>
+<dd><p>Print detailed information.</p></dd>
 
 
 <dt>cores</dt>
-<dd><p>CPU cores</p></dd>
+<dd><p>CPU cores.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -179,12 +179,12 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mengxu98.github.io/inferCSN/">inferCSN</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"exampleMatrix"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">weightDT</span> <span class="op">&lt;-</span> <span class="fu">inferCSN</span><span class="op">(</span><span class="va">exampleMatrix</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #00BBBB;">Runing start.</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #00BBBB;">Checking input parameters.</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #00BBBB;">All parameters check done.</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #00BBBB;">Using 'L0' penalty.</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #00BBBB;">Using 1 core.</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #00BBBB;">Run done.</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Runing start.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Checking input parameters.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> All parameters check done.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using 'L0' penalty.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using 1 core.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Run done.</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">weightDT</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     regulator target     weight</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 162       g17    g18  0.6777506</span>
@@ -194,9 +194,21 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 <span class="r-out co"><span class="r-pr">#&gt;</span> 291       g10     g9  0.4565135</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 55        g13    g12  0.4553549</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="va">weightDT</span> <span class="op">&lt;-</span> <span class="fu">inferCSN</span><span class="op">(</span><span class="va">exampleMatrix</span>, cores <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="va">weightDT</span> <span class="op">&lt;-</span> <span class="fu">inferCSN</span><span class="op">(</span><span class="va">exampleMatrix</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, cores <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Runing start.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Checking input parameters.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> All parameters check done.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using 'L0' penalty.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using 2 cores.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Run done.</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">weightDT</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    regulator target     weight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:       g17    g18  0.6777506</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:       g18    g17  0.5707733</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:       g17    g16  0.4664720</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:       g18     g1 -0.4652000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:       g10     g9  0.4565135</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:       g13    g12  0.4553549</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
