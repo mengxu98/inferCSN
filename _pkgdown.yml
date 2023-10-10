@@ -35,7 +35,7 @@ reference:
   - inferCSN-package
   - inferCSN
 
-- subtitle: "Network Visualization"
+- subtitle: "Network visualization"
 - contents:
   - dynamic.networks
   - contrast.networks
@@ -59,8 +59,6 @@ reference:
 - subtitle: "Utils functions"
 - contents:
   - check.parameters
-  - message.success
-  - message.warning
   - net.format
   - coef.inferCSN
   - coef.inferCSNCV
