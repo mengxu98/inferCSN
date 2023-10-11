@@ -284,6 +284,7 @@ print.inferCSNCV <- function(x, ...) {
 #' If lambda is supplied but gamma is not, the smallest value of gamma is used.
 #' In case of logistic regression, probability values are returned
 #'
+#' @return Return the predict value
 #' @export
 #'
 predict.inferCSN <- function(object,
@@ -308,6 +309,7 @@ predict.inferCSN <- function(object,
 #'
 #' @method predict inferCSNCV
 #'
+#' @return Return the predict value
 #' @export
 #'
 predict.inferCSNCV <- function(object,

@@ -22,6 +22,11 @@ A summary of the gammas in the regularization path can be obtained using \code{p
 
 \item{...}{Other parameters}
 }
+\value{
+Return the predict value
+
+Return the predict value
+}
 \description{
 Predicts the response for a given sample
 }
