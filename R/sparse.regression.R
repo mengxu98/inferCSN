@@ -66,11 +66,11 @@ sparse.regression <- function(X, y,
 
   r <- 1
   if (!is.null(kFolds)) {
-    y_hat <- as.numeric(predict(fit,
-                                newx = testX,
-                                lambda = lambda,
-                                gamma = gamma))
-    r <- stats::cor(testy, y_hat)
+    prey <- as.numeric(predict(fit,
+                               newx = testX,
+                               lambda = lambda,
+                               gamma = gamma))
+    if (length(testy) == length(prey)) r <- stats::cor(testy, prey)
   }
 
   if (r >= rThreshold) {

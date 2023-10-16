@@ -181,9 +181,9 @@ setMethod("inferCSN",
   if (cores == 1) {
     if(verbose) message("Using 1 core.")
     # Format progress information
-    format <- "Running [:bar] :percent, No.:current of :total gene,:elapsed."
+    format <- "Running [:bar] :percent, No.:current of :total gene, :elapsed."
     pb <- progress::progress_bar$new(format = format,
-                                     total = length(targets),
+                                     total = length(regulators),
                                      clear = TRUE,
                                      width = 100)
 
