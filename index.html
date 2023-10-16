@@ -76,16 +76,23 @@
 
 <!-- badges: end -->
 <p><a href="https://mengxu98.github.io/inferCSN/"><em><code>inferCSN</code></em></a> is an package for inferring cell-specific gene regulatory network from single-cell sequencing data.</p>
-<p><img src="reference/figures/inferCSN.svg" width="90%"></p>
+<p><img src="reference/figures/inferCSN.svg" width="80%"></p>
 <div class="section level2">
 <h2 id="install">
 <strong>Install</strong><a class="anchor" aria-label="anchor" href="#install"></a>
 </h2>
 <div class="section level3">
+<h3 id="cran">
+<a href="https://github.com/cran" class="external-link"><em><code>CRAN</code></em></a><a class="anchor" aria-label="anchor" href="#cran"></a>
+</h3>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"inferCSN"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
 <h3 id="using-pak">Using <a href="https://github.com/r-lib/pak" class="external-link"><em><code>pak</code></em></a>
 <a class="anchor" aria-label="anchor" href="#using-pak"></a>
 </h3>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://pak.r-lib.org/" class="external-link">"pak"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
@@ -95,11 +102,11 @@
 <h3 id="using-git-clone">Using <em><code>git clone</code></em>
 <a class="anchor" aria-label="anchor" href="#using-git-clone"></a>
 </h3>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/mengxu98/inferCSN.git</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> inferCSN</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sh</span> scripts/requirements.sh</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> R CMD INSTALL .</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Some packages may prompt not available, please install.</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/mengxu98/inferCSN.git</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> inferCSN</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sh</span> scripts/requirements.sh</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> R CMD INSTALL .</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Some packages may prompt not available, please install.</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -115,6 +122,7 @@
     <div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=inferCSN" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/mengxu98/inferCSN/" class="external-link">Browse source code</a></li>
 <li><a href="https://github.com/mengxu98/inferCSN/issues" class="external-link">Report a bug</a></li>
 </ul>
@@ -146,7 +154,7 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/mengxu98/inferCSN/blob/main/DESCRIPTION" class="external-link"><img src="https://img.shields.io/github/r-package/v/mengxu98/inferCSN" alt="r-package-version"></a></li>
+<li><a href="https://CRAN.R-project.org/package=inferCSN" class="external-link"><img src="https://www.r-pkg.org/badges/version/inferCSN" alt="CRAN_Status_Badge"></a></li>
 <li><a href="https://github.com/mengxu98/inferCSN" class="external-link"><img src="https://img.shields.io/github/languages/code-size/mengxu98/inferCSN" alt="code-size"></a></li>
 <li><a href="https://github.com/mengxu98/inferCSN/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/mengxu98/inferCSN/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://github.com/mengxu98/inferCSN/actions/workflows/test-coverage.yaml" class="external-link"><img src="https://github.com/mengxu98/inferCSN/actions/workflows/test-coverage.yaml/badge.svg" alt="test-coverage"></a></li>
