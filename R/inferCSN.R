@@ -177,15 +177,15 @@ setMethod("inferCSN",
   targets <- colnames(targetsMatrix)
   rm(matrix)
 
-  cores <- min(parallel::detectCores(logical = FALSE), cores, length(targets))
+  cores <- min((parallel::detectCores(logical = FALSE) - 1), cores, length(targets))
   if (cores == 1) {
     if(verbose) message("Using 1 core.")
     # Format progress information
-    format <- "Running [:bar] :percent, No.:current of :total gene, :elapsed."
+    format <- "Running [:bar] :percent, No.:current of :total genes, :elapsed."
     pb <- progress::progress_bar$new(format = format,
                                      total = length(regulators),
                                      clear = TRUE,
-                                     width = 100)
+                                     width = 80)
 
     weightDT <- purrr::map_dfr(regulators, function(x) {
       if (verbose) pb$tick()

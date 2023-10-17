@@ -34,6 +34,7 @@ sparse.regression <- function(X, y,
                             algorithm = algorithm,
                             maxSuppSize = maxSuppSize,
                             nFolds = nFolds))
+
     if (class(fit)[1] == "try-error") {
       if (verbose) message("Cross validation error, used fit instead.")
       fit <- inferCSN.fit(X, y,
@@ -64,19 +65,27 @@ sparse.regression <- function(X, y,
     gamma <- fitInf$gamma[which.max(fitInf$suppSize)]
   }
 
-  r <- 1
-  if (!is.null(kFolds)) {
-    prey <- as.numeric(predict(fit,
-                               newx = testX,
-                               lambda = lambda,
-                               gamma = gamma))
-    if (length(testy) == length(prey)) r <- stats::cor(testy, prey)
-  }
-
-  if (r >= rThreshold) {
+  if (rThreshold == 0) {
     return(as.vector(coef(fit, lambda = lambda, gamma = gamma))[-1])
   } else {
-    return(0.0001)
+    r <- 1
+    if (!is.null(kFolds)) {
+      predy <- as.numeric(predict(fit,
+                                  newx = testX,
+                                  lambda = lambda,
+                                  gamma = gamma))
+      if (length(testy) == length(predy)) {
+        if (var(testy) != 0 && var(predy) != 0) {
+          r <- stats::cor(testy, predy)
+        }
+      }
+    }
+
+    if (r >= rThreshold) {
+      return(as.vector(coef(fit, lambda = lambda, gamma = gamma))[-1])
+    } else {
+      return(0.0001)
+    }
   }
 }
 
@@ -121,9 +130,10 @@ sub.inferCSN <- function(regulatorsMatrix,
                                     verbose = verbose)
 
   coefficients <- coefficients / sum(abs(coefficients))
-
-  if (length(coefficients) != ncol(X)) coefficients <- 0
-  return(data.frame(regulator = colnames(X), target = target, weight = coefficients))
+  if (length(coefficients) != ncol(X)) coefficients <- 0.0001
+  return(data.frame(regulator = colnames(X),
+                    target = target,
+                    weight = coefficients))
 }
 
 #' @title Fit a sparse regression model
