@@ -75,7 +75,7 @@ sparse.regression <- function(X, y,
                                   lambda = lambda,
                                   gamma = gamma))
       if (length(testy) == length(predy)) {
-        if (var(testy) != 0 && var(predy) != 0) {
+        if (stats::var(testy) != 0 && stats::var(predy) != 0) {
           r <- stats::cor(testy, predy)
         }
       }
