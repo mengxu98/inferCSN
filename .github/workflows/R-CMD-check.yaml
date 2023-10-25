@@ -49,6 +49,4 @@ jobs:
 
       - name: run cleanup 🚀
         run: |
-          cd scripts
-          chmod +x cleanup.sh
-          ./cleanup.sh
+          cd scripts ; chmod +x cleanup.sh ; ./cleanup.sh
