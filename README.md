@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 
-[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/inferCSN)](https://CRAN.R-project.org/package=inferCSN) [![code-size](https://img.shields.io/github/languages/code-size/mengxu98/inferCSN)](https://github.com/mengxu98/inferCSN) [![R-CMD-check](https://github.com/mengxu98/inferCSN/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mengxu98/inferCSN/actions/workflows/R-CMD-check.yaml) [![test-coverage](https://github.com/mengxu98/inferCSN/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/mengxu98/inferCSN/actions/workflows/test-coverage.yaml) [![pkgdown](https://github.com/mengxu98/inferCSN/actions/workflows/pkgdown.yaml/badge.svg)](https://mengxu98.github.io/inferCSN/reference/index.html)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/inferCSN)](https://CRAN.R-project.org/package=inferCSN) [![R-CMD-check](https://github.com/mengxu98/inferCSN/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mengxu98/inferCSN/actions/workflows/R-CMD-check.yaml) [![test-coverage](https://github.com/mengxu98/inferCSN/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/mengxu98/inferCSN/actions/workflows/test-coverage.yaml) [![pkgdown](https://github.com/mengxu98/inferCSN/actions/workflows/pkgdown.yaml/badge.svg)](https://mengxu98.github.io/inferCSN/reference/index.html) [![code-size](https://img.shields.io/github/languages/code-size/mengxu98/inferCSN)](https://github.com/mengxu98/inferCSN) ![RStudio CRAN mirror downloads](http://cranlogs.r-pkg.org/badges/grand-total/inferCSN)
 
 <!-- badges: end -->
 
