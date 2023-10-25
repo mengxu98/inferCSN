@@ -5,13 +5,9 @@
 ^LICENSE\.md$
 ^_pkgdown\.yml$
 ^\.github$
-^.*\.sh$
-^scripts$
 ^dev$
-^revdep$
-^cran-comments\.md$
-^CRAN-SUBMISSION$
 ^libs
 ^.*\.o$
 ^.*\.so$
 ^.*\.dll$
+^scripts$
