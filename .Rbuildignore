@@ -11,3 +11,4 @@
 ^.*\.so$
 ^.*\.dll$
 ^scripts$
+^cran-comments.md$
