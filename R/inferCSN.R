@@ -61,7 +61,7 @@ setGeneric("inferCSN",
                     maxSuppSize = NULL,
                     verbose = FALSE,
                     cores = 1) {
-             standardGeneric("inferCSN")
+             UseMethod(generic = "inferCSN")
            })
 
 #' @rdname inferCSN
