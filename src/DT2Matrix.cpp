@@ -1,4 +1,5 @@
 #include <Rcpp.h>
+
 using namespace Rcpp;
 
 // [[Rcpp::export]]
@@ -32,16 +33,6 @@ NumericMatrix DT2Matrix(DataFrame weightDT) {
 // #' @return Weight matrix
 // #' @export
 // #'
-// #' @examples
-// #' Rcpp::sourceCpp("src/DT2Matrix.cpp")
-// #' library(inferCSN)
-// #' data("exampleMatrix")
-// #' weightDT <- inferCSN(exampleMatrix, verbose = TRUE)
-// #' weightMatrix <- DT2Matrix(weightDT)
-// #' genes <- gtools::mixedsort(unique(c(weightDT$regulator, weightDT$target)))
-// #' weightMatrix <- weightMatrix[genes, genes]
-// #' weightMatrixR <- DT2MatrixR(weightDT)
-// #'
 // DT2MatrixR <- function(weightDT) {
 //   colnames(weightDT) <- c("regulator", "target", "weight")
 //   genes <- gtools::mixedsort(unique(c(weightDT$regulator, weightDT$target)))
@@ -57,3 +48,25 @@ NumericMatrix DT2Matrix(DataFrame weightDT) {
 //
 //   return(weightMatrix)
 // }
+//
+// DT2MatrixR2 <- function(weightDT) {
+//   weightMatrix <- reshape2::acast(weightDT, regulator ~ target)[genes, genes]
+//   weightMatrix[is.na(weightMatrix)] <- 0
+//   return(weightMatrix)
+// }
+//
+// #' @examples
+// Rcpp::sourceCpp("src/DT2Matrix.cpp")
+//   library(inferCSN)
+//   data("exampleMatrix")
+//   weightDT <- inferCSN(exampleMatrix, verbose = TRUE)
+//   weightMatrix <- DT2Matrix(weightDT)
+//   genes <- gtools::mixedsort(unique(c(weightDT$regulator, weightDT$target)))
+//   weightMatrix <- weightMatrix[genes, genes]
+// weightMatrixR <- DT2MatrixR(weightDT)
+//   weightMatrixR2 <- DT2MatrixR2(weightDT)
+//
+// # Using `bench` package to evaluate the two versions of this function
+//   bench::mark(DT2MatrixR(weightDT),
+//               DT2Matrix(weightDT)[genes, genes],
+//                                  DT2MatrixR2(weightDT))
