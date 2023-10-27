@@ -35,6 +35,7 @@ devtools::check_win_devel()
 # devtools::check_rhub()
 rhub::check_on_windows(check_args = "--force-multiarch")
 rhub::check_on_debian(check_args = "--force-multiarch")
+rhub::check_on_fedora(check_args = "--force-multiarch")
 # rhub::check_on_solaris()
 
 # Check reverse dependencies
