@@ -7,7 +7,6 @@
  * arma::vec implementation
  */
 
-
 using beta_vector = arma::vec;
 //using beta_vector = arma::sp_mat;
 

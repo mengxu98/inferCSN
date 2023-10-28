@@ -12,3 +12,4 @@
 ^.*\.dll$
 ^scripts$
 ^cran-comments.md$
+^CRAN-SUBMISSION$
