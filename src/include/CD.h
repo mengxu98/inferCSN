@@ -156,7 +156,7 @@ class CD : public CDBase<T>{
 
 };
 
-
+// Version 1
 template<class T, class Derived>
 void CD<T, Derived>::UpdateBiWithBounds(const std::size_t i){
     // Update a single coefficient of B for various CD Settings
@@ -166,7 +166,6 @@ void CD<T, Derived>::UpdateBiWithBounds(const std::size_t i){
     //    GetBiReg
     //    ApplyNewBi
     //    ApplyNewBiCWMinCheck (found in UpdateBiCWMinCheck)
-
 
     const double grd_Bi = static_cast<Derived*>(this)->GetBiGrad(i); // Gradient of Loss wrt to Bi
 
@@ -234,6 +233,37 @@ void CD<T, Derived>::UpdateBiWithBounds(const std::size_t i){
     }
 }
 
+// // Version 2
+// template<class T, class Derived>
+// void CD<T, Derived>::UpdateBiWithBounds(const std::size_t i) {
+//   const double grd_Bi = static_cast<Derived*>(this)->GetBiGrad(i);
+//   double abs_grd_Bi = std::abs(grd_Bi);
+//   (*this->Xtr)[i] = abs_grd_Bi;
+//
+//   double old_Bi = this->B[i];
+//   double nrb_Bi = static_cast<Derived*>(this)->GetBiValue(old_Bi, grd_Bi);
+//   double reg_Bi = static_cast<Derived*>(this)->GetBiReg(nrb_Bi);
+//
+//   if (i < this->NoSelectK) {
+//     if (abs_grd_Bi > this->lambda1) {
+//       static_cast<Derived*>(this)->ApplyNewBi(i, old_Bi, reg_Bi);
+//     } else if (old_Bi != 0) {
+//       static_cast<Derived*>(this)->ApplyNewBi(i, old_Bi, 0);
+//     }
+//   } else if (reg_Bi >= this->thr) {
+//     double delta_tmp = std::sqrt(reg_Bi * reg_Bi - this->thr2);
+//     double delta = (delta_tmp == delta_tmp) ? delta_tmp : 0;
+//     double range_Bi = (reg_Bi > 0) ? reg_Bi : -reg_Bi;
+//
+//     if ((range_Bi - delta < reg_Bi) && (reg_Bi < range_Bi + delta)) {
+//       static_cast<Derived*>(this)->ApplyNewBi(i, old_Bi, reg_Bi);
+//     } else if (old_Bi != 0) {
+//       static_cast<Derived*>(this)->ApplyNewBi(i, old_Bi, 0);
+//     }
+//   }
+// }
+
+
 template<class T, class Derived>
 void CD<T, Derived>::UpdateBi(const std::size_t i){
     // Update a single coefficient of B for various CD Settings
@@ -243,7 +273,6 @@ void CD<T, Derived>::UpdateBi(const std::size_t i){
     //    GetBiReg
     //    ApplyNewBi
     //    ApplyNewBiCWMinCheck (found in UpdateBiCWMinCheck)
-
 
     const double grd_Bi = static_cast<Derived*>(this)->GetBiGrad(i); // Gradient of Loss wrt to Bi
 

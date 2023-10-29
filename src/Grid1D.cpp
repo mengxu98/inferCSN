@@ -191,12 +191,21 @@ std::vector<std::unique_ptr<FitResult<T>>> Grid1D<T>::Fit() {
 
                     std::vector<std::size_t> Spnew = nnzIndicies(result->B);
 
-                    bool samesupp = false;
+                    // Remove the following 5 lines to emilate warning:
+                        // Grid1D.cpp: In instantiation of 'std::vector<std::unique_ptr<FitResult<T> > > Grid1D<T>::Fit() [with T = arma::Mat<double>]':
+                        // Grid1D.cpp:234:16:   required from here
+                        // Grid1D.cpp:194:26: warning: variable 'samesupp' set but not used [-Wunused-but-set-variable]
+                        //     194 |                     bool samesupp = false;
+                        //         |                          ^~~~~~~~
+                        // Grid1D.cpp: In instantiation of 'std::vector<std::unique_ptr<FitResult<T> > > Grid1D<T>::Fit() [with T = arma::SpMat<double>]':
+                        // Grid1D.cpp:235:16:   required from here
+                        // Grid1D.cpp:194:26: warning: variable 'samesupp' set but not used [-Wunused-but-set-variable]
+                    // bool samesupp = false;
 
-                    if (Spold == Spnew) {
-                        samesupp = true;
-                        scaledown = true;
-                    }
+                    // if (Spold == Spnew) {
+                    //     samesupp = true;
+                    //     scaledown = true;
+                    // }
 
                     // if (samesupp) {
                     //     scaledown = true;

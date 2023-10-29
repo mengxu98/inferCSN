@@ -61,7 +61,7 @@ setGeneric("inferCSN",
                     maxSuppSize = NULL,
                     verbose = FALSE,
                     cores = 1) {
-             UseMethod(generic = "inferCSN")
+             UseMethod(generic = "inferCSN", object = matrix)
            })
 
 #' @rdname inferCSN
