@@ -1,5 +1,4 @@
 #!/bin/bash
-cd ..
 
 # Check if 'renv.lock' file exists and remove it if it does
 if [ -f renv.lock ]; then
