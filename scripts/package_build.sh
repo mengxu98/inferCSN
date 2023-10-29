@@ -11,4 +11,11 @@ Rscript -e 'devtools::test()'
 Rscript -e 'devtools::run_examples()'
 
 # Check R package
-Rscript -e 'devtools::check()'
+Rscript -e 'rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"))'
+
+# check on other distributions
+# _win devel
+Rscript -e 'devtools::check_win_devel()'
+
+# Verify you're ready for release, and release
+Rscript -e 'devtools::release()'
