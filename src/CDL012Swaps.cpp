@@ -14,7 +14,17 @@ FitResult<T> CDL012Swaps<T>::_Fit() {
     auto result = CDL012<T>(*(this->X), this->y, this->P).Fit(); // result will be maintained till the end
     this->B = result.B;
     this->b0 = result.b0;
-    double objective = result.Objective;
+
+    // Remove the following 1 line and line-93 to emilate warning:
+        // CDL012Swaps.cpp:97:16:   required from here
+        // CDL012Swaps.cpp:17:12: warning: variable 'objective' set but not used [-Wunused-but-set-variable]
+        //     17 |     double objective = result.Objective;
+        //         |            ^~~~~~~~~
+        // CDL012Swaps.cpp: In instantiation of 'FitResult<T> CDL012Swaps<T>::_Fit() [with T = arma::SpMat<double>]':
+        // CDL012Swaps.cpp:98:16:   required from here
+        // CDL012Swaps.cpp:17:12: warning: variable 'objective' set but not used [-Wunused-but-set-variable]
+    // double objective = result.Objective;
+
     this->P.Init = 'u';
 
     bool foundbetter = false;
@@ -26,7 +36,7 @@ FitResult<T> CDL012Swaps<T>::_Fit() {
         foundbetter = false;
 
         // TODO: shuffle NNz Indices to prevent bias.
-        //std::shuffle(std::begin(Order), std::end(Order), engine);
+        // std::shuffle(std::begin(Order), std::end(Order), engine);
 
         // TODO: This calculation is already preformed in a previous step
         // Can be pulled/stored
@@ -79,7 +89,9 @@ FitResult<T> CDL012Swaps<T>::_Fit() {
                 // Rcpp::Rcout << "Swap Objective  " <<  result.Objective << " \n";
                 // Rcpp::Rcout << "Old Objective  " <<  objective << " \n";
                 this->B = result.B;
-                objective = result.Objective;
+
+                // objective = result.Objective;
+
                 foundbetter = true;
                 break;
             }
