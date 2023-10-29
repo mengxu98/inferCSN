@@ -29,7 +29,8 @@ jobs:
 
     steps:
       - name: run cleanup for package build 🚀
-        run: scripts/cleanup.sh
+        run: bash scripts/cleanup.sh
+        shell: bash
 
       - uses: actions/checkout@v3
 
