@@ -1,5 +1,73 @@
 #!/bin/bash
 
+# Function to install R if it doesn't already exist
+install_r() {
+    # Check if R is already installed
+    if command -v R >/dev/null 2>&1; then
+        echo "R is already installed......"
+        echo "Skipping installation......"
+        return
+    fi
+
+    echo "Installing R......"
+
+    # Get the system information
+    os=$(uname -s)
+
+    # Execute different installation commands based on the detected system
+    case "$os" in
+        Linux*)
+            if [ -f /etc/lsb-release ]; then
+                # Ubuntu system
+                echo "Ubuntu system......"
+                apt-get update
+                apt-get install -y r-base
+            elif [ -f /etc/debian_version ]; then
+                # Debian system
+                echo "Debian system......"
+                apt-get update
+                apt-get install -y r-base
+            elif [ -f /etc/gentoo-release ]; then
+                # Gentoo system
+                echo "Gentoo system......"
+                emerge --ask dev-lang/R
+            elif [ -f /etc/fedora-release ]; then
+                # Fedora system
+                echo "Fedora system......"
+                dnf install -y R
+            elif [ -f /etc/arch-release ]; then
+                # Arch Linux system
+                echo "Arch Linux system......"
+                pacman -S --noconfirm r
+            elif [ -f /etc/SuSE-release ] || [ -f /etc/openSUSE-release ]; then
+                # OpenSuse system
+                echo "OpenSuse system......"
+                zypper --non-interactive in -y R
+            elif [ -f /etc/centos-release ]; then
+                # CentOS system
+                echo "CentOS system......"
+                yum install -y epel-release
+                yum install -y R
+            else
+                echo "Unsupported Linux distribution."
+                exit 1
+            fi
+            ;;
+        *)
+            echo "Unsupported operating system: $os"
+            exit 1
+            ;;
+    esac
+
+    # Check if R was installed successfully
+    if [ $? -eq 0 ]; then
+        echo "R installed successfully......"
+    else
+        echo "R installation failed......"
+        exit 1
+    fi
+}
+
 # Function to check if R is installed
 check_r_packages_installed() {
     if command -v R >/dev/null 2>&1; then
@@ -139,74 +207,6 @@ install_dependence() {
   echo "All required packages installed successfully......"
 }
 
-# Function to install R if it doesn't already exist
-install_r() {
-    # Check if R is already installed
-    if command -v R >/dev/null 2>&1; then
-        echo "R is already installed......"
-        echo "Skipping installation......"
-        return
-    fi
-
-    echo "Installing R......"
-
-    # Get the system information
-    os=$(uname -s)
-
-    # Execute different installation commands based on the detected system
-    case "$os" in
-        Linux*)
-            if [ -f /etc/lsb-release ]; then
-                # Ubuntu system
-                echo "Ubuntu system......"
-                apt-get update
-                apt-get install -y r-base
-            elif [ -f /etc/debian_version ]; then
-                # Debian system
-                echo "Debian system......"
-                apt-get update
-                apt-get install -y r-base
-            elif [ -f /etc/gentoo-release ]; then
-                # Gentoo system
-                echo "Gentoo system......"
-                emerge --ask dev-lang/R
-            elif [ -f /etc/fedora-release ]; then
-                # Fedora system
-                echo "Fedora system......"
-                dnf install -y R
-            elif [ -f /etc/arch-release ]; then
-                # Arch Linux system
-                echo "Arch Linux system......"
-                pacman -S --noconfirm r
-            elif [ -f /etc/SuSE-release ] || [ -f /etc/openSUSE-release ]; then
-                # OpenSuse system
-                echo "OpenSuse system......"
-                zypper --non-interactive in -y R
-            elif [ -f /etc/centos-release ]; then
-                # CentOS system
-                echo "CentOS system......"
-                yum install -y epel-release
-                yum install -y R
-            else
-                echo "Unsupported Linux distribution."
-                exit 1
-            fi
-            ;;
-        *)
-            echo "Unsupported operating system: $os"
-            exit 1
-            ;;
-    esac
-
-    # Check if R was installed successfully
-    if [ $? -eq 0 ]; then
-        echo "R installed successfully......"
-    else
-        echo "R installation failed......"
-        exit 1
-    fi
-}
-
 # Function to install RStudio Server if not already installed
 install_rstudio_server() {
     echo "Checking if RStudio Server is already installed..."
@@ -280,6 +280,18 @@ install_packages() {
     is_package_installed() {
         Rscript -e "if (!require($1, quietly = TRUE)) quit(save = 'no', status = 1)"
     }
+
+    # Install 'stringi'
+    if is_package_installed "stringi"; then
+        echo "'stringi' is already installed......"
+    else
+        echo "Installing stringi......"
+        git clone https://github.com/gagolews/stringi.git
+        cd stringi
+        R CMD INSTALL .
+    fi
+    
+    cd ..
 
     # List of required packages
     required_packages=(
