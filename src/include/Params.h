@@ -65,7 +65,21 @@ struct Params {
     double atol = 1e-12;
     char Init = 'z';
     std::size_t RandomStartSize = 10;
+
+    // beta_vector * InitialSol; // This line code will encounter warnings following:
+    //   // Found the following significant warnings:
+    //     // include/Params.h:9:8: warning: 'P.Params<arma::SpMat<double> >::InitialSol' is used uninitialized [-Wuninitialized]
+    //     // include/Params.h:9:8: warning: 'P' is used uninitialized [-Wuninitialized]
+    //     // include/Params.h:9:8: warning: 'P.Params<arma::Mat<double> >::InitialSol' is used uninitialized [-Wuninitialized]
+    // // First, I use code: 'beta_vector * InitialSol = nullptr' to attempt to eliminate warnings
+    // beta_vector * InitialSol = nullptr; // Initialize to nullptr, indicating no initial solution
+    //     // But it also prompts:
+    //         // Found the following significant warnings:
+    //         // include/Params.h:9:8: warning: ‘P’ is used uninitialized [-Wuninitialized]
+    //         // Now, I use code: 'beta_vector * InitialSol' to attempt again
+    // arma::vec* InitialSol;
     arma::vec* InitialSol = nullptr;
+
     double b0 = 0;
     char CyclingOrder = 'c';
     std::vector<std::size_t> Uorder;
@@ -85,7 +99,8 @@ struct Params {
     arma::vec Lows;
     arma::vec Highs;
 
-    Params() : InitialSol(nullptr) { }
+    // Params() : InitialSol(nullptr) { }
+    Params() { };
 
 };
 
