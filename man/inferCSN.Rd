@@ -7,21 +7,7 @@
 \alias{inferCSN,matrix-method}
 \title{Inferring Cell-Specific Gene Regulatory Network}
 \usage{
-inferCSN(
-  matrix,
-  penalty = "L0",
-  algorithm = "CD",
-  crossValidation = FALSE,
-  seed = 1,
-  nFolds = 10,
-  kFolds = NULL,
-  rThreshold = 0,
-  regulators = NULL,
-  targets = NULL,
-  maxSuppSize = NULL,
-  verbose = FALSE,
-  cores = 1
-)
+inferCSN(matrix, ...)
 
 \S4method{inferCSN}{data.frame}(
   matrix,
@@ -36,7 +22,8 @@ inferCSN(
   targets = NULL,
   maxSuppSize = NULL,
   verbose = FALSE,
-  cores = 1
+  cores = 1,
+  ...
 )
 
 \S4method{inferCSN}{matrix}(
@@ -52,11 +39,14 @@ inferCSN(
   targets = NULL,
   maxSuppSize = NULL,
   verbose = FALSE,
-  cores = 1
+  cores = 1,
+  ...
 )
 }
 \arguments{
 \item{matrix}{An expression matrix, cells by genes}
+
+\item{...}{Arguments passed to other methods.}
 
 \item{penalty}{The type of regularization.
 This can take either one of the following choices: "L0" and "L0L2".

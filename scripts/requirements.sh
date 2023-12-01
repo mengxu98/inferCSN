@@ -281,17 +281,18 @@ install_packages() {
         Rscript -e "if (!require($1, quietly = TRUE)) quit(save = 'no', status = 1)"
     }
 
-    # Install 'stringi'
-    if is_package_installed "stringi"; then
-        echo "'stringi' is already installed......"
-    else
-        echo "Installing stringi......"
-        git clone https://github.com/gagolews/stringi.git
-        cd stringi
-        R CMD INSTALL .
-    fi
+    # # Install 'stringi'
+    # if is_package_installed "stringi"; then
+    #     echo "'stringi' is already installed......"
+    # else
+    #     echo "Installing stringi......"
+    #     git clone https://github.com/gagolews/stringi.git
+    #     cd stringi
+    #     R CMD INSTALL .
+    # fi
     
-    cd ..
+    # cd ..
+
 
     # List of required packages
     required_packages=(

@@ -21,6 +21,7 @@
 #' Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.
 #' @param verbose Print detailed information.
 #' @param cores CPU cores.
+#' @param ... Arguments passed to other methods.
 #'
 #' @import Matrix
 #'
@@ -48,19 +49,7 @@
 #'
 setGeneric("inferCSN",
            signature = "matrix",
-           function(matrix,
-                    penalty = "L0",
-                    algorithm = "CD",
-                    crossValidation = FALSE,
-                    seed = 1,
-                    nFolds = 10,
-                    kFolds = NULL,
-                    rThreshold = 0,
-                    regulators = NULL,
-                    targets = NULL,
-                    maxSuppSize = NULL,
-                    verbose = FALSE,
-                    cores = 1) {
+           function(matrix, ...) {
              UseMethod(generic = "inferCSN", object = matrix)
            })
 
@@ -81,7 +70,8 @@ setMethod("inferCSN",
                    targets = NULL,
                    maxSuppSize = NULL,
                    verbose = FALSE,
-                   cores = 1) {
+                   cores = 1,
+                   ...) {
             warning("Converting the class type of input data from <data.frame> to <matrix>.")
             matrix <- as.matrix(matrix)
             .inferCSN(matrix = matrix,
@@ -116,7 +106,8 @@ setMethod("inferCSN",
                    targets = NULL,
                    maxSuppSize = NULL,
                    verbose = FALSE,
-                   cores = 1) {
+                   cores = 1,
+                   ...) {
             .inferCSN(matrix = matrix,
                       penalty = penalty,
                       algorithm = algorithm,
@@ -144,8 +135,9 @@ setMethod("inferCSN",
                       targets,
                       maxSuppSize,
                       verbose,
-                      cores) {
-  if(verbose) message("Runing start.")
+                      cores,
+                      ...) {
+  if(verbose) message("Running start.")
 
   # Check input parameters
   check.parameters(matrix = matrix,
