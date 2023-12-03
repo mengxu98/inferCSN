@@ -13,7 +13,7 @@
 #' @param nFolds The number of folds for cross-validation.
 #' @param seed The seed used in randomly shuffling the data for cross-validation.
 #' @param kFolds The number of folds for sample split.
-#' @param rThreshold rThreshold.
+#' @param rThreshold Threshold of R^2.
 #' @param regulators Regulator genes.
 #' @param targets Target genes.
 #' @param maxSuppSize The number of non-zore coef, this value will affect the final performance.
@@ -159,7 +159,6 @@ setMethod("inferCSN",
   } else {
     regulatorsMatrix <- matrix
   }
-  regulators <- colnames(regulatorsMatrix)
 
   if (!is.null(targets)) {
     targetsMatrix <- matrix[, intersect(colnames(matrix), targets)]
@@ -175,11 +174,11 @@ setMethod("inferCSN",
     # Format progress information
     format <- "Running [:bar] :percent, No.:current of :total genes, :elapsed."
     pb <- progress::progress_bar$new(format = format,
-                                     total = length(regulators),
+                                     total = length(targets),
                                      clear = TRUE,
                                      width = 80)
 
-    weightDT <- purrr::map_dfr(regulators, function(x) {
+    weightDT <- purrr::map_dfr(targets, function(x) {
       if (verbose) pb$tick()
       sub.inferCSN(regulatorsMatrix = regulatorsMatrix,
                    targetsMatrix = targetsMatrix,

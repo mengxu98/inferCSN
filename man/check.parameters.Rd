@@ -39,7 +39,7 @@ The CDPSI algorithm may yield better results, but it also increases running time
 
 \item{kFolds}{The number of folds for sample split.}
 
-\item{rThreshold}{rThreshold.}
+\item{rThreshold}{Threshold of R^2.}
 
 \item{regulators}{Regulator genes.}
 

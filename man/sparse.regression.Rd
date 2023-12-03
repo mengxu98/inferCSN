@@ -43,7 +43,7 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 
 \item{kFolds}{The number of folds for sample split.}
 
-\item{rThreshold}{rThreshold.}
+\item{rThreshold}{Threshold of R^2.}
 
 \item{verbose}{Print detailed information.}
 }
