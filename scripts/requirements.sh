@@ -69,7 +69,7 @@ install_r() {
 }
 
 # Function to check if R is installed
-check_r_packages_installed() {
+check_r_installed() {
     if command -v R >/dev/null 2>&1; then
         echo "R is already installed......"
     else
@@ -290,7 +290,7 @@ install_packages() {
     #     cd stringi
     #     R CMD INSTALL .
     # fi
-    
+
     # cd ..
 
 
@@ -358,7 +358,27 @@ install_packages() {
 }
 
 # Running
-check_r_packages_installed
-install_rstudio_server
-install_dependence
-install_packages
+
+# Ask the user if they want to execute function install_dependence
+read -p "Execute function install_dependence? (Enter yes to execute, any other key to skip): " choice
+if [[ $choice == "yes" ]]; then
+    install_dependence
+fi
+
+# Ask the user if they want to execute function: check_r_installed
+read -p "Execute function: check_r_installed? (Enter yes to execute, any other key to skip): " choice
+if [[ $choice == "yes" ]]; then
+    check_r_installed
+fi
+
+# Ask the user if they want to execute function: install_rstudio_server
+read -p "Execute function: install_rstudio_server? (Enter yes to execute, any other key to skip): " choice
+if [[ $choice == "yes" ]]; then
+    install_rstudio_server
+fi
+
+# Ask the user if they want to execute function 3
+read -p "Execute function install_packages? (Enter yes to execute, any other key to skip): " choice
+if [[ $choice == "yes" ]]; then
+    install_packages
+fi
