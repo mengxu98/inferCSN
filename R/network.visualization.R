@@ -1,102 +1,113 @@
 #' @title The heatmap of network
 #'
-#' @param weightDT The weight data table of network
-#' @param switchMatrix switchMatrix
-#' @param heatmapSize heatmapSize
-#' @param heatmapTitle heatmapTitle
-#' @param heatmapColor heatmapColor
-#' @param showNames showNames
-#' @param legendName legendName
+#' @param weight_table The weight data table of network
+#' @param switch_watrix switch_watrix
+#' @param heatmap_size heatmap_size
+#' @param heatmap_title heatmap_title
+#' @param heatmap_color heatmap_color
+#' @param show_names show_names
+#' @param legend_name legend_name
 #'
 #' @return Return a heatmap of ggplot2 object
 #' @export
 #'
 #' @examples
 #' library(inferCSN)
-#' data("exampleMatrix")
-#' data("exampleGroundTruth")
-#' weightDT <- inferCSN(exampleMatrix)
-#' p1 <- network.heatmap(exampleGroundTruth,
-#'                       heatmapTitle = "Ground truth")
+#' data("example_matrix")
+#' data("example_ground_truth")
+#' weight_table <- inferCSN(example_matrix)
+#' p1 <- network.heatmap(example_ground_truth,
+#'   heatmap_title = "Ground truth"
+#' )
 #'
-#' p2 <- network.heatmap(weightDT,
-#'                       legendName = "Weight2",
-#'                       heatmapTitle = "inferCSN")
+#' p2 <- network.heatmap(weight_table,
+#'   legend_name = "Weight2",
+#'   heatmap_title = "inferCSN"
+#' )
 #'
 #' ComplexHeatmap::draw(p1 + p2)
 #'
-#' p3 <- network.heatmap(weightDT,
-#'                       heatmapTitle = "inferCSN",
-#'                       heatmapColor = c("#20a485", "#410054", "#fee81f"))
+#' p3 <- network.heatmap(weight_table,
+#'   heatmap_title = "inferCSN",
+#'   heatmap_color = c("#20a485", "#410054", "#fee81f")
+#' )
 #'
-#' p4 <- network.heatmap(weightDT,
-#'                       heatmapTitle = "inferCSN",
-#'                       legendName = "Weight2",
-#'                       heatmapColor = c("#20a485", "white", "#fee81f"))
+#' p4 <- network.heatmap(weight_table,
+#'   heatmap_title = "inferCSN",
+#'   legend_name = "Weight2",
+#'   heatmap_color = c("#20a485", "white", "#fee81f")
+#' )
 #'
 #' ComplexHeatmap::draw(p3 + p4)
 #'
-#' p5 <- network.heatmap(weightDT,
-#'                       heatmapTitle = "inferCSN",
-#'                       showNames = TRUE)
+#' p5 <- network.heatmap(
+#'   weight_table,
+#'   heatmap_title = "inferCSN",
+#'   show_names = TRUE
+#' )
 #' p5
-#'
-network.heatmap <- function(weightDT,
-                            switchMatrix = TRUE,
-                            heatmapSize = NULL,
-                            heatmapTitle = NULL,
-                            heatmapColor = NULL,
-                            showNames = FALSE,
-                            legendName = NULL) {
-  if (switchMatrix) {
-    colnames(weightDT) <- c("regulator", "target", "weight")
-    genes <- c(weightDT$regulator, weightDT$target)
-    weightMatrix <- .Call("_inferCSN_DT2Matrix", PACKAGE = "inferCSN", weightDT)
+network.heatmap <- function(weight_table,
+                            switch_watrix = TRUE,
+                            heatmap_size = NULL,
+                            heatmap_title = NULL,
+                            heatmap_color = NULL,
+                            show_names = FALSE,
+                            legend_name = NULL) {
+  if (switch_watrix) {
+    colnames(weight_table) <- c("regulator", "target", "weight")
+    genes <- c(weight_table$regulator, weight_table$target)
+    weight_matrix <- table.to.matrix(weight_table)
   } else {
-    genes <- c(rownames(weightDT), colnames(weightDT))
-    weightMatrix <- weightDT
+    genes <- c(rownames(weight_table), colnames(weight_table))
+    weight_matrix <- weight_table
   }
   genes <- gtools::mixedsort(unique(genes))
-  weightMatrix <- weightMatrix[genes, genes]
+  weight_matrix <- weight_matrix[genes, genes]
 
-  if (is.null(legendName)) legendName <- "Weight"
+  if (is.null(legend_name)) legend_name <- "Weight"
 
-  if (is.null(heatmapColor)) heatmapColor <- c("#1966ad", "white", "#bb141a")
+  if (is.null(heatmap_color)) heatmap_color <- c("#1966ad", "white", "#bb141a")
 
-  if (showNames) {
-    if (is.null(heatmapSize)) heatmapSize <- length(genes) / 2
+  if (show_names) {
+    if (is.null(heatmap_size)) heatmap_size <- length(genes) / 2
   } else {
-    if (is.null(heatmapSize)) heatmapSize <- 6
+    if (is.null(heatmap_size)) heatmap_size <- 6
   }
 
-  minWeight <- min(weightMatrix)
-  maxWeight <- max(weightMatrix)
-  if (minWeight >= 0) {
-    colorFun <- circlize::colorRamp2(c(minWeight, maxWeight), heatmapColor[-1])
-  } else if (maxWeight <= 0) {
-    colorFun <- circlize::colorRamp2(c(minWeight, maxWeight), heatmapColor[-3])
+  min_weight <- min(weight_matrix)
+  max_weight <- max(weight_matrix)
+  if (min_weight >= 0) {
+    color_function <- circlize::colorRamp2(
+      c(min_weight, max_weight), heatmap_color[-1]
+    )
+  } else if (max_weight <= 0) {
+    color_function <- circlize::colorRamp2(
+      c(min_weight, max_weight), heatmap_color[-3]
+    )
   } else {
-    colorFun <- circlize::colorRamp2(c(minWeight, 0, maxWeight), heatmapColor)
+    color_function <- circlize::colorRamp2(
+      c(min_weight, 0, max_weight), heatmap_color
+    )
   }
 
-  p <- ComplexHeatmap::Heatmap(weightMatrix,
-                               name = legendName,
-                               col = colorFun,
-                               column_title = heatmapTitle,
-                               cluster_rows = FALSE,
-                               cluster_columns = FALSE,
-                               show_row_names = showNames,
-                               show_column_names = showNames,
-                               width = unit(heatmapSize, "cm"),
-                               height = unit(heatmapSize, "cm"),
-                               border = "black")
-
+  p <- ComplexHeatmap::Heatmap(weight_matrix,
+    name = legend_name,
+    col = color_function,
+    column_title = heatmap_title,
+    cluster_rows = FALSE,
+    cluster_columns = FALSE,
+    show_row_names = show_names,
+    show_column_names = show_names,
+    width = unit(heatmap_size, "cm"),
+    height = unit(heatmap_size, "cm"),
+    border = "black"
+  )
   return(p)
 }
 
 #' @title Plot of dynamic networks
 #'
-#' @param weightDT weightDT
+#' @param weight_table weight_table
 #' @param regulators regulators
 #' @param legend.position legend.position
 #'
@@ -108,60 +119,78 @@ network.heatmap <- function(weightDT,
 #'
 #' @examples
 #' library(inferCSN)
-#' data("exampleMatrix")
-#' weightDT <- inferCSN(exampleMatrix)
-#' g <- dynamic.networks(weightDT, regulators = weightDT[1, 1])
+#' data("example_matrix")
+#' weight_table <- inferCSN(example_matrix)
+#' g <- dynamic.networks(weight_table, regulators = weight_table[1, 1])
 #' g
-#'
-dynamic.networks <- function(weightDT,
-                             regulators = NULL,
-                             legend.position = "right") {
+dynamic.networks <- function(
+    weight_table,
+    regulators = NULL,
+    legend.position = "right") {
   # Format input data
-  weightDT <- net.format(weightDT,
-                         regulators = regulators)
+  weight_table <- net.format(weight_table,
+    regulators = regulators
+  )
 
-  net <- igraph::graph_from_data_frame(weightDT[, c("regulator", "target", "weight", "Interaction")],
-                                       directed = FALSE)
+  net <- igraph::graph_from_data_frame(
+    weight_table[, c("regulator", "target", "weight", "Interaction")],
+    directed = FALSE
+  )
 
   layout <- igraph::layout_with_fr(net)
   rownames(layout) <- igraph::V(net)$name
-  layout_ordered <- layout[igraph::V(net)$name,]
-  regulatorNet <- ggnetwork(net,
-                            layout = layout_ordered,
-                            cell.jitter = 0)
+  layout_ordered <- layout[igraph::V(net)$name, ]
+  regulator_network <- ggnetwork(net,
+    layout = layout_ordered,
+    cell.jitter = 0
+  )
 
-  regulatorNet$isRegulator <- as.character(regulatorNet$name %in% regulators)
+  regulator_network$is_regulator <- as.character(
+    regulator_network$name %in% regulators
+  )
   cols <- c("Activation" = "#3366cc", "Repression" = "#ff0066")
 
   # Plot
   g <- ggplot() +
-    geom_edges(data = regulatorNet,
-               aes(x = x, y = y,
-                   xend = xend, yend = yend,
-                   size = weight,
-                   color = Interaction),
-               size = 0.75,
-               curvature = 0.1,
-               alpha = .6) +
-    geom_nodes(data = regulatorNet[regulatorNet$isRegulator == "FALSE", ],
-               aes(x = x, y = y),
-               color = "darkgray",
-               size = 3,
-               alpha = .5) +
-    geom_nodes(data = regulatorNet[regulatorNet$isRegulator == "TRUE", ],
-               aes(x = x, y = y),
-               color = "#8C4985",
-               size = 6,
-               alpha = .8) +
+    geom_edges(
+      data = regulator_network,
+      aes(
+        x = x, y = y,
+        xend = xend, yend = yend,
+        size = weight,
+        color = Interaction
+      ),
+      size = 0.75,
+      curvature = 0.1,
+      alpha = .6
+    ) +
+    geom_nodes(
+      data = regulator_network[regulator_network$is_regulator == "FALSE", ],
+      aes(x = x, y = y),
+      color = "darkgray",
+      size = 3,
+      alpha = .5
+    ) +
+    geom_nodes(
+      data = regulator_network[regulator_network$is_regulator == "TRUE", ],
+      aes(x = x, y = y),
+      color = "#8C4985",
+      size = 6,
+      alpha = .8
+    ) +
     scale_color_manual(values = cols) +
-    geom_nodelabel_repel(data = regulatorNet[regulatorNet$isRegulator == "FALSE", ],
-                         aes(x = x, y = y, label = name),
-                         size = 2,
-                         color = "#5A8BAD") +
-    geom_nodelabel_repel(data = regulatorNet[regulatorNet$isRegulator == "TRUE", ],
-                         aes(x = x, y = y, label = name),
-                         size = 3.5,
-                         color = "black") +
+    geom_nodelabel_repel(
+      data = regulator_network[regulator_network$is_regulator == "FALSE", ],
+      aes(x = x, y = y, label = name),
+      size = 2,
+      color = "#5A8BAD"
+    ) +
+    geom_nodelabel_repel(
+      data = regulator_network[regulator_network$is_regulator == "TRUE", ],
+      aes(x = x, y = y, label = name),
+      size = 3.5,
+      color = "black"
+    ) +
     theme_blank() +
     theme(legend.position = legend.position)
   return(g)
@@ -169,9 +198,9 @@ dynamic.networks <- function(weightDT,
 
 #' @title contrast.networks
 #'
-#' @param weightDT weightDT
-#' @param degreeValue degreeValue
-#' @param weightValue weightValue
+#' @param weight_table weight_table
+#' @param degree_value degree_value
+#' @param weight_value weight_value
 #' @param legend.position legend.position
 #'
 #' @import ggplot2
@@ -182,37 +211,46 @@ dynamic.networks <- function(weightDT,
 #'
 #' @examples
 #' library(inferCSN)
-#' data("exampleMatrix")
-#' weightDT <- inferCSN(exampleMatrix)
-#' g <- contrast.networks(weightDT[1:50, ])
+#' data("example_matrix")
+#' weight_table <- inferCSN(example_matrix)
+#' g <- contrast.networks(weight_table[1:50, ])
 #' g
-#'
-contrast.networks <- function(weightDT,
-                              degreeValue = 0,
-                              weightValue = 0,
-                              legend.position = "bottom") {
-  weightDT <- net.format(weightDT)
+contrast.networks <- function(
+    weight_table,
+    degree_value = 0,
+    weight_value = 0,
+    legend.position = "bottom") {
+  weight_table <- net.format(weight_table)
 
-  graph <- tidygraph::as_tbl_graph(weightDT)
-  graph <- dplyr::mutate(graph, degree = tidygraph::centrality_degree(mode = 'out'))
-  graph <- dplyr::filter(graph, degree > degreeValue)
+  graph <- tidygraph::as_tbl_graph(weight_table)
+  graph <- dplyr::mutate(
+    graph,
+    degree = tidygraph::centrality_degree(mode = "out")
+  )
+  graph <- dplyr::filter(graph, degree > degree_value)
   graph <- tidygraph::activate(graph, edges)
 
-  g <- ggraph(graph, layout = 'linear', circular = TRUE) +
-    geom_edge_arc(aes(colour = Interaction,
-                      filter = weight > weightValue,
-                      edge_width = weight),
-                  arrow = arrow(length = unit(3, 'mm')),
-                  start_cap = square(3, 'mm'),
-                  end_cap = circle(3, 'mm')) +
-    scale_edge_width(range=c(0, 1)) +
+  g <- ggraph(graph, layout = "linear", circular = TRUE) +
+    geom_edge_arc(
+      aes(
+        colour = Interaction,
+        filter = weight > weight_value,
+        edge_width = weight
+      ),
+      arrow = arrow(length = unit(3, "mm")),
+      start_cap = square(3, "mm"),
+      end_cap = circle(3, "mm")
+    ) +
+    scale_edge_width(range = c(0, 1)) +
     facet_edges(~Interaction) +
-    geom_node_point(aes(size = degree), colour = '#A1B7CE') +
+    geom_node_point(aes(size = degree), colour = "#A1B7CE") +
     geom_node_text(aes(label = name), repel = TRUE) +
     coord_fixed() +
-    theme_graph(base_family = "serif",
-                foreground = 'steelblue',
-                fg_text_colour = 'white') +
+    theme_graph(
+      base_family = "serif",
+      foreground = "steelblue",
+      fg_text_colour = "white"
+    ) +
     theme(legend.position = legend.position)
 
   return(g)

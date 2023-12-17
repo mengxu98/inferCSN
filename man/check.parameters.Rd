@@ -8,14 +8,14 @@ check.parameters(
   matrix,
   penalty,
   algorithm,
-  crossValidation,
+  cross_validation,
   seed,
-  nFolds,
-  kFolds,
-  rThreshold,
+  n_folds,
+  k_folds,
+  r_threshold,
   regulators,
   targets,
-  maxSuppSize,
+  regulators_num,
   verbose,
   cores
 )
@@ -31,21 +31,21 @@ For high-dimensional and sparse data, such as single-cell sequencing data, "L0L2
 Currently "CD" and "CDPSI" are supported.
 The CDPSI algorithm may yield better results, but it also increases running time.}
 
-\item{crossValidation}{Check whether cross validation is used.}
+\item{cross_validation}{Check whether cross validation is used.}
 
 \item{seed}{The seed used in randomly shuffling the data for cross-validation.}
 
-\item{nFolds}{The number of folds for cross-validation.}
+\item{n_folds}{The number of folds for cross-validation.}
 
-\item{kFolds}{The number of folds for sample split.}
+\item{k_folds}{The number of folds for sample split.}
 
-\item{rThreshold}{Threshold of R^2.}
+\item{r_threshold}{Threshold of R^2.}
 
 \item{regulators}{Regulator genes.}
 
 \item{targets}{Target genes.}
 
-\item{maxSuppSize}{The number of non-zore coef, this value will affect the final performance.
+\item{regulators_num}{The number of non-zore coef, this value will affect the final performance.
 The maximum support size at which to terminate the regularization path.
 Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.}
 

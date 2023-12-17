@@ -5,29 +5,29 @@
 \title{The heatmap of network}
 \usage{
 network.heatmap(
-  weightDT,
-  switchMatrix = TRUE,
-  heatmapSize = NULL,
-  heatmapTitle = NULL,
-  heatmapColor = NULL,
-  showNames = FALSE,
-  legendName = NULL
+  weight_table,
+  switch_watrix = TRUE,
+  heatmap_size = NULL,
+  heatmap_title = NULL,
+  heatmap_color = NULL,
+  show_names = FALSE,
+  legend_name = NULL
 )
 }
 \arguments{
-\item{weightDT}{The weight data table of network}
+\item{weight_table}{The weight data table of network}
 
-\item{switchMatrix}{switchMatrix}
+\item{switch_watrix}{switch_watrix}
 
-\item{heatmapSize}{heatmapSize}
+\item{heatmap_size}{heatmap_size}
 
-\item{heatmapTitle}{heatmapTitle}
+\item{heatmap_title}{heatmap_title}
 
-\item{heatmapColor}{heatmapColor}
+\item{heatmap_color}{heatmap_color}
 
-\item{showNames}{showNames}
+\item{show_names}{show_names}
 
-\item{legendName}{legendName}
+\item{legend_name}{legend_name}
 }
 \value{
 Return a heatmap of ggplot2 object
@@ -37,32 +37,37 @@ The heatmap of network
 }
 \examples{
 library(inferCSN)
-data("exampleMatrix")
-data("exampleGroundTruth")
-weightDT <- inferCSN(exampleMatrix)
-p1 <- network.heatmap(exampleGroundTruth,
-                      heatmapTitle = "Ground truth")
+data("example_matrix")
+data("example_ground_truth")
+weight_table <- inferCSN(example_matrix)
+p1 <- network.heatmap(example_ground_truth,
+  heatmap_title = "Ground truth"
+)
 
-p2 <- network.heatmap(weightDT,
-                      legendName = "Weight2",
-                      heatmapTitle = "inferCSN")
+p2 <- network.heatmap(weight_table,
+  legend_name = "Weight2",
+  heatmap_title = "inferCSN"
+)
 
 ComplexHeatmap::draw(p1 + p2)
 
-p3 <- network.heatmap(weightDT,
-                      heatmapTitle = "inferCSN",
-                      heatmapColor = c("#20a485", "#410054", "#fee81f"))
+p3 <- network.heatmap(weight_table,
+  heatmap_title = "inferCSN",
+  heatmap_color = c("#20a485", "#410054", "#fee81f")
+)
 
-p4 <- network.heatmap(weightDT,
-                      heatmapTitle = "inferCSN",
-                      legendName = "Weight2",
-                      heatmapColor = c("#20a485", "white", "#fee81f"))
+p4 <- network.heatmap(weight_table,
+  heatmap_title = "inferCSN",
+  legend_name = "Weight2",
+  heatmap_color = c("#20a485", "white", "#fee81f")
+)
 
 ComplexHeatmap::draw(p3 + p4)
 
-p5 <- network.heatmap(weightDT,
-                      heatmapTitle = "inferCSN",
-                      showNames = TRUE)
+p5 <- network.heatmap(
+  weight_table,
+  heatmap_title = "inferCSN",
+  show_names = TRUE
+)
 p5
-
 }

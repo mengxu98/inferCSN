@@ -5,23 +5,23 @@
 \title{AUC value calculate}
 \usage{
 auc.calculate(
-  weightDT,
-  groundTruth,
+  weight_table,
+  ground_truth,
   plot = FALSE,
-  lineColor = "#1563cc",
-  lineWidth = 1
+  line_color = "#1563cc",
+  line_width = 1
 )
 }
 \arguments{
-\item{weightDT}{The weight data table of network}
+\item{weight_table}{The weight data table of network}
 
-\item{groundTruth}{Ground truth for calculate AUC}
+\item{ground_truth}{Ground truth for calculate AUC}
 
 \item{plot}{If true, draw and print figure of AUC}
 
-\item{lineColor}{The color of line in the figure}
+\item{line_color}{The color of line in the figure}
 
-\item{lineWidth}{The width of line in the figure}
+\item{line_width}{The width of line in the figure}
 }
 \value{
 AUC values and figure
@@ -31,10 +31,10 @@ AUC value calculate
 }
 \examples{
 library(inferCSN)
-data("exampleMatrix")
-data("exampleGroundTruth")
-weightDT <- inferCSN(exampleMatrix)
-auc <- auc.calculate(weightDT, exampleGroundTruth, plot = TRUE)
+data("example_matrix")
+data("example_ground_truth")
+weight_table <- inferCSN(example_matrix)
+auc <- auc.calculate(weight_table, example_ground_truth, plot = TRUE)
 head(auc)
 
 }

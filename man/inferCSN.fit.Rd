@@ -9,9 +9,9 @@ inferCSN.fit(
   y,
   penalty = "L0",
   algorithm = "CD",
-  maxSuppSize = 100,
-  crossValidation = FALSE,
-  nFolds = 10,
+  regulators_num = 100,
+  cross_validation = FALSE,
+  n_folds = 10,
   seed = 1,
   loss = "SquaredError",
   nLambda = 100,
@@ -48,13 +48,13 @@ For high-dimensional and sparse data, such as single-cell sequencing data, "L0L2
 Currently "CD" and "CDPSI" are supported.
 The CDPSI algorithm may yield better results, but it also increases running time.}
 
-\item{maxSuppSize}{The number of non-zore coef, this value will affect the final performance.
+\item{regulators_num}{The number of non-zore coef, this value will affect the final performance.
 The maximum support size at which to terminate the regularization path.
 Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.}
 
-\item{crossValidation}{Check whether cross validation is used.}
+\item{cross_validation}{Check whether cross validation is used.}
 
-\item{nFolds}{The number of folds for cross-validation.}
+\item{n_folds}{The number of folds for cross-validation.}
 
 \item{seed}{The seed used in randomly shuffling the data for cross-validation.}
 

@@ -1,6 +1,6 @@
 #' @title Sparse regression model
 #'
-#' @param X The data matrix
+#' @param x The data matrix
 #' @param y The response vector
 #'
 #' @inheritParams inferCSN
@@ -8,72 +8,93 @@
 #' @return The coefficients
 #' @export
 #'
-sparse.regression <- function(X, y,
-                              crossValidation = FALSE,
-                              seed = 1,
-                              penalty = "L0",
-                              algorithm = "CD",
-                              maxSuppSize = NULL,
-                              nFolds = 10,
-                              kFolds = NULL,
-                              rThreshold = 0,
-                              verbose = FALSE) {
-  if (!is.null(kFolds)) {
-    samples <- sample(kFolds / 10 * nrow(X))
-    testX <- X[-samples, ]
-    X <- X[samples, ]
+sparse.regression <- function(
+    x, y,
+    cross_validation = FALSE,
+    seed = 1,
+    penalty = "L0",
+    algorithm = "CD",
+    regulators_num = NULL,
+    n_folds = 10,
+    k_folds = NULL,
+    r_threshold = 0,
+    verbose = FALSE) {
+  if (!is.null(k_folds)) {
+    samples <- sample(k_folds / 10 * nrow(x))
+    testX <- x[-samples, ]
+    x <- x[samples, ]
     testy <- y[-samples]
     y <- y[samples]
   }
 
-  if (crossValidation) {
-    fit <- try(inferCSN.fit(X, y,
-                            crossValidation = crossValidation,
-                            seed = seed,
-                            penalty = penalty,
-                            algorithm = algorithm,
-                            maxSuppSize = maxSuppSize,
-                            nFolds = nFolds))
+  if (cross_validation) {
+    fit <- try(inferCSN.fit(
+      x, y,
+      cross_validation = cross_validation,
+      seed = seed,
+      penalty = penalty,
+      algorithm = algorithm,
+      regulators_num = regulators_num,
+      n_folds = n_folds
+    ))
 
     if (class(fit)[1] == "try-error") {
       if (verbose) message("Cross validation error, used fit instead.")
-      fit <- inferCSN.fit(X, y,
-                          penalty = penalty,
-                          algorithm = algorithm,
-                          maxSuppSize = maxSuppSize)
+      fit <- inferCSN.fit(x, y,
+        penalty = penalty,
+        algorithm = algorithm,
+        regulators_num = regulators_num
+      )
 
-      fitInf <- print(fit)
-      lambda <- fitInf$lambda[which.max(fitInf$suppSize)]
-      gamma <- fitInf$gamma[which.max(fitInf$suppSize)]
+      fit_inf <- print(fit)
+      lambda <- fit_inf$lambda[which.max(fit_inf$suppSize)]
+      gamma <- fit_inf$gamma[which.max(fit_inf$suppSize)]
     } else {
-      gamma <- fit$fit$gamma[which(unlist(lapply(fit$cvMeans, min)) == min(unlist(lapply(fit$cvMeans, min))))]
-      lambdaList <- dplyr::filter(print(fit), gamma == gamma)
-      if (maxSuppSize %in% lambdaList$maxSuppSize) {
-        lambda <- lambdaList$maxSuppSize[which(lambdaList$maxSuppSize == maxSuppSize)]
+      gamma <- fit$fit$gamma[which(
+        unlist(lapply(
+          fit$cvMeans, min
+        )) == min(unlist(lapply(fit$cvMeans, min)))
+      )]
+      lambda_list <- dplyr::filter(print(fit), gamma == gamma)
+      if (regulators_num %in% lambda_list$regulators_num) {
+        lambda <- lambda_list$regulators_num[which(
+          lambda_list$regulators_num == regulators_num
+        )]
       } else {
-        lambda <- min(lambdaList$lambda)
+        lambda <- min(lambda_list$lambda)
       }
     }
   } else {
-    fit <- inferCSN.fit(X, y,
-                        penalty = penalty,
-                        algorithm = algorithm,
-                        maxSuppSize = maxSuppSize)
+    fit <- inferCSN.fit(
+      x, y,
+      penalty = penalty,
+      algorithm = algorithm,
+      regulators_num = regulators_num
+    )
 
-    fitInf <- print(fit)
-    lambda <- fitInf$lambda[which.max(fitInf$suppSize)]
-    gamma <- fitInf$gamma[which.max(fitInf$suppSize)]
+    fit_inf <- print(fit)
+    lambda <- fit_inf$lambda[which.max(fit_inf$suppSize)]
+    gamma <- fit_inf$gamma[which.max(fit_inf$suppSize)]
   }
 
-  if (rThreshold == 0) {
-    return(as.vector(coef(fit, lambda = lambda, gamma = gamma))[-1])
+  if (r_threshold == 0) {
+    return(
+      as.vector(
+        coef(
+          fit,
+          lambda = lambda,
+          gamma = gamma
+        )
+      )[-1]
+    )
   } else {
     r <- 1
-    if (!is.null(kFolds)) {
+    if (!is.null(k_folds)) {
       predy <- as.numeric(predict(fit,
-                                  newx = testX,
-                                  lambda = lambda,
-                                  gamma = gamma))
+        newx = testX,
+        lambda = lambda,
+        gamma = gamma
+      ))
       if (length(testy) == length(predy)) {
         if (stats::var(testy) != 0 && stats::var(predy) != 0) {
           r <- stats::cor(testy, predy)
@@ -81,7 +102,7 @@ sparse.regression <- function(X, y,
       }
     }
 
-    if (r >= rThreshold) {
+    if (r >= r_threshold) {
       return(as.vector(coef(fit, lambda = lambda, gamma = gamma))[-1])
     } else {
       return(0.0001)
@@ -91,8 +112,8 @@ sparse.regression <- function(X, y,
 
 #' @title Sparse regression model for single gene
 #'
-#' @param regulatorsMatrix Regulators matrix
-#' @param targetsMatrix Targets matrix
+#' @param regulators_matrix Regulators matrix
+#' @param targets_matrix Targets matrix
 #' @param target Target genes
 #'
 #' @inheritParams inferCSN
@@ -100,40 +121,45 @@ sparse.regression <- function(X, y,
 #' @return The weight data table of sub-network
 #' @export
 #'
-sub.inferCSN <- function(regulatorsMatrix,
-                         targetsMatrix,
-                         target = NULL,
-                         crossValidation = FALSE,
-                         seed = 1,
-                         penalty = "L0",
-                         algorithm = "CD",
-                         maxSuppSize = NULL,
-                         nFolds = 10,
-                         kFolds = NULL,
-                         rThreshold = 0,
-                         verbose = FALSE) {
-  X <- regulatorsMatrix[, setdiff(colnames(regulatorsMatrix), target)]
-  if (is(X, "sparseMatrix")) X <- as.matrix(X)
-  y <- targetsMatrix[, target]
+sub.inferCSN <- function(
+    regulators_matrix,
+    targets_matrix,
+    target = NULL,
+    cross_validation = FALSE,
+    seed = 1,
+    penalty = "L0",
+    algorithm = "CD",
+    regulators_num = NULL,
+    n_folds = 10,
+    k_folds = NULL,
+    r_threshold = 0,
+    verbose = FALSE) {
+  x <- regulators_matrix[, setdiff(colnames(regulators_matrix), target)]
+  if (is(x, "sparseMatrix")) x <- as.matrix(x)
+  y <- targets_matrix[, target]
 
-  if (is.null(maxSuppSize)) maxSuppSize <- ncol(X)
+  if (is.null(regulators_num)) regulators_num <- ncol(x)
 
-  coefficients <- sparse.regression(X, y,
-                                    crossValidation = crossValidation,
-                                    seed = seed,
-                                    penalty = penalty,
-                                    algorithm = algorithm,
-                                    maxSuppSize = maxSuppSize,
-                                    nFolds = nFolds,
-                                    kFolds = kFolds,
-                                    rThreshold = rThreshold,
-                                    verbose = verbose)
+  coefficients <- sparse.regression(
+    x, y,
+    cross_validation = cross_validation,
+    seed = seed,
+    penalty = penalty,
+    algorithm = algorithm,
+    regulators_num = regulators_num,
+    n_folds = n_folds,
+    k_folds = k_folds,
+    r_threshold = r_threshold,
+    verbose = verbose
+  )
 
   coefficients <- coefficients / sum(abs(coefficients))
-  if (length(coefficients) != ncol(X)) coefficients <- 0.0001
-  return(data.frame(regulator = colnames(X),
-                    target = target,
-                    weight = coefficients))
+  if (length(coefficients) != ncol(x)) coefficients <- 0.0001
+  return(data.frame(
+    regulator = colnames(x),
+    target = target,
+    weight = coefficients
+  ))
 }
 
 #' @title Fit a sparse regression model
@@ -167,34 +193,34 @@ sub.inferCSN <- function(regulatorsMatrix,
 #'
 #' @return An S3 object describing the regularization path
 #' @export
-#'
-inferCSN.fit <- function(x, y,
-                         penalty = "L0",
-                         algorithm = "CD",
-                         maxSuppSize = 100,
-                         crossValidation = FALSE,
-                         nFolds = 10,
-                         seed = 1,
-                         loss = "SquaredError",
-                         nLambda = 100,
-                         nGamma = 5,
-                         gammaMax = 10,
-                         gammaMin = 0.0001,
-                         partialSort = TRUE,
-                         maxIters = 200,
-                         rtol = 1e-6,
-                         atol = 1e-9,
-                         activeSet = TRUE,
-                         activeSetNum = 3,
-                         maxSwaps = 100,
-                         scaleDownFactor = 0.8,
-                         screenSize = 1000,
-                         autoLambda = NULL,
-                         lambdaGrid = list(),
-                         excludeFirstK = 0,
-                         intercept = TRUE,
-                         lows = -Inf,
-                         highs = Inf) {
+inferCSN.fit <- function(
+    x, y,
+    penalty = "L0",
+    algorithm = "CD",
+    regulators_num = 100,
+    cross_validation = FALSE,
+    n_folds = 10,
+    seed = 1,
+    loss = "SquaredError",
+    nLambda = 100,
+    nGamma = 5,
+    gammaMax = 10,
+    gammaMin = 0.0001,
+    partialSort = TRUE,
+    maxIters = 200,
+    rtol = 1e-6,
+    atol = 1e-9,
+    activeSet = TRUE,
+    activeSetNum = 3,
+    maxSwaps = 100,
+    scaleDownFactor = 0.8,
+    screenSize = 1000,
+    autoLambda = NULL,
+    lambdaGrid = list(),
+    excludeFirstK = 0,
+    intercept = TRUE,
+    lows = -Inf,
+    highs = Inf) {
   # Check parameter values
   if ((rtol < 0) || (rtol >= 1)) {
     stop("The specified rtol parameter must exist in [0, 1).")
@@ -240,21 +266,21 @@ inferCSN.fit <- function(x, y,
 
   # Check lambda grid for L0 penalty
   if (penalty == "L0" && !autoLambda) {
-    bad_lambdaGrid <- FALSE
-    if (length(lambdaGrid) != 1) bad_lambdaGrid <- TRUE
+    bad_lambda_grid <- FALSE
+    if (length(lambdaGrid) != 1) bad_lambda_grid <- TRUE
     current <- Inf
     for (nxt in lambdaGrid[[1]]) {
       if (nxt > current) {
-        bad_lambdaGrid <- TRUE
+        bad_lambda_grid <- TRUE
         break
       }
       if (nxt < 0) {
-        bad_lambdaGrid <- TRUE
+        bad_lambda_grid <- TRUE
         break
       }
       current <- nxt
     }
-    if (bad_lambdaGrid) {
+    if (bad_lambda_grid) {
       stop("L0 Penalty requires 'lambdaGrid' to be a list of length 1.
            Where 'lambdaGrid[[1]]' is a list or vector of decreasing positive values.")
     }
@@ -262,27 +288,27 @@ inferCSN.fit <- function(x, y,
 
   # Check lambda grid for L0L2 penalties
   if (penalty != "L0" && !autoLambda) {
-    bad_lambdaGrid <- FALSE
+    bad_lambda_grid <- FALSE
     if (length(lambdaGrid) != nGamma) {
       warning("'nGamma' is ignored and replaced with length(lambdaGrid).....")
       nGamma <- length(lambdaGrid)
     }
-    for (i in 1:length(lambdaGrid)) {
+    for (i in seq_along(lambdaGrid)) {
       current <- Inf
       for (nxt in lambdaGrid[[i]]) {
         if (nxt > current) {
-          bad_lambdaGrid <- TRUE
+          bad_lambda_grid <- TRUE
           break
         }
         if (nxt < 0) {
-          bad_lambdaGrid <- TRUE
+          bad_lambda_grid <- TRUE
           break
         }
         current <- nxt
       }
-      if (bad_lambdaGrid) break
+      if (bad_lambda_grid) break
     }
-    if (bad_lambdaGrid) {
+    if (bad_lambda_grid) {
       stop("L0L2 Penalty requires 'lambdaGrid' to be a list of length 'nGamma'.
            Where 'lambdaGrid[[i]]' is a list or vector of decreasing positive values.")
     }
@@ -322,39 +348,51 @@ inferCSN.fit <- function(x, y,
   }
 
   # Call appropriate C++ function based on matrix type
-  M <- list()
-  if (!crossValidation) {
+  m <- list()
+  if (!cross_validation) {
     if (is(x, "sparseMatrix")) {
-      M <- .Call("_inferCSN_inferCSNFit_sparse",
-                 PACKAGE = "inferCSN", x, y, loss, penalty,
-                 algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
-                 partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
-                 scaleDownFactor, screenSize, !autoLambda, lambdaGrid,
-                 excludeFirstK, intercept, withBounds, lows, highs)
+      m <- .Call(
+        "_inferCSN_inferCSNFit_sparse",
+        PACKAGE = "inferCSN",
+        x, y, loss, penalty, algorithm, regulators_num,
+        nLambda, nGamma, gammaMax, gammaMin, partialSort,
+        maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
+        scaleDownFactor, screenSize, !autoLambda, lambdaGrid,
+        excludeFirstK, intercept, withBounds, lows, highs
+      )
     } else {
-      M <- .Call("_inferCSN_inferCSNFit_dense",
-                 PACKAGE = "inferCSN", x, y, loss, penalty,
-                 algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
-                 partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
-                 scaleDownFactor, screenSize, !autoLambda, lambdaGrid,
-                 excludeFirstK, intercept, withBounds, lows, highs)
+      m <- .Call(
+        "_inferCSN_inferCSNFit_dense",
+        PACKAGE = "inferCSN",
+        x, y, loss, penalty, algorithm, regulators_num,
+        nLambda, nGamma, gammaMax, gammaMin, partialSort,
+        maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
+        scaleDownFactor, screenSize, !autoLambda, lambdaGrid,
+        excludeFirstK, intercept, withBounds, lows, highs
+      )
     }
   } else {
     set.seed(seed)
     if (is(x, "sparseMatrix")) {
-      M <- .Call("_inferCSN_inferCSNCV_sparse",
-                 PACKAGE = "inferCSN", x, y, loss, penalty,
-                 algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
-                 partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
-                 scaleDownFactor, screenSize, !autoLambda, lambdaGrid, nFolds,
-                 seed, excludeFirstK, intercept, withBounds, lows, highs)
+      m <- .Call(
+        "_inferCSN_inferCSNCV_sparse",
+        PACKAGE = "inferCSN",
+        x, y, loss, penalty, algorithm, regulators_num,
+        nLambda, nGamma, gammaMax, gammaMin, partialSort,
+        maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
+        scaleDownFactor, screenSize, !autoLambda, lambdaGrid, n_folds,
+        seed, excludeFirstK, intercept, withBounds, lows, highs
+      )
     } else {
-      M <- .Call("_inferCSN_inferCSNCV_dense",
-                 PACKAGE = "inferCSN", x, y, loss, penalty,
-                 algorithm, maxSuppSize, nLambda, nGamma, gammaMax, gammaMin,
-                 partialSort, maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
-                 scaleDownFactor, screenSize, !autoLambda, lambdaGrid, nFolds,
-                 seed, excludeFirstK, intercept, withBounds, lows, highs)
+      m <- .Call(
+        "_inferCSN_inferCSNCV_dense",
+        PACKAGE = "inferCSN",
+        x, y, loss, penalty, algorithm, regulators_num,
+        nLambda, nGamma, gammaMax, gammaMin, partialSort,
+        maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
+        scaleDownFactor, screenSize, !autoLambda, lambdaGrid, n_folds,
+        seed, excludeFirstK, intercept, withBounds, lows, highs
+      )
     }
   }
 
@@ -362,39 +400,41 @@ inferCSN.fit <- function(x, y,
   settings[[1]] <- intercept
   names(settings) <- c("intercept")
 
-  # Remove potential support sizes exceeding maxSuppSize
-  for (i in 1:length(M$SuppSize)) {
-    last <- length(M$SuppSize[[i]])
-    if (M$SuppSize[[i]][last] > maxSuppSize) {
+  # Remove potential support sizes exceeding regulators_num
+  for (i in seq_along(m$SuppSize)) {
+    last <- length(m$SuppSize[[i]])
+    if (m$SuppSize[[i]][last] > regulators_num) {
       if (last == 1) {
-        warning("Warning! Only 1 element in path with support size > maxSuppSize.
-                Try increasing maxSuppSize to resolve the issue.")
+        warning("Only 1 element in path with support size > regulators_num.
+                Try increasing regulators_num to resolve the issue.")
       } else {
-        M$SuppSize[[i]] <- M$SuppSize[[i]][-last]
-        M$Converged[[i]] <- M$Converged[[i]][-last]
-        M$lambda[[i]] <- M$lambda[[i]][-last]
-        M$a0[[i]] <- M$a0[[i]][-last]
-        M$beta[[i]] <- as(M$beta[[i]][, -last], "sparseMatrix")
-        if (!crossValidation) {
-          M$CVMeans[[i]] <- M$CVMeans[[i]][-last]
-          M$CVSDs[[i]] <- M$CVSDs[[i]][-last]
+        m$SuppSize[[i]] <- m$SuppSize[[i]][-last]
+        m$Converged[[i]] <- m$Converged[[i]][-last]
+        m$lambda[[i]] <- m$lambda[[i]][-last]
+        m$a0[[i]] <- m$a0[[i]][-last]
+        m$beta[[i]] <- as(m$beta[[i]][, -last], "sparseMatrix")
+        if (!cross_validation) {
+          m$CVMeans[[i]] <- m$CVMeans[[i]][-last]
+          m$CVSDs[[i]] <- m$CVSDs[[i]][-last]
         }
       }
     }
   }
 
-  fit <- list(beta = M$beta,
-              lambda = lapply(M$lambda, signif, digits = 6),
-              a0 = M$a0,
-              converged = M$Converged,
-              suppSize = M$SuppSize,
-              gamma = M$gamma,
-              penalty = penalty,
-              loss = loss,
-              settings = settings)
+  fit <- list(
+    beta = m$beta,
+    lambda = lapply(m$lambda, signif, digits = 6),
+    a0 = m$a0,
+    converged = m$Converged,
+    suppSize = m$SuppSize,
+    gamma = m$gamma,
+    penalty = penalty,
+    loss = loss,
+    settings = settings
+  )
 
   if (is.null(colnames(x))) {
-    varnames <- 1:dim(x)[2]
+    varnames <- seq_len(dim(x)[2])
   } else {
     varnames <- colnames(x)
   }
@@ -403,11 +443,11 @@ inferCSN.fit <- function(x, y,
   fit$n <- dim(x)[1]
   fit$p <- dim(x)[2]
 
-  if (!crossValidation) {
-    G <- fit
+  if (!cross_validation) {
+    g <- fit
   } else {
-    G <- list(fit = fit, cvMeans = M$CVMeans, cvSDs = M$CVSDs)
-    class(G) <- "inferCSNCV"
+    g <- list(fit = fit, cvMeans = m$CVMeans, cvSDs = m$CVSDs)
+    class(g) <- "inferCSNCV"
   }
-  return(G)
+  return(g)
 }

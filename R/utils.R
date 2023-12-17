@@ -1,18 +1,21 @@
-utils::globalVariables(c("x",
-                         "y",
-                         "xend",
-                         "yend",
-                         "weight",
-                         "Interaction",
-                         "name",
-                         "regulator",
-                         "target",
-                         "degree",
-                         "edges",
-                         "curvetype"))
+utils::globalVariables(c(
+  "x",
+  "y",
+  "xend",
+  "yend",
+  "weight",
+  "Interaction",
+  "name",
+  "regulator",
+  "target",
+  "degree",
+  "edges",
+  "curvetype"
+))
 
 #' @title Check input parameters
 #'
+#' @param matrix An expression matrix, cells by genes
 #' @inheritParams inferCSN
 #'
 #' @return No return value, called for check input parameters
@@ -21,26 +24,28 @@ utils::globalVariables(c("x",
 check.parameters <- function(matrix,
                              penalty,
                              algorithm,
-                             crossValidation,
+                             cross_validation,
                              seed,
-                             nFolds,
-                             kFolds,
-                             rThreshold,
+                             n_folds,
+                             k_folds,
+                             r_threshold,
                              regulators,
                              targets,
-                             maxSuppSize,
+                             regulators_num,
                              verbose,
                              cores) {
   if (verbose) message("Checking input parameters.")
 
-  matrixErrorMessage <- paste0("Parameter matrix must be a two-dimensional matrix,
-                               where each column corresponds to a gene and each row corresponds to a sample/cell.")
+  error_message <- paste0(
+    "Parameter matrix must be a two-dimensional matrix,
+    where each column corresponds to a gene and each row corresponds to a sample/cell."
+  )
   if (!is.matrix(matrix) && !is.array(matrix)) {
-    stop(matrixErrorMessage)
+    stop(error_message)
   }
 
   if (length(dim(matrix)) != 2) {
-    stop(matrixErrorMessage)
+    stop(error_message)
   }
 
   if (is.null(colnames(matrix))) {
@@ -49,14 +54,18 @@ check.parameters <- function(matrix,
 
   # Check the penalty term of the regression model
   if (!any(c("L0", "L0L2") == penalty)) {
-    stop("inferCSN does not support ", penalty, " penalty regression.\n",
-         "Please set penalty item as 'L0' or 'L0L2'.")
+    stop(
+      "inferCSN does not support ", penalty, " penalty regression.\n",
+      "Please set penalty item as 'L0' or 'L0L2'."
+    )
   }
 
   # Check the algorithm of the regression model
   if (!any(c("CD", "CDPSI") == algorithm)) {
-    stop("inferCSN does not support ", algorithm, " algorithmn.\n",
-         "Please set algorithm item as 'CD' or 'CDPSI'.")
+    stop(
+      "inferCSN does not support ", algorithm, " algorithmn.\n",
+      "Please set algorithm item as 'CD' or 'CDPSI'."
+    )
   }
 
   if (!is.numeric(seed)) {
@@ -64,9 +73,9 @@ check.parameters <- function(matrix,
     warning("Supplied seed is not a valid integer, initialize 'seed' to 1.")
   }
 
-  if (!is.null(kFolds)) {
-    if (!(kFolds > 0 && kFolds < 10)) {
-      stop("Please set 'kFolds' value between: (0, 10).")
+  if (!is.null(k_folds)) {
+    if (!(k_folds > 0 && k_folds < 10)) {
+      stop("Please set 'k_folds' value between: (0, 10).")
     }
   }
 
@@ -76,54 +85,54 @@ check.parameters <- function(matrix,
     }
 
     if (is.numeric(targets)) {
-      if(max(targets) > nrow(matrix)) stop("At least one index in 'targets' exceeds the number of genes.")
-      if(min(targets) <= 0) stop("The indexes in 'targets' should be >=1.")
+      if (max(targets) > nrow(matrix)) stop("At least one index in 'targets' exceeds the number of genes.")
+      if (min(targets) <= 0) stop("The indexes in 'targets' should be >=1.")
     }
 
-    if(any(table(targets) > 1)) stop("Please provide each target only once.")
+    if (any(table(targets) > 1)) stop("Please provide each target only once.")
 
-    if(is.character(targets)){
+    if (is.character(targets)) {
       targetsInMatrix <- intersect(targets, colnames(matrix))
-      if(length(targetsInMatrix) == 0) {
+      if (length(targetsInMatrix) == 0) {
         stop("The genes must contain at least one target.")
       }
 
-      if(length(targetsInMatrix) < length(targets)) {
+      if (length(targetsInMatrix) < length(targets)) {
         warning("Only ", length(targetsInMatrix), " out of ", length(targets), " candidate regulators are in the expression matrix.")
       }
     }
   }
 
   if (!is.null(regulators)) {
-    if(is.list(regulators)) {
-      if(!all(names(regulators) %in% targets)) {
+    if (is.list(regulators)) {
+      if (!all(names(regulators) %in% targets)) {
         stop("Regulators: If provided as a named list, all names should be targets.")
       }
       regulators <- unique(unlist(regulators))
     }
     if (!is.null(regulators)) {
-      if(length(regulators) < 2) stop("Provide at least 2 potential regulators.")
+      if (length(regulators) < 2) stop("Provide at least 2 potential regulators.")
 
       if (!is.vector(regulators)) {
         stop("Parameter 'regulators' must a vector of indices or gene names.")
       }
 
       if (is.numeric(regulators)) {
-        if(max(regulators) > nrow(matrix)) {
+        if (max(regulators) > nrow(matrix)) {
           stop("At least one index in 'regulators' exceeds the number of genes.")
         }
-        if(min(regulators) <= 0) stop("The indexes in 'regulators' should be >=1.")
+        if (min(regulators) <= 0) stop("The indexes in 'regulators' should be >=1.")
       }
 
-      if(any(table(regulators) > 1)) stop("Please provide each regulator only once.")
+      if (any(table(regulators) > 1)) stop("Please provide each regulator only once.")
 
       if (is.character(regulators)) {
         regulatorsInMatrix <- intersect(regulators, colnames(matrix))
-        if(length(regulatorsInMatrix) < 2) {
+        if (length(regulatorsInMatrix) < 2) {
           stop("Fewer than 2 regulators in the columns of expression matrix.")
         }
 
-        if(length(regulatorsInMatrix) < length(regulators)) {
+        if (length(regulatorsInMatrix) < length(regulators)) {
           warning("Only ", length(regulatorsInMatrix), " out of ", length(regulators), " candidate regulators are in the expression matrix.")
         }
       }
@@ -137,31 +146,46 @@ check.parameters <- function(matrix,
   if (verbose) message("All parameters check done.")
 
   if (verbose) message("Using '", penalty, "' penalty.")
-  if (verbose & crossValidation) message("Using cross validation.")
+  if (verbose && cross_validation) message("Using cross validation.")
+}
+
+#' @title Switch weight table
+#'
+#' @param weight_table The weight data table of network
+#'
+#' @return Format weight matrix
+#' @export
+table.to.matrix <- function(
+    weight_table) {
+  .Call(
+    "_inferCSN_table_to_matrix",
+    PACKAGE = "inferCSN",
+    weight_table
+  )
 }
 
 #' @title Format weight table
 #'
-#' @param weightDT The weight data table of network
+#' @param weight_table The weight data table of network
 #' @param regulators Regulators list
 #'
 #' @return Format weight table
 #' @export
-#'
-net.format <- function(weightDT,
-                       regulators = NULL) {
-  colnames(weightDT) <- c("regulator", "target", "weight")
-  weightDT$weight <- as.numeric(weightDT$weight)
-  weightDT <- dplyr::filter(weightDT, weight !=0)
+net.format <- function(
+    weight_table,
+    regulators = NULL) {
+  colnames(weight_table) <- c("regulator", "target", "weight")
+  weight_table$weight <- as.numeric(weight_table$weight)
+  weight_table <- dplyr::filter(weight_table, weight != 0)
   if (!is.null(regulators)) {
-    weightDT <- purrr::map_dfr(regulators, function(x) {
-      dplyr::filter(weightDT, regulator == x)
+    weight_table <- purrr::map_dfr(regulators, function(x) {
+      dplyr::filter(weight_table, regulator == x)
     })
   }
-  weightDT$Interaction <- "Activation"
-  weightDT$Interaction[weightDT$weight < 0] <- "Repression"
-  weightDT$weight <- abs(weightDT$weight)
-  return(weightDT)
+  weight_table$Interaction <- "Activation"
+  weight_table$Interaction[weight_table$weight < 0] <- "Repression"
+  weight_table$weight <- abs(weight_table$weight)
+  return(weight_table)
 }
 
 #' @title Extracts a specific solution in the regularization path
@@ -176,11 +200,12 @@ net.format <- function(weightDT,
 #'
 #' @return Return the specific solution
 #' @export
-#'
-coef.inferCSN <- function(object,
-                          lambda = NULL,
-                          gamma = NULL,
-                          supportSize = NULL, ...) {
+coef.inferCSN <- function(
+    object,
+    lambda = NULL,
+    gamma = NULL,
+    supportSize = NULL,
+    ...) {
   if (!is.null(supportSize) && !is.null(lambda)) {
     stop("If 'supportSize' is provided to 'coef' only 'gamma' can also be provided.")
   }
@@ -212,10 +237,14 @@ coef.inferCSN <- function(object,
   }
 
   if (object$settings$intercept) {
-    t <- rbind(object$a0[[gammaindex]][indices],
-               object$beta[[gammaindex]][, indices, drop = FALSE])
-    rownames(t) <- c("Intercept",
-                     paste0(rep("V", object$p), 1:object$p))
+    t <- rbind(
+      object$a0[[gammaindex]][indices],
+      object$beta[[gammaindex]][, indices, drop = FALSE]
+    )
+    rownames(t) <- c(
+      "Intercept",
+      paste0(rep("V", object$p), 1:object$p)
+    )
   } else {
     t <- object$beta[[gammaindex]][, indices, drop = FALSE]
     rownames(t) <- paste0(rep("V", object$p), 1:object$p)
@@ -248,10 +277,12 @@ coef.inferCSNCV <- function(object,
 #'
 print.inferCSN <- function(x, ...) {
   gammas <- rep(x$gamma, times = lapply(x$lambda, length))
-  data.frame(lambda = unlist(x["lambda"]),
-             gamma = gammas,
-             suppSize = unlist(x["suppSize"]),
-             row.names = NULL)
+  data.frame(
+    lambda = unlist(x["lambda"]),
+    gamma = gammas,
+    suppSize = unlist(x["suppSize"]),
+    row.names = NULL
+  )
 }
 
 #' @rdname print.inferCSN
@@ -289,18 +320,18 @@ print.inferCSNCV <- function(x, ...) {
 #'
 predict.inferCSN <- function(object,
                              newx,
-                             lambda=NULL,
-                             gamma=NULL, ...) {
-  beta = coef.inferCSN(object, lambda, gamma)
-  if (object$settings$intercept){
+                             lambda = NULL,
+                             gamma = NULL, ...) {
+  beta <- coef.inferCSN(object, lambda, gamma)
+  if (object$settings$intercept) {
     # add a column of ones for the intercept
-    x = cbind(1,newx)
-  }	else{
-    x = newx
+    x <- cbind(1, newx)
+  } else {
+    x <- newx
   }
-  prediction = x%*%beta
-  if (object$loss == "Logistic"){
-    prediction = 1 / (1 + exp(-prediction))
+  prediction <- x %*% beta
+  if (object$loss == "Logistic") {
+    prediction <- 1 / (1 + exp(-prediction))
   }
   prediction
 }
@@ -314,8 +345,8 @@ predict.inferCSN <- function(object,
 #'
 predict.inferCSNCV <- function(object,
                                newx,
-                               lambda=NULL,
-                               gamma=NULL, ...) {
+                               lambda = NULL,
+                               gamma = NULL, ...) {
   predict.inferCSN(object$fit, newx, lambda, gamma, ...)
 }
 
