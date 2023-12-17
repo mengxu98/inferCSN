@@ -1,4 +1,4 @@
 library(inferCSN)
 
-data("exampleMatrix")
-weightDT <- inferCSN(exampleMatrix, verbose = TRUE)
+data("example_matrix")
+weight_table <- inferCSN(example_matrix, verbose = TRUE)

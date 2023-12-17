@@ -5,18 +5,18 @@
 \title{contrast.networks}
 \usage{
 contrast.networks(
-  weightDT,
-  degreeValue = 0,
-  weightValue = 0,
+  weight_table,
+  degree_value = 0,
+  weight_value = 0,
   legend.position = "bottom"
 )
 }
 \arguments{
-\item{weightDT}{weightDT}
+\item{weight_table}{weight_table}
 
-\item{degreeValue}{degreeValue}
+\item{degree_value}{degree_value}
 
-\item{weightValue}{weightValue}
+\item{weight_value}{weight_value}
 
 \item{legend.position}{legend.position}
 }
@@ -28,9 +28,8 @@ contrast.networks
 }
 \examples{
 library(inferCSN)
-data("exampleMatrix")
-weightDT <- inferCSN(exampleMatrix)
-g <- contrast.networks(weightDT[1:50, ])
+data("example_matrix")
+weight_table <- inferCSN(example_matrix)
+g <- contrast.networks(weight_table[1:50, ])
 g
-
 }

@@ -4,12 +4,12 @@
 \alias{compute.gene.rank}
 \title{Compute and rank TFs in network}
 \usage{
-compute.gene.rank(weightDT, directedGraph = FALSE)
+compute.gene.rank(weight_table, directed = FALSE)
 }
 \arguments{
-\item{weightDT}{The weight data table of network}
+\item{weight_table}{The weight data table of network}
 
-\item{directedGraph}{If GRN is directed or not}
+\item{directed}{If GRN is directed or not}
 }
 \value{
 A data.table with three columns
@@ -19,9 +19,8 @@ Compute and rank TFs in network
 }
 \examples{
 library(inferCSN)
-data("exampleMatrix")
-weightDT <- inferCSN(exampleMatrix)
-ranks <- compute.gene.rank(weightDT)
+data("example_matrix")
+weight_table <- inferCSN(example_matrix)
+ranks <- compute.gene.rank(weight_table)
 head(ranks)
-
 }

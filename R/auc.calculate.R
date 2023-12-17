@@ -1,10 +1,10 @@
 #' @title AUC value calculate
 #'
-#' @param weightDT The weight data table of network
-#' @param groundTruth Ground truth for calculate AUC
+#' @param weight_table The weight data table of network
+#' @param ground_truth Ground truth for calculate AUC
 #' @param plot If true, draw and print figure of AUC
-#' @param lineColor The color of line in the figure
-#' @param lineWidth The width of line in the figure
+#' @param line_color The color of line in the figure
+#' @param line_width The width of line in the figure
 #'
 #' @import patchwork
 #' @import ggplot2
@@ -14,70 +14,89 @@
 #'
 #' @examples
 #' library(inferCSN)
-#' data("exampleMatrix")
-#' data("exampleGroundTruth")
-#' weightDT <- inferCSN(exampleMatrix)
-#' auc <- auc.calculate(weightDT, exampleGroundTruth, plot = TRUE)
+#' data("example_matrix")
+#' data("example_ground_truth")
+#' weight_table <- inferCSN(example_matrix)
+#' auc <- auc.calculate(weight_table, example_ground_truth, plot = TRUE)
 #' head(auc)
 #'
-auc.calculate <- function(weightDT,
-                          groundTruth,
+auc.calculate <- function(weight_table,
+                          ground_truth,
                           plot = FALSE,
-                          lineColor = "#1563cc",
-                          lineWidth = 1) {
+                          line_color = "#1563cc",
+                          line_width = 1) {
   # Check input data
-  colnames(weightDT) <- c("regulator", "target", "weight")
-  weightDT$weight <- abs(as.numeric(weightDT$weight))
+  colnames(weight_table) <- c("regulator", "target", "weight")
+  weight_table$weight <- abs(as.numeric(weight_table$weight))
 
-  if (ncol(groundTruth) > 2) groundTruth <- groundTruth[, 1:2]
-  names(groundTruth) <- c("regulator", "target")
-  groundTruth$label <- rep(1, nrow(groundTruth))
+  if (ncol(ground_truth) > 2) ground_truth <- ground_truth[, 1:2]
+  names(ground_truth) <- c("regulator", "target")
+  ground_truth$label <- rep(1, nrow(ground_truth))
 
-  gold <- merge(weightDT, groundTruth,
-                by = c("regulator", "target"),
-                all.x = TRUE)
+  gold <- merge(weight_table, ground_truth,
+    by = c("regulator", "target"),
+    all.x = TRUE
+  )
   gold$label[is.na(gold$label)] <- 0
 
-  aucCurves <- precrec::evalmod(scores = gold$weight,
-                                labels = gold$label)
+  auc_curves <- precrec::evalmod(
+    scores = gold$weight,
+    labels = gold$label
+  )
 
-  auc <- attr(aucCurves, "auc")
+  auc <- attr(auc_curves, "auc")
 
-  aucMetric <- data.frame(AUROC = rep(0.000, 1),
-                          AUPRC = rep(0.000, 1),
-                          ACC = rep(0.000, 1))
-  aucMetric[1, "AUROC"] <- sprintf("%0.3f", auc$aucs[1])
-  aucMetric[1, "AUPRC"] <- sprintf("%0.3f", auc$aucs[2])
-  aucMetric[1, "ACC"] <- sprintf("%0.3f", acc.calculate(gold))
+  auc_metric <- data.frame(
+    AUROC = rep(0.000, 1),
+    AUPRC = rep(0.000, 1),
+    ACC = rep(0.000, 1)
+  )
+  auc_metric[1, "AUROC"] <- sprintf("%0.3f", auc$aucs[1])
+  auc_metric[1, "AUPRC"] <- sprintf("%0.3f", auc$aucs[2])
+  auc_metric[1, "ACC"] <- sprintf("%0.3f", acc.calculate(gold))
   if (plot) {
     # Separate data
-    aurocDf <- subset(fortify(aucCurves),
-                      curvetype == "ROC")
-    auprcDf <- subset(fortify(aucCurves),
-                      curvetype == "PRC")
+    auroc_table <- subset(
+      fortify(auc_curves),
+      curvetype == "ROC"
+    )
+    auprc_table <- subset(
+      fortify(auc_curves),
+      curvetype == "PRC"
+    )
 
     # Plot
-    auroc <- ggplot(aurocDf, aes(x = x, y = y)) +
-      geom_line(color = lineColor,
-                linewidth = lineWidth) +
-      geom_abline(slope = lineWidth,
-                  color = lineColor,
-                  linetype = "dotted",
-                  linewidth = lineWidth) +
-      labs(title = paste("AUROC:", aucMetric[1]),
-           x = "False positive rate",
-           y = "True positive rate") +
+    auroc <- ggplot(auroc_table, aes(x = x, y = y)) +
+      geom_line(
+        color = line_color,
+        linewidth = line_width
+      ) +
+      geom_abline(
+        slope = line_width,
+        color = line_color,
+        linetype = "dotted",
+        linewidth = line_width
+      ) +
+      labs(
+        title = paste("AUROC:", auc_metric[1]),
+        x = "False positive rate",
+        y = "True positive rate"
+      ) +
       xlim(0, 1) +
       ylim(0, 1) +
       coord_fixed() +
       theme_bw()
 
-    auprc <- ggplot(auprcDf, aes(x = x, y = y)) +
-      geom_line(color = lineColor,
-                linewidth = 1) +
-      labs(title = paste("AUPRC:", aucMetric[2]),
-           x = "Recall",
-           y = "Precision") +
+    auprc <- ggplot(auprc_table, aes(x = x, y = y)) +
+      geom_line(
+        color = line_color,
+        linewidth = 1
+      ) +
+      labs(
+        title = paste("AUPRC:", auc_metric[2]),
+        x = "Recall",
+        y = "Precision"
+      ) +
       xlim(0, 1) +
       ylim(0, 1) +
       coord_fixed() +
@@ -88,7 +107,7 @@ auc.calculate <- function(weightDT,
     print(p)
   }
 
-  return(aucMetric)
+  return(auc_metric)
 }
 
 #' ACC calculate
@@ -100,27 +119,30 @@ auc.calculate <- function(weightDT,
 #'
 acc.calculate <- function(gold) {
   results <- pROC::roc(gold$label ~ gold$weight,
-                       direction = "<",
-                       levels = c(0, 1))
+    direction = "<",
+    levels = c(0, 1)
+  )
 
   # After this operation, '0' indicate positive
-  reverseLabel <- 2 - as.numeric(as.factor(gold$label))
+  reverse_label <- 2 - as.numeric(as.factor(gold$label))
 
   sensitivities <- results$sensitivities
   specificities <- results$specificities
-  selectValue <- sensitivities + specificities - 1
-  cutValueResults <- results$thresholds[selectValue == max(selectValue)]
-  selectSensitivities <- sensitivities[selectValue == max(selectValue)]
+  select_value <- sensitivities + specificities - 1
+  cut_value_results <- results$thresholds[select_value == max(select_value)]
+  select_sensitivities <- sensitivities[select_value == max(select_value)]
 
-  cutValue <- cutValueResults[selectSensitivities == max(selectSensitivities)]
+  cut_value <- cut_value_results[
+    select_sensitivities == max(select_sensitivities)
+  ]
 
-  predictorBinary <- rep(0, length(results$predictor))
-  predictorBinary[results$predictor >= cutValue] <- 1
-  predictorBinary <- as.factor(predictorBinary)
-  levels(predictorBinary) <- c("0", "1")
-  predictorBinary <- factor(predictorBinary, levels = c(1, 0))
+  predictor_binary <- rep(0, length(results$predictor))
+  predictor_binary[results$predictor >= cut_value] <- 1
+  predictor_binary <- as.factor(predictor_binary)
+  levels(predictor_binary) <- c("0", "1")
+  predictor_binary <- factor(predictor_binary, levels = c(1, 0))
 
-  pre <- as.vector(table(predictorBinary, reverseLabel))
+  pre <- as.vector(table(predictor_binary, reverse_label))
 
   acc <- (pre[1] + pre[4]) / sum(pre)
 

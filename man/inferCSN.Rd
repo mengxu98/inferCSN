@@ -3,50 +3,50 @@
 \docType{methods}
 \name{inferCSN}
 \alias{inferCSN}
-\alias{inferCSN,data.frame-method}
 \alias{inferCSN,matrix-method}
+\alias{inferCSN,data.frame-method}
 \title{Inferring Cell-Specific Gene Regulatory Network}
 \usage{
-inferCSN(matrix, ...)
+inferCSN(object, ...)
 
-\S4method{inferCSN}{data.frame}(
-  matrix,
+\S4method{inferCSN}{matrix}(
+  object,
   penalty = "L0",
   algorithm = "CD",
-  crossValidation = FALSE,
+  cross_validation = FALSE,
   seed = 1,
-  nFolds = 10,
-  kFolds = NULL,
-  rThreshold = 0,
+  n_folds = 10,
+  k_folds = NULL,
+  r_threshold = 0,
   regulators = NULL,
   targets = NULL,
-  maxSuppSize = NULL,
+  regulators_num = NULL,
   verbose = FALSE,
   cores = 1,
   ...
 )
 
-\S4method{inferCSN}{matrix}(
-  matrix,
+\S4method{inferCSN}{data.frame}(
+  object,
   penalty = "L0",
   algorithm = "CD",
-  crossValidation = FALSE,
+  cross_validation = FALSE,
   seed = 1,
-  nFolds = 10,
-  kFolds = NULL,
-  rThreshold = 0,
+  n_folds = 10,
+  k_folds = NULL,
+  r_threshold = 0,
   regulators = NULL,
   targets = NULL,
-  maxSuppSize = NULL,
+  regulators_num = NULL,
   verbose = FALSE,
   cores = 1,
   ...
 )
 }
 \arguments{
-\item{matrix}{An expression matrix, cells by genes}
+\item{object}{Input object}
 
-\item{...}{Arguments passed to other methods.}
+\item{...}{Arguments passed to other methods}
 
 \item{penalty}{The type of regularization.
 This can take either one of the following choices: "L0" and "L0L2".
@@ -56,21 +56,21 @@ For high-dimensional and sparse data, such as single-cell sequencing data, "L0L2
 Currently "CD" and "CDPSI" are supported.
 The CDPSI algorithm may yield better results, but it also increases running time.}
 
-\item{crossValidation}{Check whether cross validation is used.}
+\item{cross_validation}{Check whether cross validation is used.}
 
 \item{seed}{The seed used in randomly shuffling the data for cross-validation.}
 
-\item{nFolds}{The number of folds for cross-validation.}
+\item{n_folds}{The number of folds for cross-validation.}
 
-\item{kFolds}{The number of folds for sample split.}
+\item{k_folds}{The number of folds for sample split.}
 
-\item{rThreshold}{Threshold of R^2.}
+\item{r_threshold}{Threshold of R^2.}
 
 \item{regulators}{Regulator genes.}
 
 \item{targets}{Target genes.}
 
-\item{maxSuppSize}{The number of non-zore coef, this value will affect the final performance.
+\item{regulators_num}{The number of non-zore coef, this value will affect the final performance.
 The maximum support size at which to terminate the regularization path.
 Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.}
 
@@ -86,11 +86,10 @@ Inferring Cell-Specific Gene Regulatory Network
 }
 \examples{
 library(inferCSN)
-data("exampleMatrix")
-weightDT <- inferCSN(exampleMatrix, verbose = TRUE)
-head(weightDT)
+data("example_matrix")
+weight_table <- inferCSN(example_matrix, verbose = TRUE)
+head(weight_table)
 
-weightDT <- inferCSN(exampleMatrix, verbose = TRUE, cores = 2)
-head(weightDT)
-
+weight_table <- inferCSN(example_matrix, verbose = TRUE, cores = 2)
+head(weight_table)
 }
