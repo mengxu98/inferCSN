@@ -40,7 +40,8 @@
 #'
 #' ComplexHeatmap::draw(p3 + p4)
 #'
-#' p5 <- network.heatmap(weight_table,
+#' p5 <- network.heatmap(
+#'   weight_table,
 #'   heatmap_title = "inferCSN",
 #'   show_names = TRUE
 #' )
@@ -55,7 +56,7 @@ network.heatmap <- function(weight_table,
   if (switch_watrix) {
     colnames(weight_table) <- c("regulator", "target", "weight")
     genes <- c(weight_table$regulator, weight_table$target)
-    weight_matrix <- table_to_matrix(weight_table)
+    weight_matrix <- table.to.matrix(weight_table)
   } else {
     genes <- c(rownames(weight_table), colnames(weight_table))
     weight_matrix <- weight_table

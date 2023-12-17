@@ -121,25 +121,27 @@ sparse.regression <- function(
 #' @return The weight data table of sub-network
 #' @export
 #'
-sub.inferCSN <- function(regulators_matrix,
-                         targets_matrix,
-                         target = NULL,
-                         cross_validation = FALSE,
-                         seed = 1,
-                         penalty = "L0",
-                         algorithm = "CD",
-                         regulators_num = NULL,
-                         n_folds = 10,
-                         k_folds = NULL,
-                         r_threshold = 0,
-                         verbose = FALSE) {
+sub.inferCSN <- function(
+    regulators_matrix,
+    targets_matrix,
+    target = NULL,
+    cross_validation = FALSE,
+    seed = 1,
+    penalty = "L0",
+    algorithm = "CD",
+    regulators_num = NULL,
+    n_folds = 10,
+    k_folds = NULL,
+    r_threshold = 0,
+    verbose = FALSE) {
   x <- regulators_matrix[, setdiff(colnames(regulators_matrix), target)]
   if (is(x, "sparseMatrix")) x <- as.matrix(x)
   y <- targets_matrix[, target]
 
   if (is.null(regulators_num)) regulators_num <- ncol(x)
 
-  coefficients <- sparse.regression(x, y,
+  coefficients <- sparse.regression(
+    x, y,
     cross_validation = cross_validation,
     seed = seed,
     penalty = penalty,
@@ -191,33 +193,34 @@ sub.inferCSN <- function(regulators_matrix,
 #'
 #' @return An S3 object describing the regularization path
 #' @export
-inferCSN.fit <- function(x, y,
-                         penalty = "L0",
-                         algorithm = "CD",
-                         regulators_num = 100,
-                         cross_validation = FALSE,
-                         n_folds = 10,
-                         seed = 1,
-                         loss = "SquaredError",
-                         nLambda = 100,
-                         nGamma = 5,
-                         gammaMax = 10,
-                         gammaMin = 0.0001,
-                         partialSort = TRUE,
-                         maxIters = 200,
-                         rtol = 1e-6,
-                         atol = 1e-9,
-                         activeSet = TRUE,
-                         activeSetNum = 3,
-                         maxSwaps = 100,
-                         scaleDownFactor = 0.8,
-                         screenSize = 1000,
-                         autoLambda = NULL,
-                         lambdaGrid = list(),
-                         excludeFirstK = 0,
-                         intercept = TRUE,
-                         lows = -Inf,
-                         highs = Inf) {
+inferCSN.fit <- function(
+    x, y,
+    penalty = "L0",
+    algorithm = "CD",
+    regulators_num = 100,
+    cross_validation = FALSE,
+    n_folds = 10,
+    seed = 1,
+    loss = "SquaredError",
+    nLambda = 100,
+    nGamma = 5,
+    gammaMax = 10,
+    gammaMin = 0.0001,
+    partialSort = TRUE,
+    maxIters = 200,
+    rtol = 1e-6,
+    atol = 1e-9,
+    activeSet = TRUE,
+    activeSetNum = 3,
+    maxSwaps = 100,
+    scaleDownFactor = 0.8,
+    screenSize = 1000,
+    autoLambda = NULL,
+    lambdaGrid = list(),
+    excludeFirstK = 0,
+    intercept = TRUE,
+    lows = -Inf,
+    highs = Inf) {
   # Check parameter values
   if ((rtol < 0) || (rtol >= 1)) {
     stop("The specified rtol parameter must exist in [0, 1).")

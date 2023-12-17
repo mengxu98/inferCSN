@@ -67,8 +67,9 @@ reference:
   - predict.inferCSN
   - predict.inferCSNCV
   - is.scalar
+  - table.to.matrix
 
 - subtitle: "Example data"
 - contents:
-  - exampleMatrix
-  - exampleGroundTruth
+  - example_matrix
+  - example_ground_truth

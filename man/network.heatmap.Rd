@@ -64,7 +64,8 @@ p4 <- network.heatmap(weight_table,
 
 ComplexHeatmap::draw(p3 + p4)
 
-p5 <- network.heatmap(weight_table,
+p5 <- network.heatmap(
+  weight_table,
   heatmap_title = "inferCSN",
   show_names = TRUE
 )
