@@ -3,14 +3,14 @@
 \docType{methods}
 \name{inferCSN}
 \alias{inferCSN}
-\alias{inferCSN,data.frame-method}
 \alias{inferCSN,matrix-method}
+\alias{inferCSN,data.frame-method}
 \title{Inferring Cell-Specific Gene Regulatory Network}
 \usage{
-inferCSN(matrix, ...)
+inferCSN(object, ...)
 
-\S4method{inferCSN}{data.frame}(
-  matrix,
+\S4method{inferCSN}{matrix}(
+  object,
   penalty = "L0",
   algorithm = "CD",
   cross_validation = FALSE,
@@ -26,8 +26,8 @@ inferCSN(matrix, ...)
   ...
 )
 
-\S4method{inferCSN}{matrix}(
-  matrix,
+\S4method{inferCSN}{data.frame}(
+  object,
   penalty = "L0",
   algorithm = "CD",
   cross_validation = FALSE,
@@ -44,9 +44,9 @@ inferCSN(matrix, ...)
 )
 }
 \arguments{
-\item{matrix}{An expression matrix, cells by genes}
+\item{object}{Input object}
 
-\item{...}{Arguments passed to other methods.}
+\item{...}{Arguments passed to other methods}
 
 \item{penalty}{The type of regularization.
 This can take either one of the following choices: "L0" and "L0L2".
@@ -92,5 +92,4 @@ head(weight_table)
 
 weight_table <- inferCSN(example_matrix, verbose = TRUE, cores = 2)
 head(weight_table)
-
 }
