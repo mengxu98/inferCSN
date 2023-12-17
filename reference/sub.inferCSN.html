@@ -57,28 +57,28 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sub.inferCSN</span><span class="op">(</span></span>
-<span>  <span class="va">regulatorsMatrix</span>,</span>
-<span>  <span class="va">targetsMatrix</span>,</span>
+<span>  <span class="va">regulators_matrix</span>,</span>
+<span>  <span class="va">targets_matrix</span>,</span>
 <span>  target <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  crossValidation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  cross_validation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  penalty <span class="op">=</span> <span class="st">"L0"</span>,</span>
 <span>  algorithm <span class="op">=</span> <span class="st">"CD"</span>,</span>
-<span>  maxSuppSize <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  nFolds <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  kFolds <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  rThreshold <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  regulators_num <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  n_folds <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  k_folds <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  r_threshold <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>regulatorsMatrix</dt>
+    <dl><dt>regulators_matrix</dt>
 <dd><p>Regulators matrix</p></dd>
 
 
-<dt>targetsMatrix</dt>
+<dt>targets_matrix</dt>
 <dd><p>Targets matrix</p></dd>
 
 
@@ -86,7 +86,7 @@
 <dd><p>Target genes</p></dd>
 
 
-<dt>crossValidation</dt>
+<dt>cross_validation</dt>
 <dd><p>Check whether cross validation is used.</p></dd>
 
 
@@ -106,21 +106,21 @@ Currently "CD" and "CDPSI" are supported.
 The CDPSI algorithm may yield better results, but it also increases running time.</p></dd>
 
 
-<dt>maxSuppSize</dt>
+<dt>regulators_num</dt>
 <dd><p>The number of non-zore coef, this value will affect the final performance.
 The maximum support size at which to terminate the regularization path.
 Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.</p></dd>
 
 
-<dt>nFolds</dt>
+<dt>n_folds</dt>
 <dd><p>The number of folds for cross-validation.</p></dd>
 
 
-<dt>kFolds</dt>
+<dt>k_folds</dt>
 <dd><p>The number of folds for sample split.</p></dd>
 
 
-<dt>rThreshold</dt>
+<dt>r_threshold</dt>
 <dd><p>Threshold of R^2.</p></dd>
 
 

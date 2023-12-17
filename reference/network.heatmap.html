@@ -57,44 +57,44 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">network.heatmap</span><span class="op">(</span></span>
-<span>  <span class="va">weightDT</span>,</span>
-<span>  switchMatrix <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  heatmapSize <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  heatmapTitle <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  heatmapColor <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  showNames <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  legendName <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  <span class="va">weight_table</span>,</span>
+<span>  switch_watrix <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  heatmap_size <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  heatmap_title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  heatmap_color <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  show_names <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  legend_name <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>weightDT</dt>
+    <dl><dt>weight_table</dt>
 <dd><p>The weight data table of network</p></dd>
 
 
-<dt>switchMatrix</dt>
-<dd><p>switchMatrix</p></dd>
+<dt>switch_watrix</dt>
+<dd><p>switch_watrix</p></dd>
 
 
-<dt>heatmapSize</dt>
-<dd><p>heatmapSize</p></dd>
+<dt>heatmap_size</dt>
+<dd><p>heatmap_size</p></dd>
 
 
-<dt>heatmapTitle</dt>
-<dd><p>heatmapTitle</p></dd>
+<dt>heatmap_title</dt>
+<dd><p>heatmap_title</p></dd>
 
 
-<dt>heatmapColor</dt>
-<dd><p>heatmapColor</p></dd>
+<dt>heatmap_color</dt>
+<dd><p>heatmap_color</p></dd>
 
 
-<dt>showNames</dt>
-<dd><p>showNames</p></dd>
+<dt>show_names</dt>
+<dd><p>show_names</p></dd>
 
 
-<dt>legendName</dt>
-<dd><p>legendName</p></dd>
+<dt>legend_name</dt>
+<dd><p>legend_name</p></dd>
 
 </dl></div>
     <div id="value">
@@ -107,37 +107,42 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mengxu98.github.io/inferCSN/">inferCSN</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"exampleMatrix"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"exampleGroundTruth"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">weightDT</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">exampleMatrix</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">network.heatmap</span><span class="op">(</span><span class="va">exampleGroundTruth</span>,</span></span>
-<span class="r-in"><span>                      heatmapTitle <span class="op">=</span> <span class="st">"Ground truth"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_ground_truth"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">weight_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">network.heatmap</span><span class="op">(</span><span class="va">example_ground_truth</span>,</span></span>
+<span class="r-in"><span>  heatmap_title <span class="op">=</span> <span class="st">"Ground truth"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">network.heatmap</span><span class="op">(</span><span class="va">weightDT</span>,</span></span>
-<span class="r-in"><span>                      legendName <span class="op">=</span> <span class="st">"Weight2"</span>,</span></span>
-<span class="r-in"><span>                      heatmapTitle <span class="op">=</span> <span class="st">"inferCSN"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">network.heatmap</span><span class="op">(</span><span class="va">weight_table</span>,</span></span>
+<span class="r-in"><span>  legend_name <span class="op">=</span> <span class="st">"Weight2"</span>,</span></span>
+<span class="r-in"><span>  heatmap_title <span class="op">=</span> <span class="st">"inferCSN"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html" class="external-link">draw</a></span><span class="op">(</span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="network.heatmap-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu">network.heatmap</span><span class="op">(</span><span class="va">weightDT</span>,</span></span>
-<span class="r-in"><span>                      heatmapTitle <span class="op">=</span> <span class="st">"inferCSN"</span>,</span></span>
-<span class="r-in"><span>                      heatmapColor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#20a485"</span>, <span class="st">"#410054"</span>, <span class="st">"#fee81f"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu">network.heatmap</span><span class="op">(</span><span class="va">weight_table</span>,</span></span>
+<span class="r-in"><span>  heatmap_title <span class="op">=</span> <span class="st">"inferCSN"</span>,</span></span>
+<span class="r-in"><span>  heatmap_color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#20a485"</span>, <span class="st">"#410054"</span>, <span class="st">"#fee81f"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu">network.heatmap</span><span class="op">(</span><span class="va">weightDT</span>,</span></span>
-<span class="r-in"><span>                      heatmapTitle <span class="op">=</span> <span class="st">"inferCSN"</span>,</span></span>
-<span class="r-in"><span>                      legendName <span class="op">=</span> <span class="st">"Weight2"</span>,</span></span>
-<span class="r-in"><span>                      heatmapColor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#20a485"</span>, <span class="st">"white"</span>, <span class="st">"#fee81f"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu">network.heatmap</span><span class="op">(</span><span class="va">weight_table</span>,</span></span>
+<span class="r-in"><span>  heatmap_title <span class="op">=</span> <span class="st">"inferCSN"</span>,</span></span>
+<span class="r-in"><span>  legend_name <span class="op">=</span> <span class="st">"Weight2"</span>,</span></span>
+<span class="r-in"><span>  heatmap_color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#20a485"</span>, <span class="st">"white"</span>, <span class="st">"#fee81f"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html" class="external-link">draw</a></span><span class="op">(</span><span class="va">p3</span> <span class="op">+</span> <span class="va">p4</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="network.heatmap-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">p5</span> <span class="op">&lt;-</span> <span class="fu">network.heatmap</span><span class="op">(</span><span class="va">weightDT</span>,</span></span>
-<span class="r-in"><span>                      heatmapTitle <span class="op">=</span> <span class="st">"inferCSN"</span>,</span></span>
-<span class="r-in"><span>                      showNames <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p5</span> <span class="op">&lt;-</span> <span class="fu">network.heatmap</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">weight_table</span>,</span></span>
+<span class="r-in"><span>  heatmap_title <span class="op">=</span> <span class="st">"inferCSN"</span>,</span></span>
+<span class="r-in"><span>  show_names <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">p5</span></span></span>
 <span class="r-plt img"><img src="network.heatmap-3.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>

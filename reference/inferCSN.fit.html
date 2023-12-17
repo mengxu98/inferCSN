@@ -61,9 +61,9 @@
 <span>  <span class="va">y</span>,</span>
 <span>  penalty <span class="op">=</span> <span class="st">"L0"</span>,</span>
 <span>  algorithm <span class="op">=</span> <span class="st">"CD"</span>,</span>
-<span>  maxSuppSize <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>  crossValidation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  nFolds <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  regulators_num <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  cross_validation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  n_folds <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  loss <span class="op">=</span> <span class="st">"SquaredError"</span>,</span>
 <span>  nLambda <span class="op">=</span> <span class="fl">100</span>,</span>
@@ -110,17 +110,17 @@ Currently "CD" and "CDPSI" are supported.
 The CDPSI algorithm may yield better results, but it also increases running time.</p></dd>
 
 
-<dt>maxSuppSize</dt>
+<dt>regulators_num</dt>
 <dd><p>The number of non-zore coef, this value will affect the final performance.
 The maximum support size at which to terminate the regularization path.
 Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.</p></dd>
 
 
-<dt>crossValidation</dt>
+<dt>cross_validation</dt>
 <dd><p>Check whether cross validation is used.</p></dd>
 
 
-<dt>nFolds</dt>
+<dt>n_folds</dt>
 <dd><p>The number of folds for cross-validation.</p></dd>
 
 

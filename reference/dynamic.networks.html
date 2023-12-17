@@ -56,13 +56,13 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dynamic.networks</span><span class="op">(</span><span class="va">weightDT</span>, regulators <span class="op">=</span> <span class="cn">NULL</span>, legend.position <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dynamic.networks</span><span class="op">(</span><span class="va">weight_table</span>, regulators <span class="op">=</span> <span class="cn">NULL</span>, legend.position <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>weightDT</dt>
-<dd><p>weightDT</p></dd>
+    <dl><dt>weight_table</dt>
+<dd><p>weight_table</p></dd>
 
 
 <dt>regulators</dt>
@@ -83,12 +83,11 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mengxu98.github.io/inferCSN/">inferCSN</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"exampleMatrix"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">weightDT</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">exampleMatrix</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">dynamic.networks</span><span class="op">(</span><span class="va">weightDT</span>, regulators <span class="op">=</span> <span class="va">weightDT</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">weight_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">dynamic.networks</span><span class="op">(</span><span class="va">weight_table</span>, regulators <span class="op">=</span> <span class="va">weight_table</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">g</span></span></span>
 <span class="r-plt img"><img src="dynamic.networks-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>

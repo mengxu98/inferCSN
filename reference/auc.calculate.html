@@ -57,21 +57,21 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">auc.calculate</span><span class="op">(</span></span>
-<span>  <span class="va">weightDT</span>,</span>
-<span>  <span class="va">groundTruth</span>,</span>
+<span>  <span class="va">weight_table</span>,</span>
+<span>  <span class="va">ground_truth</span>,</span>
 <span>  plot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  lineColor <span class="op">=</span> <span class="st">"#1563cc"</span>,</span>
-<span>  lineWidth <span class="op">=</span> <span class="fl">1</span></span>
+<span>  line_color <span class="op">=</span> <span class="st">"#1563cc"</span>,</span>
+<span>  line_width <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>weightDT</dt>
+    <dl><dt>weight_table</dt>
 <dd><p>The weight data table of network</p></dd>
 
 
-<dt>groundTruth</dt>
+<dt>ground_truth</dt>
 <dd><p>Ground truth for calculate AUC</p></dd>
 
 
@@ -79,11 +79,11 @@
 <dd><p>If true, draw and print figure of AUC</p></dd>
 
 
-<dt>lineColor</dt>
+<dt>line_color</dt>
 <dd><p>The color of line in the figure</p></dd>
 
 
-<dt>lineWidth</dt>
+<dt>line_width</dt>
 <dd><p>The width of line in the figure</p></dd>
 
 </dl></div>
@@ -97,10 +97,10 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mengxu98.github.io/inferCSN/">inferCSN</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"exampleMatrix"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"exampleGroundTruth"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">weightDT</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">exampleMatrix</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">auc</span> <span class="op">&lt;-</span> <span class="fu">auc.calculate</span><span class="op">(</span><span class="va">weightDT</span>, <span class="va">exampleGroundTruth</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_ground_truth"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">weight_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">auc</span> <span class="op">&lt;-</span> <span class="fu">auc.calculate</span><span class="op">(</span><span class="va">weight_table</span>, <span class="va">example_ground_truth</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="auc.calculate-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">auc</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   AUROC AUPRC   ACC</span>

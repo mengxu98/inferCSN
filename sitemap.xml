@@ -37,10 +37,10 @@
     <loc>https://mengxu98.github.io/inferCSN/reference/dynamic.networks.html</loc>
   </url>
   <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/exampleGroundTruth.html</loc>
+    <loc>https://mengxu98.github.io/inferCSN/reference/example_ground_truth.html</loc>
   </url>
   <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/exampleMatrix.html</loc>
+    <loc>https://mengxu98.github.io/inferCSN/reference/example_matrix.html</loc>
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/index.html</loc>
@@ -74,5 +74,8 @@
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/sub.inferCSN.html</loc>
+  </url>
+  <url>
+    <loc>https://mengxu98.github.io/inferCSN/reference/table.to.matrix.html</loc>
   </url>
 </urlset>

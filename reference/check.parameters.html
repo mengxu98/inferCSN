@@ -60,14 +60,14 @@
 <span>  <span class="va">matrix</span>,</span>
 <span>  <span class="va">penalty</span>,</span>
 <span>  <span class="va">algorithm</span>,</span>
-<span>  <span class="va">crossValidation</span>,</span>
+<span>  <span class="va">cross_validation</span>,</span>
 <span>  <span class="va">seed</span>,</span>
-<span>  <span class="va">nFolds</span>,</span>
-<span>  <span class="va">kFolds</span>,</span>
-<span>  <span class="va">rThreshold</span>,</span>
+<span>  <span class="va">n_folds</span>,</span>
+<span>  <span class="va">k_folds</span>,</span>
+<span>  <span class="va">r_threshold</span>,</span>
 <span>  <span class="va">regulators</span>,</span>
 <span>  <span class="va">targets</span>,</span>
-<span>  <span class="va">maxSuppSize</span>,</span>
+<span>  <span class="va">regulators_num</span>,</span>
 <span>  <span class="va">verbose</span>,</span>
 <span>  <span class="va">cores</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -91,7 +91,7 @@ Currently "CD" and "CDPSI" are supported.
 The CDPSI algorithm may yield better results, but it also increases running time.</p></dd>
 
 
-<dt>crossValidation</dt>
+<dt>cross_validation</dt>
 <dd><p>Check whether cross validation is used.</p></dd>
 
 
@@ -99,15 +99,15 @@ The CDPSI algorithm may yield better results, but it also increases running time
 <dd><p>The seed used in randomly shuffling the data for cross-validation.</p></dd>
 
 
-<dt>nFolds</dt>
+<dt>n_folds</dt>
 <dd><p>The number of folds for cross-validation.</p></dd>
 
 
-<dt>kFolds</dt>
+<dt>k_folds</dt>
 <dd><p>The number of folds for sample split.</p></dd>
 
 
-<dt>rThreshold</dt>
+<dt>r_threshold</dt>
 <dd><p>Threshold of R^2.</p></dd>
 
 
@@ -119,7 +119,7 @@ The CDPSI algorithm may yield better results, but it also increases running time
 <dd><p>Target genes.</p></dd>
 
 
-<dt>maxSuppSize</dt>
+<dt>regulators_num</dt>
 <dd><p>The number of non-zore coef, this value will affect the final performance.
 The maximum support size at which to terminate the regularization path.
 Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.</p></dd>
