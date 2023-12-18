@@ -41,3 +41,7 @@ R CMD INSTALL . --library=/your/lib/path
 ## **Usage**
 
 How to use [*`inferCSN`*](https://mengxu98.github.io/inferCSN/)? Please reference [*`here`*](https://mengxu98.github.io/inferCSN/reference/index.html).
+
+## **Cite**
+
+If you use [*`inferCSN`*](https://mengxu98.github.io/inferCSN/) in your work, please cite it reference [*`here`*](https://github.com/mengxu98/inferCSN/blob/main/src/README.cpp).
