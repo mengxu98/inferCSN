@@ -7,7 +7,6 @@ utils::globalVariables(c(
   "Interaction",
   "name",
   "regulator",
-  "target",
   "degree",
   "edges",
   "curvetype"

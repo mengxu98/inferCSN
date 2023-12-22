@@ -45,7 +45,6 @@ setGeneric("inferCSN",
 #' @param cores CPU cores.
 #'
 #' @import Matrix
-#' @import data.table
 #' @import doParallel
 #' @import parallel
 #' @import foreach
@@ -76,6 +75,7 @@ setMethod("inferCSN",
            ...) {
     if (verbose) message(paste("Running start for <", class(object)[1], ">."))
     matrix <- object
+    rm(object)
 
     # Check input parameters
     check.parameters(
@@ -108,6 +108,7 @@ setMethod("inferCSN",
     targets <- colnames(targets_matrix)
     rm(matrix)
 
+    target <- NULL
     cores <- min(
       (parallel::detectCores(logical = FALSE) - 1), cores, length(targets)
     )
@@ -165,8 +166,7 @@ setMethod("inferCSN",
           verbose = verbose
         )
       }
-      weight_table <- data.table::rbindlist(weight_table)
-      attr(weight_table, ".internal.selfref") <- NULL
+      weight_table <- purrr::list_rbind(weight_table)
       doParallel::stopImplicitCluster()
     }
 
@@ -200,6 +200,8 @@ setMethod("inferCSN",
            ...) {
     if (verbose) warning("Converting class type of input data from <data.frame> to <matrix>.")
     matrix <- as.matrix(object)
+    rm(object)
+
     inferCSN(
       object = matrix,
       penalty = penalty,
