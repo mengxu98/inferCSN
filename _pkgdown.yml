@@ -59,9 +59,10 @@ reference:
 - subtitle: "Utils functions"
 - contents:
   - check.parameters
-  - net.format
   - coef.inferCSN
   - coef.inferCSNCV
+  - net.format
+  - prepare.performance.data
   - print.inferCSN
   - print.inferCSNCV
   - predict.inferCSN

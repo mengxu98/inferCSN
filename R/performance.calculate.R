@@ -19,25 +19,16 @@
 #' weight_table <- inferCSN(example_matrix)
 #' auc <- auc.calculate(weight_table, example_ground_truth, plot = TRUE)
 #' head(auc)
-#'
-auc.calculate <- function(weight_table,
-                          ground_truth,
-                          plot = FALSE,
-                          line_color = "#1563cc",
-                          line_width = 1) {
-  # Check input data
-  colnames(weight_table) <- c("regulator", "target", "weight")
-  weight_table$weight <- abs(as.numeric(weight_table$weight))
+auc.calculate <- function(
+    weight_table,
+    ground_truth,
+    plot = FALSE,
+    line_color = "#1563cc",
+    line_width = 1) {
 
-  if (ncol(ground_truth) > 2) ground_truth <- ground_truth[, 1:2]
-  names(ground_truth) <- c("regulator", "target")
-  ground_truth$label <- rep(1, nrow(ground_truth))
-
-  gold <- merge(weight_table, ground_truth,
-    by = c("regulator", "target"),
-    all.x = TRUE
-  )
-  gold$label[is.na(gold$label)] <- 0
+  gold <- prepare.performance.data(
+    weight_table,
+    ground_truth)
 
   auc_curves <- precrec::evalmod(
     scores = gold$weight,
@@ -48,12 +39,10 @@ auc.calculate <- function(weight_table,
 
   auc_metric <- data.frame(
     AUROC = rep(0.000, 1),
-    AUPRC = rep(0.000, 1),
-    ACC = rep(0.000, 1)
+    AUPRC = rep(0.000, 1)
   )
   auc_metric[1, "AUROC"] <- sprintf("%0.3f", auc$aucs[1])
   auc_metric[1, "AUPRC"] <- sprintf("%0.3f", auc$aucs[2])
-  auc_metric[1, "ACC"] <- sprintf("%0.3f", acc.calculate(gold))
   if (plot) {
     # Separate data
     auroc_table <- subset(
@@ -112,16 +101,29 @@ auc.calculate <- function(weight_table,
 
 #' ACC calculate
 #'
-#' @param gold Data
+#' @inheritParams auc.calculate
 #'
-#' @return ACC
+#' @return ACC value
 #' @export
 #'
-acc.calculate <- function(gold) {
-  results <- pROC::roc(gold$label ~ gold$weight,
+#' @examples
+#' library(inferCSN)
+#' data("example_matrix")
+#' data("example_ground_truth")
+#' weight_table <- inferCSN(example_matrix)
+#' acc <- acc.calculate(weight_table, example_ground_truth)
+#' acc
+acc.calculate <- function(
+    weight_table,
+    ground_truth) {
+
+  gold <- prepare.performance.data(
+    weight_table,
+    ground_truth)
+  results <- pROC::roc(
+    gold$label ~ gold$weight,
     direction = "<",
-    levels = c(0, 1)
-  )
+    levels = c(0, 1))
 
   # After this operation, '0' indicate positive
   reverse_label <- 2 - as.numeric(as.factor(gold$label))
@@ -145,6 +147,33 @@ acc.calculate <- function(gold) {
   pre <- as.vector(table(predictor_binary, reverse_label))
 
   acc <- (pre[1] + pre[4]) / sum(pre)
-
+  acc <- sprintf("%0.3f", acc)
   return(acc)
+}
+
+#' @title prepare.performance.data
+#'
+#' @inheritParams auc.calculate
+#'
+#' @return Formated data
+#' @export
+prepare.performance.data <- function(
+    weight_table,
+    ground_truth) {
+  # Check input data
+  colnames(weight_table) <- c("regulator", "target", "weight")
+  weight_table$weight <- abs(as.numeric(weight_table$weight))
+
+  if (ncol(ground_truth) > 2) ground_truth <- ground_truth[, 1:2]
+  names(ground_truth) <- c("regulator", "target")
+  ground_truth$label <- rep(1, nrow(ground_truth))
+
+  gold <- merge(
+    weight_table,
+    ground_truth,
+    by = c("regulator", "target"),
+    all.x = TRUE
+  )
+  gold$label[is.na(gold$label)] <- 0
+  return(gold)
 }
