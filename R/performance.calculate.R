@@ -18,7 +18,7 @@
 #' data("example_ground_truth")
 #' weight_table <- inferCSN(example_matrix)
 #' auc <- auc.calculate(weight_table, example_ground_truth, plot = TRUE)
-#' head(auc)
+#' auc
 auc.calculate <- function(
     weight_table,
     ground_truth,
