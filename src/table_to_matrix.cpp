@@ -10,9 +10,9 @@ NumericMatrix table_to_matrix(DataFrame weight_table) {
 
   CharacterVector genes = union_(regulator, target);
 
-  int numGenes = genes.size();
+  int num_genes = genes.size();
 
-  NumericMatrix weight_matrix(numGenes, numGenes);
+  NumericMatrix weight_matrix(num_genes, num_genes);
   colnames(weight_matrix) = genes;
   rownames(weight_matrix) = genes;
 
@@ -38,9 +38,9 @@ NumericMatrix table_to_matrix(DataFrame weight_table) {
 //   genes <- gtools::mixedsort(unique(c(weight_table$regulator, weight_table$target)))
 //
 //   weight_matrix <- matrix(0,
-//                          nrow = length(genes),
-//                          ncol = length(genes),
-//                          dimnames = list(genes, genes))
+//                           nrow = length(genes),
+//                           ncol = length(genes),
+//                           dimnames = list(genes, genes))
 //
 //   for (i in 1:nrow(weight_table)) {
 //     weight_matrix[weight_table$regulator[i], weight_table$target[i]] <- weight_table$weight[i]
@@ -56,10 +56,10 @@ NumericMatrix table_to_matrix(DataFrame weight_table) {
 // }
 //
 // #' @examples
-// Rcpp::sourceCpp("src/table_to_matrix.cpp")
+//   Rcpp::sourceCpp("src/table_to_matrix.cpp")
 //   library(inferCSN)
-//   data("exampleMatrix")
-//   weight_table <- inferCSN(exampleMatrix, verbose = TRUE)
+//   data("example_matrix")
+//   weight_table <- inferCSN(example_matrix, verbose = TRUE)
 //   weight_matrix <- table_to_matrix(weight_table)
 //   genes <- gtools::mixedsort(unique(c(weight_table$regulator, weight_table$target)))
 //   weight_matrix <- weight_matrix[genes, genes]
@@ -67,6 +67,9 @@ NumericMatrix table_to_matrix(DataFrame weight_table) {
 //   weightMatrixR2 <- table_to_matrix_r2(weight_table)
 //
 // # Using `bench` package to evaluate the two versions of this function
+//   if (!requireNamespace("bench", quietly = TRUE)) {
+//     install.packages("bench")
+//   }
 //   bench::mark(table_to_matrix_r(weight_table),
 //               table_to_matrix(weight_table)[genes, genes],
-//                                  table_to_matrix_r2(weight_table))
+//               table_to_matrix_r2(weight_table))
