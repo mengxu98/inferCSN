@@ -1,13 +1,12 @@
 Type: Package
 Package: inferCSN
 Title: Inferring Cell-Specific Gene Regulatory Network
-Version: 0.99.8
-Date: 2023-12-1
+Version: 0.99.9
+Date: 2024-1-10
 Authors@R: 
     person("Meng", "Xu", email = "mengxu98@qq.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-8300-1054"))
 Maintainer: Meng Xu <mengxu98@qq.com>
 Description: A method for inferring cell-specific gene regulatory network from single-cell sequencing data.
-biocViews: CellBiology, GeneExpression
 License: MIT + file LICENSE
 URL: https://mengxu98.github.io/inferCSN/
 BugReports: https://github.com/mengxu98/inferCSN/issues
