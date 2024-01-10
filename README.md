@@ -44,4 +44,4 @@ How to use [*`inferCSN`*](https://mengxu98.github.io/inferCSN/)? Please referenc
 
 ## **Cite**
 
-If you use [*`inferCSN`*](https://mengxu98.github.io/inferCSN/) in your work, please cite it reference [*`here`*](https://github.com/mengxu98/inferCSN/blob/main/src/README.cpp).
+If you use [*`inferCSN`*](https://github.com/mengxu98/inferCSN) in your work, please cite it reference [*`here`*](https://github.com/mengxu98/inferCSN/blob/main/src/README.cpp).
