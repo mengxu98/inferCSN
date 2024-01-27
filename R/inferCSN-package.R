@@ -9,4 +9,4 @@
 #'
 #' @docType package
 #' @name inferCSN-package
-NULL
+"_PACKAGE"

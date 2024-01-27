@@ -10,6 +10,14 @@
 \description{
 A method for inferring cell-specific gene regulatory network from single-cell sequencing data.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://mengxu98.github.io/inferCSN/}
+  \item Report bugs at \url{https://github.com/mengxu98/inferCSN/issues}
+}
+
+}
 \author{
 Meng xu (Maintainer), \email{mengxu98@qq.com}
 }
