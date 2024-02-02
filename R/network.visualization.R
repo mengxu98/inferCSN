@@ -46,13 +46,14 @@
 #'   show_names = TRUE
 #' )
 #' p5
-network.heatmap <- function(weight_table,
-                            switch_watrix = TRUE,
-                            heatmap_size = NULL,
-                            heatmap_title = NULL,
-                            heatmap_color = NULL,
-                            show_names = FALSE,
-                            legend_name = NULL) {
+network.heatmap <- function(
+    weight_table,
+    switch_watrix = TRUE,
+    heatmap_size = NULL,
+    heatmap_title = NULL,
+    heatmap_color = NULL,
+    show_names = FALSE,
+    legend_name = NULL) {
   if (switch_watrix) {
     colnames(weight_table) <- c("regulator", "target", "weight")
     genes <- c(weight_table$regulator, weight_table$target)
@@ -78,19 +79,23 @@ network.heatmap <- function(weight_table,
   max_weight <- max(weight_matrix)
   if (min_weight >= 0) {
     color_function <- circlize::colorRamp2(
-      c(min_weight, max_weight), heatmap_color[-1]
+      c(min_weight, max_weight),
+      heatmap_color[-1]
     )
   } else if (max_weight <= 0) {
     color_function <- circlize::colorRamp2(
-      c(min_weight, max_weight), heatmap_color[-3]
+      c(min_weight, max_weight),
+      heatmap_color[-3]
     )
   } else {
     color_function <- circlize::colorRamp2(
-      c(min_weight, 0, max_weight), heatmap_color
+      c(min_weight, 0, max_weight),
+      heatmap_color
     )
   }
 
-  p <- ComplexHeatmap::Heatmap(weight_matrix,
+  p <- ComplexHeatmap::Heatmap(
+    weight_matrix,
     name = legend_name,
     col = color_function,
     column_title = heatmap_title,
@@ -118,17 +123,23 @@ network.heatmap <- function(weight_table,
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' # because `ggnetwork` package may be cause error
+#' # you can install `igraph 1.6.0` or lower to deal error
+#' # or waitting a new version of `ggnetwork` package
 #' library(inferCSN)
 #' data("example_matrix")
 #' weight_table <- inferCSN(example_matrix)
 #' g <- dynamic.networks(weight_table, regulators = weight_table[1, 1])
 #' g
+#' }
 dynamic.networks <- function(
     weight_table,
     regulators = NULL,
     legend.position = "right") {
   # Format input data
-  weight_table <- net.format(weight_table,
+  weight_table <- net.format(
+    weight_table,
     regulators = regulators
   )
 
@@ -140,7 +151,8 @@ dynamic.networks <- function(
   layout <- igraph::layout_with_fr(net)
   rownames(layout) <- igraph::V(net)$name
   layout_ordered <- layout[igraph::V(net)$name, ]
-  regulator_network <- ggnetwork(net,
+  regulator_network <- ggnetwork(
+    net,
     layout = layout_ordered,
     cell.jitter = 0
   )

@@ -3,7 +3,7 @@
 #' @useDynLib inferCSN
 #'
 #' @param object Input object
-#' @param ... Arguments passed to other methods
+#' @param ... Arguments for other methods
 #'
 #' @docType methods
 #' @rdname inferCSN

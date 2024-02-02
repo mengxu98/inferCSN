@@ -46,7 +46,7 @@ inferCSN(object, ...)
 \arguments{
 \item{object}{Input object}
 
-\item{...}{Arguments passed to other methods}
+\item{...}{Arguments for other methods}
 
 \item{penalty}{The type of regularization.
 This can take either one of the following choices: "L0" and "L0L2".

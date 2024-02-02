@@ -4,7 +4,7 @@ utils::globalVariables(c(
   "xend",
   "yend",
   "weight",
-  "Interaction",
+  "interaction",
   "name",
   "regulator",
   "degree",
@@ -19,32 +19,27 @@ utils::globalVariables(c(
 #'
 #' @return No return value, called for check input parameters
 #' @export
-#'
-check.parameters <- function(matrix,
-                             penalty,
-                             algorithm,
-                             cross_validation,
-                             seed,
-                             n_folds,
-                             k_folds,
-                             r_threshold,
-                             regulators,
-                             targets,
-                             regulators_num,
-                             verbose,
-                             cores) {
+check.parameters <- function(
+    matrix,
+    penalty,
+    algorithm,
+    cross_validation,
+    seed,
+    n_folds,
+    k_folds,
+    r_threshold,
+    regulators,
+    targets,
+    regulators_num,
+    verbose,
+    cores) {
   if (verbose) message("Checking input parameters.")
 
-  error_message <- paste0(
-    "Parameter matrix must be a two-dimensional matrix,
-    where each column corresponds to a gene and each row corresponds to a sample/cell."
-  )
-  if (!is.matrix(matrix) && !is.array(matrix)) {
-    stop(error_message)
-  }
-
-  if (length(dim(matrix)) != 2) {
-    stop(error_message)
+  if (!is.matrix(matrix) && !is.array(matrix) && (length(dim(matrix)) != 2)) {
+    stop(
+      "Parameter matrix must be a two-dimensional matrix,
+      where each column corresponds to a gene and each row corresponds to a sample/cell."
+    )
   }
 
   if (is.null(colnames(matrix))) {
@@ -69,7 +64,7 @@ check.parameters <- function(matrix,
 
   if (!is.numeric(seed)) {
     seed <- 1
-    warning("Supplied seed is not a valid integer, initialize 'seed' to 1.")
+    if (verbose) warning("Supplied seed is not a valid integer, initialize 'seed' to 1.")
   }
 
   if (!is.null(k_folds)) {
@@ -97,16 +92,13 @@ check.parameters <- function(matrix,
       }
 
       if (length(targetsInMatrix) < length(targets)) {
-        warning("Only ", length(targetsInMatrix), " out of ", length(targets), " candidate regulators are in the expression matrix.")
+        if (verbose) warning("Only ", length(targetsInMatrix), " out of ", length(targets), " candidate regulators are in the expression matrix.")
       }
     }
   }
 
   if (!is.null(regulators)) {
     if (is.list(regulators)) {
-      if (!all(names(regulators) %in% targets)) {
-        stop("Regulators: If provided as a named list, all names should be targets.")
-      }
       regulators <- unique(unlist(regulators))
     }
     if (!is.null(regulators)) {
@@ -126,13 +118,15 @@ check.parameters <- function(matrix,
       if (any(table(regulators) > 1)) stop("Please provide each regulator only once.")
 
       if (is.character(regulators)) {
-        regulatorsInMatrix <- intersect(regulators, colnames(matrix))
-        if (length(regulatorsInMatrix) < 2) {
+        regulators_in_matrix <- intersect(regulators, colnames(matrix))
+        if (length(regulators_in_matrix) < 2) {
           stop("Fewer than 2 regulators in the columns of expression matrix.")
         }
 
-        if (length(regulatorsInMatrix) < length(regulators)) {
-          warning("Only ", length(regulatorsInMatrix), " out of ", length(regulators), " candidate regulators are in the expression matrix.")
+        if (length(regulators_in_matrix) < length(regulators)) {
+          if (verbose) {
+            warning("Only ", length(regulators_in_matrix), " out of ", length(regulators), " candidate regulators are in the expression matrix.")
+          }
         }
       }
     }
@@ -142,10 +136,11 @@ check.parameters <- function(matrix,
     stop(x = "Parameter cores should be a stricly positive integer.")
   }
 
-  if (verbose) message("All parameters check done.")
-
-  if (verbose) message("Using '", penalty, "' penalty.")
-  if (verbose && cross_validation) message("Using cross validation.")
+  if (verbose) {
+    message("All parameters check done.")
+    message("Using '", penalty, "' penalty.")
+    if (cross_validation) message("Using cross validation.")
+  }
 }
 
 #' @title Switch weight table
@@ -154,8 +149,7 @@ check.parameters <- function(matrix,
 #'
 #' @return Format weight matrix
 #' @export
-table.to.matrix <- function(
-    weight_table) {
+table.to.matrix <- function(weight_table) {
   .Call(
     "_inferCSN_table_to_matrix",
     PACKAGE = "inferCSN",
@@ -177,12 +171,13 @@ net.format <- function(
   weight_table$weight <- as.numeric(weight_table$weight)
   weight_table <- dplyr::filter(weight_table, weight != 0)
   if (!is.null(regulators)) {
-    weight_table <- purrr::map_dfr(regulators, function(x) {
-      dplyr::filter(weight_table, regulator == x)
-    })
+    weight_table <- purrr::map_dfr(
+      unique(regulators), function(x) {
+        dplyr::filter(weight_table, regulator == x)
+      })
   }
-  weight_table$Interaction <- "Activation"
-  weight_table$Interaction[weight_table$weight < 0] <- "Repression"
+  weight_table$interaction <- "Activation"
+  weight_table$interaction[weight_table$weight < 0] <- "Repression"
   weight_table$weight <- abs(weight_table$weight)
   return(weight_table)
 }
@@ -257,10 +252,11 @@ coef.inferCSN <- function(
 #'
 #' @return Return the specific solution
 #' @export
-#'
-coef.inferCSNCV <- function(object,
-                            lambda = NULL,
-                            gamma = NULL, ...) {
+coef.inferCSNCV <- function(
+    object,
+    lambda = NULL,
+    gamma = NULL,
+    ...) {
   coef.inferCSN(object$fit, lambda, gamma, ...)
 }
 
@@ -273,7 +269,6 @@ coef.inferCSNCV <- function(object,
 #'
 #' @return Return the information of inferCSN.fit
 #' @export
-#'
 print.inferCSN <- function(x, ...) {
   gammas <- rep(x$gamma, times = lapply(x$lambda, length))
   data.frame(
@@ -290,7 +285,6 @@ print.inferCSN <- function(x, ...) {
 #'
 #' @return Return the information of inferCSN.fit
 #' @export
-#'
 print.inferCSNCV <- function(x, ...) {
   print.inferCSN(x$fit)
 }
@@ -316,11 +310,12 @@ print.inferCSNCV <- function(x, ...) {
 #'
 #' @return Return the predict value
 #' @export
-#'
-predict.inferCSN <- function(object,
-                             newx,
-                             lambda = NULL,
-                             gamma = NULL, ...) {
+predict.inferCSN <- function(
+    object,
+    newx,
+    lambda = NULL,
+    gamma = NULL,
+    ...) {
   beta <- coef.inferCSN(object, lambda, gamma)
   if (object$settings$intercept) {
     # add a column of ones for the intercept
@@ -341,21 +336,15 @@ predict.inferCSN <- function(object,
 #'
 #' @return Return the predict value
 #' @export
-#'
-predict.inferCSNCV <- function(object,
-                               newx,
-                               lambda = NULL,
-                               gamma = NULL, ...) {
+predict.inferCSNCV <- function(
+    object,
+    newx,
+    lambda = NULL,
+    gamma = NULL,
+    ...) {
   predict.inferCSN(object$fit, newx, lambda, gamma, ...)
 }
 
-#' @title is.scalar
-#'
-#' @param x Value
-#'
-#' @return No return value, called for check input parameters
-#' @export
-#'
 is.scalar <- function(x) {
   is.atomic(x) && length(x) == 1L && !is.character(x) && Im(x) == 0 && !is.nan(x) && !is.na(x)
 }
