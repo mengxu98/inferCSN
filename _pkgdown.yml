@@ -67,7 +67,6 @@ reference:
   - print.inferCSNCV
   - predict.inferCSN
   - predict.inferCSNCV
-  - is.scalar
   - table.to.matrix
 
 - subtitle: "Example data"
