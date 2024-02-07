@@ -7,7 +7,6 @@
 #'
 #' @return The coefficients
 #' @export
-#'
 sparse.regression <- function(
     x, y,
     cross_validation = FALSE,
@@ -120,7 +119,6 @@ sparse.regression <- function(
 #'
 #' @return The weight data table of sub-network
 #' @export
-#'
 sub.inferCSN <- function(
     regulators_matrix,
     targets_matrix,

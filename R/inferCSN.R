@@ -18,7 +18,8 @@
 #'
 #' weight_table <- inferCSN(example_matrix, verbose = TRUE, cores = 2)
 #' head(weight_table)
-setGeneric("inferCSN",
+setGeneric(
+  "inferCSN",
   signature = "object",
   function(object, ...) {
     UseMethod(generic = "inferCSN", object = object)
@@ -57,22 +58,24 @@ setGeneric("inferCSN",
 #'
 #' @rdname inferCSN
 #' @export
-setMethod("inferCSN",
+setMethod(
+  "inferCSN",
   signature = "matrix",
-  function(object,
-           penalty = "L0",
-           algorithm = "CD",
-           cross_validation = FALSE,
-           seed = 1,
-           n_folds = 10,
-           k_folds = NULL,
-           r_threshold = 0,
-           regulators = NULL,
-           targets = NULL,
-           regulators_num = NULL,
-           verbose = FALSE,
-           cores = 1,
-           ...) {
+  function(
+    object,
+    penalty = "L0",
+    algorithm = "CD",
+    cross_validation = FALSE,
+    seed = 1,
+    n_folds = 10,
+    k_folds = NULL,
+    r_threshold = 0,
+    regulators = NULL,
+    targets = NULL,
+    regulators_num = NULL,
+    verbose = FALSE,
+    cores = 1,
+    ...) {
     if (verbose) message(paste("Running start for <", class(object)[1], ">."))
     matrix <- object
     rm(object)
@@ -181,23 +184,24 @@ setMethod("inferCSN",
 
 #' @rdname inferCSN
 #' @export
-#'
-setMethod("inferCSN",
+setMethod(
+  "inferCSN",
   signature = "data.frame",
-  function(object,
-           penalty = "L0",
-           algorithm = "CD",
-           cross_validation = FALSE,
-           seed = 1,
-           n_folds = 10,
-           k_folds = NULL,
-           r_threshold = 0,
-           regulators = NULL,
-           targets = NULL,
-           regulators_num = NULL,
-           verbose = FALSE,
-           cores = 1,
-           ...) {
+  function(
+    object,
+    penalty = "L0",
+    algorithm = "CD",
+    cross_validation = FALSE,
+    seed = 1,
+    n_folds = 10,
+    k_folds = NULL,
+    r_threshold = 0,
+    regulators = NULL,
+    targets = NULL,
+    regulators_num = NULL,
+    verbose = FALSE,
+    cores = 1,
+    ...) {
     if (verbose) warning("Converting class type of input data from <data.frame> to <matrix>.")
     matrix <- as.matrix(object)
     rm(object)

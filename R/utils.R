@@ -4,7 +4,7 @@ utils::globalVariables(c(
   "xend",
   "yend",
   "weight",
-  "interaction",
+  "Interaction",
   "name",
   "regulator",
   "degree",
@@ -176,8 +176,8 @@ net.format <- function(
         dplyr::filter(weight_table, regulator == x)
       })
   }
-  weight_table$interaction <- "Activation"
-  weight_table$interaction[weight_table$weight < 0] <- "Repression"
+  weight_table$Interaction <- "Activation"
+  weight_table$Interaction[weight_table$weight < 0] <- "Repression"
   weight_table$weight <- abs(weight_table$weight)
   return(weight_table)
 }
