@@ -1,4 +1,4 @@
-# ***inferCSN*** <img src="man/figures/logo.svg" align="right" width="120" />
+# ***inferCSN*** <img src="man/figures/logo.svg" align="right" width="150" />
 
 <!-- badges: start -->
 
