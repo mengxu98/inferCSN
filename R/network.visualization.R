@@ -1,12 +1,15 @@
 #' @title The heatmap of network
 #'
-#' @param weight_table The weight data table of network
-#' @param switch_watrix switch_watrix
-#' @param heatmap_size heatmap_size
-#' @param heatmap_title heatmap_title
-#' @param heatmap_color heatmap_color
-#' @param show_names show_names
-#' @param legend_name legend_name
+#' @inheritParams net.format
+#' @param switch_matrix Logical value, whether to weight data table to matrix.
+#' @param show_names Logical value, whether to show names of row and column.
+#' @param heatmap_size The size of heatmap, default set to 5.
+#' @param heatmap_height The height of heatmap.
+#' @param heatmap_width The width of heatmap.
+#' @param heatmap_title The title of heatmap.
+#' @param heatmap_color Colors of heatmap.
+#' @param legend_name The name of legend.
+#' @param row_title The title of row.
 #'
 #' @return Return a heatmap of ggplot2 object
 #' @export
@@ -16,63 +19,112 @@
 #' data("example_matrix")
 #' data("example_ground_truth")
 #' weight_table <- inferCSN(example_matrix)
-#' p1 <- network.heatmap(example_ground_truth,
-#'   heatmap_title = "Ground truth"
-#' )
 #'
-#' p2 <- network.heatmap(weight_table,
-#'   legend_name = "Weight2",
-#'   heatmap_title = "inferCSN"
+#' p1 <- network.heatmap(
+#'   example_ground_truth[, 1:3],
+#'   heatmap_title = "Ground truth",
+#'   legend_name = "Ground truth"
 #' )
-#'
+#' p2 <- network.heatmap(
+#'   weight_table,
+#'   heatmap_title = "inferCSN",
+#'   legend_name = "inferCSN"
+#' )
 #' ComplexHeatmap::draw(p1 + p2)
 #'
-#' p3 <- network.heatmap(weight_table,
+#' p3 <- network.heatmap(
+#'   weight_table,
 #'   heatmap_title = "inferCSN",
+#'   legend_name = "Weight1",
 #'   heatmap_color = c("#20a485", "#410054", "#fee81f")
 #' )
-#'
-#' p4 <- network.heatmap(weight_table,
+#' p4 <- network.heatmap(
+#'   weight_table,
 #'   heatmap_title = "inferCSN",
 #'   legend_name = "Weight2",
 #'   heatmap_color = c("#20a485", "white", "#fee81f")
 #' )
-#'
 #' ComplexHeatmap::draw(p3 + p4)
 #'
-#' p5 <- network.heatmap(
+#' network.heatmap(
 #'   weight_table,
 #'   heatmap_title = "inferCSN",
 #'   show_names = TRUE
 #' )
-#' p5
+#'
+#' network.heatmap(
+#'   weight_table,
+#'   regulators = c("g1", "g2"),
+#'   heatmap_title = "inferCSN",
+#'   show_names = TRUE
+#' )
+#'
+#' network.heatmap(
+#'   weight_table,
+#'   targets = c("g1", "g2"),
+#'   heatmap_title = "inferCSN",
+#'   show_names = TRUE
+#' )
+#'
+#' network.heatmap(
+#'   weight_table,
+#'   regulators = c("g1", "g3", "g5"),
+#'   targets = c("g3", "g6", "g9"),
+#'   heatmap_title = "inferCSN",
+#'   show_names = TRUE
+#' )
 network.heatmap <- function(
     weight_table,
-    switch_watrix = TRUE,
-    heatmap_size = NULL,
-    heatmap_title = NULL,
-    heatmap_color = NULL,
+    regulators = NULL,
+    targets = NULL,
+    switch_matrix = TRUE,
     show_names = FALSE,
-    legend_name = NULL) {
-  if (switch_watrix) {
-    colnames(weight_table) <- c("regulator", "target", "weight")
-    genes <- c(weight_table$regulator, weight_table$target)
+    heatmap_size = 5,
+    heatmap_height = NULL,
+    heatmap_width = NULL,
+    heatmap_title = NULL,
+    heatmap_color = c("#1966ad", "white", "#bb141a"),
+    legend_name = "Weight",
+    row_title = "Regulators",
+    abs_weight = FALSE) {
+  if (switch_matrix) {
+    weight_table <- net.format(
+      weight_table,
+      regulators = regulators,
+      targets = targets,
+      abs_weight = FALSE
+    )[, 1:3]
+
+    regulators <- weight_table$regulator
+    targets <- weight_table$target
+
     weight_matrix <- table.to.matrix(weight_table)
   } else {
-    genes <- c(rownames(weight_table), colnames(weight_table))
+    if (is.null(regulators)) {
+      regulators <- rownames(weight_matrix)
+    }
+    if (is.null(targets)) {
+      targets <- colnames(weight_matrix)
+    }
+
     weight_matrix <- weight_table
   }
-  genes <- gtools::mixedsort(unique(genes))
-  weight_matrix <- weight_matrix[genes, genes]
+  weight_matrix[is.na(weight_matrix)] <- 0
 
-  if (is.null(legend_name)) legend_name <- "Weight"
-
-  if (is.null(heatmap_color)) heatmap_color <- c("#1966ad", "white", "#bb141a")
+  unique_regulators <- gtools::mixedsort(unique(regulators))
+  unique_targets <- gtools::mixedsort(unique(targets))
+  weight_matrix <- weight_matrix[unique_regulators, unique_targets]
 
   if (show_names) {
-    if (is.null(heatmap_size)) heatmap_size <- length(genes) / 2
+    if (is.null(heatmap_height) || is.null(heatmap_width)) {
+      heatmap_height <- length(unique_regulators) / 2
+      heatmap_width <- length(unique_targets) / 2
+    }
   } else {
-    if (is.null(heatmap_size)) heatmap_size <- 6
+    if (is.null(heatmap_height) || is.null(heatmap_width)) {
+      heatmap_height <- heatmap_size * length(unique_regulators) / length(unique_targets)
+      heatmap_width <- heatmap_size
+    }
   }
 
   min_weight <- min(weight_matrix)
@@ -99,22 +151,24 @@ network.heatmap <- function(
     name = legend_name,
     col = color_function,
     column_title = heatmap_title,
+    row_title = row_title,
     cluster_rows = FALSE,
     cluster_columns = FALSE,
     show_row_names = show_names,
     show_column_names = show_names,
-    width = unit(heatmap_size, "cm"),
-    height = unit(heatmap_size, "cm"),
-    border = "black"
+    column_names_rot = 45,
+    width = unit(heatmap_width, "cm"),
+    height = unit(heatmap_height, "cm"),
+    border = "gray"
   )
+
   return(p)
 }
 
 #' @title Plot of dynamic networks
 #'
-#' @param weight_table weight_table
-#' @param regulators regulators
-#' @param legend.position legend.position
+#' @inheritParams net.format
+#' @param legend_position The position of legend.
 #'
 #' @import ggplot2
 #' @import ggnetwork
@@ -123,24 +177,32 @@ network.heatmap <- function(
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' # because `ggnetwork` package may be cause error
-#' # you can install `igraph 1.6.0` or lower to deal error
-#' # or waitting a new version of `ggnetwork` package
 #' library(inferCSN)
 #' data("example_matrix")
 #' weight_table <- inferCSN(example_matrix)
-#' g <- dynamic.networks(weight_table, regulators = weight_table[1, 1])
-#' g
-#' }
+#' dynamic.networks(
+#'   weight_table,
+#'   regulators = weight_table[1, 1]
+#' )
+#' dynamic.networks(
+#'   weight_table,
+#'   targets = weight_table[1, 1]
+#' )
+#' dynamic.networks(
+#'   weight_table,
+#'   regulators = weight_table[1, 1],
+#'   targets = weight_table[1, 2]
+#' )
 dynamic.networks <- function(
     weight_table,
     regulators = NULL,
-    legend.position = "right") {
+    targets = NULL,
+    legend_position = "right") {
   # Format input data
   weight_table <- net.format(
     weight_table,
-    regulators = regulators
+    regulators = regulators,
+    targets = targets
   )
 
   net <- igraph::graph_from_data_frame(
@@ -204,16 +266,16 @@ dynamic.networks <- function(
       color = "black"
     ) +
     theme_blank() +
-    theme(legend.position = legend.position)
+    theme(legend.position = legend_position)
+
   return(g)
 }
 
 #' @title contrast.networks
 #'
-#' @param weight_table weight_table
+#' @inheritParams dynamic.networks
 #' @param degree_value degree_value
 #' @param weight_value weight_value
-#' @param legend.position legend.position
 #'
 #' @import ggplot2
 #' @import ggraph
@@ -225,13 +287,12 @@ dynamic.networks <- function(
 #' library(inferCSN)
 #' data("example_matrix")
 #' weight_table <- inferCSN(example_matrix)
-#' g <- contrast.networks(weight_table[1:50, ])
-#' g
+#' contrast.networks(weight_table[1:50, ])
 contrast.networks <- function(
     weight_table,
     degree_value = 0,
     weight_value = 0,
-    legend.position = "bottom") {
+    legend_position = "bottom") {
   weight_table <- net.format(weight_table)
 
   graph <- tidygraph::as_tbl_graph(weight_table)
@@ -263,7 +324,7 @@ contrast.networks <- function(
       foreground = "steelblue",
       fg_text_colour = "white"
     ) +
-    theme(legend.position = legend.position)
+    theme(legend.position = legend_position)
 
   return(g)
 }
