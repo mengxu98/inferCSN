@@ -2,16 +2,16 @@
 % Please edit documentation in R/utils.R
 \name{table.to.matrix}
 \alias{table.to.matrix}
-\title{Switch weight table}
+\title{Switch weight table to matrix}
 \usage{
 table.to.matrix(weight_table)
 }
 \arguments{
-\item{weight_table}{The weight data table of network}
+\item{weight_table}{The weight data table of network.}
 }
 \value{
-Format weight matrix
+Weight matrix
 }
 \description{
-Switch weight table
+Switch weight table to matrix
 }
