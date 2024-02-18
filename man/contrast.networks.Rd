@@ -8,17 +8,17 @@ contrast.networks(
   weight_table,
   degree_value = 0,
   weight_value = 0,
-  legend.position = "bottom"
+  legend_position = "bottom"
 )
 }
 \arguments{
-\item{weight_table}{weight_table}
+\item{weight_table}{The weight data table of network.}
 
 \item{degree_value}{degree_value}
 
 \item{weight_value}{weight_value}
 
-\item{legend.position}{legend.position}
+\item{legend_position}{The position of legend.}
 }
 \value{
 Return a ggplot2 object
@@ -30,6 +30,5 @@ contrast.networks
 library(inferCSN)
 data("example_matrix")
 weight_table <- inferCSN(example_matrix)
-g <- contrast.networks(weight_table[1:50, ])
-g
+contrast.networks(weight_table[1:50, ])
 }
