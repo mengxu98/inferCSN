@@ -56,17 +56,25 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">net.format</span><span class="op">(</span><span class="va">weight_table</span>, regulators <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">net.format</span><span class="op">(</span><span class="va">weight_table</span>, regulators <span class="op">=</span> <span class="cn">NULL</span>, targets <span class="op">=</span> <span class="cn">NULL</span>, abs_weight <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>weight_table</dt>
-<dd><p>The weight data table of network</p></dd>
+<dd><p>The weight data table of network.</p></dd>
 
 
 <dt>regulators</dt>
-<dd><p>Regulators list</p></dd>
+<dd><p>Regulators list.</p></dd>
+
+
+<dt>targets</dt>
+<dd><p>Targets list.</p></dd>
+
+
+<dt>abs_weight</dt>
+<dd><p>Logical value, whether to perform absolute value on weights.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -76,6 +84,68 @@
 <p>Format weight table</p>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mengxu98.github.io/inferCSN/">inferCSN</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_ground_truth"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">weight_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">net.format</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">weight_table</span>,</span></span>
+<span class="r-in"><span>  regulators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    regulator target       weight Interaction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         g1     g2 1.830182e-01  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         g1    g18 9.368866e-02  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         g1     g4 1.932812e-02  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         g1    g13 1.917841e-02  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5         g1     g3 1.724355e-02  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6         g1     g8 1.547471e-02  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7         g1    g10 1.539411e-02  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8         g1    g11 1.343470e-02  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9         g1    g14 1.287926e-02  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10        g1    g16 1.272474e-02  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11        g1     g9 1.247715e-02  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12        g1    g15 1.208990e-02  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13        g1     g5 9.497830e-03  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14        g1    g12 8.764386e-03  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15        g1    g17 7.509575e-03  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16        g1     g7 4.350808e-03  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17        g1     g6 9.540681e-05  Activation</span>
+<span class="r-in"><span><span class="fu">net.format</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">weight_table</span>,</span></span>
+<span class="r-in"><span>  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g3"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    regulator target       weight Interaction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         g4     g3 0.4318166678  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         g2     g3 0.2875832417  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         g5     g3 0.0757304369  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        g16     g3 0.0449972605  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        g15     g3 0.0443172799  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        g18     g3 0.0353525435  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7         g1     g3 0.0172435541  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8        g12     g3 0.0136072283  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9         g9     g3 0.0130705574  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10       g14     g3 0.0129447370  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11       g13     g3 0.0099193157  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12        g8     g3 0.0074714992  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13        g6     g3 0.0032405955  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14       g17     g3 0.0011212724  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15       g11     g3 0.0008018012  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16        g7     g3 0.0005960646  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17       g10     g3 0.0001859443  Repression</span>
+<span class="r-in"><span><span class="fu">net.format</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">weight_table</span>,</span></span>
+<span class="r-in"><span>  regulators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span>, <span class="st">"g3"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g3"</span>, <span class="st">"g5"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   regulator target     weight Interaction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        g1     g3 0.01724355  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        g1     g5 0.00949783  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        g3     g5 0.05474400  Activation</span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
