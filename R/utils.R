@@ -3,10 +3,11 @@ utils::globalVariables(c(
   "y",
   "xend",
   "yend",
+  "regulator",
+  "target",
   "weight",
   "Interaction",
   "name",
-  "regulator",
   "degree",
   "edges",
   "curvetype"
@@ -143,11 +144,11 @@ check.parameters <- function(
   }
 }
 
-#' @title Switch weight table
+#' @title Switch weight table to matrix
 #'
-#' @param weight_table The weight data table of network
+#' @param weight_table The weight data table of network.
 #'
-#' @return Format weight matrix
+#' @return Weight matrix
 #' @export
 table.to.matrix <- function(weight_table) {
   .Call(
@@ -159,14 +160,38 @@ table.to.matrix <- function(weight_table) {
 
 #' @title Format weight table
 #'
-#' @param weight_table The weight data table of network
-#' @param regulators Regulators list
+#' @param weight_table The weight data table of network.
+#' @param regulators Regulators list.
+#' @param targets Targets list.
+#' @param abs_weight Logical value, whether to perform absolute value on weights.
 #'
 #' @return Format weight table
 #' @export
+#'
+#' @examples
+#' library(inferCSN)
+#' data("example_matrix")
+#' data("example_ground_truth")
+#' weight_table <- inferCSN(example_matrix)
+#'
+#' net.format(
+#'   weight_table,
+#'   regulators = c("g1")
+#' )
+#' net.format(
+#'   weight_table,
+#'   targets = c("g3")
+#' )
+#' net.format(
+#'   weight_table,
+#'   regulators = c("g1", "g3"),
+#'   targets = c("g3", "g5")
+#' )
 net.format <- function(
     weight_table,
-    regulators = NULL) {
+    regulators = NULL,
+    targets = NULL,
+    abs_weight = TRUE) {
   colnames(weight_table) <- c("regulator", "target", "weight")
   weight_table$weight <- as.numeric(weight_table$weight)
   weight_table <- dplyr::filter(weight_table, weight != 0)
@@ -176,9 +201,18 @@ net.format <- function(
         dplyr::filter(weight_table, regulator == x)
       })
   }
-  weight_table$Interaction <- "Activation"
-  weight_table$Interaction[weight_table$weight < 0] <- "Repression"
-  weight_table$weight <- abs(weight_table$weight)
+  if (!is.null(targets)) {
+    weight_table <- purrr::map_dfr(
+      unique(targets), function(x) {
+        dplyr::filter(weight_table, target == x)
+      })
+  }
+  weight_table$Interaction <- ifelse(weight_table$weight < 0, "Repression", "Activation")
+
+  if (abs_weight) {
+    weight_table$weight <- abs(weight_table$weight)
+  }
+
   return(weight_table)
 }
 
