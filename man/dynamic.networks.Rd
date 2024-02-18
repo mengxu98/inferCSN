@@ -4,14 +4,21 @@
 \alias{dynamic.networks}
 \title{Plot of dynamic networks}
 \usage{
-dynamic.networks(weight_table, regulators = NULL, legend.position = "right")
+dynamic.networks(
+  weight_table,
+  regulators = NULL,
+  targets = NULL,
+  legend_position = "right"
+)
 }
 \arguments{
-\item{weight_table}{weight_table}
+\item{weight_table}{The weight data table of network.}
 
-\item{regulators}{regulators}
+\item{regulators}{Regulators list.}
 
-\item{legend.position}{legend.position}
+\item{targets}{Targets list.}
+
+\item{legend_position}{The position of legend.}
 }
 \value{
 A list of ggplot2 objects
@@ -20,14 +27,20 @@ A list of ggplot2 objects
 Plot of dynamic networks
 }
 \examples{
-\dontrun{
-# because `ggnetwork` package may be cause error
-# you can install `igraph 1.6.0` or lower to deal error
-# or waitting a new version of `ggnetwork` package
 library(inferCSN)
 data("example_matrix")
 weight_table <- inferCSN(example_matrix)
-g <- dynamic.networks(weight_table, regulators = weight_table[1, 1])
-g
-}
+dynamic.networks(
+  weight_table,
+  regulators = weight_table[1, 1]
+)
+dynamic.networks(
+  weight_table,
+  targets = weight_table[1, 1]
+)
+dynamic.networks(
+  weight_table,
+  regulators = weight_table[1, 1],
+  targets = weight_table[1, 2]
+)
 }
