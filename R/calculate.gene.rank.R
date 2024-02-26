@@ -1,4 +1,4 @@
-#' @title Compute and rank TFs in network
+#' @title Calculate and rank TFs in network
 #'
 #' @param weight_table The weight data table of network
 #' @param directed If GRN is directed or not
@@ -10,9 +10,9 @@
 #' library(inferCSN)
 #' data("example_matrix")
 #' weight_table <- inferCSN(example_matrix)
-#' ranks <- compute.gene.rank(weight_table)
+#' ranks <- calculate.gene.rank(weight_table)
 #' head(ranks)
-compute.gene.rank <- function(
+calculate.gene.rank <- function(
     weight_table,
     directed = FALSE) {
   colnames(weight_table) <- c("regulatory", "target", "weight")
