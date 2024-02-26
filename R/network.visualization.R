@@ -92,7 +92,7 @@ network.heatmap <- function(
       weight_table,
       regulators = regulators,
       targets = targets,
-      abs_weight = FALSE
+      abs_weight = abs_weight
     )[, 1:3]
 
     regulators <- weight_table$regulator
