@@ -46,9 +46,9 @@ reference:
   - auc.calculate
   - acc.calculate
 
-- subtitle: "Compute gene rank"
+- subtitle: "Calculate gene rank"
 - contents:
-  - compute.gene.rank
+  - calculate.gene.rank
 
 - subtitle: "Sparse regression model"
 - contents:
