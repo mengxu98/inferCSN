@@ -4,8 +4,12 @@
 
 # Run tests and examples
 devtools::document()
+devtools::check()
 devtools::test()
 devtools::run_examples()
+
+# Test pkgdown build
+pkgdown::build_site()
 
 # Check package as CRAN
 rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"))
