@@ -218,17 +218,17 @@ net.format <- function(
 
 #' @title Extracts a specific solution in the regularization path
 #'
-#' @param object The output of inferCSN.fit or inferCSN.cvfit
+#' @param object The output of model.fit or inferCSN.cvfit
 #' @param lambda The value of lambda at which to extract the solution
 #' @param gamma The value of gamma at which to extract the solution
 #' @param supportSize The number of non-zeros each solution extracted will contain
 #' @param ... Other parameters
 #'
-#' @method coef inferCSN
+#' @method coef SRM_fit
 #'
 #' @return Return the specific solution
 #' @export
-coef.inferCSN <- function(
+coef.SRM_fit <- function(
     object,
     lambda = NULL,
     gamma = NULL,
@@ -280,30 +280,30 @@ coef.inferCSN <- function(
   t
 }
 
-#' @rdname coef.inferCSN
+#' @rdname coef.SRM_fit
 #'
-#' @method coef inferCSNCV
+#' @method coef SRM_fit_CV
 #'
 #' @return Return the specific solution
 #' @export
-coef.inferCSNCV <- function(
+coef.SRM_fit_CV <- function(
     object,
     lambda = NULL,
     gamma = NULL,
     ...) {
-  coef.inferCSN(object$fit, lambda, gamma, ...)
+  coef.SRM_fit(object$fit, lambda, gamma, ...)
 }
 
-#' @title Prints a summary of inferCSN.fit
+#' @title Prints a summary of model.fit
 #'
-#' @param x The output of inferCSN.fit or inferCSN.cvfit
+#' @param x The output of model.fit or inferCSN.cvfit
 #' @param ... Other parameters
 #'
-#' @method print inferCSN
+#' @method print SRM_fit
 #'
-#' @return Return the information of inferCSN.fit
+#' @return Return information of model.fit
 #' @export
-print.inferCSN <- function(x, ...) {
+print.SRM_fit <- function(x, ...) {
   gammas <- rep(x$gamma, times = lapply(x$lambda, length))
   data.frame(
     lambda = unlist(x["lambda"]),
@@ -313,21 +313,21 @@ print.inferCSN <- function(x, ...) {
   )
 }
 
-#' @rdname print.inferCSN
+#' @rdname print.SRM_fit
 #'
-#' @method print inferCSNCV
+#' @method print SRM_fit_CV
 #'
-#' @return Return the information of inferCSN.fit
+#' @return Return information of model.fit
 #' @export
-print.inferCSNCV <- function(x, ...) {
-  print.inferCSN(x$fit)
+print.SRM_fit_CV <- function(x, ...) {
+  print.SRM_fit(x$fit)
 }
 
 #' @title Predict Response
 #'
-#' @description Predicts the response for a given sample
+#' @description Predicts response for a given sample
 #'
-#' @param object The output of inferCSN.fit
+#' @param object The output of model.fit
 #' @param newx A matrix on which predictions are made. The matrix should have p columns
 #' @param lambda The value of lambda to use for prediction.
 #' A summary of the lambdas in the regularization path can be obtained using \code{print(fit)}
@@ -335,22 +335,22 @@ print.inferCSNCV <- function(x, ...) {
 #' A summary of the gammas in the regularization path can be obtained using \code{print(fit)}
 #' @param ... Other parameters
 #'
-#' @method predict inferCSN
+#' @method predict SRM_fit
 #'
 #' @details
 #' If both lambda and gamma are not supplied, then a matrix of predictions for all the solutions in the regularization path is returned.
 #' If lambda is supplied but gamma is not, the smallest value of gamma is used.
 #' In case of logistic regression, probability values are returned
 #'
-#' @return Return the predict value
+#' @return Return predict value
 #' @export
-predict.inferCSN <- function(
+predict.SRM_fit <- function(
     object,
     newx,
     lambda = NULL,
     gamma = NULL,
     ...) {
-  beta <- coef.inferCSN(object, lambda, gamma)
+  beta <- coef.SRM_fit(object, lambda, gamma)
   if (object$settings$intercept) {
     # add a column of ones for the intercept
     x <- cbind(1, newx)
@@ -364,19 +364,19 @@ predict.inferCSN <- function(
   prediction
 }
 
-#' @rdname predict.inferCSN
+#' @rdname predict.SRM_fit
 #'
-#' @method predict inferCSNCV
+#' @method predict SRM_fit_CV
 #'
 #' @return Return the predict value
 #' @export
-predict.inferCSNCV <- function(
+predict.SRM_fit_CV <- function(
     object,
     newx,
     lambda = NULL,
     gamma = NULL,
     ...) {
-  predict.inferCSN(object$fit, newx, lambda, gamma, ...)
+  predict.SRM_fit(object$fit, newx, lambda, gamma, ...)
 }
 
 is.scalar <- function(x) {

@@ -48,7 +48,7 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 \item{verbose}{Print detailed information.}
 }
 \value{
-The coefficients
+Coefficients
 }
 \description{
 Sparse regression model

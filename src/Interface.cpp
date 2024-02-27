@@ -3,6 +3,7 @@
 #include "RcppArmadillo.h"
 #include "Grid.h"
 #include "utils.h"
+
 // [[Rcpp::depends(RcppArmadillo)]]
 
 template <typename T>
@@ -73,7 +74,7 @@ GridParams<T> makeGridParams(const std::string Loss, const std::string Penalty,
 
 
 template <typename T>
-Rcpp::List _inferCSNFit(const T& X, const arma::vec& y, const std::string Loss, const std::string Penalty,
+Rcpp::List _SRM_model_fit(const T& X, const arma::vec& y, const std::string Loss, const std::string Penalty,
                        const std::string Algorithm, const std::size_t NnzStopNum, const std::size_t G_ncols,
                        const std::size_t G_nrows, const double Lambda2Max, const double Lambda2Min,
                        const bool PartialSort, const std::size_t MaxIters, const double rtol, const double atol,
@@ -122,7 +123,7 @@ Rcpp::List _inferCSNFit(const T& X, const arma::vec& y, const std::string Loss, 
 }
 
 template <typename T>
-Rcpp::List _inferCSNCV(const T& X, const arma::vec& y, const std::string Loss,
+Rcpp::List _SRM_model_fit_CV(const T& X, const arma::vec& y, const std::string Loss,
                       const std::string Penalty, const std::string Algorithm,
                       const unsigned int NnzStopNum, const unsigned int G_ncols,
                       const unsigned int G_nrows, const double Lambda2Max,
@@ -288,7 +289,7 @@ Rcpp::List _inferCSNCV(const T& X, const arma::vec& y, const std::string Loss,
 
 
 // [[Rcpp::export]]
-Rcpp::List inferCSNFit_sparse(const arma::sp_mat& X, const arma::vec& y, const std::string Loss, const std::string Penalty,
+Rcpp::List SRM_model_fit_sparse(const arma::sp_mat& X, const arma::vec& y, const std::string Loss, const std::string Penalty,
                       const std::string Algorithm, const std::size_t NnzStopNum, const std::size_t G_ncols,
                       const std::size_t G_nrows, const double Lambda2Max, const double Lambda2Min,
                       const bool PartialSort, const std::size_t MaxIters, const double rtol,
@@ -299,14 +300,14 @@ Rcpp::List inferCSNFit_sparse(const arma::sp_mat& X, const arma::vec& y, const s
                       const std::size_t ExcludeFirstK, const bool Intercept,
                       const bool withBounds, const arma::vec &Lows, const arma::vec &Highs) {
 
-  return _inferCSNFit(X, y, Loss, Penalty, Algorithm, NnzStopNum, G_ncols, G_nrows, Lambda2Max, Lambda2Min,
+  return _SRM_model_fit(X, y, Loss, Penalty, Algorithm, NnzStopNum, G_ncols, G_nrows, Lambda2Max, Lambda2Min,
                      PartialSort, MaxIters, rtol, atol, ActiveSet, ActiveSetNum, MaxNumSwaps, ScaleDownFactor, ScreenSize, LambdaU,
                      Lambdas, ExcludeFirstK, Intercept, withBounds, Lows, Highs);
 }
 
 
 // [[Rcpp::export]]
-Rcpp::List inferCSNFit_dense(const arma::mat& X, const arma::vec& y, const std::string Loss, const std::string Penalty,
+Rcpp::List SRM_model_fit_dense(const arma::mat& X, const arma::vec& y, const std::string Loss, const std::string Penalty,
                       const std::string Algorithm, const std::size_t NnzStopNum, const std::size_t G_ncols,
                       const std::size_t G_nrows, const double Lambda2Max, const double Lambda2Min,
                       const bool PartialSort, const std::size_t MaxIters, const double rtol,
@@ -317,14 +318,14 @@ Rcpp::List inferCSNFit_dense(const arma::mat& X, const arma::vec& y, const std::
                       const std::size_t ExcludeFirstK, const bool Intercept,
                       const bool withBounds, const arma::vec &Lows, const arma::vec &Highs) {
 
-      return _inferCSNFit(X, y, Loss, Penalty, Algorithm, NnzStopNum, G_ncols, G_nrows, Lambda2Max, Lambda2Min,
+      return _SRM_model_fit(X, y, Loss, Penalty, Algorithm, NnzStopNum, G_ncols, G_nrows, Lambda2Max, Lambda2Min,
                        PartialSort, MaxIters, rtol, atol, ActiveSet, ActiveSetNum, MaxNumSwaps, ScaleDownFactor, ScreenSize, LambdaU,
                        Lambdas, ExcludeFirstK, Intercept, withBounds, Lows, Highs);
 }
 
 
 // [[Rcpp::export]]
-Rcpp::List inferCSNCV_sparse(const arma::sp_mat& X, const arma::vec& y, const std::string Loss, const std::string Penalty,
+Rcpp::List SRM_model_fit_CV_sparse(const arma::sp_mat& X, const arma::vec& y, const std::string Loss, const std::string Penalty,
                      const std::string Algorithm, const std::size_t NnzStopNum, const std::size_t G_ncols,
                      const std::size_t G_nrows, const double Lambda2Max, const double Lambda2Min,
                      const bool PartialSort, const std::size_t MaxIters, const double rtol, const double atol,
@@ -334,7 +335,7 @@ Rcpp::List inferCSNCV_sparse(const arma::sp_mat& X, const arma::vec& y, const st
                      const double seed, const std::size_t ExcludeFirstK, const bool Intercept,
                      const bool withBounds, const arma::vec &Lows, const arma::vec &Highs){
 
-    return _inferCSNCV(X, y, Loss, Penalty,
+    return _SRM_model_fit_CV(X, y, Loss, Penalty,
                       Algorithm, NnzStopNum, G_ncols, G_nrows,
                       Lambda2Max, Lambda2Min, PartialSort,
                       MaxIters, rtol,atol, ActiveSet,
@@ -344,7 +345,7 @@ Rcpp::List inferCSNCV_sparse(const arma::sp_mat& X, const arma::vec& y, const st
 }
 
 // [[Rcpp::export]]
-Rcpp::List inferCSNCV_dense(const arma::mat& X, const arma::vec& y, const std::string Loss, const std::string Penalty,
+Rcpp::List SRM_model_fit_CV_dense(const arma::mat& X, const arma::vec& y, const std::string Loss, const std::string Penalty,
                     const std::string Algorithm, const std::size_t NnzStopNum, const std::size_t G_ncols,
                     const std::size_t G_nrows, const double Lambda2Max, const double Lambda2Min,
                     const bool PartialSort, const std::size_t MaxIters, const double rtol, const double atol,
@@ -354,7 +355,7 @@ Rcpp::List inferCSNCV_dense(const arma::mat& X, const arma::vec& y, const std::s
                     const double seed, const std::size_t ExcludeFirstK, const bool Intercept,
                     const bool withBounds, const arma::vec &Lows, const arma::vec &Highs){
 
-  return _inferCSNCV(X, y, Loss, Penalty,
+  return _SRM_model_fit_CV(X, y, Loss, Penalty,
                     Algorithm, NnzStopNum, G_ncols, G_nrows,
                     Lambda2Max, Lambda2Min, PartialSort,
                     MaxIters, rtol,atol, ActiveSet,
