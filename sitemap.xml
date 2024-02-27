@@ -28,7 +28,7 @@
     <loc>https://mengxu98.github.io/inferCSN/reference/check.parameters.html</loc>
   </url>
   <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/coef.inferCSN.html</loc>
+    <loc>https://mengxu98.github.io/inferCSN/reference/coef.SRM_fit.html</loc>
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/contrast.networks.html</loc>
@@ -49,10 +49,10 @@
     <loc>https://mengxu98.github.io/inferCSN/reference/inferCSN-package.html</loc>
   </url>
   <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/inferCSN.fit.html</loc>
+    <loc>https://mengxu98.github.io/inferCSN/reference/inferCSN.html</loc>
   </url>
   <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/inferCSN.html</loc>
+    <loc>https://mengxu98.github.io/inferCSN/reference/model.fit.html</loc>
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/net.format.html</loc>
@@ -61,19 +61,19 @@
     <loc>https://mengxu98.github.io/inferCSN/reference/network.heatmap.html</loc>
   </url>
   <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/predict.inferCSN.html</loc>
+    <loc>https://mengxu98.github.io/inferCSN/reference/predict.SRM_fit.html</loc>
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/prepare.performance.data.html</loc>
   </url>
   <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/print.inferCSN.html</loc>
+    <loc>https://mengxu98.github.io/inferCSN/reference/print.SRM_fit.html</loc>
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/sparse.regression.html</loc>
   </url>
   <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/sub.inferCSN.html</loc>
+    <loc>https://mengxu98.github.io/inferCSN/reference/sub.model.fit.html</loc>
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/table.to.matrix.html</loc>
