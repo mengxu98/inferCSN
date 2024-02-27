@@ -129,7 +129,7 @@ setMethod(
       weight_table <- purrr::map_dfr(
         targets, function(target) {
           if (verbose) pb$tick()
-          sub.inferCSN(
+          sub.model.fit(
             regulators_matrix = regulators_matrix,
             targets_matrix = targets_matrix,
             target = target,
@@ -152,9 +152,9 @@ setMethod(
       "%dopar%" <- foreach::"%dopar%"
       weight_table <- foreach::foreach(
         target = targets,
-        .export = c("sub.inferCSN", "sparse.regression")
+        .export = c("sub.model.fit", "sparse.regression")
       ) %dopar% {
-        sub.inferCSN(
+        sub.model.fit(
           regulators_matrix = regulators_matrix,
           targets_matrix = targets_matrix,
           target = target,

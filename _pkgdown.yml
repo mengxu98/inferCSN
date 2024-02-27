@@ -53,20 +53,20 @@ reference:
 - subtitle: "Sparse regression model"
 - contents:
   - sparse.regression
-  - sub.inferCSN
-  - inferCSN.fit
+  - model.fit
+  - sub.model.fit
 
 - subtitle: "Utils functions"
 - contents:
   - check.parameters
-  - coef.inferCSN
-  - coef.inferCSNCV
+  - coef.SRM_fit
+  - coef.SRM_fit_CV
   - net.format
   - prepare.performance.data
-  - print.inferCSN
-  - print.inferCSNCV
-  - predict.inferCSN
-  - predict.inferCSNCV
+  - print.SRM_fit
+  - print.SRM_fit_CV
+  - predict.SRM_fit
+  - predict.SRM_fit_CV
   - table.to.matrix
 
 - subtitle: "Example data"

@@ -125,7 +125,7 @@ sparse.regression <- function(
 #'
 #' @return The weight data table of sub-network
 #' @export
-sub.inferCSN <- function(
+sub.model.fit <- function(
     regulators_matrix,
     targets_matrix,
     target = NULL,
