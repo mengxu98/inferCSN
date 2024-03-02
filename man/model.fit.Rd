@@ -9,7 +9,7 @@ model.fit(
   y,
   penalty = "L0",
   algorithm = "CD",
-  regulators_num = 100,
+  regulators_num = NULL,
   cross_validation = FALSE,
   n_folds = 10,
   seed = 1,
