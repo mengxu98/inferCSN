@@ -52,9 +52,9 @@ reference:
 
 - subtitle: "Sparse regression model"
 - contents:
+  - single.network
   - sparse.regression
   - model.fit
-  - sub.model.fit
 
 - subtitle: "Utils functions"
 - contents:

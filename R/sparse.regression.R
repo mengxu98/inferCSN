@@ -1,3 +1,54 @@
+#' @title Construct network for single gene
+#'
+#' @param regulators_matrix Regulators matrix
+#' @param targets_matrix Targets matrix
+#' @param target Target genes
+#'
+#' @inheritParams inferCSN
+#'
+#' @return The weight data table of sub-network
+#' @export
+single.network <- function(
+    regulators_matrix,
+    targets_matrix,
+    target = NULL,
+    cross_validation = FALSE,
+    seed = 1,
+    penalty = "L0",
+    algorithm = "CD",
+    regulators_num = NULL,
+    n_folds = 10,
+    k_folds = NULL,
+    r_threshold = 0,
+    verbose = FALSE) {
+  x <- regulators_matrix[, setdiff(colnames(regulators_matrix), target)]
+  if (is(x, "sparseMatrix")) x <- as.matrix(x)
+  y <- targets_matrix[, target]
+
+  coefficients <- sparse.regression(
+    x, y,
+    cross_validation = cross_validation,
+    seed = seed,
+    penalty = penalty,
+    algorithm = algorithm,
+    regulators_num = regulators_num,
+    n_folds = n_folds,
+    k_folds = k_folds,
+    r_threshold = r_threshold,
+    verbose = verbose
+  )
+
+  coefficients <- coefficients / sum(abs(coefficients))
+  if (length(coefficients) != ncol(x)) coefficients <- 0.0001
+  return(
+    data.frame(
+      regulator = colnames(x),
+      target = target,
+      weight = coefficients
+    )
+  )
+}
+
 #' @title Sparse regression model
 #'
 #' @param x The data matrix
@@ -113,59 +164,6 @@ sparse.regression <- function(
       return(0.0001)
     }
   }
-}
-
-#' @title Sparse regression model for single gene
-#'
-#' @param regulators_matrix Regulators matrix
-#' @param targets_matrix Targets matrix
-#' @param target Target genes
-#'
-#' @inheritParams inferCSN
-#'
-#' @return The weight data table of sub-network
-#' @export
-sub.model.fit <- function(
-    regulators_matrix,
-    targets_matrix,
-    target = NULL,
-    cross_validation = FALSE,
-    seed = 1,
-    penalty = "L0",
-    algorithm = "CD",
-    regulators_num = NULL,
-    n_folds = 10,
-    k_folds = NULL,
-    r_threshold = 0,
-    verbose = FALSE) {
-  x <- regulators_matrix[, setdiff(colnames(regulators_matrix), target)]
-  if (is(x, "sparseMatrix")) x <- as.matrix(x)
-  y <- targets_matrix[, target]
-
-  if (is.null(regulators_num)) regulators_num <- ncol(x)
-
-  coefficients <- sparse.regression(
-    x, y,
-    cross_validation = cross_validation,
-    seed = seed,
-    penalty = penalty,
-    algorithm = algorithm,
-    regulators_num = regulators_num,
-    n_folds = n_folds,
-    k_folds = k_folds,
-    r_threshold = r_threshold,
-    verbose = verbose
-  )
-
-  coefficients <- coefficients / sum(abs(coefficients))
-  if (length(coefficients) != ncol(x)) coefficients <- 0.0001
-  return(
-    data.frame(
-      regulator = colnames(x),
-      target = target,
-      weight = coefficients
-    )
-  )
 }
 
 #' @title Fit a sparse regression model

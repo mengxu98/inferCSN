@@ -129,7 +129,7 @@ setMethod(
       weight_table <- purrr::map_dfr(
         targets, function(target) {
           if (verbose) pb$tick()
-          sub.model.fit(
+          single.network(
             regulators_matrix = regulators_matrix,
             targets_matrix = targets_matrix,
             target = target,
@@ -152,9 +152,9 @@ setMethod(
       "%dopar%" <- foreach::"%dopar%"
       weight_table <- foreach::foreach(
         target = targets,
-        .export = c("sub.model.fit", "sparse.regression")
+        .export = c("single.network", "sparse.regression")
       ) %dopar% {
-        sub.model.fit(
+        single.network(
           regulators_matrix = regulators_matrix,
           targets_matrix = targets_matrix,
           target = target,
