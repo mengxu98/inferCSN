@@ -10,7 +10,9 @@
 ^.*\.o$
 ^.*\.so$
 ^.*\.dll$
-^scripts$
 ^CRAN-SUBMISSION$
 ^cran-comments\.md$
 ^\.vscode$
+^scripts$
+^docs$
+^pkgdown$
