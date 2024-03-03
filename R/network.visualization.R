@@ -100,14 +100,13 @@ network.heatmap <- function(
 
     weight_matrix <- table.to.matrix(weight_table)
   } else {
+    weight_matrix <- weight_table
     if (is.null(regulators)) {
       regulators <- rownames(weight_matrix)
     }
     if (is.null(targets)) {
       targets <- colnames(weight_matrix)
     }
-
-    weight_matrix <- weight_table
   }
   weight_matrix[is.na(weight_matrix)] <- 0
 
