@@ -39,7 +39,9 @@ single.network <- function(
   )
 
   coefficients <- coefficients / sum(abs(coefficients))
-  if (length(coefficients) != ncol(x)) coefficients <- 0.0001
+  if (length(coefficients) != ncol(x)) {
+    coefficients <- rep(0, ncol(x))
+  }
   return(
     data.frame(
       regulator = colnames(x),
@@ -161,7 +163,7 @@ sparse.regression <- function(
     if (r >= r_threshold) {
       return(as.vector(coef(fit, lambda = lambda, gamma = gamma))[-1])
     } else {
-      return(0.0001)
+      return(rep(0, ncol(x)))
     }
   }
 }
