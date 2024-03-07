@@ -7,7 +7,7 @@
 single.network(
   regulators_matrix,
   targets_matrix,
-  target = NULL,
+  target,
   cross_validation = FALSE,
   seed = 1,
   penalty = "L0",
@@ -55,4 +55,14 @@ The weight data table of sub-network
 }
 \description{
 Construct network for single gene
+}
+\examples{
+library(inferCSN)
+data("example_matrix")
+single_network <- single.network(
+example_matrix,
+example_matrix,
+target = colnames(example_matrix)[1]
+)
+head(single_network)
 }
