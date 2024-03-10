@@ -98,18 +98,16 @@ setMethod(
     )
 
     if (!is.null(regulators)) {
-      regulators_matrix <- matrix[, intersect(colnames(matrix), regulators)]
+      regulators <- intersect(colnames(matrix), regulators)
     } else {
-      regulators_matrix <- matrix
+      regulators <- colnames(matrix)
     }
 
     if (!is.null(targets)) {
-      targets_matrix <- matrix[, intersect(colnames(matrix), targets)]
+      targets <- intersect(colnames(matrix), targets)
     } else {
-      targets_matrix <- matrix
+      targets <- colnames(matrix)
     }
-    targets <- colnames(targets_matrix)
-    rm(matrix)
 
     target <- NULL
     cores <- min(
@@ -130,8 +128,8 @@ setMethod(
         targets, function(target) {
           if (verbose) pb$tick()
           single.network(
-            regulators_matrix = regulators_matrix,
-            targets_matrix = targets_matrix,
+            matrix = matrix,
+            regulators = regulators,
             target = target,
             cross_validation = cross_validation,
             seed = seed,
@@ -155,8 +153,8 @@ setMethod(
         .export = c("single.network", "sparse.regression")
       ) %dopar% {
         single.network(
-          regulators_matrix = regulators_matrix,
-          targets_matrix = targets_matrix,
+          matrix = matrix,
+          regulators = regulators,
           target = target,
           cross_validation = cross_validation,
           seed = seed,
