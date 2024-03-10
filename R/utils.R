@@ -69,8 +69,8 @@ check.parameters <- function(
   }
 
   if (!is.null(k_folds)) {
-    if (!(k_folds > 0 && k_folds < 10)) {
-      stop("Please set 'k_folds' value between: (0, 10).")
+    if (!(is.numeric(k_folds) && k_folds > 0 && k_folds < 10)) {
+      stop("Please set 'k_folds' value between: (0, 1].")
     }
   }
 
