@@ -1,17 +1,31 @@
 #' @title Construct network for single gene
 #'
-#' @param regulators_matrix Regulators matrix
-#' @param targets_matrix Targets matrix
-#' @param target Target genes
+#' @param matrix An expression matrix, cells by genes.
+#' @param target Target genes.
 #'
 #' @inheritParams inferCSN
 #'
 #' @return The weight data table of sub-network
 #' @export
+#' @examples
+#' library(inferCSN)
+#' data("example_matrix")
+#' single_network <- single.network(
+#'   example_matrix,
+#'   regulators = colnames(example_matrix),
+#'   target = "g1"
+#' )
+#' head(single_network)
+#'
+#' single.network(
+#'   example_matrix,
+#'   regulators = "g1",
+#'   target = "g2"
+#' )
 single.network <- function(
-    regulators_matrix,
-    targets_matrix,
-    target = NULL,
+    matrix,
+    regulators,
+    target,
     cross_validation = FALSE,
     seed = 1,
     penalty = "L0",
@@ -21,9 +35,18 @@ single.network <- function(
     k_folds = NULL,
     r_threshold = 0,
     verbose = FALSE) {
-  x <- regulators_matrix[, setdiff(colnames(regulators_matrix), target)]
-  if (is(x, "sparseMatrix")) x <- as.matrix(x)
-  y <- targets_matrix[, target]
+  regulators <- setdiff(regulators, target)
+  x <- matrix[, regulators]
+  y <- matrix[, target]
+  if (length(regulators) == 1) {
+    return(
+      data.frame(
+        regulator = regulators,
+        target = target,
+        weight = stats::cor(x, y, method = "pearson")
+      )
+    )
+  }
 
   coefficients <- sparse.regression(
     x, y,
@@ -60,6 +83,14 @@ single.network <- function(
 #'
 #' @return Coefficients
 #' @export
+#' @examples
+#' library(inferCSN)
+#' data("example_matrix")
+#' coefficients <- sparse.regression(
+#'   example_matrix[, -1],
+#'   example_matrix[, 1]
+#' )
+#' coefficients
 sparse.regression <- function(
     x, y,
     cross_validation = FALSE,
@@ -72,7 +103,7 @@ sparse.regression <- function(
     r_threshold = 0,
     verbose = FALSE) {
   if (!is.null(k_folds)) {
-    samples <- sample(k_folds / 10 * nrow(x))
+    samples <- sample(k_folds * nrow(x))
     test_x <- x[-samples, ]
     x <- x[samples, ]
     test_y <- y[-samples]
@@ -92,15 +123,19 @@ sparse.regression <- function(
       )
     )
 
-    if (class(fit)[1] == "try-error") {
+    if (any(class(fit) == "try-error")) {
       if (verbose) message("Cross validation error, used fit instead.")
-      fit <- model.fit(
-        x, y,
-        penalty = penalty,
-        algorithm = algorithm,
-        regulators_num = regulators_num
+      fit <- try(
+        model.fit(
+          x, y,
+          penalty = penalty,
+          algorithm = algorithm,
+          regulators_num = regulators_num
+        )
       )
-
+      if (any(class(fit) == "try-error")) {
+        return(rep(0, ncol(x)))
+      }
       fit_inf <- print(fit)
       lambda <- fit_inf$lambda[which.max(fit_inf$suppSize)]
       gamma <- fit_inf$gamma[which.max(fit_inf$suppSize)]
@@ -197,6 +232,14 @@ sparse.regression <- function(
 #'
 #' @return An S3 object describing the regularization path
 #' @export
+#' @examples
+#' library(inferCSN)
+#' data("example_matrix")
+#' fit <- model.fit(
+#' example_matrix[, -1],
+#' example_matrix[, 1]
+#' )
+#' head(coef(fit))
 model.fit <- function(
     x, y,
     penalty = "L0",

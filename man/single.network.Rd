@@ -5,8 +5,8 @@
 \title{Construct network for single gene}
 \usage{
 single.network(
-  regulators_matrix,
-  targets_matrix,
+  matrix,
+  regulators,
   target,
   cross_validation = FALSE,
   seed = 1,
@@ -20,11 +20,11 @@ single.network(
 )
 }
 \arguments{
-\item{regulators_matrix}{Regulators matrix}
+\item{matrix}{An expression matrix, cells by genes.}
 
-\item{targets_matrix}{Targets matrix}
+\item{regulators}{Regulator genes.}
 
-\item{target}{Target genes}
+\item{target}{Target genes.}
 
 \item{cross_validation}{Check whether cross validation is used.}
 
@@ -60,9 +60,15 @@ Construct network for single gene
 library(inferCSN)
 data("example_matrix")
 single_network <- single.network(
-example_matrix,
-example_matrix,
-target = colnames(example_matrix)[1]
+  example_matrix,
+  regulators = colnames(example_matrix),
+  target = "g1"
 )
 head(single_network)
+
+single.network(
+  example_matrix,
+  regulators = "g1",
+  target = "g2"
+)
 }
