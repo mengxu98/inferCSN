@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">inferCSN</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.1</span>
       </span>
     </div>
 
@@ -56,13 +56,21 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">table.to.matrix</span><span class="op">(</span><span class="va">weight_table</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">table.to.matrix</span><span class="op">(</span><span class="va">weight_table</span>, regulators <span class="op">=</span> <span class="cn">NULL</span>, targets <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>weight_table</dt>
 <dd><p>The weight data table of network.</p></dd>
+
+
+<dt>regulators</dt>
+<dd><p>Regulators list.</p></dd>
+
+
+<dt>targets</dt>
+<dd><p>Targets list.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -72,6 +80,39 @@
 <p>Weight matrix</p>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mengxu98.github.io/inferCSN/">inferCSN</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">weight_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">weight_table</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     regulator target     weight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 162       g17    g18  0.6777506</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 145       g18    g17  0.5707733</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 127       g17    g16  0.4664720</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9         g18     g1 -0.4652000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 291       g10     g9  0.4565135</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55        g13    g12  0.4553549</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">table.to.matrix</span><span class="op">(</span><span class="va">weight_table</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              g1          g2           g3         g4            g5            g6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g1  0.000000000 0.183018160 -0.017243554 0.01932812 -0.0094978301  9.540681e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g2  0.135155213 0.000000000  0.287583242 0.05443150  0.0004186466  6.185946e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g3 -0.017808779 0.399844678  0.000000000 0.32926936  0.0547439992 -2.596719e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g4  0.026119728 0.099476772  0.431816668 0.00000000  0.3445870129  4.421821e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g5 -0.013371027 0.000276389  0.075730437 0.36330380  0.0000000000  3.726600e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g6  0.000119805 0.012512780 -0.003240596 0.04880917  0.3879247261  0.000000e+00</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">table.to.matrix</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">weight_table</span>,</span></span>
+<span class="r-in"><span>  regulators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span>, <span class="st">"g2"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g3"</span>, <span class="st">"g4"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             g3         g4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g1 -0.01724355 0.01932812</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g2  0.28758324 0.05443150</span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
