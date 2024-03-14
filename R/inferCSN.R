@@ -171,11 +171,12 @@ setMethod(
       doParallel::stopImplicitCluster()
     }
 
-    weight_table <- weight_table[order(
-      abs(as.numeric(weight_table$weight)),
-      decreasing = TRUE
-    ), ]
+    weight_table <- net.format(
+      weight_table,
+      abs_weight = FALSE
+    )
     if (verbose) message("Run done.")
+
     return(weight_table)
   }
 )

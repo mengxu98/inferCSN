@@ -85,34 +85,24 @@ network.heatmap <- function(
     heatmap_title = NULL,
     heatmap_color = c("#1966ad", "white", "#bb141a"),
     legend_name = "Weight",
-    row_title = "Regulators",
-    abs_weight = FALSE) {
+    row_title = "Regulators") {
   if (switch_matrix) {
-    weight_table <- net.format(
+    weight_matrix <- table.to.matrix(
       weight_table,
       regulators = regulators,
-      targets = targets,
-      abs_weight = abs_weight
-    )[, 1:3]
-
-    regulators <- weight_table$regulator
-    targets <- weight_table$target
-
-    weight_matrix <- table.to.matrix(weight_table)
+      targets = targets
+    )
   } else {
     weight_matrix <- weight_table
-    if (is.null(regulators)) {
-      regulators <- rownames(weight_matrix)
-    }
-    if (is.null(targets)) {
-      targets <- colnames(weight_matrix)
-    }
   }
-  weight_matrix[is.na(weight_matrix)] <- 0
+  weight_matrix <- filter.sort.matrix(
+    weight_matrix,
+    regulators = regulators,
+    targets = targets
+  )
 
-  unique_regulators <- gtools::mixedsort(unique(regulators))
-  unique_targets <- gtools::mixedsort(unique(targets))
-  weight_matrix <- weight_matrix[unique_regulators, unique_targets]
+  unique_regulators <- rownames(weight_matrix)
+  unique_targets <- colnames(weight_matrix)
 
   if (show_names) {
     if (is.null(heatmap_height) || is.null(heatmap_width)) {

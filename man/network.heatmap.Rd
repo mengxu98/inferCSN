@@ -16,8 +16,7 @@ network.heatmap(
   heatmap_title = NULL,
   heatmap_color = c("#1966ad", "white", "#bb141a"),
   legend_name = "Weight",
-  row_title = "Regulators",
-  abs_weight = FALSE
+  row_title = "Regulators"
 )
 }
 \arguments{
@@ -44,8 +43,6 @@ network.heatmap(
 \item{legend_name}{The name of legend.}
 
 \item{row_title}{The title of row.}
-
-\item{abs_weight}{Logical value, whether to perform absolute value on weights.}
 }
 \value{
 Return a heatmap of ggplot2 object
