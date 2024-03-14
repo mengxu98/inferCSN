@@ -13,7 +13,9 @@ net.format(weight_table, regulators = NULL, targets = NULL, abs_weight = TRUE)
 
 \item{targets}{Targets list.}
 
-\item{abs_weight}{Logical value, whether to perform absolute value on weights.}
+\item{abs_weight}{Logical value, whether to perform absolute value on weights,
+default set to `TRUE`, and when set `abs_weight` to `TRUE`,
+the output of weight table will create a new column named `Interaction`.}
 }
 \value{
 Format weight table
@@ -24,13 +26,18 @@ Format weight table
 \examples{
 library(inferCSN)
 data("example_matrix")
-data("example_ground_truth")
 weight_table <- inferCSN(example_matrix)
 
 net.format(
   weight_table,
   regulators = c("g1")
 )
+net.format(
+  weight_table,
+  regulators = c("g1"),
+  abs_weight = FALSE
+)
+
 net.format(
   weight_table,
   targets = c("g3")
