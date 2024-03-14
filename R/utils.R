@@ -147,15 +147,86 @@ check.parameters <- function(
 #' @title Switch weight table to matrix
 #'
 #' @param weight_table The weight data table of network.
+#' @inheritParams net.format
 #'
 #' @return Weight matrix
 #' @export
-table.to.matrix <- function(weight_table) {
-  .Call(
+#'
+#' @examples
+#' library(inferCSN)
+#' data("example_matrix")
+#' weight_table <- inferCSN(example_matrix)
+#' head(weight_table)
+#'
+#' table.to.matrix(weight_table)[1:6, 1:6]
+#'
+#' table.to.matrix(
+#'   weight_table,
+#'   regulators = c("g1", "g2"),
+#'   targets = c("g3", "g4")
+#' )
+table.to.matrix <- function(
+    weight_table,
+    regulators = NULL,
+    targets = NULL) {
+  weight_table <- net.format(
+    weight_table,
+    abs_weight = FALSE
+  )
+  weight_matrix <- .Call(
     "_inferCSN_table_to_matrix",
     PACKAGE = "inferCSN",
     weight_table
   )
+  weight_matrix <- filter.sort.matrix(
+    weight_matrix,
+    regulators = regulators,
+    targets = targets)
+
+  return(weight_matrix)
+}
+
+#' @title Filter and sort matrix
+#'
+#' @param weight_matrix The matrix of network weight.
+#' @inheritParams net.format
+#'
+#' @return Filtered and sorted matrix
+#' @export
+#'
+#' @examples
+#' library(inferCSN)
+#' data("example_matrix")
+#' weight_table <- inferCSN(example_matrix)
+#' weight_matrix <- table.to.matrix(weight_table)
+#' filter.sort.matrix(weight_matrix)[1:6, 1:6]
+#'
+#' filter.sort.matrix(
+#'   weight_matrix ,
+#'   regulators = c("g1", "g2"),
+#'   targets = c("g3", "g4")
+#' )
+filter.sort.matrix <- function(
+    weight_matrix,
+    regulators = NULL,
+    targets = NULL) {
+  weight_matrix[is.na(weight_matrix)] <- 0
+  if (!is.null(regulators)) {
+    regulators <- intersect(rownames(weight_matrix), regulators)
+  } else {
+    regulators <- rownames(weight_matrix)
+  }
+  if (!is.null(targets)) {
+    targets <- intersect(colnames(weight_matrix), targets)
+  } else{
+    targets <- colnames(weight_matrix)
+  }
+
+  unique_regulators <- gtools::mixedsort(unique(regulators))
+  unique_targets <- gtools::mixedsort(unique(targets))
+  weight_matrix <- weight_matrix[unique_regulators, unique_targets]
+
+  return(weight_matrix)
 }
 
 #' @title Format weight table
@@ -163,7 +234,9 @@ table.to.matrix <- function(weight_table) {
 #' @param weight_table The weight data table of network.
 #' @param regulators Regulators list.
 #' @param targets Targets list.
-#' @param abs_weight Logical value, whether to perform absolute value on weights.
+#' @param abs_weight Logical value, whether to perform absolute value on weights,
+#'  default set to `TRUE`, and when set `abs_weight` to `TRUE`,
+#'  the output of weight table will create a new column named `Interaction`.
 #'
 #' @return Format weight table
 #' @export
@@ -171,13 +244,18 @@ table.to.matrix <- function(weight_table) {
 #' @examples
 #' library(inferCSN)
 #' data("example_matrix")
-#' data("example_ground_truth")
 #' weight_table <- inferCSN(example_matrix)
 #'
 #' net.format(
 #'   weight_table,
 #'   regulators = c("g1")
 #' )
+#' net.format(
+#'   weight_table,
+#'   regulators = c("g1"),
+#'   abs_weight = FALSE
+#' )
+#'
 #' net.format(
 #'   weight_table,
 #'   targets = c("g3")
@@ -207,11 +285,16 @@ net.format <- function(
         dplyr::filter(weight_table, target == x)
       })
   }
-  weight_table$Interaction <- ifelse(weight_table$weight < 0, "Repression", "Activation")
 
   if (abs_weight) {
+    weight_table$Interaction <- ifelse(weight_table$weight < 0, "Repression", "Activation")
     weight_table$weight <- abs(weight_table$weight)
   }
+
+  weight_table <- weight_table[order(
+    abs(as.numeric(weight_table$weight)),
+    decreasing = TRUE
+  ), ]
 
   return(weight_table)
 }

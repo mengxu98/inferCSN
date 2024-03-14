@@ -62,12 +62,13 @@ reference:
   - coef.SRM_fit
   - coef.SRM_fit_CV
   - net.format
+  - table.to.matrix
+  - filter.sort.matrix
   - prepare.performance.data
   - print.SRM_fit
   - print.SRM_fit_CV
   - predict.SRM_fit
   - predict.SRM_fit_CV
-  - table.to.matrix
 
 - subtitle: "Example data"
 - contents:
