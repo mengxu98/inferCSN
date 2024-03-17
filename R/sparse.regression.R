@@ -103,7 +103,7 @@ sparse.regression <- function(
     r_threshold = 0,
     verbose = FALSE) {
   if (!is.null(k_folds)) {
-    samples <- sample(k_folds * nrow(x))
+    samples <- sample(nrow(x), k_folds * nrow(x))
     test_x <- x[-samples, ]
     x <- x[samples, ]
     test_y <- y[-samples]
