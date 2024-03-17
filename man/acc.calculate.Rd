@@ -22,6 +22,5 @@ library(inferCSN)
 data("example_matrix")
 data("example_ground_truth")
 weight_table <- inferCSN(example_matrix)
-acc <- acc.calculate(weight_table, example_ground_truth)
-acc
+acc.calculate(weight_table, example_ground_truth)
 }

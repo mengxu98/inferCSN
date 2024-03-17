@@ -17,8 +17,7 @@
 #' data("example_matrix")
 #' data("example_ground_truth")
 #' weight_table <- inferCSN(example_matrix)
-#' auc <- auc.calculate(weight_table, example_ground_truth, plot = TRUE)
-#' auc
+#' auc.calculate(weight_table, example_ground_truth, plot = TRUE)
 auc.calculate <- function(
     weight_table,
     ground_truth,
@@ -111,8 +110,7 @@ auc.calculate <- function(
 #' data("example_matrix")
 #' data("example_ground_truth")
 #' weight_table <- inferCSN(example_matrix)
-#' acc <- acc.calculate(weight_table, example_ground_truth)
-#' acc
+#' acc.calculate(weight_table, example_ground_truth)
 acc.calculate <- function(
     weight_table,
     ground_truth) {
@@ -148,6 +146,7 @@ acc.calculate <- function(
 
   acc <- (pre[1] + pre[4]) / sum(pre)
   acc <- sprintf("%0.3f", acc)
+
   return(acc)
 }
 
@@ -175,5 +174,6 @@ prepare.performance.data <- function(
     all.x = TRUE
   )
   gold$label[is.na(gold$label)] <- 0
+
   return(gold)
 }
