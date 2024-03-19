@@ -178,7 +178,7 @@ table.to.matrix <- function(
     PACKAGE = "inferCSN",
     weight_table
   )
-  weight_matrix <- filter.sort.matrix(
+  weight_matrix <- filter_sort.matrix(
     weight_matrix,
     regulators = regulators,
     targets = targets)
@@ -199,14 +199,14 @@ table.to.matrix <- function(
 #' data("example_matrix")
 #' weight_table <- inferCSN(example_matrix)
 #' weight_matrix <- table.to.matrix(weight_table)
-#' filter.sort.matrix(weight_matrix)[1:6, 1:6]
+#' filter_sort.matrix(weight_matrix)[1:6, 1:6]
 #'
-#' filter.sort.matrix(
+#' filter_sort.matrix(
 #'   weight_matrix ,
 #'   regulators = c("g1", "g2"),
 #'   targets = c("g3", "g4")
 #' )
-filter.sort.matrix <- function(
+filter_sort.matrix <- function(
     weight_matrix,
     regulators = NULL,
     targets = NULL) {
@@ -464,4 +464,24 @@ predict.SRM_fit_CV <- function(
 
 is.scalar <- function(x) {
   is.atomic(x) && length(x) == 1L && !is.character(x) && Im(x) == 0 && !is.nan(x) && !is.na(x)
+}
+
+#' normalization
+#'
+#' @param x A numeric vector.
+#' @param method Method for normalization.
+#'
+#' @return Normalized vector
+#' @export
+normalization <- function(
+    x,
+    method = "max_min") {
+  y <- switch(
+    EXPR = method,
+    "max_min" = ((x - min(x)) / (max(x) - min(x))),
+    "max" = (x / max(abs(x))),
+    "sum" = (x / sum(abs(x)))
+  )
+
+  return(y)
 }

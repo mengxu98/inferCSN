@@ -95,7 +95,7 @@ network.heatmap <- function(
   } else {
     weight_matrix <- weight_table
   }
-  weight_matrix <- filter.sort.matrix(
+  weight_matrix <- filter_sort.matrix(
     weight_matrix,
     regulators = regulators,
     targets = targets
