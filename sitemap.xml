@@ -43,7 +43,7 @@
     <loc>https://mengxu98.github.io/inferCSN/reference/example_matrix.html</loc>
   </url>
   <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/filter.sort.matrix.html</loc>
+    <loc>https://mengxu98.github.io/inferCSN/reference/filter_sort.matrix.html</loc>
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/index.html</loc>
@@ -62,6 +62,9 @@
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/network.heatmap.html</loc>
+  </url>
+  <url>
+    <loc>https://mengxu98.github.io/inferCSN/reference/normalization.html</loc>
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/predict.SRM_fit.html</loc>
