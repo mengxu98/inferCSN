@@ -63,7 +63,8 @@ reference:
   - coef.SRM_fit_CV
   - net.format
   - table.to.matrix
-  - filter.sort.matrix
+  - filter_sort.matrix
+  - normalization
   - prepare.performance.data
   - print.SRM_fit
   - print.SRM_fit_CV

@@ -61,7 +61,10 @@ single.network <- function(
     verbose = verbose
   )
 
-  coefficients <- coefficients / sum(abs(coefficients))
+  coefficients <- normalization(
+    coefficients,
+    method = "sum"
+  )
   if (length(coefficients) != ncol(x)) {
     coefficients <- rep(0, ncol(x))
   }
