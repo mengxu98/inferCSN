@@ -116,7 +116,7 @@ setMethod(
     if (cores == 1) {
       if (verbose) message("Using 1 core.")
       # Format progress information
-      format <- "Running [:bar] :percent, No.:current of :total genes, :elapsed."
+      format <- "Running [:bar] :percent, No.:current of :total targets, :elapsed."
       pb <- progress::progress_bar$new(
         format = format,
         total = length(targets),
