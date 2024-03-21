@@ -1,18 +1,3 @@
-utils::globalVariables(c(
-  "x",
-  "y",
-  "xend",
-  "yend",
-  "regulator",
-  "target",
-  "weight",
-  "Interaction",
-  "name",
-  "degree",
-  "edges",
-  "curvetype"
-))
-
 #' @title Check input parameters
 #'
 #' @param matrix An expression matrix, cells by genes
@@ -181,7 +166,8 @@ table.to.matrix <- function(
   weight_matrix <- filter_sort.matrix(
     weight_matrix,
     regulators = regulators,
-    targets = targets)
+    targets = targets
+  )
 
   return(weight_matrix)
 }
@@ -287,7 +273,9 @@ net.format <- function(
   }
 
   if (abs_weight) {
-    weight_table$Interaction <- ifelse(weight_table$weight < 0, "Repression", "Activation")
+    weight_table$Interaction <- ifelse(
+      weight_table$weight < 0, "Repression", "Activation"
+    )
     weight_table$weight <- abs(weight_table$weight)
   }
 
