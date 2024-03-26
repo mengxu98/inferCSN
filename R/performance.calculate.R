@@ -167,11 +167,13 @@ prepare.performance.data <- function(
   names(ground_truth) <- c("regulator", "target")
   ground_truth$label <- rep(1, nrow(ground_truth))
 
-  gold <- merge(
-    weight_table,
-    ground_truth,
-    by = c("regulator", "target"),
-    all.x = TRUE
+  gold <- suppressWarnings(
+    merge(
+      weight_table,
+      ground_truth,
+      by = c("regulator", "target"),
+      all.x = TRUE
+    )
   )
   gold$label[is.na(gold$label)] <- 0
 
