@@ -13,6 +13,9 @@
 #'
 #' @export
 #' @examples
+#' library(inferCSN)
+#' data("example_matrix")
+#' weight_table <- inferCSN(example_matrix, verbose = TRUE)
 #' weight_table_new <- crossweight(
 #'   weight_table,
 #'   matrix = t(example_matrix)
@@ -27,11 +30,24 @@ crossweight <- function(
     max = floor(ncol(matrix) / 12),
     symmetric_filter = FALSE,
     filter_thresh = 0) {
+
+  mim <- minet::build.mim(
+    t(matrix),
+    estimator = "pearson"
+  )
+  xnet <- minet::clr(mim)
+  zscores <- table.to.matrix(weight_table)
+  # zscores <- cor(t(matrix))
+  genes <- rownames(zscores)
+  weight_table <- extract_net(xnet, zscores, genes, 0)
+
+  names(weight_table) <- c("regulator", "target", "zscore", "weight")
+
   # order matrix
   if (!is.null(xdyn)) {
     matrix <- matrix[, rownames(xdyn$cells)]
   }
-  weight_table <- net.format(weight_table, abs_weight = FALSE)
+  # weight_table <- net.format(weight_table, abs_weight = FALSE)
   weight_table$target <- as.character(weight_table$target)
   weight_table$regulator <- as.character(weight_table$regulator)
 
@@ -41,8 +57,8 @@ crossweight <- function(
   weighted_score <- c()
   for (i in 1:nrow(weight_table)) {
     new <- score_offset(
-      # weight_table$zscore[i],
-      weight_table$weight[i],
+      weight_table$zscore[i],
+      # weight_table$weight[i],
       weight_table$offset[i],
       min = min,
       max = max,
@@ -96,9 +112,17 @@ score_offset <- function(
 }
 
 
-# estimates min and max values for crossweighting
-# for now assumes uniform cell density across pseudotime/only considers early time
-# this needs to be refined if it's to be useful...
+
+#'estimates min and max values for crossweighting for now assumes uniform cell density across
+#'pseudotime/only considers early time this needs to be refined if it's to be useful...
+#'
+#' @param matrix matrix
+#' @param xdyn xdyn
+#' @param pseudotime_min pseudotime_min
+#' @param pseudotime_max pseudotime_max
+#'
+#' @return params
+#'
 #' @export
 crossweight_params <- function(
     matrix,
