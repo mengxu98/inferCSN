@@ -39,6 +39,9 @@ weight_table with offset and weighted_score added
 Perform crossweighting
 }
 \examples{
+library(inferCSN)
+data("example_matrix")
+weight_table <- inferCSN(example_matrix, verbose = TRUE)
 weight_table_new <- crossweight(
   weight_table,
   matrix = t(example_matrix)
