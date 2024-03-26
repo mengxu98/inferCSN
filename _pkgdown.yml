@@ -65,6 +65,8 @@ reference:
   - table.to.matrix
   - filter_sort.matrix
   - crossweight
+  - crossweight_params
+  - extract_net
   - normalization
   - prepare.performance.data
   - print.SRM_fit
