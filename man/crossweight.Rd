@@ -7,7 +7,7 @@
 crossweight(
   weight_table,
   matrix,
-  xdyn = NULL,
+  meta_data = NULL,
   lag = floor(ncol(matrix)/5),
   min = ceiling(ncol(matrix)/50),
   max = floor(ncol(matrix)/12),
@@ -20,7 +20,7 @@ crossweight(
 
 \item{matrix}{genes-by-cells expression matrix}
 
-\item{xdyn}{result of running findDynGenes}
+\item{meta_data}{result of running findDynGenes}
 
 \item{lag}{lag window on which to run cross-correlation. Cross-correlaiton computed from -lag to +lag.}
 
@@ -46,5 +46,7 @@ weight_table_new <- crossweight(
   weight_table,
   matrix = t(example_matrix)
 )
-head(weight_table_new)
+p1 <- network.heatmap(weight_table)
+p2 <- network.heatmap(weight_table_new[, 1:3])
+p1 + p2
 }

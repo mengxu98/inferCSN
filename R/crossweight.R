@@ -2,7 +2,7 @@
 #'
 #' @param weight_table GRN dataframe, the result of running reconstructargetRN or reconstructargetRN_GENIE3
 #' @param matrix genes-by-cells expression matrix
-#' @param xdyn result of running findDynGenes
+#' @param meta_data result of running findDynGenes
 #' @param lag lag window on which to run cross-correlation. Cross-correlaiton computed from -lag to +lag.
 #' @param min minimum of weighting window. Edges with offsets (or absolute offsets if symmetric_filter=TRUE) less than min will not be negatively weighted.
 #' @param max maximum of weighting window. Edges with offsets (or absolute offsets if symmetric_filter=TRUE) greater than max will have weights set to 0.
@@ -20,45 +20,29 @@
 #'   weight_table,
 #'   matrix = t(example_matrix)
 #' )
-#' head(weight_table_new)
+#' p1 <- network.heatmap(weight_table)
+#' p2 <- network.heatmap(weight_table_new[, 1:3])
+#' p1 + p2
 crossweight <- function(
     weight_table,
     matrix,
-    xdyn = NULL,
+    meta_data = NULL,
     lag = floor(ncol(matrix) / 5),
     min = ceiling(ncol(matrix) / 50),
     max = floor(ncol(matrix) / 12),
     symmetric_filter = FALSE,
     filter_thresh = 0) {
-
-  mim <- minet::build.mim(
-    t(matrix),
-    estimator = "pearson"
-  )
-  xnet <- minet::clr(mim)
-  zscores <- table.to.matrix(weight_table)
-  # zscores <- cor(t(matrix))
-  genes <- rownames(zscores)
-  weight_table <- extract_net(xnet, zscores, genes, 0)
-
-  names(weight_table) <- c("regulator", "target", "zscore", "weight")
-
-  # order matrix
-  if (!is.null(xdyn)) {
-    matrix <- matrix[, rownames(xdyn$cells)]
+  if (!is.null(meta_data)) {
+    matrix <- matrix[, rownames(meta_data$cell)]
   }
-  # weight_table <- net.format(weight_table, abs_weight = FALSE)
-  weight_table$target <- as.character(weight_table$target)
   weight_table$regulator <- as.character(weight_table$regulator)
-
-  offset <- apply(weight_table, 1, cross_corr, matrix = matrix, lag = lag)
-  weight_table$offset <- offset
+  weight_table$target <- as.character(weight_table$target)
+  weight_table$offset <- apply(weight_table, 1, cross_corr, matrix = matrix, lag = lag)
 
   weighted_score <- c()
   for (i in 1:nrow(weight_table)) {
     new <- score_offset(
-      weight_table$zscore[i],
-      # weight_table$weight[i],
+      weight_table$weight[i],
       weight_table$offset[i],
       min = min,
       max = max,
@@ -66,30 +50,38 @@ crossweight <- function(
     )
     weighted_score <- c(weighted_score, new)
   }
-
   weight_table$weighted_score <- weighted_score
 
-  weight_table <- weight_table[weight_table$weighted_score > filter_thresh, ]
+  # weight_table <- weight_table[abs(weight_table$weighted_score) > filter_thresh,]
+  # weight_table <- weight_table[weight_table$weight > filter_thresh, ]
+  weight_table <- weight_table[weight_table$offset > filter_thresh,]
 
-  weight_table
+  return(weight_table)
 }
 
+cross_corr <- function(
+    grn_row,
+    matrix,
+    lag) {
+  regulator <- grn_row[1]
+  target <- grn_row[2]
 
-cross_corr <- function(grn_row, matrix, lag) {
-  target <- grn_row[1]
-  regulator <- grn_row[2]
-
-  x <- ccf(as.numeric(matrix[regulator, ]), as.numeric(matrix[target, ]), lag, pl = FALSE)
+  x <- stats::ccf(
+    as.numeric(matrix[regulator, ]),
+    as.numeric(matrix[target, ]),
+    lag,
+    plot = FALSE
+  )
 
   df <- data.frame(lag = x$lag, cor = abs(x$acf))
   df <- df[order(df$cor, decreasing = TRUE), ]
   offset <- mean(df$lag[1:ceiling((2 / 3) * lag)])
 
-  offset
+  return(offset)
 }
 
 score_offset <- function(
-    score,
+    weight,
     offset,
     min = 2,
     max = 20,
@@ -98,43 +90,52 @@ score_offset <- function(
     offset <- abs(offset)
   }
 
-  if (offset <= min) {
-    res <- score
-  } else if (offset >= max) {
-    res <- 0
+  # if (offset <= min) {
+  #   weight <- weight
+  # } else if (offset >= max) {
+  #   weight <- 0
+  # } else {
+  #   # Linear weighting scheme according to y = (-x / (max - min)) + 1
+  #   score <- (-offset / (max - min)) + 1
+  #   weight <- score * weight
+  # }
+
+  if (offset < 0 && weight < 0) {
+    weight <- weight
+  } else if (offset > 0 && weight > 0) {
+    weight <- weight
   } else {
-    # linear weighting scheme according to y=(-x/(max-min))+1
-    weight <- (-offset / (max - min)) + 1
-    res <- score * weight
+    weight <- 0
   }
 
-  res
+  return(weight)
 }
 
-
-
-#'estimates min and max values for crossweighting for now assumes uniform cell density across
-#'pseudotime/only considers early time this needs to be refined if it's to be useful...
+#' estimates min and max values for crossweighting for now assumes uniform cell density across
+#' pseudotime/only considers early time this needs to be refined if it's to be useful...
 #'
 #' @param matrix matrix
-#' @param xdyn xdyn
+#' @param meta_data meta_data
 #' @param pseudotime_min pseudotime_min
 #' @param pseudotime_max pseudotime_max
 #'
-#' @return params
+#' @return Params list
 #'
 #' @export
 crossweight_params <- function(
     matrix,
-    xdyn,
+    meta_data,
     pseudotime_min = 0.005,
     pseudotime_max = 0.01) {
-  matrix <- matrix[, rownames(xdyn$cells)]
-  # ncells <- nrow(xdyn$cells)
-  min <- nrow(xdyn$cells[xdyn$cells$pseudotime < pseudotime_min, ])
-  max <- nrow(xdyn$cells[xdyn$cells$pseudotime < pseudotime_max, ])
+  matrix <- matrix[, rownames(meta_data$cell)]
+  min <- nrow(meta_data$cell[meta_data$cell$pseudotime < pseudotime_min, ])
+  max <- nrow(meta_data$cell[meta_data$cell$pseudotime < pseudotime_max, ])
 
-  params <- list(min = min, max = max)
+  params <- list(
+    matrix = matrix,
+    min = min,
+    max = max
+  )
 
   return(params)
 }

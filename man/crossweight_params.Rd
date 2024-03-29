@@ -5,19 +5,24 @@
 \title{estimates min and max values for crossweighting for now assumes uniform cell density across
 pseudotime/only considers early time this needs to be refined if it's to be useful...}
 \usage{
-crossweight_params(matrix, xdyn, pseudotime_min = 0.005, pseudotime_max = 0.01)
+crossweight_params(
+  matrix,
+  meta_data,
+  pseudotime_min = 0.005,
+  pseudotime_max = 0.01
+)
 }
 \arguments{
 \item{matrix}{matrix}
 
-\item{xdyn}{xdyn}
+\item{meta_data}{meta_data}
 
 \item{pseudotime_min}{pseudotime_min}
 
 \item{pseudotime_max}{pseudotime_max}
 }
 \value{
-params
+Params list
 }
 \description{
 estimates min and max values for crossweighting for now assumes uniform cell density across
