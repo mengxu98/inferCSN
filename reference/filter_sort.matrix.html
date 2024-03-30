@@ -87,22 +87,29 @@
 <span class="r-in"><span><span class="va">weight_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">weight_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="table.to.matrix.html">table.to.matrix</a></span><span class="op">(</span><span class="va">weight_table</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">filter_sort.matrix</span><span class="op">(</span><span class="va">weight_matrix</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              g1          g2           g3         g4            g5            g6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g1  0.000000000 0.183018160 -0.017243554 0.01932812 -0.0094978301  9.540681e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g2  0.135155213 0.000000000  0.287583242 0.05443150  0.0004186466  6.185946e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g3 -0.017808779 0.399844678  0.000000000 0.32926936  0.0547439992 -2.596719e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g4  0.026119728 0.099476772  0.431816668 0.00000000  0.3445870129  4.421821e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g5 -0.013371027 0.000276389  0.075730437 0.36330380  0.0000000000  3.726600e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g6  0.000119805 0.012512780 -0.003240596 0.04880917  0.3879247261  0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              g1           g2            g3          g4          g5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g1  0.000000000  0.338137767  0.0092681907 -0.01975279 0.022905010</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g2  0.208240363  0.000000000  0.2814299337  0.01135446 0.006973898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g3  0.007219557  0.357707045  0.0000000000  0.36993781 0.062181513</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g4 -0.016931373  0.016194043  0.4151977047  0.00000000 0.334764758</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g5  0.022599496  0.011010652  0.0788459511  0.38034320 0.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g6 -0.017414505 -0.006287723 -0.0002596662  0.08075083 0.371229345</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               g6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g1 -0.0159799588</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g2 -0.0039367559</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g3 -0.0006236106</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g4  0.0658743327</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g5  0.3460084473</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g6  0.0000000000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">filter_sort.matrix</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">weight_matrix</span> ,</span></span>
 <span class="r-in"><span>  regulators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span>, <span class="st">"g2"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g3"</span>, <span class="st">"g4"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             g3         g4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g1 -0.01724355 0.01932812</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g2  0.28758324 0.05443150</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             g3          g4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g1 0.009268191 -0.01975279</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g2 0.281429934  0.01135446</span>
 </code></pre></div>
     </div>
   </div>

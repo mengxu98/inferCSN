@@ -61,7 +61,12 @@ pseudotime/only considers early time this needs to be refined if it's to be usef
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">crossweight_params</span><span class="op">(</span><span class="va">matrix</span>, <span class="va">xdyn</span>, pseudotime_min <span class="op">=</span> <span class="fl">0.005</span>, pseudotime_max <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">crossweight_params</span><span class="op">(</span></span>
+<span>  <span class="va">matrix</span>,</span>
+<span>  <span class="va">meta_data</span>,</span>
+<span>  pseudotime_min <span class="op">=</span> <span class="fl">0.005</span>,</span>
+<span>  pseudotime_max <span class="op">=</span> <span class="fl">0.01</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -70,8 +75,8 @@ pseudotime/only considers early time this needs to be refined if it's to be usef
 <dd><p>matrix</p></dd>
 
 
-<dt>xdyn</dt>
-<dd><p>xdyn</p></dd>
+<dt>meta_data</dt>
+<dd><p>meta_data</p></dd>
 
 
 <dt>pseudotime_min</dt>
@@ -86,7 +91,7 @@ pseudotime/only considers early time this needs to be refined if it's to be usef
     <h2>Value</h2>
     
 
-<p>params</p>
+<p>Params list</p>
     </div>
 
   </div>
