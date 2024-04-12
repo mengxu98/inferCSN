@@ -1,7 +1,7 @@
 #' @title Calculate and rank TFs in network
 #'
-#' @param weight_table The weight data table of network
-#' @param directed If GRN is directed or not
+#' @inheritParams net.format
+#' @param directed If network is directed or not.
 #'
 #' @return A data.table with three columns
 #' @export
@@ -10,32 +10,40 @@
 #' library(inferCSN)
 #' data("example_matrix")
 #' weight_table <- inferCSN(example_matrix)
-#' ranks <- calculate.gene.rank(weight_table)
-#' head(ranks)
+#' head(calculate.gene.rank(weight_table))
+#' head(calculate.gene.rank(weight_table, regulators = "g1"))
 calculate.gene.rank <- function(
     weight_table,
+    regulators = NULL,
+    targets = NULL,
     directed = FALSE) {
-  colnames(weight_table) <- c("regulatory", "target", "weight")
-  weight_table$weight <- abs(weight_table$weight)
-  tfnet <- igraph::graph_from_data_frame(
+  colnames(weight_table) <- c("regulator", "target", "weight")
+  weight_table <- net.format(
+    weight_table,
+    regulators = regulators,
+    targets = targets
+  )
+
+  network <- igraph::graph_from_data_frame(
     weight_table,
     directed = directed
   )
   page_rank_res <- data.frame(
-    igraph::page_rank(tfnet, directed = directed)$vector
+    igraph::page_rank(network, directed = directed)$vector
   )
-  colnames(page_rank_res) <- c("pageRank")
+  colnames(page_rank_res) <- c("page_rank")
   page_rank_res$gene <- rownames(page_rank_res)
-  page_rank_res <- page_rank_res[, c("gene", "pageRank")]
+  page_rank_res <- page_rank_res[, c("gene", "page_rank")]
   page_rank_res <- page_rank_res[order(
-    page_rank_res$pageRank,
+    page_rank_res$page_rank,
     decreasing = TRUE
   ), ]
-  page_rank_res$isRegulator <- FALSE
-  page_rank_res$isRegulator[
+  page_rank_res$is_regulator <- FALSE
+  page_rank_res$is_regulator[
     page_rank_res$gene %in% unique(
-      weight_table$regulatory
+      weight_table$regulator
     )
   ] <- TRUE
+
   return(page_rank_res)
 }

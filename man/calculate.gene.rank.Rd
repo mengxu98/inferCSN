@@ -4,12 +4,21 @@
 \alias{calculate.gene.rank}
 \title{Calculate and rank TFs in network}
 \usage{
-calculate.gene.rank(weight_table, directed = FALSE)
+calculate.gene.rank(
+  weight_table,
+  regulators = NULL,
+  targets = NULL,
+  directed = FALSE
+)
 }
 \arguments{
-\item{weight_table}{The weight data table of network}
+\item{weight_table}{The weight data table of network.}
 
-\item{directed}{If GRN is directed or not}
+\item{regulators}{Regulators list.}
+
+\item{targets}{Targets list.}
+
+\item{directed}{If network is directed or not.}
 }
 \value{
 A data.table with three columns
@@ -21,6 +30,6 @@ Calculate and rank TFs in network
 library(inferCSN)
 data("example_matrix")
 weight_table <- inferCSN(example_matrix)
-ranks <- calculate.gene.rank(weight_table)
-head(ranks)
+head(calculate.gene.rank(weight_table))
+head(calculate.gene.rank(weight_table, regulators = "g1"))
 }
