@@ -63,7 +63,7 @@ reference:
   - coef.SRM_fit_CV
   - net.format
   - table.to.matrix
-  - filter_sort.matrix
+  - filter_sort_matrix
   - crossweight
   - crossweight_params
   - normalization
