@@ -163,7 +163,7 @@ table.to.matrix <- function(
     PACKAGE = "inferCSN",
     weight_table
   )
-  weight_matrix <- filter_sort.matrix(
+  weight_matrix <- filter_sort_matrix(
     weight_matrix,
     regulators = regulators,
     targets = targets
@@ -185,14 +185,14 @@ table.to.matrix <- function(
 #' data("example_matrix")
 #' weight_table <- inferCSN(example_matrix)
 #' weight_matrix <- table.to.matrix(weight_table)
-#' filter_sort.matrix(weight_matrix)[1:6, 1:6]
+#' filter_sort_matrix(weight_matrix)[1:6, 1:6]
 #'
-#' filter_sort.matrix(
+#' filter_sort_matrix(
 #'   weight_matrix ,
 #'   regulators = c("g1", "g2"),
 #'   targets = c("g3", "g4")
 #' )
-filter_sort.matrix <- function(
+filter_sort_matrix <- function(
     weight_matrix,
     regulators = NULL,
     targets = NULL) {
