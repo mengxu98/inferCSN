@@ -58,7 +58,7 @@
     "BiocVersion": {
       "Package": "BiocVersion",
       "Version": "3.18.1",
-      "Source": "Repository",
+      "Source": "Bioconductor",
       "Repository": "Bioconductor 3.18",
       "Requirements": [
         "R"
@@ -198,7 +198,7 @@
     },
     "RcppArmadillo": {
       "Package": "RcppArmadillo",
-      "Version": "0.12.8.1.0",
+      "Version": "0.12.8.2.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -208,7 +208,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "e78bbbb81a5dcd71a4bd3268d6ede0b1"
+      "Hash": "85c0c4491c06db4814ed7e39b960973c"
     },
     "RcppEigen": {
       "Package": "RcppEigen",
@@ -1054,7 +1054,7 @@
     },
     "igraph": {
       "Package": "igraph",
-      "Version": "2.0.2",
+      "Version": "2.0.3",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1073,7 +1073,7 @@
         "utils",
         "vctrs"
       ],
-      "Hash": "e3baa015afa83d9f1b748db5a2aedb5a"
+      "Hash": "c3b7d801d722e26e4cd888e042bf9af5"
     },
     "ini": {
       "Package": "ini",
