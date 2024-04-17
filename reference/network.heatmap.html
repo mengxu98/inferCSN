@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">inferCSN</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.3</span>
       </span>
     </div>
 
@@ -67,6 +67,12 @@
 <span>  heatmap_width <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  heatmap_title <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  heatmap_color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#1966ad"</span>, <span class="st">"white"</span>, <span class="st">"#bb141a"</span><span class="op">)</span>,</span>
+<span>  border_color <span class="op">=</span> <span class="st">"gray"</span>,</span>
+<span>  rect_color <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  anno_width <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  anno_height <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  row_anno_type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  column_anno_type <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  legend_name <span class="op">=</span> <span class="st">"Weight"</span>,</span>
 <span>  row_title <span class="op">=</span> <span class="st">"Regulators"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -87,15 +93,15 @@
 
 
 <dt>switch_matrix</dt>
-<dd><p>Logical value, whether to weight data table to matrix.</p></dd>
+<dd><p>Logical value, default set to `TRUE`, whether to weight data table to matrix.</p></dd>
 
 
 <dt>show_names</dt>
-<dd><p>Logical value, whether to show names of row and column.</p></dd>
+<dd><p>Logical value, default set to `FALSE`, whether to show names of row and column.</p></dd>
 
 
 <dt>heatmap_size</dt>
-<dd><p>The size of heatmap, default set to 5.</p></dd>
+<dd><p>Default set to 5. The size of heatmap.</p></dd>
 
 
 <dt>heatmap_height</dt>
@@ -114,6 +120,30 @@
 <dd><p>Colors of heatmap.</p></dd>
 
 
+<dt>border_color</dt>
+<dd><p>Default set to `gray`. Color of heatmap border.</p></dd>
+
+
+<dt>rect_color</dt>
+<dd><p>Default set to `NA`. Color of heatmap rect.</p></dd>
+
+
+<dt>anno_width</dt>
+<dd><p>Width of annotation.</p></dd>
+
+
+<dt>anno_height</dt>
+<dd><p>Height of annotation.</p></dd>
+
+
+<dt>row_anno_type</dt>
+<dd><p>Default set to `NULL`. c("boxplot", "barplot", "histogram", "density", "lines", "points", "horizon")</p></dd>
+
+
+<dt>column_anno_type</dt>
+<dd><p>Default set to `NULL`. c("boxplot", "barplot", "histogram", "density", "lines", "points")</p></dd>
+
+
 <dt>legend_name</dt>
 <dd><p>The name of legend.</p></dd>
 
@@ -126,7 +156,7 @@
     <h2>Value</h2>
     
 
-<p>Return a heatmap of ggplot2 object</p>
+<p>Return a heatmap</p>
     </div>
 
     <div id="ref-examples">
@@ -166,15 +196,16 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">network.heatmap</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">weight_table</span>,</span></span>
-<span class="r-in"><span>  heatmap_title <span class="op">=</span> <span class="st">"inferCSN"</span>,</span></span>
-<span class="r-in"><span>  show_names <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>  show_names <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  rect_color <span class="op">=</span> <span class="st">"gray90"</span>,</span></span>
+<span class="r-in"><span>  row_anno_type <span class="op">=</span> <span class="st">"density"</span>,</span></span>
+<span class="r-in"><span>  column_anno_type <span class="op">=</span> <span class="st">"barplot"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="network.heatmap-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">network.heatmap</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">weight_table</span>,</span></span>
 <span class="r-in"><span>  regulators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span>, <span class="st">"g2"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  heatmap_title <span class="op">=</span> <span class="st">"inferCSN"</span>,</span></span>
 <span class="r-in"><span>  show_names <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="network.heatmap-4.png" alt="" width="700" height="433"></span>
@@ -182,7 +213,8 @@
 <span class="r-in"><span><span class="fu">network.heatmap</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">weight_table</span>,</span></span>
 <span class="r-in"><span>  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span>, <span class="st">"g2"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  heatmap_title <span class="op">=</span> <span class="st">"inferCSN"</span>,</span></span>
+<span class="r-in"><span>  row_anno_type <span class="op">=</span> <span class="st">"boxplot"</span>,</span></span>
+<span class="r-in"><span>  column_anno_type <span class="op">=</span> <span class="st">"histogram"</span>,</span></span>
 <span class="r-in"><span>  show_names <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="network.heatmap-5.png" alt="" width="700" height="433"></span>
@@ -191,7 +223,6 @@
 <span class="r-in"><span>  <span class="va">weight_table</span>,</span></span>
 <span class="r-in"><span>  regulators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span>, <span class="st">"g3"</span>, <span class="st">"g5"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g3"</span>, <span class="st">"g6"</span>, <span class="st">"g9"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  heatmap_title <span class="op">=</span> <span class="st">"inferCSN"</span>,</span></span>
 <span class="r-in"><span>  show_names <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="network.heatmap-6.png" alt="" width="700" height="433"></span>
