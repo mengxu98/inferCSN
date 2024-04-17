@@ -39,6 +39,7 @@ weight_table with offset and weighted_score added
 Perform crossweighting
 }
 \examples{
+\dontrun{
 library(inferCSN)
 data("example_matrix")
 weight_table <- inferCSN(example_matrix, verbose = TRUE)
@@ -49,4 +50,5 @@ weight_table_new <- crossweight(
 p1 <- network.heatmap(weight_table)
 p2 <- network.heatmap(weight_table_new[, 1:3])
 p1 + p2
+}
 }
