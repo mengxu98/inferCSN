@@ -15,6 +15,12 @@ network.heatmap(
   heatmap_width = NULL,
   heatmap_title = NULL,
   heatmap_color = c("#1966ad", "white", "#bb141a"),
+  border_color = "gray",
+  rect_color = NA,
+  anno_width = 1,
+  anno_height = 1,
+  row_anno_type = NULL,
+  column_anno_type = NULL,
   legend_name = "Weight",
   row_title = "Regulators"
 )
@@ -26,11 +32,11 @@ network.heatmap(
 
 \item{targets}{Targets list.}
 
-\item{switch_matrix}{Logical value, whether to weight data table to matrix.}
+\item{switch_matrix}{Logical value, default set to `TRUE`, whether to weight data table to matrix.}
 
-\item{show_names}{Logical value, whether to show names of row and column.}
+\item{show_names}{Logical value, default set to `FALSE`, whether to show names of row and column.}
 
-\item{heatmap_size}{The size of heatmap, default set to 5.}
+\item{heatmap_size}{Default set to 5. The size of heatmap.}
 
 \item{heatmap_height}{The height of heatmap.}
 
@@ -40,12 +46,24 @@ network.heatmap(
 
 \item{heatmap_color}{Colors of heatmap.}
 
+\item{border_color}{Default set to `gray`. Color of heatmap border.}
+
+\item{rect_color}{Default set to `NA`. Color of heatmap rect.}
+
+\item{anno_width}{Width of annotation.}
+
+\item{anno_height}{Height of annotation.}
+
+\item{row_anno_type}{Default set to `NULL`. c("boxplot", "barplot", "histogram", "density", "lines", "points", "horizon")}
+
+\item{column_anno_type}{Default set to `NULL`. c("boxplot", "barplot", "histogram", "density", "lines", "points")}
+
 \item{legend_name}{The name of legend.}
 
 \item{row_title}{The title of row.}
 }
 \value{
-Return a heatmap of ggplot2 object
+Return a heatmap
 }
 \description{
 The heatmap of network
@@ -84,21 +102,23 @@ ComplexHeatmap::draw(p3 + p4)
 
 network.heatmap(
   weight_table,
-  heatmap_title = "inferCSN",
-  show_names = TRUE
+  show_names = TRUE,
+  rect_color = "gray90",
+  row_anno_type = "density",
+  column_anno_type = "barplot"
 )
 
 network.heatmap(
   weight_table,
   regulators = c("g1", "g2"),
-  heatmap_title = "inferCSN",
   show_names = TRUE
 )
 
 network.heatmap(
   weight_table,
   targets = c("g1", "g2"),
-  heatmap_title = "inferCSN",
+  row_anno_type = "boxplot",
+  column_anno_type = "histogram",
   show_names = TRUE
 )
 
@@ -106,7 +126,6 @@ network.heatmap(
   weight_table,
   regulators = c("g1", "g3", "g5"),
   targets = c("g3", "g6", "g9"),
-  heatmap_title = "inferCSN",
   show_names = TRUE
 )
 }

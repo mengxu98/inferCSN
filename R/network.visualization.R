@@ -1,17 +1,23 @@
 #' @title The heatmap of network
 #'
 #' @inheritParams net.format
-#' @param switch_matrix Logical value, whether to weight data table to matrix.
-#' @param show_names Logical value, whether to show names of row and column.
-#' @param heatmap_size The size of heatmap, default set to 5.
+#' @param switch_matrix Logical value, default set to `TRUE`, whether to weight data table to matrix.
+#' @param show_names Logical value, default set to `FALSE`, whether to show names of row and column.
+#' @param heatmap_size Default set to 5. The size of heatmap.
 #' @param heatmap_height The height of heatmap.
 #' @param heatmap_width The width of heatmap.
 #' @param heatmap_title The title of heatmap.
 #' @param heatmap_color Colors of heatmap.
+#' @param border_color Default set to `gray`. Color of heatmap border.
+#' @param rect_color Default set to `NA`. Color of heatmap rect.
+#' @param anno_width Width of annotation.
+#' @param anno_height Height of annotation.
+#' @param row_anno_type Default set to `NULL`. c("boxplot", "barplot", "histogram", "density", "lines", "points", "horizon")
+#' @param column_anno_type Default set to `NULL`. c("boxplot", "barplot", "histogram", "density", "lines", "points")
 #' @param legend_name The name of legend.
 #' @param row_title The title of row.
 #'
-#' @return Return a heatmap of ggplot2 object
+#' @return Return a heatmap
 #' @export
 #'
 #' @examples
@@ -48,21 +54,23 @@
 #'
 #' network.heatmap(
 #'   weight_table,
-#'   heatmap_title = "inferCSN",
-#'   show_names = TRUE
+#'   show_names = TRUE,
+#'   rect_color = "gray90",
+#'   row_anno_type = "density",
+#'   column_anno_type = "barplot"
 #' )
 #'
 #' network.heatmap(
 #'   weight_table,
 #'   regulators = c("g1", "g2"),
-#'   heatmap_title = "inferCSN",
 #'   show_names = TRUE
 #' )
 #'
 #' network.heatmap(
 #'   weight_table,
 #'   targets = c("g1", "g2"),
-#'   heatmap_title = "inferCSN",
+#'   row_anno_type = "boxplot",
+#'   column_anno_type = "histogram",
 #'   show_names = TRUE
 #' )
 #'
@@ -70,7 +78,6 @@
 #'   weight_table,
 #'   regulators = c("g1", "g3", "g5"),
 #'   targets = c("g3", "g6", "g9"),
-#'   heatmap_title = "inferCSN",
 #'   show_names = TRUE
 #' )
 network.heatmap <- function(
@@ -84,6 +91,12 @@ network.heatmap <- function(
     heatmap_width = NULL,
     heatmap_title = NULL,
     heatmap_color = c("#1966ad", "white", "#bb141a"),
+    border_color = "gray",
+    rect_color = NA,
+    anno_width = 1,
+    anno_height = 1,
+    row_anno_type = NULL,
+    column_anno_type = NULL,
     legend_name = "Weight",
     row_title = "Regulators") {
   if (switch_matrix) {
@@ -135,6 +148,121 @@ network.heatmap <- function(
     )
   }
 
+  if (!is.null(row_anno_type)) {
+    row_anno_type <- match.arg(
+      row_anno_type,
+      c("boxplot", "barplot", "histogram", "density", "lines", "points", "horizon")
+    )
+    row_anno <- switch(
+      row_anno_type,
+      "boxplot" = ComplexHeatmap::rowAnnotation(
+        Anno = ComplexHeatmap::anno_boxplot(
+          weight_matrix,
+          width = grid::unit(anno_width, "cm"),
+          gp = grid::gpar(fill = 1:nrow(weight_matrix))
+        )
+      ),
+      "barplot" = ComplexHeatmap::rowAnnotation(
+        Anno = ComplexHeatmap::anno_barplot(
+          abs(weight_matrix),
+          width = grid::unit(anno_width, "cm"),
+          gp = grid::gpar(fill = 1:ncol(weight_matrix))
+        )
+      ),
+      "histogram" = ComplexHeatmap::rowAnnotation(
+        Anno = ComplexHeatmap::anno_histogram(
+          weight_matrix,
+          width = grid::unit(anno_width, "cm"),
+          gp = grid::gpar(fill = 1:nrow(weight_matrix))
+        )
+      ),
+      "density" = ComplexHeatmap::rowAnnotation(
+        Anno = ComplexHeatmap::anno_density(
+          weight_matrix,
+          width = grid::unit(anno_width, "cm"),
+          gp = grid::gpar(fill = 1:nrow(weight_matrix))
+        )
+      ),
+      "lines" = ComplexHeatmap::rowAnnotation(
+        Anno = ComplexHeatmap::anno_lines(
+          weight_matrix,
+          width = grid::unit(anno_width, "cm"),
+          gp = grid::gpar(fill = 1:nrow(weight_matrix))
+        )
+      ),
+      "points" = ComplexHeatmap::rowAnnotation(
+        Anno = ComplexHeatmap::anno_points(
+          weight_matrix,
+          width = grid::unit(anno_width, "cm"),
+          gp = grid::gpar(fill = 1:nrow(weight_matrix))
+        )
+      ),
+      "horizon" = ComplexHeatmap::rowAnnotation(
+        Anno = ComplexHeatmap::anno_horizon(
+          weight_matrix,
+          width = grid::unit(anno_width, "cm"),
+          gp = grid::gpar(fill = 1:nrow(weight_matrix))
+        )
+      )
+    )
+  } else {
+    row_anno <- NULL
+  }
+
+  if (!is.null(column_anno_type)) {
+    column_anno_type <- match.arg(
+      column_anno_type,
+      c("boxplot", "barplot", "histogram", "density", "lines", "points")
+    )
+    column_anno <- switch(
+      column_anno_type,
+      "boxplot" = ComplexHeatmap::columnAnnotation(
+        Anno = ComplexHeatmap::anno_boxplot(
+          weight_matrix,
+          height = grid::unit(anno_height, "cm"),
+          gp = grid::gpar(fill = 1:ncol(weight_matrix))
+        )
+      ),
+      "barplot" = ComplexHeatmap::columnAnnotation(
+        Anno = ComplexHeatmap::anno_barplot(
+          abs(weight_matrix),
+          height = grid::unit(anno_height, "cm"),
+          gp = grid::gpar(fill = 1:nrow(weight_matrix))
+        )
+      ),
+      "histogram" = ComplexHeatmap::columnAnnotation(
+        Anno = ComplexHeatmap::anno_histogram(
+          weight_matrix,
+          height = grid::unit(anno_height, "cm"),
+          gp = grid::gpar(fill = 1:ncol(weight_matrix))
+        )
+      ),
+      "density" = ComplexHeatmap::columnAnnotation(
+        Anno = ComplexHeatmap::anno_density(
+          weight_matrix,
+          height = grid::unit(anno_height, "cm"),
+          gp = grid::gpar(fill = 1:ncol(weight_matrix))
+        )
+      ),
+      "lines" = ComplexHeatmap::columnAnnotation(
+        Anno = ComplexHeatmap::anno_lines(
+          weight_matrix,
+          height = grid::unit(anno_height, "cm"),
+          gp = grid::gpar(fill = 1:ncol(weight_matrix))
+        )
+      ),
+      "points" = ComplexHeatmap::columnAnnotation(
+        Anno = ComplexHeatmap::anno_points(
+          weight_matrix,
+          height = grid::unit(anno_height, "cm"),
+          gp = grid::gpar(fill = 1:ncol(weight_matrix))
+        )
+      )
+    )
+  } else {
+    column_anno <- NULL
+  }
+
   p <- ComplexHeatmap::Heatmap(
     weight_matrix,
     name = legend_name,
@@ -146,9 +274,12 @@ network.heatmap <- function(
     show_row_names = show_names,
     show_column_names = show_names,
     column_names_rot = 45,
-    width = unit(heatmap_width, "cm"),
-    height = unit(heatmap_height, "cm"),
-    border = "gray"
+    border = border_color,
+    rect_gp = grid::gpar(col = rect_color),
+    width = grid::unit(heatmap_width, "cm"),
+    height = grid::unit(heatmap_height, "cm"),
+    top_annotation = column_anno,
+    left_annotation = row_anno
   )
 
   return(p)
