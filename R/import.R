@@ -11,6 +11,7 @@ utils::globalVariables(
     "name",
     "degree",
     "edges",
-    "curvetype"
+    "curvetype",
+    "weight_new"
   )
 )
