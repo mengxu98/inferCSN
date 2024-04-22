@@ -71,8 +71,8 @@
 <span>  regulators <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  targets <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  regulators_num <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  cores <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -151,12 +151,12 @@ The maximum support size at which to terminate the regularization path.
 Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.</p></dd>
 
 
-<dt>verbose</dt>
-<dd><p>Print detailed information.</p></dd>
-
-
 <dt>cores</dt>
 <dd><p>CPU cores.</p></dd>
+
+
+<dt>verbose</dt>
+<dd><p>Print detailed information.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -173,8 +173,7 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 <span class="r-in"><span><span class="va">weight_table</span> <span class="op">&lt;-</span> <span class="fu">inferCSN</span><span class="op">(</span><span class="va">example_matrix</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Running start for &lt; matrix &gt;.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Checking input parameters.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> All parameters check done.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using 'L0' penalty.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using `L0` penalty.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using 1 core.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Run done.</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">weight_table</span><span class="op">)</span></span></span>
@@ -186,13 +185,7 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 <span class="r-out co"><span class="r-pr">#&gt;</span> 91        g15    g14  0.4516497</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 73        g14    g13  0.4483912</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">weight_table</span> <span class="op">&lt;-</span> <span class="fu">inferCSN</span><span class="op">(</span><span class="va">example_matrix</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, cores <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running start for &lt; matrix &gt;.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Checking input parameters.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> All parameters check done.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using 'L0' penalty.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using 2 cores.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Run done.</span>
+<span class="r-in"><span><span class="va">weight_table</span> <span class="op">&lt;-</span> <span class="fu">inferCSN</span><span class="op">(</span><span class="va">example_matrix</span>, cores <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">weight_table</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     regulator target     weight</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 162       g17    g18  0.5443805</span>
@@ -215,7 +208,7 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer></div>
