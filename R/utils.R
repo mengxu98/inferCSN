@@ -19,112 +19,80 @@ check.parameters <- function(
     regulators_num,
     verbose,
     cores) {
-  if (verbose) message("Checking input parameters.")
+  if (verbose) {
+    message("Checking input parameters.")
+  }
 
   if (!is.matrix(matrix) && !is.array(matrix) && (length(dim(matrix)) != 2)) {
     stop(
-      "Parameter matrix must be a two-dimensional matrix,
+      "`matrix` must be a two-dimensional matrix,
       where each column corresponds to a gene and each row corresponds to a sample/cell."
     )
   }
 
   if (is.null(colnames(matrix))) {
-    stop("Parameter matrix must contain the names of the genes as colnames.")
+    stop("`matrix` must contain the names of the genes as colnames.")
   }
 
   # Check the penalty term of the regression model
-  if (!any(c("L0", "L0L2") == penalty)) {
-    stop(
-      "inferCSN does not support ", penalty, " penalty regression.\n",
-      "Please set penalty item as 'L0' or 'L0L2'."
-    )
-  }
+  match.arg(penalty, c("L0", "L0L2"))
 
   # Check the algorithm of the regression model
-  if (!any(c("CD", "CDPSI") == algorithm)) {
-    stop(
-      "inferCSN does not support ", algorithm, " algorithmn.\n",
-      "Please set algorithm item as 'CD' or 'CDPSI'."
-    )
-  }
+  match.arg(algorithm, c("CD", "CDPSI"))
 
   if (!is.numeric(seed)) {
     seed <- 1
-    if (verbose) warning("Supplied seed is not a valid integer, initialize 'seed' to 1.")
+    if (verbose) {
+      warning("`seed` is not a valid integer, initialize to 1.")
+    }
   }
 
   if (!is.null(k_folds)) {
-    if (!(is.numeric(k_folds) && k_folds > 0 && k_folds < 10)) {
-      stop("Please set 'k_folds' value between: (0, 1].")
+    if (!(is.numeric(k_folds) && k_folds > 0 && k_folds <= 1)) {
+      stop("Please set `k_folds` value between: (0, 1].")
     }
   }
 
   if (!is.null(targets)) {
-    if (!is.vector(targets)) {
-      stop("Parameter 'targets' must a vector (of indices or gene names).")
+    targets_intersect <- intersect(targets, colnames(matrix))
+    if (length(targets_intersect) == 0) {
+      stop("The input genes must contain at least 1 target.")
     }
 
-    if (is.numeric(targets)) {
-      if (max(targets) > nrow(matrix)) stop("At least one index in 'targets' exceeds the number of genes.")
-      if (min(targets) <= 0) stop("The indexes in 'targets' should be >=1.")
-    }
-
-    if (any(table(targets) > 1)) stop("Please provide each target only once.")
-
-    if (is.character(targets)) {
-      targetsInMatrix <- intersect(targets, colnames(matrix))
-      if (length(targetsInMatrix) == 0) {
-        stop("The genes must contain at least one target.")
-      }
-
-      if (length(targetsInMatrix) < length(targets)) {
-        if (verbose) warning("Only ", length(targetsInMatrix), " out of ", length(targets), " candidate regulators are in the expression matrix.")
+    if (length(targets_intersect) < length(targets)) {
+      if (verbose) {
+        warning(
+          "Only ", length(targets_intersect), " out of ", length(targets), " candidate regulators are in `matrix`."
+        )
       }
     }
   }
 
   if (!is.null(regulators)) {
-    if (is.list(regulators)) {
-      regulators <- unique(unlist(regulators))
+    regulators_intersect <- intersect(regulators, colnames(matrix))
+    if (length(regulators_intersect) == 0) {
+      stop("The input genes must contain at least 1 regulator.")
     }
-    if (!is.null(regulators)) {
-      if (length(regulators) < 2) stop("Provide at least 2 potential regulators.")
 
-      if (!is.vector(regulators)) {
-        stop("Parameter 'regulators' must a vector of indices or gene names.")
+    if (length(regulators_intersect) == 1) {
+      if (verbose) {
+        message("Only 1 regulator found in `matrix`, `weight` calculated by `cor`.")
       }
+    }
 
-      if (is.numeric(regulators)) {
-        if (max(regulators) > nrow(matrix)) {
-          stop("At least one index in 'regulators' exceeds the number of genes.")
-        }
-        if (min(regulators) <= 0) stop("The indexes in 'regulators' should be >=1.")
-      }
-
-      if (any(table(regulators) > 1)) stop("Please provide each regulator only once.")
-
-      if (is.character(regulators)) {
-        regulators_in_matrix <- intersect(regulators, colnames(matrix))
-        if (length(regulators_in_matrix) < 2) {
-          stop("Fewer than 2 regulators in the columns of expression matrix.")
-        }
-
-        if (length(regulators_in_matrix) < length(regulators)) {
-          if (verbose) {
-            warning("Only ", length(regulators_in_matrix), " out of ", length(regulators), " candidate regulators are in the expression matrix.")
-          }
-        }
+    if (length(regulators_intersect) < length(regulators)) {
+      if (verbose) {
+        warning("Only ", length(regulators_intersect), " out of ", length(regulators), " candidate regulators are in the expression matrix.")
       }
     }
   }
 
   if (!is.numeric(cores) || cores < 1) {
-    stop(x = "Parameter cores should be a stricly positive integer.")
+    stop("`cores` should be a stricly positive integer.")
   }
 
   if (verbose) {
-    message("All parameters check done.")
-    message("Using '", penalty, "' penalty.")
+    message("Using `", penalty, "` penalty.")
     if (cross_validation) message("Using cross validation.")
   }
 }
@@ -188,7 +156,7 @@ table.to.matrix <- function(
 #' filter_sort_matrix(weight_matrix)[1:6, 1:6]
 #'
 #' filter_sort_matrix(
-#'   weight_matrix ,
+#'   weight_matrix,
 #'   regulators = c("g1", "g2"),
 #'   targets = c("g3", "g4")
 #' )
@@ -204,7 +172,7 @@ filter_sort_matrix <- function(
   }
   if (!is.null(targets)) {
     targets <- intersect(colnames(weight_matrix), targets)
-  } else{
+  } else {
     targets <- colnames(weight_matrix)
   }
 
@@ -236,6 +204,7 @@ filter_sort_matrix <- function(
 #'   weight_table,
 #'   regulators = c("g1")
 #' )
+#'
 #' net.format(
 #'   weight_table,
 #'   regulators = c("g1"),
@@ -246,6 +215,7 @@ filter_sort_matrix <- function(
 #'   weight_table,
 #'   targets = c("g3")
 #' )
+#'
 #' net.format(
 #'   weight_table,
 #'   regulators = c("g1", "g3"),
@@ -263,13 +233,15 @@ net.format <- function(
     weight_table <- purrr::map_dfr(
       unique(regulators), function(x) {
         dplyr::filter(weight_table, regulator == x)
-      })
+      }
+    )
   }
   if (!is.null(targets)) {
     weight_table <- purrr::map_dfr(
       unique(targets), function(x) {
         dplyr::filter(weight_table, target == x)
-      })
+      }
+    )
   }
 
   if (abs_weight) {
@@ -464,12 +436,15 @@ is.scalar <- function(x) {
 normalization <- function(
     x,
     method = "max_min") {
-  y <- switch(
+  na_index <- which(is.na(x))
+  x[na_index] <- 0
+  x <- switch(
     EXPR = method,
     "max_min" = ((x - min(x)) / (max(x) - min(x))),
     "max" = (x / max(abs(x))),
     "sum" = (x / sum(abs(x)))
   )
+  x[na_index] <- NA
 
-  return(y)
+  return(x)
 }
