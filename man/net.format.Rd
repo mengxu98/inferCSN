@@ -32,6 +32,7 @@ net.format(
   weight_table,
   regulators = c("g1")
 )
+
 net.format(
   weight_table,
   regulators = c("g1"),
@@ -42,6 +43,7 @@ net.format(
   weight_table,
   targets = c("g3")
 )
+
 net.format(
   weight_table,
   regulators = c("g1", "g3"),

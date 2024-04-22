@@ -27,7 +27,7 @@ weight_matrix <- table.to.matrix(weight_table)
 filter_sort_matrix(weight_matrix)[1:6, 1:6]
 
 filter_sort_matrix(
-  weight_matrix ,
+  weight_matrix,
   regulators = c("g1", "g2"),
   targets = c("g3", "g4")
 )

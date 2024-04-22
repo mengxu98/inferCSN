@@ -16,7 +16,7 @@
 #' weight_table <- inferCSN(example_matrix, verbose = TRUE)
 #' head(weight_table)
 #'
-#' weight_table <- inferCSN(example_matrix, verbose = TRUE, cores = 2)
+#' weight_table <- inferCSN(example_matrix, cores = 2)
 #' head(weight_table)
 setGeneric(
   "inferCSN",
@@ -42,8 +42,8 @@ setGeneric(
 #' @param regulators_num The number of non-zore coef, this value will affect the final performance.
 #' The maximum support size at which to terminate the regularization path.
 #' Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.
-#' @param verbose Print detailed information.
 #' @param cores CPU cores.
+#' @param verbose Print detailed information.
 #'
 #' @import Matrix
 #' @import doParallel
@@ -73,8 +73,8 @@ setMethod(
     regulators = NULL,
     targets = NULL,
     regulators_num = NULL,
-    verbose = FALSE,
     cores = 1,
+    verbose = FALSE,
     ...) {
     if (verbose) message(paste("Running start for <", class(object)[1], ">."))
     matrix <- object

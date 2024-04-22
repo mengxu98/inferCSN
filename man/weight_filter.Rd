@@ -21,7 +21,7 @@ weight_filter
 library(inferCSN)
 data("example_matrix")
 data("example_ground_truth")
-weight_table <- inferCSN(example_matrix, verbose = TRUE)
+weight_table <- inferCSN(example_matrix)
 weight_table_new <- weight_filter(weight_table)
 network.heatmap(
   example_ground_truth[, 1:3],

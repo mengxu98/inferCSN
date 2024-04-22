@@ -21,8 +21,8 @@ inferCSN(object, ...)
   regulators = NULL,
   targets = NULL,
   regulators_num = NULL,
-  verbose = FALSE,
   cores = 1,
+  verbose = FALSE,
   ...
 )
 
@@ -74,9 +74,9 @@ The CDPSI algorithm may yield better results, but it also increases running time
 The maximum support size at which to terminate the regularization path.
 Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.}
 
-\item{verbose}{Print detailed information.}
-
 \item{cores}{CPU cores.}
+
+\item{verbose}{Print detailed information.}
 }
 \value{
 A data table of gene-gene regulatory relationship
@@ -90,6 +90,6 @@ data("example_matrix")
 weight_table <- inferCSN(example_matrix, verbose = TRUE)
 head(weight_table)
 
-weight_table <- inferCSN(example_matrix, verbose = TRUE, cores = 2)
+weight_table <- inferCSN(example_matrix, cores = 2)
 head(weight_table)
 }

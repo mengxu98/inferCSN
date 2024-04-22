@@ -10,7 +10,7 @@
 #' library(inferCSN)
 #' data("example_matrix")
 #' data("example_ground_truth")
-#' weight_table <- inferCSN(example_matrix, verbose = TRUE)
+#' weight_table <- inferCSN(example_matrix)
 #' weight_table_new <- weight_filter(weight_table)
 #' network.heatmap(
 #'   example_ground_truth[, 1:3],
@@ -44,7 +44,6 @@
 weight_filter <- function(
     weight_table,
     method = "max") {
-  weight_table <- weight_table
   weight_table$edge <- paste(
     weight_table$regulator,
     weight_table$target,
@@ -58,8 +57,10 @@ weight_filter <- function(
   rownames(weight_table_new) <- weight_table_new$edge
   weight_table_new <- weight_table_new[weight_table$edge, ]
   weight_table$weight_new <- weight_table_new$weight
-  weight_table <- dplyr::filter(weight_table, abs(weight) > abs(weight_new))
-  weight_table <- weight_table[, c(1:3)]
+  if (method == "max") {
+    weight_table <- dplyr::filter(weight_table, abs(weight) > abs(weight_new))
+  }
+  weight_table <- weight_table[, c("regulator", "target", "weight")]
 
   return(weight_table)
 }
