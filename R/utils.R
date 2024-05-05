@@ -442,9 +442,20 @@ normalization <- function(
     EXPR = method,
     "max_min" = ((x - min(x)) / (max(x) - min(x))),
     "max" = (x / max(abs(x))),
-    "sum" = (x / sum(abs(x)))
+    "sum" = (x / sum(abs(x))),
+    "softmax" = .softmax(x)
   )
   x[na_index] <- NA
 
   return(x)
+}
+
+.softmax <- function(x) {
+  abs_x <- abs(x)
+  exp_abs_x <- exp(abs_x)
+  sum_exp_abs_x <- sum(exp_abs_x)
+  softmax_values <- exp_abs_x / sum_exp_abs_x
+  result <- softmax_values * sign(x)
+
+  return(result)
 }
