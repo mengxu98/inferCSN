@@ -7,7 +7,22 @@
 \alias{inferCSN,data.frame-method}
 \title{Inferring Cell-Specific Gene Regulatory Network}
 \usage{
-inferCSN(object, ...)
+inferCSN(
+  object,
+  penalty = "L0",
+  algorithm = "CD",
+  cross_validation = FALSE,
+  seed = 1,
+  n_folds = 10,
+  k_folds = NULL,
+  r_threshold = 0,
+  regulators = NULL,
+  targets = NULL,
+  regulators_num = NULL,
+  cores = 1,
+  verbose = FALSE,
+  ...
+)
 
 \S4method{inferCSN}{matrix}(
   object,
@@ -38,15 +53,13 @@ inferCSN(object, ...)
   regulators = NULL,
   targets = NULL,
   regulators_num = NULL,
-  verbose = FALSE,
   cores = 1,
+  verbose = FALSE,
   ...
 )
 }
 \arguments{
 \item{object}{Input object}
-
-\item{...}{Arguments for other methods}
 
 \item{penalty}{The type of regularization.
 This can take either one of the following choices: "L0" and "L0L2".
@@ -77,6 +90,8 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 \item{cores}{CPU cores.}
 
 \item{verbose}{Print detailed information.}
+
+\item{...}{Arguments for other methods}
 }
 \value{
 A data table of gene-gene regulatory relationship
@@ -85,11 +100,16 @@ A data table of gene-gene regulatory relationship
 Inferring Cell-Specific Gene Regulatory Network
 }
 \examples{
-library(inferCSN)
 data("example_matrix")
 weight_table <- inferCSN(example_matrix, verbose = TRUE)
 head(weight_table)
 
 weight_table <- inferCSN(example_matrix, cores = 2)
+head(weight_table)
+data("example_matrix")
+weight_table <- inferCSN(
+  as.data.frame(example_matrix),
+  verbose = TRUE
+)
 head(weight_table)
 }

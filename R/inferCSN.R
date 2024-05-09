@@ -3,29 +3,6 @@
 #' @useDynLib inferCSN
 #'
 #' @param object Input object
-#' @param ... Arguments for other methods
-#'
-#' @docType methods
-#' @rdname inferCSN
-#' @return A data table of gene-gene regulatory relationship
-#' @export
-#'
-#' @examples
-#' library(inferCSN)
-#' data("example_matrix")
-#' weight_table <- inferCSN(example_matrix, verbose = TRUE)
-#' head(weight_table)
-#'
-#' weight_table <- inferCSN(example_matrix, cores = 2)
-#' head(weight_table)
-setGeneric(
-  "inferCSN",
-  signature = "object",
-  function(object, ...) {
-    UseMethod(generic = "inferCSN", object = object)
-  }
-)
-
 #' @param penalty The type of regularization.
 #' This can take either one of the following choices: "L0" and "L0L2".
 #' For high-dimensional and sparse data, such as single-cell sequencing data, "L0L2" is more effective.
@@ -44,24 +21,16 @@ setGeneric(
 #' Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.
 #' @param cores CPU cores.
 #' @param verbose Print detailed information.
+#' @param ... Arguments for other methods
 #'
-#' @import Matrix
-#' @import doParallel
-#' @import parallel
-#' @import foreach
-#' @import progress
-#'
-#' @importFrom methods as is
-#' @importFrom Rcpp evalCpp
-#' @importFrom stats coef predict
-#' @importFrom utils methods
-#'
+#' @docType methods
 #' @rdname inferCSN
+#' @return A data table of gene-gene regulatory relationship
 #' @export
-setMethod(
-  "inferCSN",
-  signature = "matrix",
-  function(
+setGeneric(
+  name = "inferCSN",
+  signature = c("object"),
+  def = function(
     object,
     penalty = "L0",
     algorithm = "CD",
@@ -76,13 +45,49 @@ setMethod(
     cores = 1,
     verbose = FALSE,
     ...) {
-    if (verbose) message(paste("Running start for <", class(object)[1], ">."))
-    matrix <- object
-    rm(object)
+    UseMethod(
+      generic = "inferCSN",
+      object = object
+    )
+  }
+)
+
+#' @rdname inferCSN
+#' @export
+#'
+#' @examples
+#' data("example_matrix")
+#' weight_table <- inferCSN(example_matrix, verbose = TRUE)
+#' head(weight_table)
+#'
+#' weight_table <- inferCSN(example_matrix, cores = 2)
+#' head(weight_table)
+setMethod(
+  f = "inferCSN",
+  signature = signature(
+    object = "matrix"),
+  definition = function(
+    object,
+    penalty = "L0",
+    algorithm = "CD",
+    cross_validation = FALSE,
+    seed = 1,
+    n_folds = 10,
+    k_folds = NULL,
+    r_threshold = 0,
+    regulators = NULL,
+    targets = NULL,
+    regulators_num = NULL,
+    cores = 1,
+    verbose = FALSE,
+    ...) {
+    if (verbose) {
+      message(paste("Running start for <", class(object)[1], ">."))
+    }
 
     # Check input parameters
     check.parameters(
-      matrix = matrix,
+      matrix = object,
       penalty = penalty,
       algorithm = algorithm,
       cross_validation = cross_validation,
@@ -98,15 +103,15 @@ setMethod(
     )
 
     if (!is.null(regulators)) {
-      regulators <- intersect(colnames(matrix), regulators)
+      regulators <- intersect(colnames(object), regulators)
     } else {
-      regulators <- colnames(matrix)
+      regulators <- colnames(object)
     }
 
     if (!is.null(targets)) {
-      targets <- intersect(colnames(matrix), targets)
+      targets <- intersect(colnames(object), targets)
     } else {
-      targets <- colnames(matrix)
+      targets <- colnames(object)
     }
 
     target <- NULL
@@ -128,7 +133,7 @@ setMethod(
         targets, function(target) {
           if (verbose) pb$tick()
           single.network(
-            matrix = matrix,
+            matrix = object,
             regulators = regulators,
             target = target,
             cross_validation = cross_validation,
@@ -145,15 +150,17 @@ setMethod(
       )
     } else {
       doParallel::registerDoParallel(cores = cores)
-      if (verbose) message("Using ", foreach::getDoParWorkers(), " cores.")
+      if (verbose) {
+        message("Using ", foreach::getDoParWorkers(), " cores.")
+      }
 
       "%dopar%" <- foreach::"%dopar%"
-      weight_table <- foreach::foreach(
+      weight_list <- foreach::foreach(
         target = targets,
         .export = c("single.network", "sparse.regression")
       ) %dopar% {
         single.network(
-          matrix = matrix,
+          matrix = object,
           regulators = regulators,
           target = target,
           cross_validation = cross_validation,
@@ -167,7 +174,7 @@ setMethod(
           verbose = verbose
         )
       }
-      weight_table <- purrr::list_rbind(weight_table)
+      weight_table <- purrr::list_rbind(weight_list)
       doParallel::stopImplicitCluster()
     }
 
@@ -183,10 +190,20 @@ setMethod(
 
 #' @rdname inferCSN
 #' @export
+#'
+#' @examples
+#' data("example_matrix")
+#' weight_table <- inferCSN(
+#'   as.data.frame(example_matrix),
+#'   verbose = TRUE
+#' )
+#' head(weight_table)
 setMethod(
-  "inferCSN",
-  signature = "data.frame",
-  function(
+  f = "inferCSN",
+  signature = signature(
+    object = "data.frame"
+  ),
+  definition = function(
     object,
     penalty = "L0",
     algorithm = "CD",
@@ -198,15 +215,16 @@ setMethod(
     regulators = NULL,
     targets = NULL,
     regulators_num = NULL,
-    verbose = FALSE,
     cores = 1,
+    verbose = FALSE,
     ...) {
-    if (verbose) warning("Converting class type of input data from <data.frame> to <matrix>.")
-    matrix <- as.matrix(object)
-    rm(object)
+    if (verbose) {
+      warning("Converting class type of input data from <data.frame> to <matrix>.")
+    }
+    object <- as.matrix(object)
 
     inferCSN(
-      object = matrix,
+      object = object,
       penalty = penalty,
       algorithm = algorithm,
       cross_validation = cross_validation,
@@ -218,7 +236,8 @@ setMethod(
       targets = targets,
       regulators_num = regulators_num,
       verbose = verbose,
-      cores = cores
+      cores = cores,
+      ...
     )
   }
 )
