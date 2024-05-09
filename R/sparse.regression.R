@@ -404,7 +404,7 @@ model.fit <- function(
   # Call appropriate C++ function based on matrix type
   m <- list()
   if (!cross_validation) {
-    if (is(x, "sparseMatrix")) {
+    if (methods::is(x, "sparseMatrix")) {
       m <- .Call(
         "_inferCSN_SRM_model_fit_sparse",
         PACKAGE = "inferCSN",
@@ -427,7 +427,7 @@ model.fit <- function(
     }
   } else {
     set.seed(seed)
-    if (is(x, "sparseMatrix")) {
+    if (methods::is(x, "sparseMatrix")) {
       m <- .Call(
         "_inferCSN_SRM_model_fit_CV_sparse",
         PACKAGE = "inferCSN",
@@ -466,7 +466,7 @@ model.fit <- function(
         m$Converged[[i]] <- m$Converged[[i]][-last]
         m$lambda[[i]] <- m$lambda[[i]][-last]
         m$a0[[i]] <- m$a0[[i]][-last]
-        m$beta[[i]] <- as(m$beta[[i]][, -last], "sparseMatrix")
+        m$beta[[i]] <- methods::as(m$beta[[i]][, -last], "sparseMatrix")
         if (!cross_validation) {
           m$CVMeans[[i]] <- m$CVMeans[[i]][-last]
           m$CVSDs[[i]] <- m$CVSDs[[i]][-last]
