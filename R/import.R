@@ -1,3 +1,10 @@
+#' @import Matrix
+#'
+#' @importFrom Rcpp evalCpp
+#' @importFrom stats coef predict
+#' @importFrom utils methods
+NULL
+
 utils::globalVariables(
   c(
     "x",
