@@ -1,3 +1,48 @@
+#' @title Apply function over a List or Vector
+#'
+#' @param x A vector or list to apply over.
+#' @param fun The function to be applied to each element.
+#' @param cores cores.
+#' @param export_fun export_fun.
+#' @param verbose Logical. Whether to print progress bar.
+#' Only works in sequential mode.
+#'
+#' @return A list.
+#'
+#' @export
+map_parallel <- function(
+    x,
+    fun,
+    cores = 1,
+    export_fun = NULL,
+    verbose = TRUE) {
+  if (cores == 1 && verbose) {
+    return(pbapply::pblapply(X = x, FUN = fun))
+  }
+  if (cores == 1 && !verbose) {
+    return(base::lapply(X = x, FUN = fun))
+  }
+  if (cores > 1) {
+    doParallel::registerDoParallel(cores = cores)
+    if (verbose) {
+      message("Using ", foreach::getDoParWorkers(), " cores.")
+    }
+
+    "%dopar%" <- foreach::"%dopar%"
+    output_list <- foreach::foreach(
+      i = 1:length(x),
+      .export = export_fun
+    ) %dopar% {
+      fun(x[[i]])
+    }
+    names(output_list) <- names(x)
+
+    doParallel::stopImplicitCluster()
+
+    return(output_list)
+  }
+}
+
 #' @title Check input parameters
 #'
 #' @param matrix An expression matrix, cells by genes
