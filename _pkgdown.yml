@@ -68,6 +68,7 @@ reference:
   - crossweight
   - crossweight_params
   - normalization
+  - parallelize_fun
   - prepare.performance.data
   - print.SRM_fit
   - print.SRM_fit_CV
