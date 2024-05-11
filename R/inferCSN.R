@@ -114,55 +114,17 @@ setMethod(
       targets <- colnames(object)
     }
 
-    target <- NULL
+    names(targets) <- targets
     cores <- min(
       (parallel::detectCores(logical = FALSE) - 1), cores, length(targets)
     )
-    if (cores == 1) {
-      if (verbose) message("Using 1 core.")
-      # Format progress information
-      format <- "Running [:bar] :percent, No.:current of :total targets, :elapsed."
-      pb <- progress::progress_bar$new(
-        format = format,
-        total = length(targets),
-        clear = TRUE,
-        width = 80
-      )
-
-      weight_table <- purrr::map_dfr(
-        targets, function(target) {
-          if (verbose) pb$tick()
-          single.network(
-            matrix = object,
-            regulators = regulators,
-            target = target,
-            cross_validation = cross_validation,
-            seed = seed,
-            penalty = penalty,
-            algorithm = algorithm,
-            n_folds = n_folds,
-            k_folds = k_folds,
-            r_threshold = r_threshold,
-            regulators_num = regulators_num,
-            verbose = verbose
-          )
-        }
-      )
-    } else {
-      doParallel::registerDoParallel(cores = cores)
-      if (verbose) {
-        message("Using ", foreach::getDoParWorkers(), " cores.")
-      }
-
-      "%dopar%" <- foreach::"%dopar%"
-      weight_list <- foreach::foreach(
-        target = targets,
-        .export = c("single.network", "sparse.regression")
-      ) %dopar% {
+    weight_list <- parallelize_fun(
+      x = targets,
+      fun = function(x) {
         single.network(
           matrix = object,
           regulators = regulators,
-          target = target,
+          target = x,
           cross_validation = cross_validation,
           seed = seed,
           penalty = penalty,
@@ -173,11 +135,11 @@ setMethod(
           regulators_num = regulators_num,
           verbose = verbose
         )
-      }
-      weight_table <- purrr::list_rbind(weight_list)
-      doParallel::stopImplicitCluster()
-    }
-
+      },
+      cores = cores,
+      verbose = verbose
+    )
+    weight_table <- purrr::list_rbind(weight_list)
     weight_table <- net.format(
       weight_table,
       abs_weight = FALSE

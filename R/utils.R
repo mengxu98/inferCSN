@@ -10,7 +10,7 @@
 #' @return A list.
 #'
 #' @export
-map_parallel <- function(
+parallelize_fun <- function(
     x,
     fun,
     cores = 1,
