@@ -14,6 +14,7 @@ utils::globalVariables(
     "regulator",
     "target",
     "weight",
+    "i",
     "Interaction",
     "name",
     "degree",
