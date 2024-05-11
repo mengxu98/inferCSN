@@ -24,7 +24,7 @@ Imports:
     methods,
     parallel,
     patchwork,
-    progress,
+    pbapply,
     purrr,
     Rcpp,
     stats,
