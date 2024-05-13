@@ -1,4 +1,4 @@
-#' @import Matrix
+#' @import Matrix ggplot2 patchwork
 #'
 #' @importFrom Rcpp evalCpp
 #' @importFrom stats coef predict
