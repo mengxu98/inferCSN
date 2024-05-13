@@ -34,7 +34,12 @@ reference:
 - contents:
   - inferCSN-package
   - inferCSN
+
+- subtitle: "Network processing"
+- contents:
   - weight_filter
+  - crossweight
+  - crossweight_params
 
 - subtitle: "Network visualization"
 - contents:
@@ -65,8 +70,6 @@ reference:
   - net.format
   - table.to.matrix
   - filter_sort_matrix
-  - crossweight
-  - crossweight_params
   - normalization
   - parallelize_fun
   - prepare.performance.data
