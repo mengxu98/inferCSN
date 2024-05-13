@@ -7,7 +7,6 @@
 #' @export
 #'
 #' @examples
-#' library(inferCSN)
 #' data("example_matrix")
 #' weight_table <- inferCSN(example_matrix)
 #' head(calculate.gene.rank(weight_table))

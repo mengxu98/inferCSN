@@ -54,7 +54,7 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 \item{cores}{CPU cores.}
 }
 \value{
-No return value, called for check input parameters
+Not return value, called for check input parameters
 }
 \description{
 Check input parameters

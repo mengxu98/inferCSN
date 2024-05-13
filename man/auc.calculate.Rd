@@ -30,7 +30,6 @@ AUC values and figure
 AUC value calculate
 }
 \examples{
-library(inferCSN)
 data("example_matrix")
 data("example_ground_truth")
 weight_table <- inferCSN(example_matrix)

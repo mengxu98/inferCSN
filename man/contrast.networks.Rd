@@ -27,7 +27,6 @@ Return a ggplot2 object
 contrast.networks
 }
 \examples{
-library(inferCSN)
 data("example_matrix")
 weight_table <- inferCSN(example_matrix)
 contrast.networks(weight_table[1:50, ])

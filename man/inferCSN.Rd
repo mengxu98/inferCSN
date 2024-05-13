@@ -106,10 +106,4 @@ head(weight_table)
 
 weight_table <- inferCSN(example_matrix, cores = 2)
 head(weight_table)
-data("example_matrix")
-weight_table <- inferCSN(
-  as.data.frame(example_matrix),
-  verbose = TRUE
-)
-head(weight_table)
 }

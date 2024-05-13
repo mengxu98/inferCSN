@@ -8,7 +8,6 @@
 #' @return The weight data table of sub-network
 #' @export
 #' @examples
-#' library(inferCSN)
 #' data("example_matrix")
 #' single_network <- single.network(
 #'   example_matrix,
@@ -87,13 +86,11 @@ single.network <- function(
 #' @return Coefficients
 #' @export
 #' @examples
-#' library(inferCSN)
 #' data("example_matrix")
-#' coefficients <- sparse.regression(
+#' sparse.regression(
 #'   example_matrix[, -1],
 #'   example_matrix[, 1]
 #' )
-#' coefficients
 sparse.regression <- function(
     x, y,
     cross_validation = FALSE,
@@ -236,7 +233,6 @@ sparse.regression <- function(
 #' @return An S3 object describing the regularization path
 #' @export
 #' @examples
-#' library(inferCSN)
 #' data("example_matrix")
 #' fit <- model.fit(
 #' example_matrix[, -1],

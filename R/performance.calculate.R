@@ -6,14 +6,10 @@
 #' @param line_color The color of line in the figure
 #' @param line_width The width of line in the figure
 #'
-#' @import patchwork
-#' @import ggplot2
-#'
 #' @return AUC values and figure
 #' @export
 #'
 #' @examples
-#' library(inferCSN)
 #' data("example_matrix")
 #' data("example_ground_truth")
 #' weight_table <- inferCSN(example_matrix)
@@ -98,7 +94,7 @@ auc.calculate <- function(
   return(auc_metric)
 }
 
-#' ACC calculate
+#' @title ACC calculate
 #'
 #' @inheritParams auc.calculate
 #'
@@ -106,7 +102,6 @@ auc.calculate <- function(
 #' @export
 #'
 #' @examples
-#' library(inferCSN)
 #' data("example_matrix")
 #' data("example_ground_truth")
 #' weight_table <- inferCSN(example_matrix)

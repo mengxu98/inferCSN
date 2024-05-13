@@ -57,7 +57,6 @@ The weight data table of sub-network
 Construct network for single gene
 }
 \examples{
-library(inferCSN)
 data("example_matrix")
 single_network <- single.network(
   example_matrix,

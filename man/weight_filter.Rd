@@ -18,7 +18,6 @@ Filtered weight table
 weight_filter
 }
 \examples{
-library(inferCSN)
 data("example_matrix")
 data("example_ground_truth")
 weight_table <- inferCSN(example_matrix)

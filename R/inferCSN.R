@@ -152,14 +152,6 @@ setMethod(
 
 #' @rdname inferCSN
 #' @export
-#'
-#' @examples
-#' data("example_matrix")
-#' weight_table <- inferCSN(
-#'   as.data.frame(example_matrix),
-#'   verbose = TRUE
-#' )
-#' head(weight_table)
 setMethod(
   f = "inferCSN",
   signature = signature(

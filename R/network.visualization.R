@@ -21,7 +21,6 @@
 #' @export
 #'
 #' @examples
-#' library(inferCSN)
 #' data("example_matrix")
 #' data("example_ground_truth")
 #' weight_table <- inferCSN(example_matrix)
@@ -297,7 +296,6 @@ network.heatmap <- function(
 #' @export
 #'
 #' @examples
-#' library(inferCSN)
 #' data("example_matrix")
 #' weight_table <- inferCSN(example_matrix)
 #' dynamic.networks(
@@ -404,7 +402,6 @@ dynamic.networks <- function(
 #' @export
 #'
 #' @examples
-#' library(inferCSN)
 #' data("example_matrix")
 #' weight_table <- inferCSN(example_matrix)
 #' contrast.networks(weight_table[1:50, ])

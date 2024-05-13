@@ -27,7 +27,6 @@ A list of ggplot2 objects
 Plot of dynamic networks
 }
 \examples{
-library(inferCSN)
 data("example_matrix")
 weight_table <- inferCSN(example_matrix)
 dynamic.networks(

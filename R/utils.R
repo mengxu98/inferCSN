@@ -48,7 +48,7 @@ parallelize_fun <- function(
 #' @param matrix An expression matrix, cells by genes
 #' @inheritParams inferCSN
 #'
-#' @return No return value, called for check input parameters
+#' @return Not return value, called for check input parameters
 #' @export
 check.parameters <- function(
     matrix,

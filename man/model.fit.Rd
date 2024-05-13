@@ -105,7 +105,6 @@ An S3 object describing the regularization path
 Computes the regularization path for the specified loss function and penalty function
 }
 \examples{
-library(inferCSN)
 data("example_matrix")
 fit <- model.fit(
 example_matrix[, -1],

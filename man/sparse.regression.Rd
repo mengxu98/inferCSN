@@ -54,11 +54,9 @@ Coefficients
 Sparse regression model
 }
 \examples{
-library(inferCSN)
 data("example_matrix")
-coefficients <- sparse.regression(
+sparse.regression(
   example_matrix[, -1],
   example_matrix[, 1]
 )
-coefficients
 }

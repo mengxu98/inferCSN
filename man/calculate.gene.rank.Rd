@@ -27,7 +27,6 @@ A data.table with three columns
 Calculate and rank TFs in network
 }
 \examples{
-library(inferCSN)
 data("example_matrix")
 weight_table <- inferCSN(example_matrix)
 head(calculate.gene.rank(weight_table))
