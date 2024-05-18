@@ -3,6 +3,7 @@
 #' @inheritParams net.format
 #' @param switch_matrix Logical value, default set to `TRUE`, whether to weight data table to matrix.
 #' @param show_names Logical value, default set to `FALSE`, whether to show names of row and column.
+#' @param heatmap_size_lock Lock the size of heatmap.
 #' @param heatmap_size Default set to 5. The size of heatmap.
 #' @param heatmap_height The height of heatmap.
 #' @param heatmap_width The width of heatmap.
@@ -85,6 +86,7 @@ network.heatmap <- function(
     targets = NULL,
     switch_matrix = TRUE,
     show_names = FALSE,
+    heatmap_size_lock = TRUE,
     heatmap_size = 5,
     heatmap_height = NULL,
     heatmap_width = NULL,
@@ -262,6 +264,14 @@ network.heatmap <- function(
     column_anno <- NULL
   }
 
+  if (heatmap_size_lock) {
+    width <- grid::unit(heatmap_width, "cm")
+    height <- grid::unit(heatmap_height, "cm")
+  } else {
+    width <- NULL
+    height <- NULL
+  }
+
   p <- ComplexHeatmap::Heatmap(
     weight_matrix,
     name = legend_name,
@@ -275,8 +285,8 @@ network.heatmap <- function(
     column_names_rot = 45,
     border = border_color,
     rect_gp = grid::gpar(col = rect_color),
-    width = grid::unit(heatmap_width, "cm"),
-    height = grid::unit(heatmap_height, "cm"),
+    width = width,
+    height = height,
     top_annotation = column_anno,
     left_annotation = row_anno
   )

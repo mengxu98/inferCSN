@@ -10,6 +10,7 @@ network.heatmap(
   targets = NULL,
   switch_matrix = TRUE,
   show_names = FALSE,
+  heatmap_size_lock = TRUE,
   heatmap_size = 5,
   heatmap_height = NULL,
   heatmap_width = NULL,
@@ -35,6 +36,8 @@ network.heatmap(
 \item{switch_matrix}{Logical value, default set to `TRUE`, whether to weight data table to matrix.}
 
 \item{show_names}{Logical value, default set to `FALSE`, whether to show names of row and column.}
+
+\item{heatmap_size_lock}{Lock the size of heatmap.}
 
 \item{heatmap_size}{Default set to 5. The size of heatmap.}
 
