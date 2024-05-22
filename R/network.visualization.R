@@ -599,7 +599,7 @@ plot_dynamic_networks <- function(
         cf <- nodes_data_celltype$targets_num[ntop]
         nodes_data_celltype$label_genes[which(nodes_data_celltype$targets_num < cf)] <- ""
       } else if (nrow(nodes_data_celltype) == 0) {
-        next
+        return()
       }
       nodes_data_celltype$celltype <- x
 
