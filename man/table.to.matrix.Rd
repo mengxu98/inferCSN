@@ -4,10 +4,10 @@
 \alias{table.to.matrix}
 \title{Switch weight table to matrix}
 \usage{
-table.to.matrix(weight_table, regulators = NULL, targets = NULL)
+table.to.matrix(network_table, regulators = NULL, targets = NULL)
 }
 \arguments{
-\item{weight_table}{The weight data table of network.}
+\item{network_table}{The weight data table of network.}
 
 \item{regulators}{Regulators list.}
 
@@ -20,15 +20,14 @@ Weight matrix
 Switch weight table to matrix
 }
 \examples{
-library(inferCSN)
 data("example_matrix")
-weight_table <- inferCSN(example_matrix)
-head(weight_table)
+network_table <- inferCSN(example_matrix)
+head(network_table)
 
-table.to.matrix(weight_table)[1:6, 1:6]
+table.to.matrix(network_table)[1:6, 1:6]
 
 table.to.matrix(
-  weight_table,
+  network_table,
   regulators = c("g1", "g2"),
   targets = c("g3", "g4")
 )

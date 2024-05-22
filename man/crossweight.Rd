@@ -5,7 +5,7 @@
 \title{Perform crossweighting}
 \usage{
 crossweight(
-  weight_table,
+  network_table,
   matrix,
   meta_data = NULL,
   lag = floor(ncol(matrix)/5),
@@ -16,7 +16,7 @@ crossweight(
 )
 }
 \arguments{
-\item{weight_table}{GRN dataframe, the result of running reconstructargetRN or reconstructargetRN_GENIE3}
+\item{network_table}{GRN dataframe, the result of running reconstructargetRN or reconstructargetRN_GENIE3}
 
 \item{matrix}{genes-by-cells expression matrix}
 
@@ -33,7 +33,7 @@ crossweight(
 \item{filter_thresh}{after crossweighting, edges with weights less than filter_thresh will be set to 0.}
 }
 \value{
-weight_table with offset and weighted_score added
+network_table with offset and weighted_score added
 }
 \description{
 Perform crossweighting
@@ -41,13 +41,13 @@ Perform crossweighting
 \examples{
 \dontrun{
 data("example_matrix")
-weight_table <- inferCSN(example_matrix, verbose = TRUE)
-weight_table_new <- crossweight(
-  weight_table,
+network_table <- inferCSN(example_matrix, verbose = TRUE)
+network_table_new <- crossweight(
+  network_table,
   matrix = t(example_matrix)
 )
-p1 <- network.heatmap(weight_table)
-p2 <- network.heatmap(weight_table_new[, 1:3])
+p1 <- network.heatmap(network_table)
+p2 <- network.heatmap(network_table_new[, 1:3])
 p1 + p2
 }
 }

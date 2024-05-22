@@ -4,10 +4,10 @@
 \alias{acc.calculate}
 \title{ACC calculate}
 \usage{
-acc.calculate(weight_table, ground_truth)
+acc.calculate(network_table, ground_truth)
 }
 \arguments{
-\item{weight_table}{The weight data table of network}
+\item{network_table}{The weight data table of network}
 
 \item{ground_truth}{Ground truth for calculate AUC}
 }
@@ -20,6 +20,6 @@ ACC calculate
 \examples{
 data("example_matrix")
 data("example_ground_truth")
-weight_table <- inferCSN(example_matrix)
-acc.calculate(weight_table, example_ground_truth)
+network_table <- inferCSN(example_matrix)
+acc.calculate(network_table, example_ground_truth)
 }

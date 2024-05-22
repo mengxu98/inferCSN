@@ -101,9 +101,9 @@ Inferring Cell-Specific Gene Regulatory Network
 }
 \examples{
 data("example_matrix")
-weight_table <- inferCSN(example_matrix, verbose = TRUE)
-head(weight_table)
+network_table <- inferCSN(example_matrix, verbose = TRUE)
+head(network_table)
 
-weight_table <- inferCSN(example_matrix, cores = 2)
-head(weight_table)
+network_table <- inferCSN(example_matrix, cores = 2)
+head(network_table)
 }

@@ -1,6 +1,6 @@
 #' @title weight_filter
 #'
-#' @param weight_table weight_table
+#' @param network_table network_table
 #' @param method method
 #'
 #' @return Filtered weight table
@@ -9,8 +9,8 @@
 #' @examples
 #' data("example_matrix")
 #' data("example_ground_truth")
-#' weight_table <- inferCSN(example_matrix)
-#' weight_table_new <- weight_filter(weight_table)
+#' network_table <- inferCSN(example_matrix)
+#' network_table_new <- weight_filter(network_table)
 #' network.heatmap(
 #'   example_ground_truth[, 1:3],
 #'   heatmap_title = "Ground truth",
@@ -18,48 +18,48 @@
 #'   rect_color = "gray90"
 #' )
 #' network.heatmap(
-#'   weight_table,
+#'   network_table,
 #'   heatmap_title = "Raw",
 #'   show_names = TRUE,
 #'   rect_color = "gray90"
 #' )
 #' network.heatmap(
-#'   weight_table_new,
+#'   network_table_new,
 #'   heatmap_title = "Filtered",
 #'   show_names = TRUE,
 #'   rect_color = "gray90"
 #' )
 #'
 #' auc.calculate(
-#'   weight_table,
+#'   network_table,
 #'   example_ground_truth,
 #'   plot = TRUE
 #'  )
 #' auc.calculate(
-#'   weight_table_new,
+#'   network_table_new,
 #'   example_ground_truth,
 #'   plot = TRUE
 #'  )
 weight_filter <- function(
-    weight_table,
+    network_table,
     method = "max") {
-  weight_table$edge <- paste(
-    weight_table$regulator,
-    weight_table$target,
+  network_table$edge <- paste(
+    network_table$regulator,
+    network_table$target,
     sep = "_"
   )
 
-  weight_table_new <- data.frame(
-    edge = paste(weight_table$target, weight_table$regulator, sep = "_"),
-    weight = weight_table$weight
+  network_table_new <- data.frame(
+    edge = paste(network_table$target, network_table$regulator, sep = "_"),
+    weight = network_table$weight
   )
-  rownames(weight_table_new) <- weight_table_new$edge
-  weight_table_new <- weight_table_new[weight_table$edge, ]
-  weight_table$weight_new <- weight_table_new$weight
+  rownames(network_table_new) <- network_table_new$edge
+  network_table_new <- network_table_new[network_table$edge, ]
+  network_table$weight_new <- network_table_new$weight
   if (method == "max") {
-    weight_table <- dplyr::filter(weight_table, abs(weight) > abs(weight_new))
+    network_table <- dplyr::filter(network_table, abs(weight) > abs(weight_new))
   }
-  weight_table <- weight_table[, c("regulator", "target", "weight")]
+  network_table <- network_table[, c("regulator", "target", "weight")]
 
-  return(weight_table)
+  return(network_table)
 }

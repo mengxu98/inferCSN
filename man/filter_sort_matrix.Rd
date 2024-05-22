@@ -22,8 +22,8 @@ Filter and sort matrix
 \examples{
 library(inferCSN)
 data("example_matrix")
-weight_table <- inferCSN(example_matrix)
-weight_matrix <- table.to.matrix(weight_table)
+network_table <- inferCSN(example_matrix)
+weight_matrix <- table.to.matrix(network_table)
 filter_sort_matrix(weight_matrix)[1:6, 1:6]
 
 filter_sort_matrix(

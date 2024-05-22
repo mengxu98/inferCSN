@@ -1,6 +1,6 @@
 #' @title AUC value calculate
 #'
-#' @param weight_table The weight data table of network
+#' @param network_table The weight data table of network
 #' @param ground_truth Ground truth for calculate AUC
 #' @param plot If true, draw and print figure of AUC
 #' @param line_color The color of line in the figure
@@ -12,17 +12,17 @@
 #' @examples
 #' data("example_matrix")
 #' data("example_ground_truth")
-#' weight_table <- inferCSN(example_matrix)
-#' auc.calculate(weight_table, example_ground_truth, plot = TRUE)
+#' network_table <- inferCSN(example_matrix)
+#' auc.calculate(network_table, example_ground_truth, plot = TRUE)
 auc.calculate <- function(
-    weight_table,
+    network_table,
     ground_truth,
     plot = FALSE,
     line_color = "#1563cc",
     line_width = 1) {
 
   gold <- prepare.performance.data(
-    weight_table,
+    network_table,
     ground_truth)
 
   auc_curves <- precrec::evalmod(
@@ -86,7 +86,6 @@ auc.calculate <- function(
       coord_fixed() +
       theme_bw()
 
-    # Combine two plots by `patchwork` package
     p <- auroc + auprc
     print(p)
   }
@@ -104,14 +103,14 @@ auc.calculate <- function(
 #' @examples
 #' data("example_matrix")
 #' data("example_ground_truth")
-#' weight_table <- inferCSN(example_matrix)
-#' acc.calculate(weight_table, example_ground_truth)
+#' network_table <- inferCSN(example_matrix)
+#' acc.calculate(network_table, example_ground_truth)
 acc.calculate <- function(
-    weight_table,
+    network_table,
     ground_truth) {
 
   gold <- prepare.performance.data(
-    weight_table,
+    network_table,
     ground_truth)
   results <- pROC::roc(
     gold$label ~ gold$weight,
@@ -152,11 +151,11 @@ acc.calculate <- function(
 #' @return Formated data
 #' @export
 prepare.performance.data <- function(
-    weight_table,
+    network_table,
     ground_truth) {
   # Check input data
-  colnames(weight_table) <- c("regulator", "target", "weight")
-  weight_table$weight <- abs(as.numeric(weight_table$weight))
+  colnames(network_table) <- c("regulator", "target", "weight")
+  network_table$weight <- abs(as.numeric(network_table$weight))
 
   if (ncol(ground_truth) > 2) ground_truth <- ground_truth[, 1:2]
   names(ground_truth) <- c("regulator", "target")
@@ -164,7 +163,7 @@ prepare.performance.data <- function(
 
   gold <- suppressWarnings(
     merge(
-      weight_table,
+      network_table,
       ground_truth,
       by = c("regulator", "target"),
       all.x = TRUE

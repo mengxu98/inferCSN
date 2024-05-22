@@ -57,15 +57,14 @@ setGeneric(
 #'
 #' @examples
 #' data("example_matrix")
-#' weight_table <- inferCSN(example_matrix, verbose = TRUE)
-#' head(weight_table)
+#' network_table <- inferCSN(example_matrix, verbose = TRUE)
+#' head(network_table)
 #'
-#' weight_table <- inferCSN(example_matrix, cores = 2)
-#' head(weight_table)
+#' network_table <- inferCSN(example_matrix, cores = 2)
+#' head(network_table)
 setMethod(
   f = "inferCSN",
-  signature = signature(
-    object = "matrix"),
+  signature = signature(object = "matrix"),
   definition = function(
     object,
     penalty = "L0",
@@ -139,14 +138,14 @@ setMethod(
       cores = cores,
       verbose = verbose
     )
-    weight_table <- purrr::list_rbind(weight_list)
-    weight_table <- net.format(
-      weight_table,
+    network_table <- purrr::list_rbind(weight_list)
+    network_table <- network_format(
+      network_table,
       abs_weight = FALSE
     )
     if (verbose) message("Run done.")
 
-    return(weight_table)
+    return(network_table)
   }
 )
 
@@ -154,9 +153,7 @@ setMethod(
 #' @export
 setMethod(
   f = "inferCSN",
-  signature = signature(
-    object = "data.frame"
-  ),
+  signature = signature(object = "data.frame"),
   definition = function(
     object,
     penalty = "L0",

@@ -20,6 +20,12 @@ utils::globalVariables(
     "degree",
     "edges",
     "curvetype",
-    "weight_new"
+    "weight_new",
+    "celltype",
+    "from",
+    "id",
+    "label_genes",
+    "targets_num",
+    "to"
   )
 )

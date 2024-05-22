@@ -1,6 +1,6 @@
 #' @title Calculate and rank TFs in network
 #'
-#' @inheritParams net.format
+#' @inheritParams network_format
 #' @param directed If network is directed or not.
 #'
 #' @return A data.table with three columns
@@ -8,23 +8,23 @@
 #'
 #' @examples
 #' data("example_matrix")
-#' weight_table <- inferCSN(example_matrix)
-#' head(calculate.gene.rank(weight_table))
-#' head(calculate.gene.rank(weight_table, regulators = "g1"))
+#' network_table <- inferCSN(example_matrix)
+#' head(calculate.gene.rank(network_table))
+#' head(calculate.gene.rank(network_table, regulators = "g1"))
 calculate.gene.rank <- function(
-    weight_table,
+    network_table,
     regulators = NULL,
     targets = NULL,
     directed = FALSE) {
-  colnames(weight_table) <- c("regulator", "target", "weight")
-  weight_table <- net.format(
-    weight_table,
+  colnames(network_table) <- c("regulator", "target", "weight")
+  network_table <- network_format(
+    network_table,
     regulators = regulators,
     targets = targets
   )
 
   network <- igraph::graph_from_data_frame(
-    weight_table,
+    network_table,
     directed = directed
   )
   page_rank_res <- data.frame(
@@ -40,7 +40,7 @@ calculate.gene.rank <- function(
   page_rank_res$is_regulator <- FALSE
   page_rank_res$is_regulator[
     page_rank_res$gene %in% unique(
-      weight_table$regulator
+      network_table$regulator
     )
   ] <- TRUE
 

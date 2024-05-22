@@ -4,10 +4,10 @@
 \alias{weight_filter}
 \title{weight_filter}
 \usage{
-weight_filter(weight_table, method = "max")
+weight_filter(network_table, method = "max")
 }
 \arguments{
-\item{weight_table}{weight_table}
+\item{network_table}{network_table}
 
 \item{method}{method}
 }
@@ -20,8 +20,8 @@ weight_filter
 \examples{
 data("example_matrix")
 data("example_ground_truth")
-weight_table <- inferCSN(example_matrix)
-weight_table_new <- weight_filter(weight_table)
+network_table <- inferCSN(example_matrix)
+network_table_new <- weight_filter(network_table)
 network.heatmap(
   example_ground_truth[, 1:3],
   heatmap_title = "Ground truth",
@@ -29,25 +29,25 @@ network.heatmap(
   rect_color = "gray90"
 )
 network.heatmap(
-  weight_table,
+  network_table,
   heatmap_title = "Raw",
   show_names = TRUE,
   rect_color = "gray90"
 )
 network.heatmap(
-  weight_table_new,
+  network_table_new,
   heatmap_title = "Filtered",
   show_names = TRUE,
   rect_color = "gray90"
 )
 
 auc.calculate(
-  weight_table,
+  network_table,
   example_ground_truth,
   plot = TRUE
  )
 auc.calculate(
-  weight_table_new,
+  network_table_new,
   example_ground_truth,
   plot = TRUE
  )

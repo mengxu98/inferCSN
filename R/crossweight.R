@@ -1,6 +1,6 @@
 #' Perform crossweighting
 #'
-#' @param weight_table GRN dataframe, the result of running reconstructargetRN or reconstructargetRN_GENIE3
+#' @param network_table GRN dataframe, the result of running reconstructargetRN or reconstructargetRN_GENIE3
 #' @param matrix genes-by-cells expression matrix
 #' @param meta_data result of running findDynGenes
 #' @param lag lag window on which to run cross-correlation. Cross-correlaiton computed from -lag to +lag.
@@ -9,23 +9,23 @@
 #' @param symmetric_filter whether or not to employ a symmetric weight scheme. If true, absolute offset is used in place of offset.
 #' @param filter_thresh after crossweighting, edges with weights less than filter_thresh will be set to 0.
 #'
-#' @return weight_table with offset and weighted_score added
+#' @return network_table with offset and weighted_score added
 #'
 #' @export
 #' @examples
 #' \dontrun{
 #' data("example_matrix")
-#' weight_table <- inferCSN(example_matrix, verbose = TRUE)
-#' weight_table_new <- crossweight(
-#'   weight_table,
+#' network_table <- inferCSN(example_matrix, verbose = TRUE)
+#' network_table_new <- crossweight(
+#'   network_table,
 #'   matrix = t(example_matrix)
 #' )
-#' p1 <- network.heatmap(weight_table)
-#' p2 <- network.heatmap(weight_table_new[, 1:3])
+#' p1 <- network.heatmap(network_table)
+#' p2 <- network.heatmap(network_table_new[, 1:3])
 #' p1 + p2
 #' }
 crossweight <- function(
-    weight_table,
+    network_table,
     matrix,
     meta_data = NULL,
     lag = floor(ncol(matrix) / 5),
@@ -36,28 +36,28 @@ crossweight <- function(
   if (!is.null(meta_data)) {
     matrix <- matrix[, rownames(meta_data$cell)]
   }
-  weight_table$regulator <- as.character(weight_table$regulator)
-  weight_table$target <- as.character(weight_table$target)
-  weight_table$offset <- apply(weight_table, 1, cross_corr, matrix = matrix, lag = lag)
+  network_table$regulator <- as.character(network_table$regulator)
+  network_table$target <- as.character(network_table$target)
+  network_table$offset <- apply(network_table, 1, cross_corr, matrix = matrix, lag = lag)
 
   weighted_score <- c()
-  for (i in 1:nrow(weight_table)) {
+  for (i in 1:nrow(network_table)) {
     new <- score_offset(
-      weight_table$weight[i],
-      weight_table$offset[i],
+      network_table$weight[i],
+      network_table$offset[i],
       min = min,
       max = max,
       symmetric_filter = symmetric_filter
     )
     weighted_score <- c(weighted_score, new)
   }
-  weight_table$weighted_score <- weighted_score
+  network_table$weighted_score <- weighted_score
 
-  # weight_table <- weight_table[abs(weight_table$weighted_score) > filter_thresh,]
-  # weight_table <- weight_table[weight_table$weight > filter_thresh, ]
-  weight_table <- weight_table[weight_table$offset > filter_thresh,]
+  # network_table <- network_table[abs(network_table$weighted_score) > filter_thresh,]
+  # network_table <- network_table[network_table$weight > filter_thresh, ]
+  network_table <- network_table[network_table$offset > filter_thresh,]
 
-  return(weight_table)
+  return(network_table)
 }
 
 cross_corr <- function(

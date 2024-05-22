@@ -4,10 +4,10 @@
 \alias{prepare.performance.data}
 \title{prepare.performance.data}
 \usage{
-prepare.performance.data(weight_table, ground_truth)
+prepare.performance.data(network_table, ground_truth)
 }
 \arguments{
-\item{weight_table}{The weight data table of network}
+\item{network_table}{The weight data table of network}
 
 \item{ground_truth}{Ground truth for calculate AUC}
 }

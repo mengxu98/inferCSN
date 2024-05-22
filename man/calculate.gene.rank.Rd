@@ -5,14 +5,14 @@
 \title{Calculate and rank TFs in network}
 \usage{
 calculate.gene.rank(
-  weight_table,
+  network_table,
   regulators = NULL,
   targets = NULL,
   directed = FALSE
 )
 }
 \arguments{
-\item{weight_table}{The weight data table of network.}
+\item{network_table}{The weight data table of network.}
 
 \item{regulators}{Regulators list.}
 
@@ -28,7 +28,7 @@ Calculate and rank TFs in network
 }
 \examples{
 data("example_matrix")
-weight_table <- inferCSN(example_matrix)
-head(calculate.gene.rank(weight_table))
-head(calculate.gene.rank(weight_table, regulators = "g1"))
+network_table <- inferCSN(example_matrix)
+head(calculate.gene.rank(network_table))
+head(calculate.gene.rank(network_table, regulators = "g1"))
 }

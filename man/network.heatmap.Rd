@@ -5,7 +5,7 @@
 \title{The heatmap of network}
 \usage{
 network.heatmap(
-  weight_table,
+  network_table,
   regulators = NULL,
   targets = NULL,
   switch_matrix = TRUE,
@@ -27,7 +27,7 @@ network.heatmap(
 )
 }
 \arguments{
-\item{weight_table}{The weight data table of network.}
+\item{network_table}{The weight data table of network.}
 
 \item{regulators}{Regulators list.}
 
@@ -74,7 +74,7 @@ The heatmap of network
 \examples{
 data("example_matrix")
 data("example_ground_truth")
-weight_table <- inferCSN(example_matrix)
+network_table <- inferCSN(example_matrix)
 
 p1 <- network.heatmap(
   example_ground_truth[, 1:3],
@@ -82,20 +82,20 @@ p1 <- network.heatmap(
   legend_name = "Ground truth"
 )
 p2 <- network.heatmap(
-  weight_table,
+  network_table,
   heatmap_title = "inferCSN",
   legend_name = "inferCSN"
 )
 ComplexHeatmap::draw(p1 + p2)
 
 p3 <- network.heatmap(
-  weight_table,
+  network_table,
   heatmap_title = "inferCSN",
   legend_name = "Weight1",
   heatmap_color = c("#20a485", "#410054", "#fee81f")
 )
 p4 <- network.heatmap(
-  weight_table,
+  network_table,
   heatmap_title = "inferCSN",
   legend_name = "Weight2",
   heatmap_color = c("#20a485", "white", "#fee81f")
@@ -103,7 +103,7 @@ p4 <- network.heatmap(
 ComplexHeatmap::draw(p3 + p4)
 
 network.heatmap(
-  weight_table,
+  network_table,
   show_names = TRUE,
   rect_color = "gray90",
   row_anno_type = "density",
@@ -111,13 +111,13 @@ network.heatmap(
 )
 
 network.heatmap(
-  weight_table,
+  network_table,
   regulators = c("g1", "g2"),
   show_names = TRUE
 )
 
 network.heatmap(
-  weight_table,
+  network_table,
   targets = c("g1", "g2"),
   row_anno_type = "boxplot",
   column_anno_type = "histogram",
@@ -125,7 +125,7 @@ network.heatmap(
 )
 
 network.heatmap(
-  weight_table,
+  network_table,
   regulators = c("g1", "g3", "g5"),
   targets = c("g3", "g6", "g9"),
   show_names = TRUE

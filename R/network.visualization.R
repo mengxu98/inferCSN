@@ -1,6 +1,6 @@
 #' @title The heatmap of network
 #'
-#' @inheritParams net.format
+#' @inheritParams network_format
 #' @param switch_matrix Logical value, default set to `TRUE`, whether to weight data table to matrix.
 #' @param show_names Logical value, default set to `FALSE`, whether to show names of row and column.
 #' @param heatmap_size_lock Lock the size of heatmap.
@@ -24,7 +24,7 @@
 #' @examples
 #' data("example_matrix")
 #' data("example_ground_truth")
-#' weight_table <- inferCSN(example_matrix)
+#' network_table <- inferCSN(example_matrix)
 #'
 #' p1 <- network.heatmap(
 #'   example_ground_truth[, 1:3],
@@ -32,20 +32,20 @@
 #'   legend_name = "Ground truth"
 #' )
 #' p2 <- network.heatmap(
-#'   weight_table,
+#'   network_table,
 #'   heatmap_title = "inferCSN",
 #'   legend_name = "inferCSN"
 #' )
 #' ComplexHeatmap::draw(p1 + p2)
 #'
 #' p3 <- network.heatmap(
-#'   weight_table,
+#'   network_table,
 #'   heatmap_title = "inferCSN",
 #'   legend_name = "Weight1",
 #'   heatmap_color = c("#20a485", "#410054", "#fee81f")
 #' )
 #' p4 <- network.heatmap(
-#'   weight_table,
+#'   network_table,
 #'   heatmap_title = "inferCSN",
 #'   legend_name = "Weight2",
 #'   heatmap_color = c("#20a485", "white", "#fee81f")
@@ -53,7 +53,7 @@
 #' ComplexHeatmap::draw(p3 + p4)
 #'
 #' network.heatmap(
-#'   weight_table,
+#'   network_table,
 #'   show_names = TRUE,
 #'   rect_color = "gray90",
 #'   row_anno_type = "density",
@@ -61,13 +61,13 @@
 #' )
 #'
 #' network.heatmap(
-#'   weight_table,
+#'   network_table,
 #'   regulators = c("g1", "g2"),
 #'   show_names = TRUE
 #' )
 #'
 #' network.heatmap(
-#'   weight_table,
+#'   network_table,
 #'   targets = c("g1", "g2"),
 #'   row_anno_type = "boxplot",
 #'   column_anno_type = "histogram",
@@ -75,13 +75,13 @@
 #' )
 #'
 #' network.heatmap(
-#'   weight_table,
+#'   network_table,
 #'   regulators = c("g1", "g3", "g5"),
 #'   targets = c("g3", "g6", "g9"),
 #'   show_names = TRUE
 #' )
 network.heatmap <- function(
-    weight_table,
+    network_table,
     regulators = NULL,
     targets = NULL,
     switch_matrix = TRUE,
@@ -102,12 +102,12 @@ network.heatmap <- function(
     row_title = "Regulators") {
   if (switch_matrix) {
     weight_matrix <- table.to.matrix(
-      weight_table,
+      network_table,
       regulators = regulators,
       targets = targets
     )
   } else {
-    weight_matrix <- weight_table
+    weight_matrix <- network_table
   }
   weight_matrix <- filter_sort_matrix(
     weight_matrix,
@@ -296,7 +296,7 @@ network.heatmap <- function(
 
 #' @title Plot of dynamic networks
 #'
-#' @inheritParams net.format
+#' @inheritParams network_format
 #' @param legend_position The position of legend.
 #'
 #' @import ggplot2
@@ -307,34 +307,34 @@ network.heatmap <- function(
 #'
 #' @examples
 #' data("example_matrix")
-#' weight_table <- inferCSN(example_matrix)
-#' dynamic.networks(
-#'   weight_table,
-#'   regulators = weight_table[1, 1]
+#' network_table <- inferCSN(example_matrix)
+#' plot_static_networks(
+#'   network_table,
+#'   regulators = network_table[1, 1]
 #' )
-#' dynamic.networks(
-#'   weight_table,
-#'   targets = weight_table[1, 1]
+#' plot_static_networks(
+#'   network_table,
+#'   targets = network_table[1, 1]
 #' )
-#' dynamic.networks(
-#'   weight_table,
-#'   regulators = weight_table[1, 1],
-#'   targets = weight_table[1, 2]
+#' plot_static_networks(
+#'   network_table,
+#'   regulators = network_table[1, 1],
+#'   targets = network_table[1, 2]
 #' )
-dynamic.networks <- function(
-    weight_table,
+plot_static_networks <- function(
+    network_table,
     regulators = NULL,
     targets = NULL,
     legend_position = "right") {
   # Format input data
-  weight_table <- net.format(
-    weight_table,
+  network_table <- network_format(
+    network_table,
     regulators = regulators,
     targets = targets
   )
 
   net <- igraph::graph_from_data_frame(
-    weight_table[, c("regulator", "target", "weight", "Interaction")],
+    network_table[, c("regulator", "target", "weight", "Interaction")],
     directed = FALSE
   )
 
@@ -399,9 +399,9 @@ dynamic.networks <- function(
   return(g)
 }
 
-#' @title contrast.networks
+#' @title plot_contrast_networks
 #'
-#' @inheritParams dynamic.networks
+#' @inheritParams plot_static_networks
 #' @param degree_value degree_value
 #' @param weight_value weight_value
 #'
@@ -413,16 +413,16 @@ dynamic.networks <- function(
 #'
 #' @examples
 #' data("example_matrix")
-#' weight_table <- inferCSN(example_matrix)
-#' contrast.networks(weight_table[1:50, ])
-contrast.networks <- function(
-    weight_table,
+#' network_table <- inferCSN(example_matrix)
+#' plot_contrast_networks(network_table[1:50, ])
+plot_contrast_networks <- function(
+    network_table,
     degree_value = 0,
     weight_value = 0,
     legend_position = "bottom") {
-  weight_table <- net.format(weight_table)
+  network_table <- network_format(network_table)
 
-  graph <- tidygraph::as_tbl_graph(weight_table)
+  graph <- tidygraph::as_tbl_graph(network_table)
   graph <- dplyr::mutate(
     graph,
     degree = tidygraph::centrality_degree(mode = "out")
@@ -454,4 +454,232 @@ contrast.networks <- function(
     theme(legend.position = legend_position)
 
   return(g)
+}
+
+#' @title plot_dynamic_networks
+#'
+#' @param network_table network_table
+#' @param celltypes_order celltypes_order
+#' @param ntop ntop
+#' @param width width
+#' @param height height
+#' @param seed seed
+#' @param theme_type theme_type
+#' @param plot_type plot_type
+#' @param layout layout
+#' @param nrow nrow
+#' @param title The title of figure.
+#' @param figure_save figure_save
+#' @param figure_name figure_name
+#'
+#' @return ggplot object
+#' @export
+#'
+#' @examples
+#' data("example_matrix")
+#' network <- inferCSN(example_matrix)[1:100, ]
+#' network$celltype <- c(
+#'   rep("cluster5", 20),
+#'   rep("cluster1", 20),
+#'   rep("cluster3", 20),
+#'   rep("cluster2", 20),
+#'   rep("cluster6", 20)
+#' )
+#'
+#' celltypes_order <- c(
+#'   "cluster5", "cluster3",
+#'   "cluster2", "cluster1",
+#'   "cluster6"
+#' )
+#'
+#' plot_dynamic_networks(
+#'   network,
+#'   celltypes_order = celltypes_order
+#' )
+#'
+#' plot_dynamic_networks(
+#'   network,
+#'   celltypes_order = celltypes_order[1:2]
+#' )
+#'
+#' \dontrun{
+#' # If setting `plot_type = "animate"` to plot and save `gif` figure,
+#' # please install `gifski` package first.
+#' plot_dynamic_networks(
+#'   network,
+#'   celltypes_order = celltypes_order,
+#'   plot_type = "animate"
+#' )
+#' }
+#'
+#' plot_dynamic_networks(
+#'   network,
+#'   celltypes_order = celltypes_order,
+#'   plot_type = "ggplotly"
+#' )
+plot_dynamic_networks <- function(
+    network_table,
+    celltypes_order,
+    ntop = 10,
+    width = 6,
+    height = 6,
+    seed = 2024,
+    theme_type = "theme_void",
+    plot_type = "ggplot",
+    layout = "fruchtermanreingold",
+    nrow = 2,
+    title = NULL,
+    figure_save = FALSE,
+    figure_name = NULL) {
+  names(network_table) <- c("regulator", "target", "weight", "celltype")
+  network_table$regulator <- as.character(network_table$regulator)
+  network_table$target <- as.character(network_table$target)
+  celltypes_select <- unique(intersect(celltypes_order, network_table$celltype))
+
+  network_table <- purrr::map_dfr(
+    celltypes_select,
+    .f = function(x) {
+      network_table[which(network_table$celltype == x), ]
+    }
+  )
+
+  # Get nodes information
+  nodes <- unique(c(network_table$regulator, network_table$target))
+  dnodes <- data.frame(id = 1:length(nodes), label = nodes)
+  edges <- dplyr::left_join(network_table, dnodes, by = c("regulator" = "label"))
+  edges <- dplyr::rename(edges, from = id)
+  edges <- dplyr::left_join(edges, dnodes, by = c("target" = "label"))
+  edges <- dplyr::rename(edges, to = id)
+  edges <- dplyr::select(edges, from, to, weight, celltype)
+  edges$Interaction <- ifelse(edges$weight > 0, "Activation", "Repression")
+  edges$weight <- abs(edges$weight)
+
+  dedges <- unique(edges)
+  dnodes$label <- gsub("\\.", "-", dnodes$label)
+  network_data <- network::network(
+    dedges,
+    vertex.attr = dnodes,
+    matrix.type = "edgelist",
+    ignore.eval = FALSE,
+    directed = TRUE,
+    multiple = TRUE
+  )
+
+  set.seed(seed)
+  layout <- match.arg(layout, c("fruchtermanreingold", "kamadakawai"))
+  ggnetwork_data <- ggnetwork(
+    network_data,
+    arrow.size = 0.1,
+    arrow.gap = 0.015,
+    by = "celltype",
+    weights = "weight",
+    layout = layout
+  )
+
+  # get out-degree for each regulator node per celltype
+  nodes_data <- purrr::map_dfr(
+    celltypes_select,
+    .f = function(x) {
+      nodes_data_celltype <- network_table[which(network_table$celltype == x), ]
+      nodes_data_celltype <- dplyr::group_by(
+        nodes_data_celltype,
+        regulator
+      )
+      nodes_data_celltype <- dplyr::summarise(
+        nodes_data_celltype,
+        targets_num = dplyr::n()
+      )
+      nodes_data_celltype <- dplyr::arrange(
+        nodes_data_celltype,
+        dplyr::desc(targets_num)
+      )
+      nodes_data_celltype <- as.data.frame(nodes_data_celltype)
+      nodes_data_celltype$label_genes <- as.character(nodes_data_celltype$regulator)
+      if (nrow(nodes_data_celltype) > ntop) {
+        cf <- nodes_data_celltype$targets_num[ntop]
+        nodes_data_celltype$label_genes[which(nodes_data_celltype$targets_num < cf)] <- ""
+      } else if (nrow(nodes_data_celltype) == 0) {
+        next
+      }
+      nodes_data_celltype$celltype <- x
+
+      return(nodes_data_celltype)
+    }
+  )
+
+  names(nodes_data)[1] <- "label"
+  ggnetwork_data <- merge(ggnetwork_data, nodes_data, by = c("label", "celltype"), all.x = T)
+  ggnetwork_data$targets_num[which(is.na(ggnetwork_data$targets_num))] <- 0
+  ggnetwork_data$label_genes[which(is.na(ggnetwork_data$label_genes))] <- ""
+  ggnetwork_data$celltype <- factor(ggnetwork_data$celltype, levels = celltypes_order)
+  cols <- c("Activation" = "#3366cc", "Repression" = "#ff0066")
+
+  plot_type <- match.arg(plot_type, c("ggplot", "animate", "ggplotly"))
+  p <- ggplot(ggnetwork_data, aes(x, y, xend = xend, yend = yend))
+  if (plot_type == "ggplotly") {
+    p <- p + geom_edges(
+      aes(color = Interaction),
+      size = 0.7,
+      arrow = arrow(length = unit(3, "pt"), type = "closed")
+    )
+  } else {
+    p <- p + geom_edges(
+      aes(color = Interaction, alpha = weight),
+      size = 0.7,
+      arrow = arrow(length = unit(3, "pt"), type = "closed")
+    )
+  }
+  p <- p +
+    geom_nodes(
+      aes(size = targets_num),
+      color = "darkgray",
+      alpha = 0.9
+    ) +
+    geom_nodetext(
+      aes(label = label_genes, size = targets_num - 1),
+      color = "black"
+    ) +
+    theme(aspect.ratio = 2, legend.position = "bottom") +
+    scale_color_manual(values = cols)
+
+  if (!is.null(title)) {
+    p <- p + ggtitle(title)
+  }
+
+  theme_type <- match.arg(theme_type, c("theme_blank", "theme_facet", "theme_void"))
+  p <- switch(
+    theme_type,
+    "theme_void" = p + theme_void(),
+    "theme_blank" = p + theme_blank(),
+    "theme_facet" = p + theme_facet()
+  )
+  if (plot_type == "ggplot") {
+    p <- p +
+      facet_wrap(~celltype, nrow = nrow)
+    if (figure_save) {
+      if (is.null(figure_name)) {
+        figure_name <- "networks.pdf"
+      }
+      ggsave(figure_name, p, width = width, height = height)
+    }
+  }
+
+  if (plot_type == "animate") {
+    p <- p + gganimate::transition_states(states = celltype)
+    p <- gganimate::animate(p, render = gganimate::gifski_renderer())
+    if (figure_save) {
+      if (is.null(figure_name)) {
+        figure_name <- "networks.gif"
+      }
+      gganimate::anim_save(figure_name, animation = p)
+    }
+  }
+
+  if (plot_type == "ggplotly") {
+    p <- p +
+      facet_wrap(~celltype, nrow = nrow)
+    p <- plotly::ggplotly(p)
+  }
+
+  return(p)
 }
