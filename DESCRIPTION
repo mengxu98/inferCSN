@@ -32,7 +32,10 @@ Imports:
 Suggests: 
     circlize,
     gtools,
+    gganimate,
     igraph,
+    network,
+    plotly,
     precrec,
     pROC,
     testthat (>= 3.0.0),
