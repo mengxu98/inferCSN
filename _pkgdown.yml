@@ -43,8 +43,9 @@ reference:
 
 - subtitle: "Network visualization"
 - contents:
-  - dynamic.networks
-  - contrast.networks
+  - plot_dynamic_networks
+  - plot_static_networks
+  - plot_contrast_networks
   - network.heatmap
 
 - subtitle: "Network evaluation"
