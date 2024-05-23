@@ -499,7 +499,7 @@ plot_contrast_networks <- function(
 #'
 #' plot_dynamic_networks(
 #'   network,
-#'   celltypes_order = celltypes_order[1:2]
+#'   celltypes_order = celltypes_order[1:3]
 #' )
 #'
 #' \dontrun{
@@ -636,7 +636,7 @@ plot_dynamic_networks <- function(
       alpha = 0.9
     ) +
     geom_nodetext(
-      aes(label = label_genes, size = targets_num - 1),
+      aes(label = label_genes), # , size = targets_num - 1
       color = "black"
     ) +
     theme(aspect.ratio = 2, legend.position = "bottom") +

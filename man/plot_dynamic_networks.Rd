@@ -77,7 +77,7 @@ plot_dynamic_networks(
 
 plot_dynamic_networks(
   network,
-  celltypes_order = celltypes_order[1:2]
+  celltypes_order = celltypes_order[1:3]
 )
 
 \dontrun{
