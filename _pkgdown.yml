@@ -68,7 +68,7 @@ reference:
   - check.parameters
   - coef.SRM_fit
   - coef.SRM_fit_CV
-  - net.format
+  - network_format
   - table.to.matrix
   - filter_sort_matrix
   - normalization
