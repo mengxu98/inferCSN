@@ -57,7 +57,7 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">calculate.gene.rank</span><span class="op">(</span></span>
-<span>  <span class="va">weight_table</span>,</span>
+<span>  <span class="va">network_table</span>,</span>
 <span>  regulators <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  targets <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  directed <span class="op">=</span> <span class="cn">FALSE</span></span>
@@ -66,7 +66,7 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>weight_table</dt>
+    <dl><dt>network_table</dt>
 <dd><p>The weight data table of network.</p></dd>
 
 
@@ -92,8 +92,8 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">weight_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">calculate.gene.rank</span><span class="op">(</span><span class="va">weight_table</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">network_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">calculate.gene.rank</span><span class="op">(</span><span class="va">network_table</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     gene  page_rank is_regulator</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> g17  g17 0.06121629         TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> g18  g18 0.06117286         TRUE</span>
@@ -101,7 +101,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> g9    g9 0.05766284         TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> g12  g12 0.05761050         TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> g5    g5 0.05599781         TRUE</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">calculate.gene.rank</span><span class="op">(</span><span class="va">weight_table</span>, regulators <span class="op">=</span> <span class="st">"g1"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">calculate.gene.rank</span><span class="op">(</span><span class="va">network_table</span>, regulators <span class="op">=</span> <span class="st">"g1"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     gene  page_rank is_regulator</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> g1    g1 0.46396396         TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> g2    g2 0.17217862        FALSE</span>

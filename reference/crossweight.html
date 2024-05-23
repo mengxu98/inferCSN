@@ -57,7 +57,7 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">crossweight</span><span class="op">(</span></span>
-<span>  <span class="va">weight_table</span>,</span>
+<span>  <span class="va">network_table</span>,</span>
 <span>  <span class="va">matrix</span>,</span>
 <span>  meta_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">floor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">matrix</span><span class="op">)</span><span class="op">/</span><span class="fl">5</span><span class="op">)</span>,</span>
@@ -70,7 +70,7 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>weight_table</dt>
+    <dl><dt>network_table</dt>
 <dd><p>GRN dataframe, the result of running reconstructargetRN or reconstructargetRN_GENIE3</p></dd>
 
 
@@ -106,20 +106,20 @@
     <h2>Value</h2>
     
 
-<p>weight_table with offset and weighted_score added</p>
+<p>network_table with offset and weighted_score added</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">weight_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">weight_table_new</span> <span class="op">&lt;-</span> <span class="fu">crossweight</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">weight_table</span>,</span></span>
+<span class="r-in"><span><span class="va">network_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">network_table_new</span> <span class="op">&lt;-</span> <span class="fu">crossweight</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
 <span class="r-in"><span>  matrix <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="network.heatmap.html">network.heatmap</a></span><span class="op">(</span><span class="va">weight_table</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="network.heatmap.html">network.heatmap</a></span><span class="op">(</span><span class="va">weight_table_new</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="network.heatmap.html">network.heatmap</a></span><span class="op">(</span><span class="va">network_table</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="network.heatmap.html">network.heatmap</a></span><span class="op">(</span><span class="va">network_table_new</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>

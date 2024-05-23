@@ -57,7 +57,7 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">network.heatmap</span><span class="op">(</span></span>
-<span>  <span class="va">weight_table</span>,</span>
+<span>  <span class="va">network_table</span>,</span>
 <span>  regulators <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  targets <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  switch_matrix <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -81,7 +81,7 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>weight_table</dt>
+    <dl><dt>network_table</dt>
 <dd><p>The weight data table of network.</p></dd>
 
 
@@ -168,7 +168,7 @@
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_ground_truth"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">weight_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">network_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">network.heatmap</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">example_ground_truth</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>,</span></span>
@@ -176,7 +176,7 @@
 <span class="r-in"><span>  legend_name <span class="op">=</span> <span class="st">"Ground truth"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">network.heatmap</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">weight_table</span>,</span></span>
+<span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
 <span class="r-in"><span>  heatmap_title <span class="op">=</span> <span class="st">"inferCSN"</span>,</span></span>
 <span class="r-in"><span>  legend_name <span class="op">=</span> <span class="st">"inferCSN"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
@@ -184,13 +184,13 @@
 <span class="r-plt img"><img src="network.heatmap-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu">network.heatmap</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">weight_table</span>,</span></span>
+<span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
 <span class="r-in"><span>  heatmap_title <span class="op">=</span> <span class="st">"inferCSN"</span>,</span></span>
 <span class="r-in"><span>  legend_name <span class="op">=</span> <span class="st">"Weight1"</span>,</span></span>
 <span class="r-in"><span>  heatmap_color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#20a485"</span>, <span class="st">"#410054"</span>, <span class="st">"#fee81f"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu">network.heatmap</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">weight_table</span>,</span></span>
+<span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
 <span class="r-in"><span>  heatmap_title <span class="op">=</span> <span class="st">"inferCSN"</span>,</span></span>
 <span class="r-in"><span>  legend_name <span class="op">=</span> <span class="st">"Weight2"</span>,</span></span>
 <span class="r-in"><span>  heatmap_color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#20a485"</span>, <span class="st">"white"</span>, <span class="st">"#fee81f"</span><span class="op">)</span></span></span>
@@ -199,7 +199,7 @@
 <span class="r-plt img"><img src="network.heatmap-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">network.heatmap</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">weight_table</span>,</span></span>
+<span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
 <span class="r-in"><span>  show_names <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  rect_color <span class="op">=</span> <span class="st">"gray90"</span>,</span></span>
 <span class="r-in"><span>  row_anno_type <span class="op">=</span> <span class="st">"density"</span>,</span></span>
@@ -208,14 +208,14 @@
 <span class="r-plt img"><img src="network.heatmap-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">network.heatmap</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">weight_table</span>,</span></span>
+<span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
 <span class="r-in"><span>  regulators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span>, <span class="st">"g2"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  show_names <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="network.heatmap-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">network.heatmap</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">weight_table</span>,</span></span>
+<span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
 <span class="r-in"><span>  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span>, <span class="st">"g2"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  row_anno_type <span class="op">=</span> <span class="st">"boxplot"</span>,</span></span>
 <span class="r-in"><span>  column_anno_type <span class="op">=</span> <span class="st">"histogram"</span>,</span></span>
@@ -224,7 +224,7 @@
 <span class="r-plt img"><img src="network.heatmap-5.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">network.heatmap</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">weight_table</span>,</span></span>
+<span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
 <span class="r-in"><span>  regulators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span>, <span class="st">"g3"</span>, <span class="st">"g5"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g3"</span>, <span class="st">"g6"</span>, <span class="st">"g9"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  show_names <span class="op">=</span> <span class="cn">TRUE</span></span></span>
