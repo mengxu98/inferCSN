@@ -12,7 +12,7 @@ single.network(
   seed = 1,
   penalty = "L0",
   algorithm = "CD",
-  regulators_num = NULL,
+  regulators_num = (ncol(matrix) - 1),
   n_folds = 10,
   k_folds = NULL,
   r_threshold = 0,

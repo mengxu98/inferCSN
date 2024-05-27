@@ -106,13 +106,14 @@ setMethod(
     } else {
       regulators <- colnames(object)
     }
-
     if (!is.null(targets)) {
       targets <- intersect(colnames(object), targets)
     } else {
       targets <- colnames(object)
     }
-
+    if (is.null(regulators_num)) {
+      regulators_num <- (ncol(object) - 1)
+    }
     names(targets) <- targets
     cores <- min(
       (parallel::detectCores(logical = FALSE) - 1), cores, length(targets)
