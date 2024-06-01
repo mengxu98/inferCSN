@@ -34,12 +34,12 @@
 #'   network_table,
 #'   example_ground_truth,
 #'   plot = TRUE
-#'  )
+#' )
 #' auc.calculate(
 #'   network_table_new,
 #'   example_ground_truth,
 #'   plot = TRUE
-#'  )
+#' )
 weight_filter <- function(
     network_table,
     method = "max") {
