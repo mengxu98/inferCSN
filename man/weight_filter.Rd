@@ -12,7 +12,7 @@ weight_filter(network_table, method = "max")
 \item{method}{method}
 }
 \value{
-Filtered weight table
+Filtered network table
 }
 \description{
 weight_filter
@@ -45,10 +45,10 @@ auc.calculate(
   network_table,
   example_ground_truth,
   plot = TRUE
- )
+)
 auc.calculate(
   network_table_new,
   example_ground_truth,
   plot = TRUE
- )
+)
 }

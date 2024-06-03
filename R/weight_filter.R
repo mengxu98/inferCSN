@@ -3,7 +3,7 @@
 #' @param network_table network_table
 #' @param method method
 #'
-#' @return Filtered weight table
+#' @return Filtered network table
 #' @export
 #'
 #' @examples
