@@ -502,3 +502,33 @@ normalization <- function(
 
   return(result)
 }
+
+.rmse <- function(
+    true,
+    pred) {
+  sqrt(mean((true - pred)^2))
+}
+
+#' Sum of Squared Errors
+#'
+#' @param y_true A numeric vector with ground truth values.
+#' @param y_pred A numeric vector with predicted values.
+sse <- function(y_true, y_pred) {
+  return(sum((y_true - y_pred)**2))
+}
+
+#' Relative Squared Error
+#'
+#' @param y_true A numeric vector with ground truth values.
+#' @param y_pred A numeric vector with predicted values.
+rse <- function(y_true, y_pred) {
+  return(sse(y_true, y_pred) / sse(y_true, mean(y_true)))
+}
+
+#' \eqn{R^2} (coefficient of determination)
+#'
+#' @param y_true A numeric vector with ground truth values.
+#' @param y_pred A numeric vector with predicted values.
+r2 <- function(y_true, y_pred) {
+  1 - rse(y_true, y_pred)
+}
