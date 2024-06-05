@@ -41,6 +41,11 @@ reference:
   - crossweight
   - crossweight_params
 
+- subtitle: "Network evaluation"
+- contents:
+  - auc.calculate
+  - acc.calculate
+
 - subtitle: "Network visualization"
 - contents:
   - plot_dynamic_networks
@@ -48,10 +53,9 @@ reference:
   - plot_contrast_networks
   - network.heatmap
 
-- subtitle: "Network evaluation"
+- subtitle: "Plotting functions"
 - contents:
-  - auc.calculate
-  - acc.calculate
+  - plot_scatter
 
 - subtitle: "Calculate gene rank"
 - contents:
@@ -78,6 +82,9 @@ reference:
   - print.SRM_fit_CV
   - predict.SRM_fit
   - predict.SRM_fit_CV
+  - r_square
+  - rse
+  - sse
 
 - subtitle: "Example data"
 - contents:
