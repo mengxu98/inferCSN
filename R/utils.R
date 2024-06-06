@@ -57,13 +57,14 @@ check.parameters <- function(
     cross_validation,
     seed,
     n_folds,
-    k_folds,
+    percent_samples,
     r_threshold,
     regulators,
     targets,
     regulators_num,
     verbose,
-    cores) {
+    cores,
+    ...) {
   if (verbose) {
     message("Checking input parameters.")
   }
@@ -92,10 +93,8 @@ check.parameters <- function(
     }
   }
 
-  if (!is.null(k_folds)) {
-    if (!(is.numeric(k_folds) && k_folds > 0 && k_folds <= 1)) {
-      stop("Please set `k_folds` value between: (0, 1].")
-    }
+  if (!(is.numeric(percent_samples) && percent_samples > 0 && percent_samples <= 1)) {
+    stop("Please set `percent_samples` value between: (0, 1].")
   }
 
   if (!is.null(targets)) {
@@ -525,10 +524,10 @@ rse <- function(y_true, y_pred) {
   return(sse(y_true, y_pred) / sse(y_true, mean(y_true)))
 }
 
-#' \eqn{R^2} (coefficient of determination)
+#' @title \eqn{R^2} (coefficient of determination)
 #'
 #' @param y_true A numeric vector with ground truth values.
 #' @param y_pred A numeric vector with predicted values.
-r2 <- function(y_true, y_pred) {
+r_square <- function(y_true, y_pred) {
   1 - rse(y_true, y_pred)
 }

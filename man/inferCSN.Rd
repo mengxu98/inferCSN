@@ -14,7 +14,7 @@ inferCSN(
   cross_validation = FALSE,
   seed = 1,
   n_folds = 10,
-  k_folds = NULL,
+  percent_samples = 1,
   r_threshold = 0,
   regulators = NULL,
   targets = NULL,
@@ -31,7 +31,7 @@ inferCSN(
   cross_validation = FALSE,
   seed = 1,
   n_folds = 10,
-  k_folds = NULL,
+  percent_samples = 1,
   r_threshold = 0,
   regulators = NULL,
   targets = NULL,
@@ -48,7 +48,7 @@ inferCSN(
   cross_validation = FALSE,
   seed = 1,
   n_folds = 10,
-  k_folds = NULL,
+  percent_samples = 1,
   r_threshold = 0,
   regulators = NULL,
   targets = NULL,
@@ -59,15 +59,15 @@ inferCSN(
 )
 }
 \arguments{
-\item{object}{Input object}
+\item{object}{The input data for \code{inferCSN}.}
 
 \item{penalty}{The type of regularization.
-This can take either one of the following choices: "L0" and "L0L2".
-For high-dimensional and sparse data, such as single-cell sequencing data, "L0L2" is more effective.}
+This can take either one of the following choices: \code{L0} and \code{L0L2}.
+For high-dimensional and sparse data, such as single-cell sequencing data, \code{L0L2} is more effective.}
 
 \item{algorithm}{The type of algorithm used to minimize the objective function.
-Currently "CD" and "CDPSI" are supported.
-The CDPSI algorithm may yield better results, but it also increases running time.}
+Currently \code{CD} and \code{CDPSI} are supported.
+The \code{CDPSI} algorithm may yield better results, but it also increases running time.}
 
 \item{cross_validation}{Check whether cross validation is used.}
 
@@ -75,23 +75,23 @@ The CDPSI algorithm may yield better results, but it also increases running time
 
 \item{n_folds}{The number of folds for cross-validation.}
 
-\item{k_folds}{The number of folds for sample split.}
+\item{percent_samples}{The percent of all samples used for \code{\link{sparse.regression}}. Default set to 1.}
 
-\item{r_threshold}{Threshold of R^2.}
+\item{r_threshold}{Threshold of \eqn{R^2} or correlation coefficient.}
 
-\item{regulators}{Regulator genes.}
+\item{regulators}{A character vector with the regulators to consider for CSN inference.}
 
-\item{targets}{Target genes.}
+\item{targets}{A character vector with the targets to consider for CSN inference.}
 
-\item{regulators_num}{The number of non-zore coef, this value will affect the final performance.
+\item{regulators_num}{The number of non-zore coefficients, this value will affect the final performance.
 The maximum support size at which to terminate the regularization path.
 Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.}
 
-\item{cores}{CPU cores.}
+\item{cores}{Number of CPU cores used. Setting to parallelize the computation with \code{\link[foreach]{foreach}}.}
 
 \item{verbose}{Print detailed information.}
 
-\item{...}{Arguments for other methods}
+\item{...}{Parameters for other methods.}
 }
 \value{
 A data table of gene-gene regulatory relationship

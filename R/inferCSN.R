@@ -2,26 +2,26 @@
 #'
 #' @useDynLib inferCSN
 #'
-#' @param object Input object
+#' @param object The input data for \code{inferCSN}.
 #' @param penalty The type of regularization.
-#' This can take either one of the following choices: "L0" and "L0L2".
-#' For high-dimensional and sparse data, such as single-cell sequencing data, "L0L2" is more effective.
+#' This can take either one of the following choices: \code{L0} and \code{L0L2}.
+#' For high-dimensional and sparse data, such as single-cell sequencing data, \code{L0L2} is more effective.
 #' @param algorithm The type of algorithm used to minimize the objective function.
-#' Currently "CD" and "CDPSI" are supported.
-#' The CDPSI algorithm may yield better results, but it also increases running time.
+#' Currently \code{CD} and \code{CDPSI} are supported.
+#' The \code{CDPSI} algorithm may yield better results, but it also increases running time.
 #' @param cross_validation Check whether cross validation is used.
 #' @param n_folds The number of folds for cross-validation.
 #' @param seed The seed used in randomly shuffling the data for cross-validation.
-#' @param k_folds The number of folds for sample split.
-#' @param r_threshold Threshold of R^2.
-#' @param regulators Regulator genes.
-#' @param targets Target genes.
-#' @param regulators_num The number of non-zore coef, this value will affect the final performance.
+#' @param percent_samples The percent of all samples used for \code{\link{sparse.regression}}. Default set to 1.
+#' @param r_threshold Threshold of \eqn{R^2} or correlation coefficient.
+#' @param regulators A character vector with the regulators to consider for CSN inference.
+#' @param targets A character vector with the targets to consider for CSN inference.
+#' @param regulators_num The number of non-zore coefficients, this value will affect the final performance.
 #' The maximum support size at which to terminate the regularization path.
 #' Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.
-#' @param cores CPU cores.
+#' @param cores Number of CPU cores used. Setting to parallelize the computation with \code{\link[foreach]{foreach}}.
 #' @param verbose Print detailed information.
-#' @param ... Arguments for other methods
+#' @param ... Parameters for other methods.
 #'
 #' @docType methods
 #' @rdname inferCSN
@@ -37,7 +37,7 @@ setGeneric(
     cross_validation = FALSE,
     seed = 1,
     n_folds = 10,
-    k_folds = NULL,
+    percent_samples = 1,
     r_threshold = 0,
     regulators = NULL,
     targets = NULL,
@@ -72,7 +72,7 @@ setMethod(
     cross_validation = FALSE,
     seed = 1,
     n_folds = 10,
-    k_folds = NULL,
+    percent_samples = 1,
     r_threshold = 0,
     regulators = NULL,
     targets = NULL,
@@ -92,13 +92,14 @@ setMethod(
       cross_validation = cross_validation,
       seed = seed,
       n_folds = n_folds,
-      k_folds = k_folds,
+      percent_samples = percent_samples,
       r_threshold = r_threshold,
       regulators = regulators,
       targets = targets,
       regulators_num = regulators_num,
       verbose = verbose,
-      cores = cores
+      cores = cores,
+      ...
     )
 
     if (!is.null(regulators)) {
@@ -130,7 +131,7 @@ setMethod(
           penalty = penalty,
           algorithm = algorithm,
           n_folds = n_folds,
-          k_folds = k_folds,
+          percent_samples = percent_samples,
           r_threshold = r_threshold,
           regulators_num = regulators_num,
           verbose = verbose
@@ -162,7 +163,7 @@ setMethod(
     cross_validation = FALSE,
     seed = 1,
     n_folds = 10,
-    k_folds = NULL,
+    percent_samples = 1,
     r_threshold = 0,
     regulators = NULL,
     targets = NULL,
@@ -182,7 +183,7 @@ setMethod(
       cross_validation = cross_validation,
       seed = seed,
       n_folds = n_folds,
-      k_folds = k_folds,
+      percent_samples = percent_samples,
       r_threshold = r_threshold,
       regulators = regulators,
       targets = targets,

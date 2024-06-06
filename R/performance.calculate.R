@@ -20,10 +20,10 @@ auc.calculate <- function(
     plot = FALSE,
     line_color = "#1563cc",
     line_width = 1) {
-
   gold <- prepare.performance.data(
     network_table,
-    ground_truth)
+    ground_truth
+  )
 
   auc_curves <- precrec::evalmod(
     scores = gold$weight,

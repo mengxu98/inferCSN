@@ -31,9 +31,10 @@ single.network <- function(
     algorithm = "CD",
     regulators_num = (ncol(matrix) - 1),
     n_folds = 10,
-    k_folds = NULL,
+    percent_samples = 1,
     r_threshold = 0,
-    verbose = FALSE) {
+    verbose = FALSE,
+    ...) {
   regulators <- setdiff(regulators, target)
   x <- matrix[, regulators]
   y <- matrix[, target]
@@ -55,9 +56,10 @@ single.network <- function(
     algorithm = algorithm,
     regulators_num = regulators_num,
     n_folds = n_folds,
-    k_folds = k_folds,
+    percent_samples = percent_samples,
     r_threshold = r_threshold,
-    verbose = verbose
+    verbose = verbose,
+    ...
   )
 
   coefficients <- normalization(
@@ -80,6 +82,7 @@ single.network <- function(
 #'
 #' @param x The data matrix
 #' @param y The response vector
+#' @param computation_method The method used to compute \code{r}.
 #'
 #' @inheritParams inferCSN
 #'
@@ -99,11 +102,16 @@ sparse.regression <- function(
     algorithm = "CD",
     regulators_num = ncol(x),
     n_folds = 10,
-    k_folds = NULL,
+    percent_samples = 1,
     r_threshold = 0,
-    verbose = FALSE) {
-  if (!is.null(k_folds)) {
-    samples <- sample(nrow(x), k_folds * nrow(x))
+    computation_method = "cor",
+    verbose = FALSE,
+    ...) {
+  if (percent_samples == 1) {
+    test_x <- x
+    test_y <- y
+  } else {
+    samples <- sample(nrow(x), percent_samples * nrow(x))
     test_x <- x[-samples, ]
     x <- x[samples, ]
     test_y <- y[-samples]
@@ -114,23 +122,28 @@ sparse.regression <- function(
     fit <- try(
       model.fit(
         x, y,
-        cross_validation = cross_validation,
-        seed = seed,
         penalty = penalty,
         algorithm = algorithm,
         regulators_num = regulators_num,
-        n_folds = n_folds
+        cross_validation = cross_validation,
+        n_folds = n_folds,
+        seed = seed,
+        ...
       )
     )
 
     if (any(class(fit) == "try-error")) {
-      if (verbose) message("Cross validation error, used fit instead.")
+      if (verbose) {
+        message("Cross validation error, used fit instead.")
+      }
       fit <- try(
         model.fit(
           x, y,
           penalty = penalty,
           algorithm = algorithm,
-          regulators_num = regulators_num
+          regulators_num = regulators_num,
+          cross_validation = FALSE,
+          ...
         )
       )
       if (any(class(fit) == "try-error")) {
@@ -155,51 +168,51 @@ sparse.regression <- function(
       }
     }
   } else {
-    fit <- model.fit(
-      x, y,
-      penalty = penalty,
-      algorithm = algorithm,
-      regulators_num = regulators_num
+    fit <- try(
+      model.fit(
+        x, y,
+        penalty = penalty,
+        algorithm = algorithm,
+        regulators_num = regulators_num,
+        cross_validation = FALSE
+      )
     )
-
+    if (any(class(fit) == "try-error")) {
+      return(rep(0, ncol(x)))
+    }
     fit_inf <- print(fit)
     lambda <- fit_inf$lambda[which.max(fit_inf$suppSize)]
     gamma <- fit_inf$gamma[which.max(fit_inf$suppSize)]
   }
 
-  if (r_threshold == 0) {
-    return(
-      as.vector(
-        coef(
-          fit,
-          lambda = lambda,
-          gamma = gamma
-        )
-      )[-1]
+  pred_y <- as.numeric(
+    predict(
+      fit,
+      newx = test_x,
+      lambda = lambda,
+      gamma = gamma
     )
-  } else {
-    r <- 1
-    if (!is.null(k_folds)) {
-      pred_y <- as.numeric(
-        predict(
-          fit,
-          newx = test_x,
-          lambda = lambda,
-          gamma = gamma
-        )
-      )
-      if (length(test_y) == length(pred_y)) {
-        if (stats::var(test_y) != 0 && stats::var(pred_y) != 0) {
-          r <- stats::cor(test_y, pred_y)
-        }
-      }
-    }
+  )
 
-    if (r >= r_threshold) {
-      return(as.vector(coef(fit, lambda = lambda, gamma = gamma))[-1])
+  if (length(test_y) == length(pred_y)) {
+    if (stats::var(test_y) != 0 && stats::var(pred_y) != 0) {
+      computation_method <- match.arg(computation_method, c("r_square", "cor"))
+      r <- switch(
+        computation_method,
+        "cor" = stats::cor(test_y, pred_y),
+        "r_square" = r_square(test_y, pred_y)
+      )
     } else {
-      return(rep(0, ncol(x)))
+      r <- 0
     }
+  } else {
+    return(rep(0, ncol(x)))
+  }
+
+  if (r >= r_threshold) {
+    return(as.vector(coef(fit, lambda = lambda, gamma = gamma))[-1])
+  } else {
+    return(rep(0, ncol(x)))
   }
 }
 
@@ -266,7 +279,8 @@ model.fit <- function(
     excludeFirstK = 0,
     intercept = TRUE,
     lows = -Inf,
-    highs = Inf) {
+    highs = Inf,
+    ...) {
   # Check parameter values
   if (is.null(regulators_num)) {
     regulators_num <- ncol(x)

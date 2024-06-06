@@ -32,7 +32,8 @@ model.fit(
   excludeFirstK = 0,
   intercept = TRUE,
   lows = -Inf,
-  highs = Inf
+  highs = Inf,
+  ...
 )
 }
 \arguments{
@@ -41,14 +42,14 @@ model.fit(
 \item{y}{The response vector}
 
 \item{penalty}{The type of regularization.
-This can take either one of the following choices: "L0" and "L0L2".
-For high-dimensional and sparse data, such as single-cell sequencing data, "L0L2" is more effective.}
+This can take either one of the following choices: \code{L0} and \code{L0L2}.
+For high-dimensional and sparse data, such as single-cell sequencing data, \code{L0L2} is more effective.}
 
 \item{algorithm}{The type of algorithm used to minimize the objective function.
-Currently "CD" and "CDPSI" are supported.
-The CDPSI algorithm may yield better results, but it also increases running time.}
+Currently \code{CD} and \code{CDPSI} are supported.
+The \code{CDPSI} algorithm may yield better results, but it also increases running time.}
 
-\item{regulators_num}{The number of non-zore coef, this value will affect the final performance.
+\item{regulators_num}{The number of non-zore coefficients, this value will affect the final performance.
 The maximum support size at which to terminate the regularization path.
 Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.}
 
@@ -97,6 +98,8 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 \item{lows}{Lower bounds for coefficients}
 
 \item{highs}{Upper bounds for coefficients}
+
+\item{...}{Parameters for other methods.}
 }
 \value{
 An S3 object describing the regularization path
