@@ -79,6 +79,9 @@
     <loc>https://mengxu98.github.io/inferCSN/reference/plot_dynamic_networks.html</loc>
   </url>
   <url>
+    <loc>https://mengxu98.github.io/inferCSN/reference/plot_scatter.html</loc>
+  </url>
+  <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/plot_static_networks.html</loc>
   </url>
   <url>
@@ -91,10 +94,19 @@
     <loc>https://mengxu98.github.io/inferCSN/reference/print.SRM_fit.html</loc>
   </url>
   <url>
+    <loc>https://mengxu98.github.io/inferCSN/reference/r_square.html</loc>
+  </url>
+  <url>
+    <loc>https://mengxu98.github.io/inferCSN/reference/rse.html</loc>
+  </url>
+  <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/single.network.html</loc>
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/sparse.regression.html</loc>
+  </url>
+  <url>
+    <loc>https://mengxu98.github.io/inferCSN/reference/sse.html</loc>
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/table.to.matrix.html</loc>

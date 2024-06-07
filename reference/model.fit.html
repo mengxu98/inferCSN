@@ -84,7 +84,8 @@
 <span>  excludeFirstK <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  intercept <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  lows <span class="op">=</span> <span class="op">-</span><span class="cn">Inf</span>,</span>
-<span>  highs <span class="op">=</span> <span class="cn">Inf</span></span>
+<span>  highs <span class="op">=</span> <span class="cn">Inf</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -100,18 +101,18 @@
 
 <dt>penalty</dt>
 <dd><p>The type of regularization.
-This can take either one of the following choices: "L0" and "L0L2".
-For high-dimensional and sparse data, such as single-cell sequencing data, "L0L2" is more effective.</p></dd>
+This can take either one of the following choices: <code>L0</code> and <code>L0L2</code>.
+For high-dimensional and sparse data, such as single-cell sequencing data, <code>L0L2</code> is more effective.</p></dd>
 
 
 <dt>algorithm</dt>
 <dd><p>The type of algorithm used to minimize the objective function.
-Currently "CD" and "CDPSI" are supported.
-The CDPSI algorithm may yield better results, but it also increases running time.</p></dd>
+Currently <code>CD</code> and <code>CDPSI</code> are supported.
+The <code>CDPSI</code> algorithm may yield better results, but it also increases running time.</p></dd>
 
 
 <dt>regulators_num</dt>
-<dd><p>The number of non-zore coef, this value will affect the final performance.
+<dd><p>The number of non-zore coefficients, this value will affect the final performance.
 The maximum support size at which to terminate the regularization path.
 Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.</p></dd>
 
@@ -206,6 +207,10 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 
 <dt>highs</dt>
 <dd><p>Upper bounds for coefficients</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Parameters for other methods.</p></dd>
 
 </dl></div>
     <div id="value">

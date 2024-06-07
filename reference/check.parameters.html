@@ -63,13 +63,14 @@
 <span>  <span class="va">cross_validation</span>,</span>
 <span>  <span class="va">seed</span>,</span>
 <span>  <span class="va">n_folds</span>,</span>
-<span>  <span class="va">k_folds</span>,</span>
+<span>  <span class="va">percent_samples</span>,</span>
 <span>  <span class="va">r_threshold</span>,</span>
 <span>  <span class="va">regulators</span>,</span>
 <span>  <span class="va">targets</span>,</span>
 <span>  <span class="va">regulators_num</span>,</span>
 <span>  <span class="va">verbose</span>,</span>
-<span>  <span class="va">cores</span></span>
+<span>  <span class="va">cores</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -81,14 +82,14 @@
 
 <dt>penalty</dt>
 <dd><p>The type of regularization.
-This can take either one of the following choices: "L0" and "L0L2".
-For high-dimensional and sparse data, such as single-cell sequencing data, "L0L2" is more effective.</p></dd>
+This can take either one of the following choices: <code>L0</code> and <code>L0L2</code>.
+For high-dimensional and sparse data, such as single-cell sequencing data, <code>L0L2</code> is more effective.</p></dd>
 
 
 <dt>algorithm</dt>
 <dd><p>The type of algorithm used to minimize the objective function.
-Currently "CD" and "CDPSI" are supported.
-The CDPSI algorithm may yield better results, but it also increases running time.</p></dd>
+Currently <code>CD</code> and <code>CDPSI</code> are supported.
+The <code>CDPSI</code> algorithm may yield better results, but it also increases running time.</p></dd>
 
 
 <dt>cross_validation</dt>
@@ -103,24 +104,24 @@ The CDPSI algorithm may yield better results, but it also increases running time
 <dd><p>The number of folds for cross-validation.</p></dd>
 
 
-<dt>k_folds</dt>
-<dd><p>The number of folds for sample split.</p></dd>
+<dt>percent_samples</dt>
+<dd><p>The percent of all samples used for <code><a href="sparse.regression.html">sparse.regression</a></code>. Default set to 1.</p></dd>
 
 
 <dt>r_threshold</dt>
-<dd><p>Threshold of R^2.</p></dd>
+<dd><p>Threshold of \(R^2\) or correlation coefficient.</p></dd>
 
 
 <dt>regulators</dt>
-<dd><p>Regulator genes.</p></dd>
+<dd><p>A character vector with the regulators to consider for CSN inference.</p></dd>
 
 
 <dt>targets</dt>
-<dd><p>Target genes.</p></dd>
+<dd><p>A character vector with the targets to consider for CSN inference.</p></dd>
 
 
 <dt>regulators_num</dt>
-<dd><p>The number of non-zore coef, this value will affect the final performance.
+<dd><p>The number of non-zore coefficients, this value will affect the final performance.
 The maximum support size at which to terminate the regularization path.
 Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.</p></dd>
 
@@ -130,7 +131,11 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 
 
 <dt>cores</dt>
-<dd><p>CPU cores.</p></dd>
+<dd><p>Number of CPU cores used. Setting to parallelize the computation with <code><a href="https://rdrr.io/pkg/foreach/man/foreach.html" class="external-link">foreach</a></code>.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Parameters for other methods.</p></dd>
 
 </dl></div>
     <div id="value">

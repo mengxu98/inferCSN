@@ -66,9 +66,10 @@
 <span>  algorithm <span class="op">=</span> <span class="st">"CD"</span>,</span>
 <span>  regulators_num <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">matrix</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  n_folds <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  k_folds <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  percent_samples <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  r_threshold <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -79,7 +80,7 @@
 
 
 <dt>regulators</dt>
-<dd><p>Regulator genes.</p></dd>
+<dd><p>A character vector with the regulators to consider for CSN inference.</p></dd>
 
 
 <dt>target</dt>
@@ -96,18 +97,18 @@
 
 <dt>penalty</dt>
 <dd><p>The type of regularization.
-This can take either one of the following choices: "L0" and "L0L2".
-For high-dimensional and sparse data, such as single-cell sequencing data, "L0L2" is more effective.</p></dd>
+This can take either one of the following choices: <code>L0</code> and <code>L0L2</code>.
+For high-dimensional and sparse data, such as single-cell sequencing data, <code>L0L2</code> is more effective.</p></dd>
 
 
 <dt>algorithm</dt>
 <dd><p>The type of algorithm used to minimize the objective function.
-Currently "CD" and "CDPSI" are supported.
-The CDPSI algorithm may yield better results, but it also increases running time.</p></dd>
+Currently <code>CD</code> and <code>CDPSI</code> are supported.
+The <code>CDPSI</code> algorithm may yield better results, but it also increases running time.</p></dd>
 
 
 <dt>regulators_num</dt>
-<dd><p>The number of non-zore coef, this value will affect the final performance.
+<dd><p>The number of non-zore coefficients, this value will affect the final performance.
 The maximum support size at which to terminate the regularization path.
 Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.</p></dd>
 
@@ -116,16 +117,20 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 <dd><p>The number of folds for cross-validation.</p></dd>
 
 
-<dt>k_folds</dt>
-<dd><p>The number of folds for sample split.</p></dd>
+<dt>percent_samples</dt>
+<dd><p>The percent of all samples used for <code><a href="sparse.regression.html">sparse.regression</a></code>. Default set to 1.</p></dd>
 
 
 <dt>r_threshold</dt>
-<dd><p>Threshold of R^2.</p></dd>
+<dd><p>Threshold of \(R^2\) or correlation coefficient.</p></dd>
 
 
 <dt>verbose</dt>
 <dd><p>Print detailed information.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Parameters for other methods.</p></dd>
 
 </dl></div>
     <div id="value">
