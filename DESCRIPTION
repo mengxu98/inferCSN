@@ -33,6 +33,7 @@ Suggests:
     circlize,
     gtools,
     gganimate,
+    ggExtra,
     ggpubr,
     igraph,
     network,
