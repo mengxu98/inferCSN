@@ -19,6 +19,7 @@ utils::globalVariables(
     "name",
     "degree",
     "edges",
+    "cluster",
     "curvetype",
     "weight_new",
     "celltype",
