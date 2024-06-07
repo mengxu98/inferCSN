@@ -39,7 +39,6 @@ auc.calculate <- function(
   auc_metric[1, "AUROC"] <- sprintf("%0.3f", auc$aucs[1])
   auc_metric[1, "AUPRC"] <- sprintf("%0.3f", auc$aucs[2])
   if (plot) {
-    # Separate data
     auroc_table <- subset(
       fortify(auc_curves),
       curvetype == "ROC"
@@ -49,7 +48,6 @@ auc.calculate <- function(
       curvetype == "PRC"
     )
 
-    # Plot
     auroc <- ggplot(auroc_table, aes(x = x, y = y)) +
       geom_line(
         color = line_color,
