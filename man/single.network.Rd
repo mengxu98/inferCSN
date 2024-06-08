@@ -25,7 +25,7 @@ single.network(
 
 \item{regulators}{A character vector with the regulators to consider for CSN inference.}
 
-\item{target}{Target genes.}
+\item{target}{Target gene.}
 
 \item{cross_validation}{Check whether cross validation is used.}
 

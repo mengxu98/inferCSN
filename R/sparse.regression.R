@@ -1,7 +1,7 @@
 #' @title Construct network for single gene
 #'
 #' @param matrix An expression matrix, cells by genes.
-#' @param target Target genes.
+#' @param target Target gene.
 #'
 #' @inheritParams inferCSN
 #'
