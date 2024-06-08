@@ -16,7 +16,8 @@
 #' @param compute_correlation_method Method to compute correlation ("pearson" or "spearman").
 #' @param keep_aspect_ratio Logical value, whether to set aspect ratio to 1:1.
 #' @param facet Faceting variable. If setting TRUE, all settings about margins will be inalidation.
-#' @param se Display confidence interval around smooth
+#' @param se Display confidence interval around smooth.
+#' @param pointdensity Plot point density when only provide 1 cluster.
 #'
 #' @return ggplot object
 #' @export
@@ -33,12 +34,16 @@
 #'   )
 #' )
 #'
-#' plot_scatter(test_data, keep_aspect_ratio = TRUE)
-#' plot_scatter(test_data, facet = TRUE, keep_aspect_ratio = TRUE)
-#' plot_scatter(test_data, marginal_type = "density", keep_aspect_ratio = TRUE)
-#' plot_scatter(test_data, marginal_type = "boxplot", keep_aspect_ratio = TRUE)
-#' plot_scatter(test_data[, 1:2], keep_aspect_ratio = TRUE)
-#' plot_scatter(test_data[, 1:2], marginal_type = "histogram", keep_aspect_ratio = TRUE)
+#' p1 <- plot_scatter(test_data, keep_aspect_ratio = TRUE)
+#'
+#' p2 <- plot_scatter(test_data, marginal_type = "boxplot", keep_aspect_ratio = TRUE)
+#' p1 + p2
+#' p3 <- plot_scatter(test_data, facet = TRUE, keep_aspect_ratio = TRUE)
+#' p3
+#'
+#' p4 <- plot_scatter(test_data[, 1:2], marginal_type = "histogram", keep_aspect_ratio = TRUE)
+#' p5 <- plot_scatter(test_data[, 1:2], keep_aspect_ratio = TRUE)
+#' p4 + p6
 plot_scatter <- function(
     data,
     smoothing_method = "lm",
@@ -56,7 +61,8 @@ plot_scatter <- function(
     compute_correlation_method = "pearson",
     keep_aspect_ratio = FALSE,
     facet = FALSE,
-    se = FALSE) {
+    se = FALSE,
+    pointdensity = TRUE) {
   smoothing_method <- match.arg(smoothing_method, c("lm", "loess"))
   compute_correlation_method <- match.arg(
     compute_correlation_method, c("pearson", "spearman")
@@ -84,6 +90,11 @@ plot_scatter <- function(
         formula = "y ~ x",
         se = se
       )
+    if (pointdensity) {
+      p <- p +
+        ggpointdensity::geom_pointdensity() +
+        viridis::scale_color_viridis()
+    }
     marginal_group_colour <- FALSE
     marginal_group_fill <- FALSE
   } else {

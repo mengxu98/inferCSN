@@ -21,7 +21,8 @@ plot_scatter(
   compute_correlation_method = "pearson",
   keep_aspect_ratio = FALSE,
   facet = FALSE,
-  se = FALSE
+  se = FALSE,
+  pointdensity = TRUE
 )
 }
 \arguments{
@@ -57,7 +58,9 @@ plot_scatter(
 
 \item{facet}{Faceting variable. If setting TRUE, all settings about margins will be inalidation.}
 
-\item{se}{Display confidence interval around smooth}
+\item{se}{Display confidence interval around smooth.}
+
+\item{pointdensity}{Plot point density when only provide 1 cluster.}
 }
 \value{
 ggplot object
@@ -78,10 +81,14 @@ test_data <- data.frame(
   )
 )
 
-plot_scatter(test_data, keep_aspect_ratio = TRUE)
-plot_scatter(test_data, facet = TRUE, keep_aspect_ratio = TRUE)
-plot_scatter(test_data, marginal_type = "density", keep_aspect_ratio = TRUE)
-plot_scatter(test_data, marginal_type = "boxplot", keep_aspect_ratio = TRUE)
-plot_scatter(test_data[, 1:2], keep_aspect_ratio = TRUE)
-plot_scatter(test_data[, 1:2], marginal_type = "histogram", keep_aspect_ratio = TRUE)
+p1 <- plot_scatter(test_data, keep_aspect_ratio = TRUE)
+
+p2 <- plot_scatter(test_data, marginal_type = "boxplot", keep_aspect_ratio = TRUE)
+p1 + p2
+p3 <- plot_scatter(test_data, facet = TRUE, keep_aspect_ratio = TRUE)
+p3
+
+p4 <- plot_scatter(test_data[, 1:2], marginal_type = "histogram", keep_aspect_ratio = TRUE)
+p5 <- plot_scatter(test_data[, 1:2], keep_aspect_ratio = TRUE)
+p4 + p6
 }
