@@ -82,13 +82,13 @@ test_data <- data.frame(
 )
 
 p1 <- plot_scatter(test_data, keep_aspect_ratio = TRUE)
-
 p2 <- plot_scatter(test_data, marginal_type = "boxplot", keep_aspect_ratio = TRUE)
 p1 + p2
+
 p3 <- plot_scatter(test_data, facet = TRUE, keep_aspect_ratio = TRUE)
 p3
 
 p4 <- plot_scatter(test_data[, 1:2], marginal_type = "histogram", keep_aspect_ratio = TRUE)
 p5 <- plot_scatter(test_data[, 1:2], keep_aspect_ratio = TRUE)
-p4 + p6
+p4 + p5
 }
