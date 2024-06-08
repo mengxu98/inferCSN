@@ -27,6 +27,7 @@ Imports:
     pbapply,
     purrr,
     Rcpp,
+    RcppArmadillo,
     stats,
     utils
 Suggests: 
@@ -34,6 +35,7 @@ Suggests:
     gtools,
     gganimate,
     ggExtra,
+    ggpointdensity,
     ggpubr,
     igraph,
     network,
@@ -41,7 +43,9 @@ Suggests:
     precrec,
     pROC,
     testthat (>= 3.0.0),
-    tidygraph
+    tidygraph,
+    RColorBrewer,
+    viridis
 LinkingTo: 
     Rcpp,
     RcppArmadillo
