@@ -1,6 +1,7 @@
 #' @import Matrix ggplot2 patchwork
 #'
 #' @importFrom Rcpp evalCpp
+#' @importFrom RcppArmadillo armadillo_version
 #' @importFrom stats coef predict
 #' @importFrom utils methods
 NULL
