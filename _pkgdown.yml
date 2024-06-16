@@ -69,6 +69,7 @@ reference:
 
 - subtitle: "Utils functions"
 - contents:
+  - as_matrix
   - check.parameters
   - coef.SRM_fit
   - coef.SRM_fit_CV

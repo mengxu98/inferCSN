@@ -141,6 +141,49 @@ check.parameters <- function(
   }
 }
 
+#' @title Attempts to turn a dgCMatrix into a dense matrix
+#'
+#' @param x A matrix.
+#' @export
+#'
+#' @examples
+#' sparse_matrix <- Matrix::sparseMatrix(
+#'   i = sample(1:200, 50),
+#'   j = sample(1:200, 50),
+#'   x = rnorm(50),
+#'   dims = c(200, 200),
+#'   dimnames = list(
+#'     paste0("a", rep(1:200)),
+#'     paste0("b", rep(1:200))
+#'   )
+#' )
+#'
+#' identical(
+#'   as.matrix(sparse_matrix),
+#'   as_matrix(sparse_matrix)
+#' )
+as_matrix <- function(x) {
+  if (!inherits(x, "dgCMatrix")) {
+    return(Matrix::as.matrix(x))
+  } else {
+    row_pos <- x@i
+    col_pos <- findInterval(seq_along(x@x) - 1, x@p[-1])
+    mat <- .Call(
+      "_inferCSN_asMatrix",
+      PACKAGE = "inferCSN",
+      row_pos,
+      col_pos,
+      x@x,
+      x@Dim[1],
+      x@Dim[2]
+    )
+
+    attr(mat, "dimnames") <- list(x@Dimnames[[1]], x@Dimnames[[2]])
+
+    return(mat)
+  }
+}
+
 #' @title Switch weight table to matrix
 #'
 #' @param network_table The weight data table of network.
