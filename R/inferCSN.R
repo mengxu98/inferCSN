@@ -174,7 +174,7 @@ setMethod(
     if (verbose) {
       warning("Converting class type of input data from <data.frame> to <matrix>.")
     }
-    object <- as.matrix(object)
+    object <- as_matrix(object)
 
     inferCSN(
       object = object,
