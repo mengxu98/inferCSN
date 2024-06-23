@@ -28,6 +28,10 @@ utils::globalVariables(
     "id",
     "label_genes",
     "targets_num",
-    "to"
+    "to",
+    "P_value",
+    "P_value_contrary",
+    "v",
+    "v_new"
   )
 )
