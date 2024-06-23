@@ -56,7 +56,19 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">weight_filter</span><span class="op">(</span><span class="va">network_table</span>, method <span class="op">=</span> <span class="st">"max"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">weight_filter</span><span class="op">(</span></span>
+<span>  <span class="va">network_table</span>,</span>
+<span>  matrix <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  meta_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pseudotime_column <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"entropy"</span>, <span class="st">"max"</span><span class="op">)</span>,</span>
+<span>  entropy_method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Shannon"</span>, <span class="st">"Renyi"</span><span class="op">)</span>,</span>
+<span>  entropy_nboot <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  history_length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
+<span>  entropy_p_value <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  cores <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -65,8 +77,44 @@
 <dd><p>network_table</p></dd>
 
 
+<dt>matrix</dt>
+<dd><p>The expression matrix.</p></dd>
+
+
+<dt>meta_data</dt>
+<dd><p>The meta data for cells or samples.</p></dd>
+
+
+<dt>pseudotime_column</dt>
+<dd><p>The column of pseudotime.</p></dd>
+
+
 <dt>method</dt>
-<dd><p>method</p></dd>
+<dd><p>method The method used for filter edges. Could be choose "entropy" or "max".</p></dd>
+
+
+<dt>entropy_method</dt>
+<dd><p>If setting 'method' to "entropy", could be choose "Shannon" or "Renyi" to compute entropy.</p></dd>
+
+
+<dt>entropy_nboot</dt>
+<dd><p>entropy_nboot</p></dd>
+
+
+<dt>history_length</dt>
+<dd><p>history_length</p></dd>
+
+
+<dt>entropy_p_value</dt>
+<dd><p>P value.</p></dd>
+
+
+<dt>cores</dt>
+<dd><p>Number of CPU cores used. Setting to parallelize the computation with <code><a href="https://rdrr.io/pkg/foreach/man/foreach.html" class="external-link">foreach</a></code>.</p></dd>
+
+
+<dt>verbose</dt>
+<dd><p>Print detailed information.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -81,7 +129,20 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_ground_truth"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">network_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">network_table_new</span> <span class="op">&lt;-</span> <span class="fu">weight_filter</span><span class="op">(</span><span class="va">network_table</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">network_table_filtered</span> <span class="op">&lt;-</span> <span class="fu">weight_filter</span><span class="op">(</span><span class="va">network_table</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Parameters: 'matrix', 'meta_data' and 'pseudotime_column' not all provide, setting 'method' to 'max'.</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_meta_data"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">network_table_filtered_entropy</span> <span class="op">&lt;-</span> <span class="fu">weight_filter</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
+<span class="r-in"><span>  matrix <span class="op">=</span> <span class="va">example_matrix</span>,</span></span>
+<span class="r-in"><span>  meta_data <span class="op">=</span> <span class="va">example_meta_data</span>,</span></span>
+<span class="r-in"><span>  pseudotime_column <span class="op">=</span> <span class="st">"pseudotime"</span>,</span></span>
+<span class="r-in"><span>  history_length <span class="op">=</span> <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>  entropy_nboot <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>  cores <span class="op">=</span> <span class="fl">2</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using 2 cores.</span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="network.heatmap.html">network.heatmap</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">example_ground_truth</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>  heatmap_title <span class="op">=</span> <span class="st">"Ground truth"</span>,</span></span>
@@ -97,29 +158,44 @@
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="weight_filter-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu"><a href="network.heatmap.html">network.heatmap</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">network_table_new</span>,</span></span>
+<span class="r-in"><span>  <span class="va">network_table_filtered</span>,</span></span>
 <span class="r-in"><span>  heatmap_title <span class="op">=</span> <span class="st">"Filtered"</span>,</span></span>
 <span class="r-in"><span>  show_names <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  rect_color <span class="op">=</span> <span class="st">"gray90"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="weight_filter-3.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="network.heatmap.html">network.heatmap</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">network_table_filtered_entropy</span>,</span></span>
+<span class="r-in"><span>  heatmap_title <span class="op">=</span> <span class="st">"Filtered by entropy"</span>,</span></span>
+<span class="r-in"><span>  show_names <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  rect_color <span class="op">=</span> <span class="st">"gray90"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="weight_filter-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="auc.calculate.html">auc.calculate</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
 <span class="r-in"><span>  <span class="va">example_ground_truth</span>,</span></span>
 <span class="r-in"><span>  plot <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="weight_filter-4.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="weight_filter-5.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   AUROC AUPRC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.963 0.495</span>
 <span class="r-in"><span><span class="fu"><a href="auc.calculate.html">auc.calculate</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">network_table_new</span>,</span></span>
+<span class="r-in"><span>  <span class="va">network_table_filtered</span>,</span></span>
 <span class="r-in"><span>  <span class="va">example_ground_truth</span>,</span></span>
 <span class="r-in"><span>  plot <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="weight_filter-5.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="weight_filter-6.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   AUROC AUPRC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.961 0.604</span>
+<span class="r-in"><span><span class="fu"><a href="auc.calculate.html">auc.calculate</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">network_table_filtered_entropy</span>,</span></span>
+<span class="r-in"><span>  <span class="va">example_ground_truth</span>,</span></span>
+<span class="r-in"><span>  plot <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="weight_filter-7.png" alt="" width="700" height="433"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   AUROC AUPRC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.973 0.619</span>
 </code></pre></div>
     </div>
   </div>
