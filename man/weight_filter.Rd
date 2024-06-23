@@ -4,12 +4,42 @@
 \alias{weight_filter}
 \title{weight_filter}
 \usage{
-weight_filter(network_table, method = "max")
+weight_filter(
+  network_table,
+  matrix = NULL,
+  meta_data = NULL,
+  pseudotime_column = NULL,
+  method = c("entropy", "max"),
+  entropy_method = c("Shannon", "Renyi"),
+  entropy_nboot = 0,
+  history_length = as.numeric(1),
+  entropy_p_value = 0.05,
+  cores = 1,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{network_table}{network_table}
 
-\item{method}{method}
+\item{matrix}{The expression matrix.}
+
+\item{meta_data}{The meta data for cells or samples.}
+
+\item{pseudotime_column}{The column of pseudotime.}
+
+\item{method}{method The method used for filter edges. Could be choose "entropy" or "max".}
+
+\item{entropy_method}{If setting 'method' to "entropy", could be choose "Shannon" or "Renyi" to compute entropy.}
+
+\item{entropy_nboot}{entropy_nboot}
+
+\item{history_length}{history_length}
+
+\item{entropy_p_value}{P value.}
+
+\item{cores}{Number of CPU cores used. Setting to parallelize the computation with \code{\link[foreach]{foreach}}.}
+
+\item{verbose}{Print detailed information.}
 }
 \value{
 Filtered network table
@@ -21,7 +51,18 @@ weight_filter
 data("example_matrix")
 data("example_ground_truth")
 network_table <- inferCSN(example_matrix)
-network_table_new <- weight_filter(network_table)
+network_table_filtered <- weight_filter(network_table)
+data("example_meta_data")
+network_table_filtered_entropy <- weight_filter(
+  network_table,
+  matrix = example_matrix,
+  meta_data = example_meta_data,
+  pseudotime_column = "pseudotime",
+  history_length = 2,
+  entropy_nboot = 0,
+  cores = 2
+)
+
 network.heatmap(
   example_ground_truth[, 1:3],
   heatmap_title = "Ground truth",
@@ -35,8 +76,14 @@ network.heatmap(
   rect_color = "gray90"
 )
 network.heatmap(
-  network_table_new,
+  network_table_filtered,
   heatmap_title = "Filtered",
+  show_names = TRUE,
+  rect_color = "gray90"
+)
+network.heatmap(
+  network_table_filtered_entropy,
+  heatmap_title = "Filtered by entropy",
   show_names = TRUE,
   rect_color = "gray90"
 )
@@ -47,7 +94,12 @@ auc.calculate(
   plot = TRUE
 )
 auc.calculate(
-  network_table_new,
+  network_table_filtered,
+  example_ground_truth,
+  plot = TRUE
+)
+auc.calculate(
+  network_table_filtered_entropy,
   example_ground_truth,
   plot = TRUE
 )

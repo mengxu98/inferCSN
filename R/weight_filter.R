@@ -1,7 +1,43 @@
+.filter_table <- function(table) {
+  table <- table[, 1:3]
+  raw_rownames <- colnames(table)
+  colnames(table) <- c("x", "y", "v")
+  table$edge <- paste(
+    table$x,
+    table$y,
+    sep = "_"
+  )
+
+  table_new <- data.frame(
+    edge = paste(
+      table$y,
+      table$x,
+      sep = "_"
+    ),
+    v = table$v
+  )
+  rownames(table_new) <- table_new$edge
+  table_new <- table_new[table$edge, ]
+  table$v_new <- table_new$v
+  table <- dplyr::filter(table, abs(v) > abs(v_new))
+  table <- table[, 1:3]
+  colnames(table) <- raw_rownames
+
+  return(table)
+}
+
 #' @title weight_filter
 #'
+#' @inheritParams inferCSN
 #' @param network_table network_table
-#' @param method method
+#' @param matrix The expression matrix.
+#' @param meta_data The meta data for cells or samples.
+#' @param pseudotime_column The column of pseudotime.
+#' @param method method The method used for filter edges. Could be choose "entropy" or "max".
+#' @param entropy_method If setting 'method' to "entropy", could be choose "Shannon" or "Renyi" to compute entropy.
+#' @param entropy_nboot entropy_nboot
+#' @param history_length history_length
+#' @param entropy_p_value P value.
 #'
 #' @return Filtered network table
 #' @export
@@ -10,7 +46,18 @@
 #' data("example_matrix")
 #' data("example_ground_truth")
 #' network_table <- inferCSN(example_matrix)
-#' network_table_new <- weight_filter(network_table)
+#' network_table_filtered <- weight_filter(network_table)
+#' data("example_meta_data")
+#' network_table_filtered_entropy <- weight_filter(
+#'   network_table,
+#'   matrix = example_matrix,
+#'   meta_data = example_meta_data,
+#'   pseudotime_column = "pseudotime",
+#'   history_length = 2,
+#'   entropy_nboot = 0,
+#'   cores = 2
+#' )
+#'
 #' network.heatmap(
 #'   example_ground_truth[, 1:3],
 #'   heatmap_title = "Ground truth",
@@ -24,8 +71,14 @@
 #'   rect_color = "gray90"
 #' )
 #' network.heatmap(
-#'   network_table_new,
+#'   network_table_filtered,
 #'   heatmap_title = "Filtered",
+#'   show_names = TRUE,
+#'   rect_color = "gray90"
+#' )
+#' network.heatmap(
+#'   network_table_filtered_entropy,
+#'   heatmap_title = "Filtered by entropy",
 #'   show_names = TRUE,
 #'   rect_color = "gray90"
 #' )
@@ -36,30 +89,126 @@
 #'   plot = TRUE
 #' )
 #' auc.calculate(
-#'   network_table_new,
+#'   network_table_filtered,
+#'   example_ground_truth,
+#'   plot = TRUE
+#' )
+#' auc.calculate(
+#'   network_table_filtered_entropy,
 #'   example_ground_truth,
 #'   plot = TRUE
 #' )
 weight_filter <- function(
     network_table,
-    method = "max") {
-  network_table$edge <- paste(
-    network_table$regulator,
-    network_table$target,
-    sep = "_"
+    matrix = NULL,
+    meta_data = NULL,
+    pseudotime_column = NULL,
+    method = c("entropy", "max"),
+    entropy_method = c("Shannon", "Renyi"),
+    entropy_nboot = 0,
+    history_length = as.numeric(1),
+    entropy_p_value = 0.05,
+    cores = 1,
+    verbose = TRUE) {
+  method <- match.arg(method)
+  entropy_method <- match.arg(entropy_method)
+  if (is.null(matrix) | is.null(meta_data) | is.null(pseudotime_column)) {
+    if (verbose) {
+      message(
+        "Parameters: 'matrix', 'meta_data' and 'pseudotime_column' not all provide, setting 'method' to 'max'."
+      )
+    }
+    method <- "max"
+  }
+  if (method == "max") {
+    return(.filter_table(network_table))
+  }
+
+  meta_data <- meta_data[order(
+    meta_data[, pseudotime_column],
+    decreasing = FALSE
+  ), ]
+  matrix <- matrix[rownames(meta_data), ]
+
+  pairs <- expand.grid(
+    regulator = colnames(matrix),
+    target = colnames(matrix)
+  )
+  pairs <- pairs[pairs$regulator != pairs$target, ]
+  pairs <- as.data.frame(pairs)
+
+  pairs <- purrr::map(
+    seq_len(nrow(pairs)),
+    .f = function(x) {
+      as.character(c(pairs[x, 1], pairs[x, 2]))
+    }
   )
 
-  network_table_new <- data.frame(
-    edge = paste(network_table$target, network_table$regulator, sep = "_"),
-    weight = network_table$weight
-  )
-  rownames(network_table_new) <- network_table_new$edge
-  network_table_new <- network_table_new[network_table$edge, ]
-  network_table$weight_new <- network_table_new$weight
-  if (method == "max") {
-    network_table <- dplyr::filter(network_table, abs(weight) > abs(weight_new))
+  unique_pairs <- list()
+  for (pair in pairs) {
+    ordered_pair <- sort(pair)
+
+    found <- FALSE
+    for (up in unique_pairs) {
+      if (all(up == ordered_pair)) {
+        found <- TRUE
+        break
+      }
+    }
+
+    if (!found) {
+      unique_pairs <- append(unique_pairs, list(ordered_pair))
+    }
   }
+
+  transfer_entropy_list <- parallelize_fun(
+    unique_pairs,
+    cores = cores,
+    verbose = verbose,
+    fun = function(x) {
+      result <- RTransferEntropy::transfer_entropy(
+        matrix[, x[1]],
+        matrix[, x[2]],
+        lx = history_length,
+        ly = history_length,
+        entropy = entropy_method,
+        nboot = entropy_nboot,
+        quiet = TRUE
+      )
+
+      result <- coef(result)
+      data.frame(
+        "regulator" = x[1],
+        "target" = x[2],
+        "entropy" = result[1, 1],
+        "entropy_contrary" = result[2, 1],
+        "effective_entropy" = result[1, 2],
+        "effective_entropy_contrary" = result[2, 2],
+        "P_value" = result[1, 4],
+        "P_value_contrary" = result[2, 4]
+      )
+    }
+  )
+
+  transfer_entropy_table <- purrr::map_dfr(
+    transfer_entropy_list,
+    .f = function(x) {
+      x
+    }
+  )
+
+  if (entropy_nboot > 1) {
+    transfer_entropy_table <- dplyr::filter(transfer_entropy_table, P_value <= entropy_p_value & P_value_contrary <= entropy_p_value)
+  }
+  transfer_entropy_table_contrary <- transfer_entropy_table[, c(2, 1, 4)]
+  colnames(transfer_entropy_table_contrary) <- c("regulator", "target", "entropy")
+  transfer_entropy_table <- rbind(transfer_entropy_table[, c(1, 2, 3)], transfer_entropy_table_contrary)
+
+  transfer_entropy_table <- .filter_table(transfer_entropy_table)
+
+  network_table <- merge(network_table, transfer_entropy_table, by = c("regulator", "target"))
   network_table <- network_table[, c("regulator", "target", "weight")]
 
   return(network_table)
 }
+
