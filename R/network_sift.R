@@ -1,4 +1,4 @@
-.filter_table <- function(table) {
+.weight_sift <- function(table) {
   table <- table[, 1:3]
   raw_rownames <- colnames(table)
   colnames(table) <- c("x", "y", "v")
@@ -26,7 +26,7 @@
   return(table)
 }
 
-#' @title weight_filter
+#' @title network_sift
 #'
 #' @inheritParams inferCSN
 #' @param network_table network_table
@@ -46,9 +46,9 @@
 #' data("example_matrix")
 #' data("example_ground_truth")
 #' network_table <- inferCSN(example_matrix)
-#' network_table_filtered <- weight_filter(network_table)
+#' network_table_filtered <- network_sift(network_table)
 #' data("example_meta_data")
-#' network_table_filtered_entropy <- weight_filter(
+#' network_table_filtered_entropy <- network_sift(
 #'   network_table,
 #'   matrix = example_matrix,
 #'   meta_data = example_meta_data,
@@ -98,7 +98,7 @@
 #'   example_ground_truth,
 #'   plot = TRUE
 #' )
-weight_filter <- function(
+network_sift <- function(
     network_table,
     matrix = NULL,
     meta_data = NULL,
@@ -121,7 +121,7 @@ weight_filter <- function(
     method <- "max"
   }
   if (method == "max") {
-    return(.filter_table(network_table))
+    return(.weight_sift(network_table))
   }
 
   meta_data <- meta_data[order(
@@ -204,11 +204,10 @@ weight_filter <- function(
   colnames(transfer_entropy_table_contrary) <- c("regulator", "target", "entropy")
   transfer_entropy_table <- rbind(transfer_entropy_table[, c(1, 2, 3)], transfer_entropy_table_contrary)
 
-  transfer_entropy_table <- .filter_table(transfer_entropy_table)
+  transfer_entropy_table <- .weight_sift(transfer_entropy_table)
 
   network_table <- merge(network_table, transfer_entropy_table, by = c("regulator", "target"))
   network_table <- network_table[, c("regulator", "target", "weight")]
 
   return(network_table)
 }
-
