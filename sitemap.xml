@@ -34,12 +34,6 @@
     <loc>https://mengxu98.github.io/inferCSN/reference/coef.SRM_fit.html</loc>
   </url>
   <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/crossweight.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/crossweight_params.html</loc>
-  </url>
-  <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/example_ground_truth.html</loc>
   </url>
   <url>
@@ -68,6 +62,9 @@
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/network_format.html</loc>
+  </url>
+  <url>
+    <loc>https://mengxu98.github.io/inferCSN/reference/network_sift.html</loc>
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/normalization.html</loc>
@@ -113,8 +110,5 @@
   </url>
   <url>
     <loc>https://mengxu98.github.io/inferCSN/reference/table.to.matrix.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/weight_filter.html</loc>
   </url>
 </urlset>
