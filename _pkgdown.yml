@@ -37,9 +37,7 @@ reference:
 
 - subtitle: "Network processing"
 - contents:
-  - weight_filter
-  - crossweight
-  - crossweight_params
+  - network_sift
 
 - subtitle: "Network evaluation"
 - contents:
