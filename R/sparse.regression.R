@@ -43,7 +43,7 @@ single.network <- function(
       data.frame(
         regulator = regulators,
         target = target,
-        weight = stats::cor(x, y, method = "pearson")
+        weight = stats::cor(x, y, method = "spearman")
       )
     )
   }
