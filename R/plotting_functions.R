@@ -77,14 +77,21 @@ plot_scatter <- function(
     facet = FALSE,
     se = FALSE,
     pointdensity = TRUE) {
-  smoothing_method <- match.arg(smoothing_method, c("lm", "loess"))
+  smoothing_method <- match.arg(
+    smoothing_method,
+    c("lm", "loess")
+  )
   compute_correlation_method <- match.arg(
-    compute_correlation_method, c("pearson", "spearman")
+    compute_correlation_method,
+    c("pearson", "spearman")
   )
 
   if (ncol(data) == 3) {
     colnames(data) <- c("x", "y", "cluster")
-    p <- ggplot(data, aes(x = x, y = y, color = cluster)) +
+    p <- ggplot(
+      data,
+      aes(x = x, y = y, color = cluster)
+    ) +
       scale_color_manual(values = group_colors) +
       geom_point() +
       geom_smooth(
@@ -118,7 +125,8 @@ plot_scatter <- function(
   p <- p + theme_bw()
 
   if (compute_correlation) {
-    p <- p + ggpubr::stat_cor(method = compute_correlation_method)
+    p <- p +
+      ggpubr::stat_cor(method = compute_correlation_method)
   }
 
   p <- p +
@@ -144,7 +152,10 @@ plot_scatter <- function(
   }
 
   if (!is.null(marginal_type)) {
-    marginal_type <- match.arg(marginal_type, c("density", "histogram", "boxplot", "violin", "densigram"))
+    marginal_type <- match.arg(
+      marginal_type,
+      c("density", "histogram", "boxplot", "violin", "densigram")
+    )
     margins <- match.arg(margins, c("both", "x", "y"))
 
     p <- suppressMessages(
@@ -160,6 +171,7 @@ plot_scatter <- function(
       )
     )
   }
+  grDevices::dev.off()
 
   return(p)
 }
