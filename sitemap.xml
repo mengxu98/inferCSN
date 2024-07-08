@@ -1,114 +1,42 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/404.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/index.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/acc.calculate.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/as_matrix.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/auc.calculate.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/calculate.gene.rank.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/check.parameters.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/coef.SRM_fit.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/example_ground_truth.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/example_matrix.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/example_meta_data.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/filter_sort_matrix.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/inferCSN-package.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/inferCSN.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/model.fit.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/network.heatmap.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/network_format.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/network_sift.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/normalization.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/parallelize_fun.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/plot_contrast_networks.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/plot_dynamic_networks.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/plot_scatter.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/plot_static_networks.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/predict.SRM_fit.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/prepare.performance.data.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/print.SRM_fit.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/r_square.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/rse.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/single.network.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/sparse.regression.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/sse.html</loc>
-  </url>
-  <url>
-    <loc>https://mengxu98.github.io/inferCSN/reference/table.to.matrix.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://mengxu98.github.io/inferCSN/404.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/LICENSE-text.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/LICENSE.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/authors.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/index.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/acc.calculate.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/as_matrix.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/auc.calculate.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/calculate.gene.rank.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/check.parameters.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/coef.SRM_fit.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/example_ground_truth.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/example_matrix.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/example_meta_data.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/filter_sort_matrix.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/index.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/inferCSN-package.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/inferCSN.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/model.fit.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/network.heatmap.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/network_format.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/network_sift.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/normalization.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/parallelize_fun.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/plot_contrast_networks.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/plot_dynamic_networks.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/plot_embedding.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/plot_scatter.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/plot_static_networks.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/plot_weight_distribution.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/predict.SRM_fit.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/prepare.performance.data.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/print.SRM_fit.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/r_square.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/rse.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/single.network.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/sparse.regression.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/sse.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/table.to.matrix.html</loc></url>
 </urlset>
+

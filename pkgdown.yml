@@ -1,9 +1,8 @@
 pandoc: 3.1.11
-pkgdown: 2.0.9
+pkgdown: 2.1.0
 pkgdown_sha: ~
 articles: {}
-last_built: 2024-07-06T07:27Z
+last_built: 2024-07-08T09:00Z
 urls:
   reference: https://mengxu98.github.io/inferCSN/reference
   article: https://mengxu98.github.io/inferCSN/articles
-
