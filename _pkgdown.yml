@@ -54,6 +54,8 @@ reference:
 - subtitle: "Plotting functions"
 - contents:
   - plot_scatter
+  - plot_embedding
+  - plot_weight_distribution
 
 - subtitle: "Calculate gene rank"
 - contents:

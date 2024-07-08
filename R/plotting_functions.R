@@ -9,10 +9,10 @@
 #' @param row_title Title for the y-axis.
 #' @param legend_title Title for the legend.
 #' @param legend_position The position of legend.
-#' @param margins The position of marginal figure ("both", "x", "y").
-#' @param marginal_type The type of marginal figure ("density", "histogram", "boxplot", "violin", "densigram").
-#' @param margins_size The size of marginal figure, note the bigger size the smaller figure.
-#' @param compute_correlation Whether to compute and print correlation on the figure.
+#' @param margins The position of marginal pure ("both", "x", "y").
+#' @param marginal_type The type of marginal pure ("density", "histogram", "boxplot", "violin", "densigram").
+#' @param margins_size The size of marginal pure, note the bigger size the smaller pure.
+#' @param compute_correlation Whether to compute and print correlation on the pure.
 #' @param compute_correlation_method Method to compute correlation ("pearson" or "spearman").
 #' @param keep_aspect_ratio Logical value, whether to set aspect ratio to 1:1.
 #' @param facet Faceting variable. If setting TRUE, all settings about margins will be inalidation.
@@ -171,7 +171,130 @@ plot_scatter <- function(
       )
     )
   }
-  grDevices::dev.off()
+
+  return(p)
+}
+
+#' @title plot_weight_distribution
+#'
+#' @param net_table Input data frame.
+#'
+#' @return ggplot object
+#' @export
+#'
+#' @examples
+#' data("example_matrix")
+#' net_table <- inferCSN(example_matrix)
+#' plot_weight_distribution(net_table)
+plot_weight_distribution <- function(net_table) {
+  ggplot(net_table, aes(x = weight)) +
+    geom_histogram(aes(fill = ..count..), binwidth = 0.01) +
+    viridis::scale_fill_viridis(begin = 0, end = 0.3, direction = -1) +
+    scale_x_continuous(name = "Weight") +
+    scale_y_continuous(name = "Count") +
+    theme_bw()
+}
+
+#' @title plot_embedding
+#' @description
+#'  Plot embedding of the expression matrix.
+#'
+#' @param expression_matrix Input data frame.
+#' @param labels Input data frame.
+#' @param method Method to use for dimensionality reduction.
+#' @param colors Colors to use for the plot.
+#' @param point_size Size of the points.
+#' @param seed Seed for the random number generator.
+#'
+#' @return ggplot object
+#' @export
+#'
+#' @examples
+#' data("example_matrix")
+#' samples_use <- 1:200
+#' labels <- sample(
+#'   c("A", "B", "C", "D", "E"),
+#'   nrow(example_matrix[samples_use, ]),
+#'   replace = TRUE
+#' )
+#'
+#' plot_embedding(
+#'   example_matrix[samples_use, ],
+#'   point_size = 2
+#' )
+#'
+#' plot_embedding(
+#'   example_matrix[samples_use, ],
+#'   labels,
+#'   point_size = 2
+#' )
+#'
+#' plot_embedding(
+#'   example_matrix[samples_use, ],
+#'   labels,
+#'   method = "pca",
+#'   point_size = 2
+#' )
+plot_embedding <- function(
+    expression_matrix,
+    labels = NULL,
+    method = "tsne",
+    colors = RColorBrewer::brewer.pal(length(unique(labels)), "Set1"),
+    seed = 1,
+    point_size = 1) {
+  method <- match.arg(method, c("umap", "tsne", "pca"))
+
+  set.seed(seed)
+  result <- switch(method,
+    "umap" = {
+      uwot::umap(expression_matrix, n_components = 3)
+    },
+    "tsne" = {
+      Rtsne::Rtsne(expression_matrix, dims = 3)$Y
+    },
+    "pca" = {
+      stats::prcomp(expression_matrix, rank. = 3)$x
+    }
+  )
+
+  result_df <- as.data.frame(result)
+  colnames(result_df) <- c("Dim1", "Dim2", "Dim3")
+
+  if (!is.null(labels)) {
+    result_df$label <- labels
+
+    p <- plotly::plot_ly(
+      data = result_df,
+      x = ~Dim1,
+      y = ~Dim2,
+      z = ~Dim3,
+      color = ~label,
+      colors = colors,
+      type = "scatter3d",
+      mode = "markers",
+      marker = list(size = point_size)
+    )
+  } else {
+    p <- plotly::plot_ly(
+      data = result_df,
+      x = ~Dim1,
+      y = ~Dim2,
+      z = ~Dim3,
+      type = "scatter3d",
+      mode = "markers",
+      marker = list(size = point_size)
+    )
+  }
+
+  p <- plotly::layout(
+    p,
+    scene = list(
+      xaxis = list(title = paste0(toupper(method), "_1")),
+      yaxis = list(title = paste0(toupper(method), "_2")),
+      zaxis = list(title = paste0(toupper(method), "_3"))
+    ),
+    title = paste0("3D ", toupper(method), " Visualization")
+  )
 
   return(p)
 }
