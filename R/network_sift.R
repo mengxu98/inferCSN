@@ -158,7 +158,10 @@ network_sift <- function(
     meta_data[, pseudotime_column],
     decreasing = FALSE
   ), ]
-  matrix <- matrix[rownames(meta_data), ]
+
+  genes <- unique(c(network_table$regulator, network_table$target))
+
+  matrix <- matrix[rownames(meta_data), genes]
 
   pairs <- expand.grid(
     regulator = colnames(matrix),
