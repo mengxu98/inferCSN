@@ -9,10 +9,10 @@
 #' @param row_title Title for the y-axis.
 #' @param legend_title Title for the legend.
 #' @param legend_position The position of legend.
-#' @param margins The position of marginal pure ("both", "x", "y").
-#' @param marginal_type The type of marginal pure ("density", "histogram", "boxplot", "violin", "densigram").
-#' @param margins_size The size of marginal pure, note the bigger size the smaller pure.
-#' @param compute_correlation Whether to compute and print correlation on the pure.
+#' @param margins The position of marginal figure ("both", "x", "y").
+#' @param marginal_type The type of marginal figure ("density", "histogram", "boxplot", "violin", "densigram").
+#' @param margins_size The size of marginal figure, note the bigger size the smaller figure.
+#' @param compute_correlation Whether to compute and print correlation on the figure.
 #' @param compute_correlation_method Method to compute correlation ("pearson" or "spearman").
 #' @param keep_aspect_ratio Logical value, whether to set aspect ratio to 1:1.
 #' @param facet Faceting variable. If setting TRUE, all settings about margins will be inalidation.
