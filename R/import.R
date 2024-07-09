@@ -8,6 +8,7 @@ NULL
 
 utils::globalVariables(
   c(
+    "count",
     "x",
     "y",
     "xend",
