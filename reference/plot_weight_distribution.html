@@ -56,15 +56,62 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_weight_distribution</span><span class="op">(</span><span class="va">net_table</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_weight_distribution</span><span class="op">(</span></span>
+<span>  <span class="va">network_table</span>,</span>
+<span>  binwidth <span class="op">=</span> <span class="fl">0.01</span>,</span>
+<span>  show_border <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  border_color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  theme <span class="op">=</span> <span class="st">"viridis"</span>,</span>
+<span>  theme_begin <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  theme_end <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  theme_direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>,</span>
+<span>  legend_position <span class="op">=</span> <span class="st">"right"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-net-table">net_table<a class="anchor" aria-label="anchor" href="#arg-net-table"></a></dt>
+<dl><dt id="arg-network-table">network_table<a class="anchor" aria-label="anchor" href="#arg-network-table"></a></dt>
 <dd><p>Input data frame.</p></dd>
+
+
+<dt id="arg-binwidth">binwidth<a class="anchor" aria-label="anchor" href="#arg-binwidth"></a></dt>
+<dd><p>Width of the bins.</p></dd>
+
+
+<dt id="arg-show-border">show_border<a class="anchor" aria-label="anchor" href="#arg-show-border"></a></dt>
+<dd><p>Logical value, whether to show border of the bins.</p></dd>
+
+
+<dt id="arg-border-color">border_color<a class="anchor" aria-label="anchor" href="#arg-border-color"></a></dt>
+<dd><p>Color of the border.</p></dd>
+
+
+<dt id="arg-alpha">alpha<a class="anchor" aria-label="anchor" href="#arg-alpha"></a></dt>
+<dd><p>Alpha value of the bins.</p></dd>
+
+
+<dt id="arg-theme">theme<a class="anchor" aria-label="anchor" href="#arg-theme"></a></dt>
+<dd><p>Theme of the bins.</p></dd>
+
+
+<dt id="arg-theme-begin">theme_begin<a class="anchor" aria-label="anchor" href="#arg-theme-begin"></a></dt>
+<dd><p>Begin value of the theme.</p></dd>
+
+
+<dt id="arg-theme-end">theme_end<a class="anchor" aria-label="anchor" href="#arg-theme-end"></a></dt>
+<dd><p>End value of the theme.</p></dd>
+
+
+<dt id="arg-theme-direction">theme_direction<a class="anchor" aria-label="anchor" href="#arg-theme-direction"></a></dt>
+<dd><p>Direction of the theme.</p></dd>
+
+
+<dt id="arg-legend-position">legend_position<a class="anchor" aria-label="anchor" href="#arg-legend-position"></a></dt>
+<dd><p>The position of legend.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -75,12 +122,8 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">net_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">plot_weight_distribution</span><span class="op">(</span><span class="va">net_table</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The dot-dot notation (`..count..`) was deprecated in ggplot2 3.4.0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Please use `after_stat(count)` instead.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">inferCSN</span> package.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   Please report the issue at <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/mengxu98/inferCSN/issues&gt;</span>.</span>
+<span class="r-in"><span><span class="va">network_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">plot_weight_distribution</span><span class="op">(</span><span class="va">network_table</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_weight_distribution-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
