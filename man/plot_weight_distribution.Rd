@@ -4,10 +4,39 @@
 \alias{plot_weight_distribution}
 \title{plot_weight_distribution}
 \usage{
-plot_weight_distribution(net_table)
+plot_weight_distribution(
+  network_table,
+  binwidth = 0.01,
+  show_border = FALSE,
+  border_color = "black",
+  alpha = 1,
+  theme = "viridis",
+  theme_begin = 0,
+  theme_end = 0.5,
+  theme_direction = -1,
+  legend_position = "right"
+)
 }
 \arguments{
-\item{net_table}{Input data frame.}
+\item{network_table}{Input data frame.}
+
+\item{binwidth}{Width of the bins.}
+
+\item{show_border}{Logical value, whether to show border of the bins.}
+
+\item{border_color}{Color of the border.}
+
+\item{alpha}{Alpha value of the bins.}
+
+\item{theme}{Theme of the bins.}
+
+\item{theme_begin}{Begin value of the theme.}
+
+\item{theme_end}{End value of the theme.}
+
+\item{theme_direction}{Direction of the theme.}
+
+\item{legend_position}{The position of legend.}
 }
 \value{
 ggplot object
@@ -17,6 +46,6 @@ plot_weight_distribution
 }
 \examples{
 data("example_matrix")
-net_table <- inferCSN(example_matrix)
-plot_weight_distribution(net_table)
+network_table <- inferCSN(example_matrix)
+plot_weight_distribution(network_table)
 }

@@ -177,21 +177,59 @@ plot_scatter <- function(
 
 #' @title plot_weight_distribution
 #'
-#' @param net_table Input data frame.
+#' @param network_table Input data frame.
+#' @param binwidth Width of the bins.
+#' @param show_border Logical value, whether to show border of the bins.
+#' @param border_color Color of the border.
+#' @param alpha Alpha value of the bins.
+#' @param theme Theme of the bins.
+#' @param theme_begin Begin value of the theme.
+#' @param theme_end End value of the theme.
+#' @param theme_direction Direction of the theme.
+#' @param legend_position The position of legend.
 #'
 #' @return ggplot object
 #' @export
 #'
 #' @examples
 #' data("example_matrix")
-#' net_table <- inferCSN(example_matrix)
-#' plot_weight_distribution(net_table)
-plot_weight_distribution <- function(net_table) {
-  ggplot(net_table, aes(x = weight)) +
-    geom_histogram(aes(fill = ..count..), binwidth = 0.01) +
-    viridis::scale_fill_viridis(begin = 0, end = 0.3, direction = -1) +
+#' network_table <- inferCSN(example_matrix)
+#' plot_weight_distribution(network_table)
+plot_weight_distribution <- function(
+    network_table,
+    binwidth = 0.01,
+    show_border = FALSE,
+    border_color = "black",
+    alpha = 1,
+    theme = "viridis",
+    theme_begin = 0,
+    theme_end = 0.5,
+    theme_direction = -1,
+    legend_position = "right") {
+  ggplot(network_table, aes(x = weight)) +
+    geom_histogram(
+      aes(fill = after_stat(count)),
+      binwidth = binwidth,
+      color = ifelse(show_border, border_color, NA),
+      alpha = alpha
+    ) +
+    viridis::scale_fill_viridis(
+      option = theme,
+      begin = theme_begin,
+      end = theme_end,
+      direction = theme_direction
+    ) +
     scale_x_continuous(name = "Weight") +
     scale_y_continuous(name = "Count") +
+    theme(
+      panel.grid.minor = element_blank(),
+      panel.grid.major.x = element_line(
+        color = "grey", size = 0.5
+      ),
+      axis.text = element_text(size = 12),
+      axis.title = element_text(size = 14, face = "bold"),
+      legend.position = legend_position
+    ) +
     theme_bw()
 }
 
