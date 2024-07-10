@@ -7,6 +7,7 @@
     table$y,
     sep = "_"
   )
+  rownames(table) <- table$edge
 
   table_new <- data.frame(
     edge = paste(
@@ -17,11 +18,21 @@
     v = table$v
   )
   rownames(table_new) <- table_new$edge
-  table_new <- table_new[table$edge, ]
-  table$v_new <- table_new$v
-  table <- dplyr::filter(table, abs(v) > abs(v_new))
-  table <- table[, 1:3]
+
+  common_edges <- intersect(rownames(table), rownames(table_new))
+  if (length(common_edges) == 0) {
+    table <- table[, 1:3]
+    colnames(table) <- raw_rownames
+    rownames(table) <- NULL
+    return(table)
+  }
+  table_common_edges <- table[common_edges, ]
+  table_new <- table_new[common_edges, ]
+  table_common_edges$v_new <- table_new$v
+  table_common_edges <- dplyr::filter(table_common_edges, abs(v) < abs(v_new))
+  table <- table[setdiff(rownames(table), rownames(table_common_edges)), 1:3]
   colnames(table) <- raw_rownames
+  rownames(table) <- NULL
 
   return(table)
 }
