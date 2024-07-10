@@ -32,6 +32,13 @@
     "Version": "3.18"
   },
   "Packages": {
+    "BH": {
+      "Package": "BH",
+      "Version": "1.84.0-0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "a8235afbcd6316e6e91433ea47661013"
+    },
     "BiocGenerics": {
       "Package": "BiocGenerics",
       "Version": "0.48.1",
@@ -102,6 +109,16 @@
         "methods"
       ],
       "Hash": "065ae649b05f1ff66bb0c793107508f5"
+    },
+    "FNN": {
+      "Package": "FNN",
+      "Version": "1.1.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "eaabdc7938aa3632a28273f53a0d226d"
     },
     "GetoptLong": {
       "Package": "GetoptLong",
@@ -220,6 +237,19 @@
       ],
       "Hash": "45f0398006e83a5b10b72a90663d8d8c"
     },
+    "RSpectra": {
+      "Package": "RSpectra",
+      "Version": "0.16-1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "Matrix",
+        "R",
+        "Rcpp",
+        "RcppEigen"
+      ],
+      "Hash": "6b5ab997fd5ff6d46a5f1d9f8b76961c"
+    },
     "RTransferEntropy": {
       "Package": "RTransferEntropy",
       "Version": "0.2.21",
@@ -243,6 +273,18 @@
         "utils"
       ],
       "Hash": "5ea2700d21e038ace58269ecdbeb9ec0"
+    },
+    "RcppAnnoy": {
+      "Package": "RcppAnnoy",
+      "Version": "0.0.22",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "Rcpp",
+        "methods"
+      ],
+      "Hash": "f6baa1e06fb6c3724f601a764266cb0d"
     },
     "RcppArmadillo": {
       "Package": "RcppArmadillo",
@@ -270,6 +312,24 @@
         "utils"
       ],
       "Hash": "df49e3306f232ec28f1604e36a202847"
+    },
+    "RcppProgress": {
+      "Package": "RcppProgress",
+      "Version": "0.4.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "1c0aa18b97e6aaa17f93b8b866c0ace5"
+    },
+    "Rtsne": {
+      "Package": "Rtsne",
+      "Version": "0.17",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "Rcpp",
+        "stats"
+      ],
+      "Hash": "f81f7764a3c3e310b1d40e1a8acee19e"
     },
     "S4Vectors": {
       "Package": "S4Vectors",
@@ -861,6 +921,19 @@
         "vctrs"
       ],
       "Hash": "fedd9d00c2944ff00a0e2696ccf048ec"
+    },
+    "dqrng": {
+      "Package": "dqrng",
+      "Version": "0.4.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "BH",
+        "R",
+        "Rcpp",
+        "sitmo"
+      ],
+      "Hash": "6d7b942d8f615705f89a7883998fc839"
     },
     "e1071": {
       "Package": "e1071",
@@ -1480,6 +1553,19 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "6154ec2223172bce8162d4153cda21f7"
+    },
+    "irlba": {
+      "Package": "irlba",
+      "Version": "2.3.5.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "Matrix",
+        "R",
+        "methods",
+        "stats"
+      ],
+      "Hash": "acb06a47b732c6251afd16e19c3201ff"
     },
     "isoband": {
       "Package": "isoband",
@@ -2317,7 +2403,7 @@
     },
     "roxygen2": {
       "Package": "roxygen2",
-      "Version": "7.3.1",
+      "Version": "7.3.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2339,7 +2425,7 @@
         "withr",
         "xml2"
       ],
-      "Hash": "c25fe7b2d8cba73d1b63c947bf7afdb9"
+      "Hash": "6ee25f9054a70f44d615300ed531ba8d"
     },
     "rprojroot": {
       "Package": "rprojroot",
@@ -2533,6 +2619,17 @@
         "shiny"
       ],
       "Hash": "802e4786b353a4bb27116957558548d5"
+    },
+    "sitmo": {
+      "Package": "sitmo",
+      "Version": "2.0.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "Rcpp"
+      ],
+      "Hash": "c956d93f6768a9789edbc13072b70c78"
     },
     "sna": {
       "Package": "sna",
@@ -2865,6 +2962,24 @@
         "R"
       ],
       "Hash": "62b65c52671e6665f803ff02954446e9"
+    },
+    "uwot": {
+      "Package": "uwot",
+      "Version": "0.2.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "FNN",
+        "Matrix",
+        "RSpectra",
+        "Rcpp",
+        "RcppAnnoy",
+        "RcppProgress",
+        "dqrng",
+        "irlba",
+        "methods"
+      ],
+      "Hash": "f693a0ca6d34b02eb432326388021805"
     },
     "vctrs": {
       "Package": "vctrs",
