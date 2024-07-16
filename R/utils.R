@@ -2,7 +2,7 @@
 #'
 #' @param x A vector or list to apply over.
 #' @param fun The function to be applied to each element.
-#' @param cores cores.
+#' @param cores Number of CPU cores used. Setting to parallelize the computation with \code{\link[foreach]{foreach}}.
 #' @param export_fun export_fun.
 #' @param verbose Logical. Whether to print progress bar.
 #' Only works in sequential mode.
@@ -141,42 +141,68 @@ check.parameters <- function(
   }
 }
 
-#' @title Attempts to turn a dgCMatrix into a dense matrix
+#' @title Convert dgCMatrix into a dense matrix
 #'
 #' @param x A matrix.
+#' @param parallel Setting to parallelize the computation with \code{\link[RcppParallel]{setThreadOptions}}.
 #' @export
 #'
 #' @examples
+#' dims_i <- 2000
+#' dims_j <- 2000
 #' sparse_matrix <- Matrix::sparseMatrix(
-#'   i = sample(1:200, 50),
-#'   j = sample(1:200, 50),
-#'   x = rnorm(50),
-#'   dims = c(200, 200),
+#'   i = sample(1:dims_i, 500),
+#'   j = sample(1:dims_j, 500),
+#'   x = rnorm(500),
+#'   dims = c(dims_i, dims_j),
 #'   dimnames = list(
-#'     paste0("a", rep(1:200)),
-#'     paste0("b", rep(1:200))
+#'     paste0("a", rep(1:dims_i)),
+#'     paste0("b", rep(1:dims_j))
 #'   )
 #' )
+#'
+#' system.time(as.matrix(sparse_matrix))
+#' system.time(as_matrix(sparse_matrix))
+#' system.time(as_matrix(sparse_matrix, parallel = TRUE))
 #'
 #' identical(
 #'   as.matrix(sparse_matrix),
 #'   as_matrix(sparse_matrix)
 #' )
-as_matrix <- function(x) {
+#'
+#' identical(
+#'   as.matrix(sparse_matrix),
+#'   as_matrix(sparse_matrix, parallel = TRUE)
+#' )
+as_matrix <- function(
+    x,
+    parallel = FALSE) {
   if (!inherits(x, "dgCMatrix")) {
     return(Matrix::as.matrix(x))
   } else {
     row_pos <- x@i
     col_pos <- findInterval(seq_along(x@x) - 1, x@p[-1])
-    mat <- .Call(
-      "_inferCSN_asMatrix",
-      PACKAGE = "inferCSN",
-      row_pos,
-      col_pos,
-      x@x,
-      x@Dim[1],
-      x@Dim[2]
-    )
+    if (parallel) {
+      mat <- .Call(
+        "_inferCSN_asMatrixParallel",
+        PACKAGE = "inferCSN",
+        row_pos,
+        col_pos,
+        x@x,
+        x@Dim[1],
+        x@Dim[2]
+      )
+    } else {
+      mat <- .Call(
+        "_inferCSN_asMatrix",
+        PACKAGE = "inferCSN",
+        row_pos,
+        col_pos,
+        x@x,
+        x@Dim[1],
+        x@Dim[2]
+      )
+    }
 
     attr(mat, "dimnames") <- list(x@Dimnames[[1]], x@Dimnames[[2]])
 

@@ -49,7 +49,7 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 
 \item{r_threshold}{Threshold of \eqn{R^2} or correlation coefficient.}
 
-\item{verbose}{Print detailed information.}
+\item{verbose}{Logical value. Whether to print detailed information.}
 
 \item{...}{Parameters for other methods.}
 }

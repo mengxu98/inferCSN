@@ -20,7 +20,7 @@
 #' The maximum support size at which to terminate the regularization path.
 #' Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.
 #' @param cores Number of CPU cores used. Setting to parallelize the computation with \code{\link[foreach]{foreach}}.
-#' @param verbose Print detailed information.
+#' @param verbose Logical value. Whether to print detailed information.
 #' @param ... Parameters for other methods.
 #'
 #' @docType methods

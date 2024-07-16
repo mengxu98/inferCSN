@@ -11,7 +11,7 @@ parallelize_fun(x, fun, cores = 1, export_fun = NULL, verbose = TRUE)
 
 \item{fun}{The function to be applied to each element.}
 
-\item{cores}{cores.}
+\item{cores}{Number of CPU cores used. Setting to parallelize the computation with \code{\link[foreach]{foreach}}.}
 
 \item{export_fun}{export_fun.}
 
