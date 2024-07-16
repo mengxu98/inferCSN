@@ -2,30 +2,43 @@
 % Please edit documentation in R/utils.R
 \name{as_matrix}
 \alias{as_matrix}
-\title{Attempts to turn a dgCMatrix into a dense matrix}
+\title{Convert dgCMatrix into a dense matrix}
 \usage{
-as_matrix(x)
+as_matrix(x, parallel = FALSE)
 }
 \arguments{
 \item{x}{A matrix.}
+
+\item{parallel}{Setting to parallelize the computation with \code{\link[RcppParallel]{setThreadOptions}}.}
 }
 \description{
-Attempts to turn a dgCMatrix into a dense matrix
+Convert dgCMatrix into a dense matrix
 }
 \examples{
+dims_i <- 2000
+dims_j <- 2000
 sparse_matrix <- Matrix::sparseMatrix(
-  i = sample(1:200, 50),
-  j = sample(1:200, 50),
-  x = rnorm(50),
-  dims = c(200, 200),
+  i = sample(1:dims_i, 500),
+  j = sample(1:dims_j, 500),
+  x = rnorm(500),
+  dims = c(dims_i, dims_j),
   dimnames = list(
-    paste0("a", rep(1:200)),
-    paste0("b", rep(1:200))
+    paste0("a", rep(1:dims_i)),
+    paste0("b", rep(1:dims_j))
   )
 )
+
+system.time(as.matrix(sparse_matrix))
+system.time(as_matrix(sparse_matrix))
+system.time(as_matrix(sparse_matrix, parallel = TRUE))
 
 identical(
   as.matrix(sparse_matrix),
   as_matrix(sparse_matrix)
+)
+
+identical(
+  as.matrix(sparse_matrix),
+  as_matrix(sparse_matrix, parallel = TRUE)
 )
 }

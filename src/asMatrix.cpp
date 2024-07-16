@@ -1,5 +1,11 @@
 #include <Rcpp.h>
+#include <RcppParallel.h>
+#include <algorithm>
+#include <cmath>
+
 using namespace Rcpp;
+using namespace RcppParallel;
+
 
 // [[Rcpp::export]]
 NumericMatrix asMatrix(NumericVector rp,
@@ -31,6 +37,39 @@ NumericMatrix asMatrix(NumericVector rp,
   return matrix;
 }
 
+// Parallel version reference: https://rcppcore.github.io/RcppParallel/
+// [[Rcpp::depends(RcppParallel)]]
+struct MatrixFiller : public Worker {
+  const RVector<double> rp;
+  const RVector<double> cp;
+  const RVector<double> z;
+  RMatrix<double> outputMatrix;
+
+  MatrixFiller(const NumericVector rp, const NumericVector cp, const NumericVector z, NumericMatrix outputMatrix)
+    : rp(rp), cp(cp), z(z), outputMatrix(outputMatrix) {}
+
+  void operator()(std::size_t begin, std::size_t end) {
+    for (std::size_t i = begin; i < end; ++i) {
+      outputMatrix(rp[i], cp[i]) = z[i];
+    }
+  }
+};
+
+// [[Rcpp::export]]
+NumericMatrix asMatrixParallel(NumericVector rp,
+                               NumericVector cp,
+                               NumericVector z,
+                               int nrows,
+                               int ncols) {
+  NumericMatrix outputMatrix(nrows, ncols);
+
+  MatrixFiller matrixFiller(rp, cp, z, outputMatrix);
+
+  int grainSize = std::max(1, static_cast<int>(z.size() / 2000));
+  RcppParallel::parallelFor(0, z.size(), matrixFiller, grainSize);
+
+  return outputMatrix;
+}
 
 // Reference:
 // https://github.com/zhanghao-njmu/SCP/blob/b9b0eb7a7bf2c2c4b2262e73e09d7ebd515c7da0/R/utils.R#L831
@@ -75,12 +114,12 @@ NumericMatrix asMatrix(NumericVector rp,
  }
 
 # Define row indices, column indices, and corresponding non-zero values
- i <- sample(1:200, 50) # Row indices (assuming we have 50 non-zero elements)
- j <- sample(1:200, 50) # Column indices
- x <- rnorm(50) # Corresponding non-zero values
+ i <- sample(1:2000, 500) # Row indices (assuming we have 50 non-zero elements)
+ j <- sample(1:2000, 500) # Column indices
+ x <- rnorm(100) # Corresponding non-zero values
  dimnames <- list(
- paste0("a", rep(1:200)),
- paste0("b", rep(1:200))
+ paste0("a", rep(1:2000)),
+ paste0("b", rep(1:2000))
  )
 
 # Create the sparse matrix
@@ -88,13 +127,35 @@ NumericMatrix asMatrix(NumericVector rp,
  i = i,
  j = j,
  x = x,
- dims = c(200, 200),
+ dims = c(2000, 2000),
  dimnames = dimnames
  )
 
  identical(
  as.matrix(sparse_matrix),
  as_matrix(sparse_matrix)
+ )
+
+ identical(
+ as.matrix(sparse_matrix),
+ as_matrix(sparse_matrix, parallel = TRUE)
+ )
+ if (!requireNamespace("bench", quietly = TRUE)) {
+ pak::pak('bench')
+ }
+ bench::mark(
+  as.matrix(sparse_matrix),
+  as_matrix(sparse_matrix),
+  as_matrix(sparse_matrix, parallel = TRUE)
+ )
+
+ if (!requireNamespace("rbenchmark", quietly = TRUE)) {
+ pak::pak('rbenchmark')
+ }
+ rbenchmark::benchmark(
+ as.matrix(sparse_matrix),
+ as_matrix(sparse_matrix),
+ as_matrix(sparse_matrix, parallel = TRUE)
  )
 
  */

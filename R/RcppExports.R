@@ -97,6 +97,10 @@ asMatrix <- function(rp, cp, z, nrows, ncols) {
     .Call('_inferCSN_asMatrix', PACKAGE = 'inferCSN', rp, cp, z, nrows, ncols)
 }
 
+asMatrixParallel <- function(rp, cp, z, nrows, ncols) {
+    .Call('_inferCSN_asMatrixParallel', PACKAGE = 'inferCSN', rp, cp, z, nrows, ncols)
+}
+
 table_to_matrix <- function(weight_table) {
     .Call('_inferCSN_table_to_matrix', PACKAGE = 'inferCSN', weight_table)
 }

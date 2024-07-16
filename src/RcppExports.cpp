@@ -404,6 +404,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// asMatrixParallel
+NumericMatrix asMatrixParallel(NumericVector rp, NumericVector cp, NumericVector z, int nrows, int ncols);
+RcppExport SEXP _inferCSN_asMatrixParallel(SEXP rpSEXP, SEXP cpSEXP, SEXP zSEXP, SEXP nrowsSEXP, SEXP ncolsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type rp(rpSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type cp(cpSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type z(zSEXP);
+    Rcpp::traits::input_parameter< int >::type nrows(nrowsSEXP);
+    Rcpp::traits::input_parameter< int >::type ncols(ncolsSEXP);
+    rcpp_result_gen = Rcpp::wrap(asMatrixParallel(rp, cp, z, nrows, ncols));
+    return rcpp_result_gen;
+END_RCPP
+}
 // table_to_matrix
 NumericMatrix table_to_matrix(DataFrame weight_table);
 RcppExport SEXP _inferCSN_table_to_matrix(SEXP weight_tableSEXP) {
@@ -441,6 +456,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_inferCSN_R_matrix_center_dense", (DL_FUNC) &_inferCSN_R_matrix_center_dense, 3},
     {"_inferCSN_R_matrix_center_sparse", (DL_FUNC) &_inferCSN_R_matrix_center_sparse, 3},
     {"_inferCSN_asMatrix", (DL_FUNC) &_inferCSN_asMatrix, 5},
+    {"_inferCSN_asMatrixParallel", (DL_FUNC) &_inferCSN_asMatrixParallel, 5},
     {"_inferCSN_table_to_matrix", (DL_FUNC) &_inferCSN_table_to_matrix, 1},
     {NULL, NULL, 0}
 };
