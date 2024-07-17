@@ -41,8 +41,9 @@ reference:
 
 - subtitle: "Network evaluation"
 - contents:
-  - auc.calculate
-  - acc.calculate
+  - calculate_auc
+  - calculate_acc
+  - prepare_network_data
 
 - subtitle: "Network visualization"
 - contents:
@@ -78,7 +79,6 @@ reference:
   - filter_sort_matrix
   - normalization
   - parallelize_fun
-  - prepare.performance.data
   - print.SRM_fit
   - print.SRM_fit_CV
   - predict.SRM_fit

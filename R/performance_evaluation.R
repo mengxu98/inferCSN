@@ -1,4 +1,6 @@
-#' @title AUC value calculate
+#' @title Calculate auc
+#' @description
+#'  Calculate AUPRC and AUROC values
 #'
 #' @param network_table The weight data table of network
 #' @param ground_truth Ground truth for calculate AUC
@@ -13,14 +15,14 @@
 #' data("example_matrix")
 #' data("example_ground_truth")
 #' network_table <- inferCSN(example_matrix)
-#' auc.calculate(network_table, example_ground_truth, plot = TRUE)
-auc.calculate <- function(
+#' calculate_auc(network_table, example_ground_truth, plot = TRUE)
+calculate_auc <- function(
     network_table,
     ground_truth,
     plot = FALSE,
     line_color = "#1563cc",
     line_width = 1) {
-  gold <- prepare.performance.data(
+  gold <- prepare_network_data(
     network_table,
     ground_truth
   )
@@ -91,9 +93,11 @@ auc.calculate <- function(
   return(auc_metric)
 }
 
-#' @title ACC calculate
+#' @title Calculate acc
+#' @description
+#'  Calculate accuracy value
 #'
-#' @inheritParams auc.calculate
+#' @inheritParams calculate_auc
 #'
 #' @return ACC value
 #' @export
@@ -102,18 +106,19 @@ auc.calculate <- function(
 #' data("example_matrix")
 #' data("example_ground_truth")
 #' network_table <- inferCSN(example_matrix)
-#' acc.calculate(network_table, example_ground_truth)
-acc.calculate <- function(
+#' calculate_acc(network_table, example_ground_truth)
+calculate_acc <- function(
     network_table,
     ground_truth) {
-
-  gold <- prepare.performance.data(
+  gold <- prepare_network_data(
     network_table,
-    ground_truth)
+    ground_truth
+  )
   results <- pROC::roc(
     gold$label ~ gold$weight,
     direction = "<",
-    levels = c(0, 1))
+    levels = c(0, 1)
+  )
 
   # After this operation, '0' indicate positive
   reverse_label <- 2 - as.numeric(as.factor(gold$label))
@@ -142,16 +147,17 @@ acc.calculate <- function(
   return(acc)
 }
 
-#' @title prepare.performance.data
+#' @title Prepare network data
+#' @description
+#'  Formated network table
 #'
-#' @inheritParams auc.calculate
+#' @inheritParams calculate_auc
 #'
-#' @return Formated data
+#' @return Formated network table
 #' @export
-prepare.performance.data <- function(
+prepare_network_data <- function(
     network_table,
     ground_truth) {
-  # Check input data
   colnames(network_table) <- c("regulator", "target", "weight")
   network_table$weight <- abs(as.numeric(network_table$weight))
 

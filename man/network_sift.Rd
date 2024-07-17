@@ -95,17 +95,17 @@ network.heatmap(
   rect_color = "gray70"
 )
 
-auc.calculate(
+calculate_auc(
   network_table,
   example_ground_truth,
   plot = TRUE
 )
-auc.calculate(
+calculate_auc(
   network_table_filtered,
   example_ground_truth,
   plot = TRUE
 )
-auc.calculate(
+calculate_auc(
   network_table_filtered_entropy,
   example_ground_truth,
   plot = TRUE
