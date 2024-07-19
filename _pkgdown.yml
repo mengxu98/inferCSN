@@ -60,7 +60,7 @@ reference:
 
 - subtitle: "Calculate gene rank"
 - contents:
-  - calculate.gene.rank
+  - calculate_gene_rank
 
 - subtitle: "Sparse regression model"
 - contents:
