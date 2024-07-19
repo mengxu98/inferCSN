@@ -1,22 +1,22 @@
-#' @title Calculate and rank TFs in network
+#' @title Rank TFs and genes in network
 #'
 #' @inheritParams network_format
-#' @param directed If network is directed or not.
+#' @param directed Whether the network is directed.
 #'
-#' @return A data.table with three columns
+#' @return A table of gene rank.
 #' @export
 #'
 #' @examples
 #' data("example_matrix")
 #' network_table <- inferCSN(example_matrix)
-#' head(calculate.gene.rank(network_table))
-#' head(calculate.gene.rank(network_table, regulators = "g1"))
-calculate.gene.rank <- function(
+#' head(calculate_gene_rank(network_table))
+#' head(calculate_gene_rank(network_table, regulators = "g1"))
+#' head(calculate_gene_rank(network_table, targets = "g1"))
+calculate_gene_rank <- function(
     network_table,
     regulators = NULL,
     targets = NULL,
     directed = FALSE) {
-  colnames(network_table) <- c("regulator", "target", "weight")
   network_table <- network_format(
     network_table,
     regulators = regulators,
@@ -30,19 +30,17 @@ calculate.gene.rank <- function(
   page_rank_res <- data.frame(
     igraph::page_rank(network, directed = directed)$vector
   )
-  colnames(page_rank_res) <- c("page_rank")
+  colnames(page_rank_res) <- c("rank_value")
   page_rank_res$gene <- rownames(page_rank_res)
-  page_rank_res <- page_rank_res[, c("gene", "page_rank")]
+  page_rank_res <- page_rank_res[, c("gene", "rank_value")]
   page_rank_res <- page_rank_res[order(
-    page_rank_res$page_rank,
+    page_rank_res$rank_value,
     decreasing = TRUE
   ), ]
-  page_rank_res$is_regulator <- FALSE
-  page_rank_res$is_regulator[
-    page_rank_res$gene %in% unique(
-      network_table$regulator
-    )
-  ] <- TRUE
+  page_rank_res$regulator <- ifelse(
+    page_rank_res$gene %in% unique(network_table$regulator),
+    "TRUE", "FALSE"
+  )
 
   return(page_rank_res)
 }
