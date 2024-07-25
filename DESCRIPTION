@@ -11,7 +11,7 @@ License: MIT + file LICENSE
 URL: https://mengxu98.github.io/inferCSN/
 BugReports: https://github.com/mengxu98/inferCSN/issues
 Depends: 
-    R (>= 3.3.0)
+    R (>= 4.1.0)
 Imports:
     ComplexHeatmap,
     doParallel,
