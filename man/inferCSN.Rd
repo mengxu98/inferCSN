@@ -4,6 +4,7 @@
 \name{inferCSN}
 \alias{inferCSN}
 \alias{inferCSN,matrix-method}
+\alias{inferCSN,sparseMatrix-method}
 \alias{inferCSN,data.frame-method}
 \title{Inferring Cell-Specific Gene Regulatory Network}
 \usage{
@@ -41,6 +42,23 @@ inferCSN(
   ...
 )
 
+\S4method{inferCSN}{sparseMatrix}(
+  object,
+  penalty = "L0",
+  algorithm = "CD",
+  cross_validation = FALSE,
+  seed = 1,
+  n_folds = 10,
+  percent_samples = 1,
+  r_threshold = 0,
+  regulators = NULL,
+  targets = NULL,
+  regulators_num = NULL,
+  cores = 1,
+  verbose = FALSE,
+  ...
+)
+
 \S4method{inferCSN}{data.frame}(
   object,
   penalty = "L0",
@@ -62,7 +80,7 @@ inferCSN(
 \item{object}{The input data for \code{inferCSN}.}
 
 \item{penalty}{The type of regularization.
-This can take either one of the following choices: \code{L0} and \code{L0L2}.
+This can take either one of the following choices: \code{L0}, \code{L0L1} and \code{L0L2}.
 For high-dimensional and sparse data, such as single-cell sequencing data, \code{L0L2} is more effective.}
 
 \item{algorithm}{The type of algorithm used to minimize the objective function.
@@ -75,7 +93,7 @@ The \code{CDPSI} algorithm may yield better results, but it also increases runni
 
 \item{n_folds}{The number of folds for cross-validation.}
 
-\item{percent_samples}{The percent of all samples used for \code{\link{sparse.regression}}. Default set to 1.}
+\item{percent_samples}{The percent of all samples used for \code{\link{sparse_regression}}. Default set to 1.}
 
 \item{r_threshold}{Threshold of \eqn{R^2} or correlation coefficient.}
 
@@ -106,4 +124,23 @@ head(network_table)
 
 network_table <- inferCSN(example_matrix, cores = 2)
 head(network_table)
+data("example_matrix")
+network_table <- inferCSN(example_matrix, verbose = TRUE)
+head(network_table)
+
+network_table <- inferCSN(example_matrix, cores = 2)
+head(network_table)
+
+network_table_sparse <- inferCSN(
+  as(example_matrix, "sparseMatrix"),
+  cores = 2
+)
+head(network_table_sparse)
+
+plot_scatter(
+  data.frame(
+    network_table_sparse$weight,
+    network_table$weight
+  )
+)
 }

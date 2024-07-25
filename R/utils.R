@@ -50,7 +50,7 @@ parallelize_fun <- function(
 #'
 #' @return Not return value, called for check input parameters
 #' @export
-check.parameters <- function(
+check_parameters <- function(
     matrix,
     penalty,
     algorithm,
@@ -81,7 +81,7 @@ check.parameters <- function(
   }
 
   # Check the penalty term of the regression model
-  match.arg(penalty, c("L0", "L0L2"))
+  match.arg(penalty, c("L0", "L0L1", "L0L2"))
 
   # Check the algorithm of the regression model
   match.arg(algorithm, c("CD", "CDPSI"))
@@ -138,6 +138,20 @@ check.parameters <- function(
   if (verbose) {
     message("Using `", penalty, "` penalty.")
     if (cross_validation) message("Using cross validation.")
+  }
+}
+
+.cores_detect <- function(
+    cores = 1,
+    num_session = NULL) {
+  if (is.null(num_session)) {
+    return(1)
+  } else {
+    cores <- min(
+      (parallel::detectCores(logical = FALSE) - 1), cores, num_session
+    )
+
+    return(cores)
   }
 }
 
@@ -372,7 +386,7 @@ network_format <- function(
 
 #' @title Extracts a specific solution in the regularization path
 #'
-#' @param object The output of model.fit or inferCSN.cvfit
+#' @param object The output of fit_sparse_regression or inferCSN.cvfit
 #' @param lambda The value of lambda at which to extract the solution
 #' @param gamma The value of gamma at which to extract the solution
 #' @param supportSize The number of non-zeros each solution extracted will contain
@@ -431,7 +445,8 @@ coef.SRM_fit <- function(
     t <- object$beta[[gammaindex]][, indices, drop = FALSE]
     rownames(t) <- paste0(rep("V", object$p), 1:object$p)
   }
-  t
+
+  return(t)
 }
 
 #' @rdname coef.SRM_fit
@@ -448,14 +463,14 @@ coef.SRM_fit_CV <- function(
   coef.SRM_fit(object$fit, lambda, gamma, ...)
 }
 
-#' @title Prints a summary of model.fit
+#' @title Prints a summary of fit_sparse_regression
 #'
-#' @param x The output of model.fit or inferCSN.cvfit
+#' @param x The output of fit_sparse_regression or inferCSN.cvfit
 #' @param ... Other parameters
 #'
 #' @method print SRM_fit
 #'
-#' @return Return information of model.fit
+#' @return Return information of fit_sparse_regression
 #' @export
 print.SRM_fit <- function(x, ...) {
   gammas <- rep(x$gamma, times = lapply(x$lambda, length))
@@ -471,7 +486,7 @@ print.SRM_fit <- function(x, ...) {
 #'
 #' @method print SRM_fit_CV
 #'
-#' @return Return information of model.fit
+#' @return Return information of fit_sparse_regression
 #' @export
 print.SRM_fit_CV <- function(x, ...) {
   print.SRM_fit(x$fit)
@@ -481,7 +496,7 @@ print.SRM_fit_CV <- function(x, ...) {
 #'
 #' @description Predicts response for a given sample
 #'
-#' @param object The output of model.fit
+#' @param object The output of fit_sparse_regression
 #' @param newx A matrix on which predictions are made. The matrix should have p columns
 #' @param lambda The value of lambda to use for prediction.
 #' A summary of the lambdas in the regularization path can be obtained using \code{print(fit)}
@@ -494,7 +509,7 @@ print.SRM_fit_CV <- function(x, ...) {
 #' @details
 #' If both lambda and gamma are not supplied, then a matrix of predictions for all the solutions in the regularization path is returned.
 #' If lambda is supplied but gamma is not, the smallest value of gamma is used.
-#' In case of logistic regression, probability values are returned
+#' In case of logistic regression, probability values are returned.
 #'
 #' @return Return predict value
 #' @export
@@ -515,7 +530,8 @@ predict.SRM_fit <- function(
   if (object$loss == "Logistic") {
     prediction <- 1 / (1 + exp(-prediction))
   }
-  prediction
+
+  return(prediction)
 }
 
 #' @rdname predict.SRM_fit
@@ -533,11 +549,7 @@ predict.SRM_fit_CV <- function(
   predict.SRM_fit(object$fit, newx, lambda, gamma, ...)
 }
 
-is.scalar <- function(x) {
-  is.atomic(x) && length(x) == 1L && !is.character(x) && Im(x) == 0 && !is.nan(x) && !is.na(x)
-}
-
-#' normalization
+#' @title Normalize numeric vector
 #'
 #' @param x A numeric vector.
 #' @param method Method for normalization.
@@ -563,12 +575,14 @@ normalization <- function(
 
 .softmax <- function(x) {
   abs_x <- abs(x)
-  exp_abs_x <- exp(abs_x)
-  sum_exp_abs_x <- sum(exp_abs_x)
-  softmax_values <- exp_abs_x / sum_exp_abs_x
+  softmax_values <- exp(abs_x) / sum(exp_abs_x)
   result <- softmax_values * sign(x)
 
   return(result)
+}
+
+.is_scalar <- function(x) {
+  is.atomic(x) && length(x) == 1L && !is.character(x) && Im(x) == 0 && !is.nan(x) && !is.na(x)
 }
 
 .rmse <- function(

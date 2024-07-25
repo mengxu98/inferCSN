@@ -64,14 +64,14 @@ reference:
 
 - subtitle: "Sparse regression model"
 - contents:
-  - single.network
-  - sparse.regression
-  - model.fit
+  - single_network
+  - sparse_regression
+  - fit_sparse_regression
 
 - subtitle: "Utils functions"
 - contents:
   - as_matrix
-  - check.parameters
+  - check_parameters
   - coef.SRM_fit
   - coef.SRM_fit_CV
   - network_format

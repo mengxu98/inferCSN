@@ -10,7 +10,7 @@
 \method{coef}{SRM_fit_CV}(object, lambda = NULL, gamma = NULL, ...)
 }
 \arguments{
-\item{object}{The output of model.fit or inferCSN.cvfit}
+\item{object}{The output of fit_sparse_regression or inferCSN.cvfit}
 
 \item{lambda}{The value of lambda at which to extract the solution}
 

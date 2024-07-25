@@ -9,19 +9,19 @@
 #' @export
 #' @examples
 #' data("example_matrix")
-#' single_network <- single.network(
+#' network_table <- single_network(
 #'   example_matrix,
 #'   regulators = colnames(example_matrix),
 #'   target = "g1"
 #' )
-#' head(single_network)
+#' head(network_table)
 #'
-#' single.network(
+#' single_network(
 #'   example_matrix,
 #'   regulators = "g1",
 #'   target = "g2"
 #' )
-single.network <- function(
+single_network <- function(
     matrix,
     regulators,
     target,
@@ -48,7 +48,7 @@ single.network <- function(
     )
   }
 
-  coefficients <- sparse.regression(
+  coefficients <- sparse_regression(
     x, y,
     cross_validation = cross_validation,
     seed = seed,
@@ -69,6 +69,7 @@ single.network <- function(
   if (length(coefficients) != ncol(x)) {
     coefficients <- rep(0, ncol(x))
   }
+
   return(
     data.frame(
       regulator = colnames(x),
@@ -90,11 +91,11 @@ single.network <- function(
 #' @export
 #' @examples
 #' data("example_matrix")
-#' sparse.regression(
+#' sparse_regression(
 #'   example_matrix[, -1],
 #'   example_matrix[, 1]
 #' )
-sparse.regression <- function(
+sparse_regression <- function(
     x, y,
     cross_validation = FALSE,
     seed = 1,
@@ -120,7 +121,7 @@ sparse.regression <- function(
 
   if (cross_validation) {
     fit <- try(
-      model.fit(
+      fit_sparse_regression(
         x, y,
         penalty = penalty,
         algorithm = algorithm,
@@ -137,7 +138,7 @@ sparse.regression <- function(
         message("Cross validation error, used fit instead.")
       }
       fit <- try(
-        model.fit(
+        fit_sparse_regression(
           x, y,
           penalty = penalty,
           algorithm = algorithm,
@@ -169,7 +170,7 @@ sparse.regression <- function(
     }
   } else {
     fit <- try(
-      model.fit(
+      fit_sparse_regression(
         x, y,
         penalty = penalty,
         algorithm = algorithm,
@@ -197,8 +198,7 @@ sparse.regression <- function(
   if (length(test_y) == length(pred_y)) {
     if (stats::var(test_y) != 0 && stats::var(pred_y) != 0) {
       computation_method <- match.arg(computation_method, c("r_square", "cor"))
-      r <- switch(
-        computation_method,
+      r <- switch(computation_method,
         "cor" = stats::cor(test_y, pred_y),
         "r_square" = r_square(test_y, pred_y)
       )
@@ -218,13 +218,17 @@ sparse.regression <- function(
 
 #' @title Fit a sparse regression model
 #'
-#' @description Computes the regularization path for the specified loss function and penalty function
+#' @description
+#'  Computes the regularization path for the specified loss function and penalty function.
 #'
-#' @param loss The loss function
+#' @param loss The loss function.
 #' @param nLambda The number of Lambda values to select
 #' @param nGamma The number of Gamma values to select
-#' @param gammaMax The maximum value of Gamma when using the L0L2 penalty
-#' @param gammaMin The minimum value of Gamma when using the L0L2 penalty
+#' @param gammaMax The maximum value of Gamma when using the L0L2 penalty.
+#' For the L0L1 penalty this is automatically selected.
+#' @param gammaMin The minimum value of Gamma when using the L0L2 penalty.
+#' For the L0L1 penalty, the minimum value of gamma in the grid is set to gammaMin * gammaMax.
+#' Note that this should be a strictly positive quantity.
 #' @param partialSort If TRUE, partial sorting will be used for sorting the coordinates to do greedy cycling. Otherwise, full sorting is used
 #' @param maxIters The maximum number of iterations (full cycles) for CD per grid point
 #' @param rtol The relative tolerance which decides when to terminate optimization (based on the relative change in the objective between iterations)
@@ -240,23 +244,31 @@ sparse.regression <- function(
 #' @param intercept If FALSE, no intercept term is included in the model
 #' @param lows Lower bounds for coefficients
 #' @param highs Upper bounds for coefficients
-#'
-#' @inheritParams sparse.regression
+#' @inheritParams sparse_regression
+#' 
+#' @references
+#'  Hazimeh, Hussein et al. 
+#'  “L0Learn: A Scalable Package for Sparse Learning using L0 Regularization.” 
+#'  J. Mach. Learn. Res. 24 (2022): 205:1-205:8.
+#'  Hazimeh, Hussein and Rahul Mazumder. 
+#'  “Fast Best Subset Selection: Coordinate Descent and Local Combinatorial Optimization Algorithms.” 
+#'  Oper. Res. 68 (2018): 1517-1537.
+#'  https://github.com/hazimehh/L0Learn/blob/master/R/fit.R
 #'
 #' @return An S3 object describing the regularization path
 #' @export
 #' @examples
 #' data("example_matrix")
-#' fit <- model.fit(
-#' example_matrix[, -1],
-#' example_matrix[, 1]
+#' fit <- fit_sparse_regression(
+#'   example_matrix[, -1],
+#'   example_matrix[, 1]
 #' )
 #' head(coef(fit))
-model.fit <- function(
+fit_sparse_regression <- function(
     x, y,
     penalty = "L0",
     algorithm = "CD",
-    regulators_num = NULL,
+    regulators_num = ncol(x),
     cross_validation = FALSE,
     n_folds = 10,
     seed = 1,
@@ -282,10 +294,6 @@ model.fit <- function(
     highs = Inf,
     ...) {
   # Check parameter values
-  if (is.null(regulators_num)) {
-    regulators_num <- ncol(x)
-  }
-
   if ((rtol < 0) || (rtol >= 1)) {
     stop("The specified rtol parameter must exist in [0, 1).")
   }
@@ -307,8 +315,10 @@ model.fit <- function(
     # Adjust parameters for L0 penalty
     if (penalty == "L0") {
       if ((length(lambdaGrid) != 0) && (length(lambdaGrid) != 1)) {
-        stop("L0 Penalty requires 'lambdaGrid' to be a list of length 1.
-                Where lambdaGrid[[1]] is a list or vector of decreasing positive values.")
+        stop(
+          "L0 Penalty requires 'lambdaGrid' to be a list of length 1.
+          Where lambdaGrid[[1]] is a list or vector of decreasing positive values."
+        )
       }
       penalty <- "L0L2"
       nGamma <- 1
@@ -393,15 +403,15 @@ model.fit <- function(
     }
 
     # Adjust lows and highs to vectors if scalar is provided
-    if (is.scalar(lows)) {
+    if (.is_scalar(lows)) {
       lows <- lows * rep(1, p)
-    } else if (!all(sapply(lows, is.scalar)) || length(lows) != p) {
+    } else if (!all(sapply(lows, .is_scalar)) || length(lows) != p) {
       stop("Lows must be a vector of real values of length p.")
     }
 
-    if (is.scalar(highs)) {
+    if (.is_scalar(highs)) {
       highs <- highs * rep(1, p)
-    } else if (!all(sapply(highs, is.scalar)) || length(highs) != p) {
+    } else if (!all(sapply(highs, .is_scalar)) || length(highs) != p) {
       stop("Highs must be a vector of real values of length p.")
     }
 
@@ -513,5 +523,6 @@ model.fit <- function(
     g <- list(fit = fit, cvMeans = m$CVMeans, cvSDs = m$CVSDs)
     class(g) <- "SRM_fit_CV"
   }
+
   return(g)
 }

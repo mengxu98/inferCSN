@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{normalization}
 \alias{normalization}
-\title{normalization}
+\title{Normalize numeric vector}
 \usage{
 normalization(x, method = "max_min")
 }
@@ -15,5 +15,5 @@ normalization(x, method = "max_min")
 Normalized vector
 }
 \description{
-normalization
+Normalize numeric vector
 }
