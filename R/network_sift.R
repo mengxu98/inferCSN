@@ -72,25 +72,25 @@
 #'   entropy_nboot = 0
 #' )
 #'
-#' network.heatmap(
+#' plot_network_heatmap(
 #'   example_ground_truth[, 1:3],
 #'   heatmap_title = "Ground truth",
 #'   show_names = TRUE,
 #'   rect_color = "gray70"
 #' )
-#' network.heatmap(
+#' plot_network_heatmap(
 #'   network_table,
 #'   heatmap_title = "Raw",
 #'   show_names = TRUE,
 #'   rect_color = "gray70"
 #' )
-#' network.heatmap(
+#' plot_network_heatmap(
 #'   network_table_filtered,
 #'   heatmap_title = "Filtered",
 #'   show_names = TRUE,
 #'   rect_color = "gray70"
 #' )
-#' network.heatmap(
+#' plot_network_heatmap(
 #'   network_table_filtered_entropy,
 #'   heatmap_title = "Filtered by entropy",
 #'   show_names = TRUE,

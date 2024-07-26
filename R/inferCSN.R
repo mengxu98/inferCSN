@@ -65,21 +65,20 @@ setGeneric(
 setMethod(
   f = "inferCSN",
   signature = signature(object = "matrix"),
-  definition = function(
-      object,
-      penalty = "L0",
-      algorithm = "CD",
-      cross_validation = FALSE,
-      seed = 1,
-      n_folds = 10,
-      percent_samples = 1,
-      r_threshold = 0,
-      regulators = NULL,
-      targets = NULL,
-      regulators_num = NULL,
-      cores = 1,
-      verbose = FALSE,
-      ...) {
+  definition = function(object,
+                        penalty = "L0",
+                        algorithm = "CD",
+                        cross_validation = FALSE,
+                        seed = 1,
+                        n_folds = 10,
+                        percent_samples = 1,
+                        r_threshold = 0,
+                        regulators = NULL,
+                        targets = NULL,
+                        regulators_num = NULL,
+                        cores = 1,
+                        verbose = FALSE,
+                        ...) {
     if (verbose) {
       message(paste("Running start for <", class(object)[1], ">."))
     }

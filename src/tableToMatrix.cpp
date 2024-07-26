@@ -4,7 +4,7 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-NumericMatrix table_to_matrix(DataFrame weight_table) {
+NumericMatrix tableToMatrix(DataFrame weight_table) {
   CharacterVector regulators = weight_table["regulator"];
   CharacterVector targets = weight_table["target"];
   NumericVector weight = weight_table["weight"];
@@ -39,7 +39,7 @@ NumericMatrix table_to_matrix(DataFrame weight_table) {
 /*
 
  # Older version, bug: can not handle data frame with unequal number regulators and targets.
- NumericMatrix table_to_matrix(DataFrame weight_table) {
+ NumericMatrix tableToMatrix(DataFrame weight_table) {
  CharacterVector regulator = weight_table[0];
  CharacterVector target = weight_table[1];
  NumericVector weight = weight_table[2];
@@ -114,7 +114,7 @@ NumericMatrix table_to_matrix(DataFrame weight_table) {
  }
 
 #' @examples
- Rcpp::sourceCpp("src/table_to_matrix.cpp")
+ Rcpp::sourceCpp("src/tableToMatrix.cpp")
  library(inferCSN)
  data("example_matrix")
  weight_table <- inferCSN(
@@ -125,7 +125,7 @@ NumericMatrix table_to_matrix(DataFrame weight_table) {
 
  unique_regulators <- gtools::mixedsort(unique(weight_table$regulator))
  unique_targets <- gtools::mixedsort(unique(weight_table$target))
- weight_matrix <- table_to_matrix(weight_table)
+ weight_matrix <- tableToMatrix(weight_table)
  weight_matrix <- weight_matrix[unique_regulators, unique_targets]
  weight_matrix_r1 <- table_to_matrix_v1(weight_table)
  weight_matrix_r2 <- table_to_matrix_v2(weight_table)
@@ -135,7 +135,7 @@ NumericMatrix table_to_matrix(DataFrame weight_table) {
  install.packages("bench")
  }
  bench::mark(
- table_to_matrix(weight_table)[unique_regulators, unique_targets],
+ tableToMatrix(weight_table)[unique_regulators, unique_targets],
  table_to_matrix_v1(weight_table),
  table_to_matrix_v2(weight_table)
  )

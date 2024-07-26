@@ -26,25 +26,25 @@
 #' data("example_ground_truth")
 #' network_table <- inferCSN(example_matrix)
 #'
-#' p1 <- network.heatmap(
+#' p1 <- plot_network_heatmap(
 #'   example_ground_truth[, 1:3],
 #'   heatmap_title = "Ground truth",
 #'   legend_name = "Ground truth"
 #' )
-#' p2 <- network.heatmap(
+#' p2 <- plot_network_heatmap(
 #'   network_table,
 #'   heatmap_title = "inferCSN",
 #'   legend_name = "inferCSN"
 #' )
 #' ComplexHeatmap::draw(p1 + p2)
 #'
-#' p3 <- network.heatmap(
+#' p3 <- plot_network_heatmap(
 #'   network_table,
 #'   heatmap_title = "inferCSN",
 #'   legend_name = "Weight1",
 #'   heatmap_color = c("#20a485", "#410054", "#fee81f")
 #' )
-#' p4 <- network.heatmap(
+#' p4 <- plot_network_heatmap(
 #'   network_table,
 #'   heatmap_title = "inferCSN",
 #'   legend_name = "Weight2",
@@ -52,7 +52,7 @@
 #' )
 #' ComplexHeatmap::draw(p3 + p4)
 #'
-#' network.heatmap(
+#' plot_network_heatmap(
 #'   network_table,
 #'   show_names = TRUE,
 #'   rect_color = "gray90",
@@ -60,13 +60,13 @@
 #'   column_anno_type = "barplot"
 #' )
 #'
-#' network.heatmap(
+#' plot_network_heatmap(
 #'   network_table,
 #'   regulators = c("g1", "g2"),
 #'   show_names = TRUE
 #' )
 #'
-#' network.heatmap(
+#' plot_network_heatmap(
 #'   network_table,
 #'   targets = c("g1", "g2"),
 #'   row_anno_type = "boxplot",
@@ -74,13 +74,13 @@
 #'   show_names = TRUE
 #' )
 #'
-#' network.heatmap(
+#' plot_network_heatmap(
 #'   network_table,
 #'   regulators = c("g1", "g3", "g5"),
 #'   targets = c("g3", "g6", "g9"),
 #'   show_names = TRUE
 #' )
-network.heatmap <- function(
+plot_network_heatmap <- function(
     network_table,
     regulators = NULL,
     targets = NULL,
@@ -101,7 +101,7 @@ network.heatmap <- function(
     legend_name = "Weight",
     row_title = "Regulators") {
   if (switch_matrix) {
-    weight_matrix <- table.to.matrix(
+    weight_matrix <- table_to_matrix(
       network_table,
       regulators = regulators,
       targets = targets

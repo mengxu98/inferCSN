@@ -4,12 +4,14 @@
 \alias{as_matrix}
 \title{Convert dgCMatrix into a dense matrix}
 \usage{
-as_matrix(x, parallel = FALSE)
+as_matrix(x, parallel = FALSE, sparse = FALSE)
 }
 \arguments{
 \item{x}{A matrix.}
 
 \item{parallel}{Setting to parallelize the computation with \code{\link[RcppParallel]{setThreadOptions}}.}
+
+\item{sparse}{Logical. Whether to output a sparse matrix.}
 }
 \description{
 Convert dgCMatrix into a dense matrix
@@ -40,5 +42,10 @@ identical(
 identical(
   as.matrix(sparse_matrix),
   as_matrix(sparse_matrix, parallel = TRUE)
+)
+
+identical(
+  sparse_matrix,
+  as_matrix(as.matrix(sparse_matrix), sparse = TRUE)
 )
 }

@@ -72,7 +72,7 @@ check_parameters <- function(
   if (!is.matrix(matrix) && !is.array(matrix) && (length(dim(matrix)) != 2)) {
     stop(
       "`matrix` must be a two-dimensional matrix,
-      where each column corresponds to a gene and each row corresponds to a sample/cell."
+  where each column corresponds to a gene and each row corresponds to a sample/cell."
     )
   }
 
@@ -159,6 +159,7 @@ check_parameters <- function(
 #'
 #' @param x A matrix.
 #' @param parallel Setting to parallelize the computation with \code{\link[RcppParallel]{setThreadOptions}}.
+#' @param sparse Logical. Whether to output a sparse matrix.
 #' @export
 #'
 #' @examples
@@ -188,16 +189,35 @@ check_parameters <- function(
 #'   as.matrix(sparse_matrix),
 #'   as_matrix(sparse_matrix, parallel = TRUE)
 #' )
+#'
+#' identical(
+#'   sparse_matrix,
+#'   as_matrix(as.matrix(sparse_matrix), sparse = TRUE)
+#' )
 as_matrix <- function(
     x,
-    parallel = FALSE) {
-  if (!inherits(x, "dgCMatrix")) {
-    return(Matrix::as.matrix(x))
+    parallel = FALSE,
+    sparse = FALSE) {
+  if (!methods::is(x, "sparseMatrix")) {
+    if (sparse) {
+      non_zero <- which(x != 0, arr.ind = TRUE)
+      return(
+        Matrix::sparseMatrix(
+          i = non_zero[, 1],
+          j = non_zero[, 2],
+          x = x[non_zero],
+          dims = dim(x),
+          dimnames = dimnames(x)
+        )
+      )
+    } else {
+      return(Matrix::as.matrix(x))
+    }
   } else {
     row_pos <- x@i
     col_pos <- findInterval(seq_along(x@x) - 1, x@p[-1])
     if (parallel) {
-      mat <- .Call(
+      matrix <- .Call(
         "_inferCSN_asMatrixParallel",
         PACKAGE = "inferCSN",
         row_pos,
@@ -207,7 +227,7 @@ as_matrix <- function(
         x@Dim[2]
       )
     } else {
-      mat <- .Call(
+      matrix <- .Call(
         "_inferCSN_asMatrix",
         PACKAGE = "inferCSN",
         row_pos,
@@ -218,10 +238,32 @@ as_matrix <- function(
       )
     }
 
-    attr(mat, "dimnames") <- list(x@Dimnames[[1]], x@Dimnames[[2]])
+    attr(matrix, "dimnames") <- list(x@Dimnames[[1]], x@Dimnames[[2]])
 
-    return(mat)
+    return(matrix)
   }
+}
+
+#' @title Check sparsity of matrix
+#'
+#' @param x A matrix.
+#' 
+#' @return Sparsity of matrix
+#' @export
+check_sparsity <- function(x) {
+  if (methods::is(x, "sparseMatrix")) {
+    non_zero_count <- Matrix::nnzero(x)
+    total_counts <- prod(dim(x))
+  } else {
+    non_zero_count <- sum(x != 0)
+    total_counts <- length(x)
+  }
+
+  sparsity_ratio <- non_zero_count / total_counts
+
+  sparsity <- 1 - sparsity_ratio
+
+  return(sparsity)
 }
 
 #' @title Switch weight table to matrix
@@ -237,14 +279,14 @@ as_matrix <- function(
 #' network_table <- inferCSN(example_matrix)
 #' head(network_table)
 #'
-#' table.to.matrix(network_table)[1:6, 1:6]
+#' table_to_matrix(network_table)[1:6, 1:6]
 #'
-#' table.to.matrix(
+#' table_to_matrix(
 #'   network_table,
 #'   regulators = c("g1", "g2"),
 #'   targets = c("g3", "g4")
 #' )
-table.to.matrix <- function(
+table_to_matrix <- function(
     network_table,
     regulators = NULL,
     targets = NULL) {
@@ -253,7 +295,7 @@ table.to.matrix <- function(
     abs_weight = FALSE
   )
   weight_matrix <- .Call(
-    "_inferCSN_table_to_matrix",
+    "_inferCSN_tableToMatrix",
     PACKAGE = "inferCSN",
     network_table
   )
@@ -275,10 +317,9 @@ table.to.matrix <- function(
 #' @export
 #'
 #' @examples
-#' library(inferCSN)
 #' data("example_matrix")
 #' network_table <- inferCSN(example_matrix)
-#' weight_matrix <- table.to.matrix(network_table)
+#' weight_matrix <- table_to_matrix(network_table)
 #' filter_sort_matrix(weight_matrix)[1:6, 1:6]
 #'
 #' filter_sort_matrix(
@@ -575,7 +616,7 @@ normalization <- function(
 
 .softmax <- function(x) {
   abs_x <- abs(x)
-  softmax_values <- exp(abs_x) / sum(exp_abs_x)
+  softmax_values <- exp(abs_x) / sum(exp(abs_x))
   result <- softmax_values * sign(x)
 
   return(result)
@@ -591,7 +632,7 @@ normalization <- function(
   sqrt(mean((true - pred)^2))
 }
 
-#' Sum of Squared Errors
+#' @title Sum of Squared Errors
 #'
 #' @param y_true A numeric vector with ground truth values.
 #' @param y_pred A numeric vector with predicted values.
@@ -599,18 +640,16 @@ sse <- function(y_true, y_pred) {
   return(sum((y_true - y_pred)**2))
 }
 
-#' Relative Squared Error
+#' @title Relative Squared Error
 #'
-#' @param y_true A numeric vector with ground truth values.
-#' @param y_pred A numeric vector with predicted values.
+#' @inheritParams sse
 rse <- function(y_true, y_pred) {
   return(sse(y_true, y_pred) / sse(y_true, mean(y_true)))
 }
 
 #' @title \eqn{R^2} (coefficient of determination)
 #'
-#' @param y_true A numeric vector with ground truth values.
-#' @param y_pred A numeric vector with predicted values.
+#' @inheritParams sse
 r_square <- function(y_true, y_pred) {
   1 - rse(y_true, y_pred)
 }

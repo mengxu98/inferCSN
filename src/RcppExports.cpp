@@ -419,14 +419,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// table_to_matrix
-NumericMatrix table_to_matrix(DataFrame weight_table);
-RcppExport SEXP _inferCSN_table_to_matrix(SEXP weight_tableSEXP) {
+// tableToMatrix
+NumericMatrix tableToMatrix(DataFrame weight_table);
+RcppExport SEXP _inferCSN_tableToMatrix(SEXP weight_tableSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< DataFrame >::type weight_table(weight_tableSEXP);
-    rcpp_result_gen = Rcpp::wrap(table_to_matrix(weight_table));
+    rcpp_result_gen = Rcpp::wrap(tableToMatrix(weight_table));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -457,7 +457,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_inferCSN_R_matrix_center_sparse", (DL_FUNC) &_inferCSN_R_matrix_center_sparse, 3},
     {"_inferCSN_asMatrix", (DL_FUNC) &_inferCSN_asMatrix, 5},
     {"_inferCSN_asMatrixParallel", (DL_FUNC) &_inferCSN_asMatrixParallel, 5},
-    {"_inferCSN_table_to_matrix", (DL_FUNC) &_inferCSN_table_to_matrix, 1},
+    {"_inferCSN_tableToMatrix", (DL_FUNC) &_inferCSN_tableToMatrix, 1},
     {NULL, NULL, 0}
 };
 
