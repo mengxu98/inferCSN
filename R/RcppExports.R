@@ -17,10 +17,6 @@ SRM_model_fit_CV_dense <- function(X, y, Loss, Penalty, Algorithm, NnzStopNum, G
     .Call('_inferCSN_SRM_model_fit_CV_dense', PACKAGE = 'inferCSN', X, y, Loss, Penalty, Algorithm, NnzStopNum, G_ncols, G_nrows, Lambda2Max, Lambda2Min, PartialSort, MaxIters, rtol, atol, ActiveSet, ActiveSetNum, MaxNumSwaps, ScaleDownFactor, ScreenSize, LambdaU, Lambdas, nfolds, seed, ExcludeFirstK, Intercept, withBounds, Lows, Highs)
 }
 
-cor_matrix <- function(p, base_cor) {
-    .Call('_inferCSN_cor_matrix', PACKAGE = 'inferCSN', p, base_cor)
-}
-
 R_matrix_column_get_dense <- function(mat, col) {
     .Call('_inferCSN_R_matrix_column_get_dense', PACKAGE = 'inferCSN', mat, col)
 }

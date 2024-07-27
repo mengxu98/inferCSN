@@ -13,9 +13,12 @@ NumericMatrix tableToMatrix(DataFrame weight_table) {
   CharacterVector unique_targets = unique(targets);
 
   // // TODO:
-  // // The two lines to sort genes, such as "g3", "g1", "g2" to "g1", "g2", "g3",
-  // // but these codes can not work successful, maybe return "g1.1", "g1.2", "g3".
-  // // Now, use R code: 'weight_matrix <- weight_matrix[unique_regulators, unique_targets]',
+  // // The two lines to sort genes, such as "g3", "g1", "g2" to "g1", "g2",
+  // "g3",
+  // // but these codes can not work successful, maybe return "g1.1", "g1.2",
+  // "g3".
+  // // Now, use R code: 'weight_matrix <- weight_matrix[unique_regulators,
+  // unique_targets]',
   // // to temporarily overcome this problem
   // std::sort(unique_regulators.begin(), unique_regulators.end());
   // std::sort(unique_targets.begin(), unique_targets.end());
@@ -28,8 +31,13 @@ NumericMatrix tableToMatrix(DataFrame weight_table) {
   colnames(weight_matrix) = unique_targets;
 
   for (int i = 0; i < weight_table.nrows(); ++i) {
-    int regulators_index = std::distance(unique_regulators.begin(), std::find(unique_regulators.begin(), unique_regulators.end(), regulators[i]));
-    int targets_index = std::distance(unique_targets.begin(), std::find(unique_targets.begin(), unique_targets.end(), targets[i]));
+    int regulators_index =
+        std::distance(unique_regulators.begin(),
+                      std::find(unique_regulators.begin(),
+                                unique_regulators.end(), regulators[i]));
+    int targets_index = std::distance(
+        unique_targets.begin(),
+        std::find(unique_targets.begin(), unique_targets.end(), targets[i]));
     weight_matrix(regulators_index, targets_index) = weight[i];
   }
 
@@ -38,8 +46,8 @@ NumericMatrix tableToMatrix(DataFrame weight_table) {
 
 /*
 
- # Older version, bug: can not handle data frame with unequal number regulators and targets.
- NumericMatrix tableToMatrix(DataFrame weight_table) {
+ # Older version, bug: can not handle data frame with unequal number regulators
+ and targets. NumericMatrix tableToMatrix(DataFrame weight_table) {
  CharacterVector regulator = weight_table[0];
  CharacterVector target = weight_table[1];
  NumericVector weight = weight_table[2];
@@ -53,8 +61,9 @@ NumericMatrix tableToMatrix(DataFrame weight_table) {
  rownames(weight_matrix) = genes;
 
  for (int i = 0; i < weight_table.nrows(); ++i) {
- int regulators_index = std::distance(genes.begin(), std::find(genes.begin(), genes.end(), regulator[i]));
- int targets_index = std::distance(genes.begin(), std::find(genes.begin(), genes.end(), target[i]));
+ int regulators_index = std::distance(genes.begin(), std::find(genes.begin(),
+ genes.end(), regulator[i])); int targets_index = std::distance(genes.begin(),
+ std::find(genes.begin(), genes.end(), target[i]));
  weight_matrix(regulators_index, targets_index) = weight[i];
  }
 
@@ -86,7 +95,8 @@ NumericMatrix tableToMatrix(DataFrame weight_table) {
  )
 
  for (i in 1:nrow(weight_table)) {
- weight_matrix[weight_table$regulator[i], weight_table$target[i]] <- weight_table$weight[i]
+ weight_matrix[weight_table$regulator[i], weight_table$target[i]] <-
+weight_table$weight[i]
  }
 
  return(weight_matrix)

@@ -6,13 +6,9 @@
 using namespace Rcpp;
 using namespace RcppParallel;
 
-
 // [[Rcpp::export]]
-NumericMatrix asMatrix(NumericVector rp,
-                       NumericVector cp,
-                       NumericVector z,
-                       int nrows,
-                       int ncols) {
+NumericMatrix asMatrix(NumericVector rp, NumericVector cp, NumericVector z,
+                       int nrows, int ncols) {
   int elementsCount = z.size();
 
   // Input validation
@@ -28,7 +24,9 @@ NumericMatrix asMatrix(NumericVector rp,
   // Index validity check and matrix population
   for (int i = 0; i < elementsCount; i++) {
     if (rp[i] < 0 || rp[i] >= nrows || cp[i] < 0 || cp[i] >= ncols) {
-      std::string errMsg = "Index out of bounds at position (" + std::to_string(rp[i]) + ", " + std::to_string(cp[i]) + ").";
+      std::string errMsg = "Index out of bounds at position (" +
+                           std::to_string(rp[i]) + ", " +
+                           std::to_string(cp[i]) + ").";
       stop(errMsg.c_str());
     }
     matrix(rp[i], cp[i]) = z[i];
@@ -45,8 +43,9 @@ struct MatrixFiller : public Worker {
   const RVector<double> z;
   RMatrix<double> outputMatrix;
 
-  MatrixFiller(const NumericVector rp, const NumericVector cp, const NumericVector z, NumericMatrix outputMatrix)
-    : rp(rp), cp(cp), z(z), outputMatrix(outputMatrix) {}
+  MatrixFiller(const NumericVector rp, const NumericVector cp,
+               const NumericVector z, NumericMatrix outputMatrix)
+      : rp(rp), cp(cp), z(z), outputMatrix(outputMatrix) {}
 
   void operator()(std::size_t begin, std::size_t end) {
     for (std::size_t i = begin; i < end; ++i) {
@@ -56,11 +55,8 @@ struct MatrixFiller : public Worker {
 };
 
 // [[Rcpp::export]]
-NumericMatrix asMatrixParallel(NumericVector rp,
-                               NumericVector cp,
-                               NumericVector z,
-                               int nrows,
-                               int ncols) {
+NumericMatrix asMatrixParallel(NumericVector rp, NumericVector cp,
+                               NumericVector z, int nrows, int ncols) {
   NumericMatrix outputMatrix(nrows, ncols);
 
   MatrixFiller matrixFiller(rp, cp, z, outputMatrix);

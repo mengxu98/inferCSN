@@ -12,7 +12,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // SRM_model_fit_sparse
-Rcpp::List SRM_model_fit_sparse(const arma::sp_mat& X, const arma::vec& y, const std::string Loss, const std::string Penalty, const std::string Algorithm, const std::size_t NnzStopNum, const std::size_t G_ncols, const std::size_t G_nrows, const double Lambda2Max, const double Lambda2Min, const bool PartialSort, const std::size_t MaxIters, const double rtol, const double atol, const bool ActiveSet, const std::size_t ActiveSetNum, const std::size_t MaxNumSwaps, const double ScaleDownFactor, const std::size_t ScreenSize, const bool LambdaU, const std::vector< std::vector<double> > Lambdas, const std::size_t ExcludeFirstK, const bool Intercept, const bool withBounds, const arma::vec& Lows, const arma::vec& Highs);
+Rcpp::List SRM_model_fit_sparse(const arma::sp_mat& X, const arma::vec& y, const std::string Loss, const std::string Penalty, const std::string Algorithm, const std::size_t NnzStopNum, const std::size_t G_ncols, const std::size_t G_nrows, const double Lambda2Max, const double Lambda2Min, const bool PartialSort, const std::size_t MaxIters, const double rtol, const double atol, const bool ActiveSet, const std::size_t ActiveSetNum, const std::size_t MaxNumSwaps, const double ScaleDownFactor, const std::size_t ScreenSize, const bool LambdaU, const std::vector<std::vector<double>> Lambdas, const std::size_t ExcludeFirstK, const bool Intercept, const bool withBounds, const arma::vec& Lows, const arma::vec& Highs);
 RcppExport SEXP _inferCSN_SRM_model_fit_sparse(SEXP XSEXP, SEXP ySEXP, SEXP LossSEXP, SEXP PenaltySEXP, SEXP AlgorithmSEXP, SEXP NnzStopNumSEXP, SEXP G_ncolsSEXP, SEXP G_nrowsSEXP, SEXP Lambda2MaxSEXP, SEXP Lambda2MinSEXP, SEXP PartialSortSEXP, SEXP MaxItersSEXP, SEXP rtolSEXP, SEXP atolSEXP, SEXP ActiveSetSEXP, SEXP ActiveSetNumSEXP, SEXP MaxNumSwapsSEXP, SEXP ScaleDownFactorSEXP, SEXP ScreenSizeSEXP, SEXP LambdaUSEXP, SEXP LambdasSEXP, SEXP ExcludeFirstKSEXP, SEXP InterceptSEXP, SEXP withBoundsSEXP, SEXP LowsSEXP, SEXP HighsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -37,7 +37,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type ScaleDownFactor(ScaleDownFactorSEXP);
     Rcpp::traits::input_parameter< const std::size_t >::type ScreenSize(ScreenSizeSEXP);
     Rcpp::traits::input_parameter< const bool >::type LambdaU(LambdaUSEXP);
-    Rcpp::traits::input_parameter< const std::vector< std::vector<double> > >::type Lambdas(LambdasSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::vector<double>> >::type Lambdas(LambdasSEXP);
     Rcpp::traits::input_parameter< const std::size_t >::type ExcludeFirstK(ExcludeFirstKSEXP);
     Rcpp::traits::input_parameter< const bool >::type Intercept(InterceptSEXP);
     Rcpp::traits::input_parameter< const bool >::type withBounds(withBoundsSEXP);
@@ -48,7 +48,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // SRM_model_fit_dense
-Rcpp::List SRM_model_fit_dense(const arma::mat& X, const arma::vec& y, const std::string Loss, const std::string Penalty, const std::string Algorithm, const std::size_t NnzStopNum, const std::size_t G_ncols, const std::size_t G_nrows, const double Lambda2Max, const double Lambda2Min, const bool PartialSort, const std::size_t MaxIters, const double rtol, const double atol, const bool ActiveSet, const std::size_t ActiveSetNum, const std::size_t MaxNumSwaps, const double ScaleDownFactor, const std::size_t ScreenSize, const bool LambdaU, const std::vector< std::vector<double> > Lambdas, const std::size_t ExcludeFirstK, const bool Intercept, const bool withBounds, const arma::vec& Lows, const arma::vec& Highs);
+Rcpp::List SRM_model_fit_dense(const arma::mat& X, const arma::vec& y, const std::string Loss, const std::string Penalty, const std::string Algorithm, const std::size_t NnzStopNum, const std::size_t G_ncols, const std::size_t G_nrows, const double Lambda2Max, const double Lambda2Min, const bool PartialSort, const std::size_t MaxIters, const double rtol, const double atol, const bool ActiveSet, const std::size_t ActiveSetNum, const std::size_t MaxNumSwaps, const double ScaleDownFactor, const std::size_t ScreenSize, const bool LambdaU, const std::vector<std::vector<double>> Lambdas, const std::size_t ExcludeFirstK, const bool Intercept, const bool withBounds, const arma::vec& Lows, const arma::vec& Highs);
 RcppExport SEXP _inferCSN_SRM_model_fit_dense(SEXP XSEXP, SEXP ySEXP, SEXP LossSEXP, SEXP PenaltySEXP, SEXP AlgorithmSEXP, SEXP NnzStopNumSEXP, SEXP G_ncolsSEXP, SEXP G_nrowsSEXP, SEXP Lambda2MaxSEXP, SEXP Lambda2MinSEXP, SEXP PartialSortSEXP, SEXP MaxItersSEXP, SEXP rtolSEXP, SEXP atolSEXP, SEXP ActiveSetSEXP, SEXP ActiveSetNumSEXP, SEXP MaxNumSwapsSEXP, SEXP ScaleDownFactorSEXP, SEXP ScreenSizeSEXP, SEXP LambdaUSEXP, SEXP LambdasSEXP, SEXP ExcludeFirstKSEXP, SEXP InterceptSEXP, SEXP withBoundsSEXP, SEXP LowsSEXP, SEXP HighsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -73,7 +73,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type ScaleDownFactor(ScaleDownFactorSEXP);
     Rcpp::traits::input_parameter< const std::size_t >::type ScreenSize(ScreenSizeSEXP);
     Rcpp::traits::input_parameter< const bool >::type LambdaU(LambdaUSEXP);
-    Rcpp::traits::input_parameter< const std::vector< std::vector<double> > >::type Lambdas(LambdasSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::vector<double>> >::type Lambdas(LambdasSEXP);
     Rcpp::traits::input_parameter< const std::size_t >::type ExcludeFirstK(ExcludeFirstKSEXP);
     Rcpp::traits::input_parameter< const bool >::type Intercept(InterceptSEXP);
     Rcpp::traits::input_parameter< const bool >::type withBounds(withBoundsSEXP);
@@ -84,7 +84,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // SRM_model_fit_CV_sparse
-Rcpp::List SRM_model_fit_CV_sparse(const arma::sp_mat& X, const arma::vec& y, const std::string Loss, const std::string Penalty, const std::string Algorithm, const std::size_t NnzStopNum, const std::size_t G_ncols, const std::size_t G_nrows, const double Lambda2Max, const double Lambda2Min, const bool PartialSort, const std::size_t MaxIters, const double rtol, const double atol, const bool ActiveSet, const std::size_t ActiveSetNum, const std::size_t MaxNumSwaps, const double ScaleDownFactor, const std::size_t ScreenSize, const bool LambdaU, const std::vector< std::vector<double> > Lambdas, const std::size_t nfolds, const double seed, const std::size_t ExcludeFirstK, const bool Intercept, const bool withBounds, const arma::vec& Lows, const arma::vec& Highs);
+Rcpp::List SRM_model_fit_CV_sparse(const arma::sp_mat& X, const arma::vec& y, const std::string Loss, const std::string Penalty, const std::string Algorithm, const std::size_t NnzStopNum, const std::size_t G_ncols, const std::size_t G_nrows, const double Lambda2Max, const double Lambda2Min, const bool PartialSort, const std::size_t MaxIters, const double rtol, const double atol, const bool ActiveSet, const std::size_t ActiveSetNum, const std::size_t MaxNumSwaps, const double ScaleDownFactor, const std::size_t ScreenSize, const bool LambdaU, const std::vector<std::vector<double>> Lambdas, const std::size_t nfolds, const double seed, const std::size_t ExcludeFirstK, const bool Intercept, const bool withBounds, const arma::vec& Lows, const arma::vec& Highs);
 RcppExport SEXP _inferCSN_SRM_model_fit_CV_sparse(SEXP XSEXP, SEXP ySEXP, SEXP LossSEXP, SEXP PenaltySEXP, SEXP AlgorithmSEXP, SEXP NnzStopNumSEXP, SEXP G_ncolsSEXP, SEXP G_nrowsSEXP, SEXP Lambda2MaxSEXP, SEXP Lambda2MinSEXP, SEXP PartialSortSEXP, SEXP MaxItersSEXP, SEXP rtolSEXP, SEXP atolSEXP, SEXP ActiveSetSEXP, SEXP ActiveSetNumSEXP, SEXP MaxNumSwapsSEXP, SEXP ScaleDownFactorSEXP, SEXP ScreenSizeSEXP, SEXP LambdaUSEXP, SEXP LambdasSEXP, SEXP nfoldsSEXP, SEXP seedSEXP, SEXP ExcludeFirstKSEXP, SEXP InterceptSEXP, SEXP withBoundsSEXP, SEXP LowsSEXP, SEXP HighsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -109,7 +109,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type ScaleDownFactor(ScaleDownFactorSEXP);
     Rcpp::traits::input_parameter< const std::size_t >::type ScreenSize(ScreenSizeSEXP);
     Rcpp::traits::input_parameter< const bool >::type LambdaU(LambdaUSEXP);
-    Rcpp::traits::input_parameter< const std::vector< std::vector<double> > >::type Lambdas(LambdasSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::vector<double>> >::type Lambdas(LambdasSEXP);
     Rcpp::traits::input_parameter< const std::size_t >::type nfolds(nfoldsSEXP);
     Rcpp::traits::input_parameter< const double >::type seed(seedSEXP);
     Rcpp::traits::input_parameter< const std::size_t >::type ExcludeFirstK(ExcludeFirstKSEXP);
@@ -122,7 +122,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // SRM_model_fit_CV_dense
-Rcpp::List SRM_model_fit_CV_dense(const arma::mat& X, const arma::vec& y, const std::string Loss, const std::string Penalty, const std::string Algorithm, const std::size_t NnzStopNum, const std::size_t G_ncols, const std::size_t G_nrows, const double Lambda2Max, const double Lambda2Min, const bool PartialSort, const std::size_t MaxIters, const double rtol, const double atol, const bool ActiveSet, const std::size_t ActiveSetNum, const std::size_t MaxNumSwaps, const double ScaleDownFactor, const std::size_t ScreenSize, const bool LambdaU, const std::vector< std::vector<double> > Lambdas, const std::size_t nfolds, const double seed, const std::size_t ExcludeFirstK, const bool Intercept, const bool withBounds, const arma::vec& Lows, const arma::vec& Highs);
+Rcpp::List SRM_model_fit_CV_dense(const arma::mat& X, const arma::vec& y, const std::string Loss, const std::string Penalty, const std::string Algorithm, const std::size_t NnzStopNum, const std::size_t G_ncols, const std::size_t G_nrows, const double Lambda2Max, const double Lambda2Min, const bool PartialSort, const std::size_t MaxIters, const double rtol, const double atol, const bool ActiveSet, const std::size_t ActiveSetNum, const std::size_t MaxNumSwaps, const double ScaleDownFactor, const std::size_t ScreenSize, const bool LambdaU, const std::vector<std::vector<double>> Lambdas, const std::size_t nfolds, const double seed, const std::size_t ExcludeFirstK, const bool Intercept, const bool withBounds, const arma::vec& Lows, const arma::vec& Highs);
 RcppExport SEXP _inferCSN_SRM_model_fit_CV_dense(SEXP XSEXP, SEXP ySEXP, SEXP LossSEXP, SEXP PenaltySEXP, SEXP AlgorithmSEXP, SEXP NnzStopNumSEXP, SEXP G_ncolsSEXP, SEXP G_nrowsSEXP, SEXP Lambda2MaxSEXP, SEXP Lambda2MinSEXP, SEXP PartialSortSEXP, SEXP MaxItersSEXP, SEXP rtolSEXP, SEXP atolSEXP, SEXP ActiveSetSEXP, SEXP ActiveSetNumSEXP, SEXP MaxNumSwapsSEXP, SEXP ScaleDownFactorSEXP, SEXP ScreenSizeSEXP, SEXP LambdaUSEXP, SEXP LambdasSEXP, SEXP nfoldsSEXP, SEXP seedSEXP, SEXP ExcludeFirstKSEXP, SEXP InterceptSEXP, SEXP withBoundsSEXP, SEXP LowsSEXP, SEXP HighsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -147,7 +147,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type ScaleDownFactor(ScaleDownFactorSEXP);
     Rcpp::traits::input_parameter< const std::size_t >::type ScreenSize(ScreenSizeSEXP);
     Rcpp::traits::input_parameter< const bool >::type LambdaU(LambdaUSEXP);
-    Rcpp::traits::input_parameter< const std::vector< std::vector<double> > >::type Lambdas(LambdasSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::vector<double>> >::type Lambdas(LambdasSEXP);
     Rcpp::traits::input_parameter< const std::size_t >::type nfolds(nfoldsSEXP);
     Rcpp::traits::input_parameter< const double >::type seed(seedSEXP);
     Rcpp::traits::input_parameter< const std::size_t >::type ExcludeFirstK(ExcludeFirstKSEXP);
@@ -156,18 +156,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::vec& >::type Lows(LowsSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type Highs(HighsSEXP);
     rcpp_result_gen = Rcpp::wrap(SRM_model_fit_CV_dense(X, y, Loss, Penalty, Algorithm, NnzStopNum, G_ncols, G_nrows, Lambda2Max, Lambda2Min, PartialSort, MaxIters, rtol, atol, ActiveSet, ActiveSetNum, MaxNumSwaps, ScaleDownFactor, ScreenSize, LambdaU, Lambdas, nfolds, seed, ExcludeFirstK, Intercept, withBounds, Lows, Highs));
-    return rcpp_result_gen;
-END_RCPP
-}
-// cor_matrix
-Rcpp::NumericMatrix cor_matrix(const int p, const double base_cor);
-RcppExport SEXP _inferCSN_cor_matrix(SEXP pSEXP, SEXP base_corSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const int >::type p(pSEXP);
-    Rcpp::traits::input_parameter< const double >::type base_cor(base_corSEXP);
-    rcpp_result_gen = Rcpp::wrap(cor_matrix(p, base_cor));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -436,7 +424,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_inferCSN_SRM_model_fit_dense", (DL_FUNC) &_inferCSN_SRM_model_fit_dense, 26},
     {"_inferCSN_SRM_model_fit_CV_sparse", (DL_FUNC) &_inferCSN_SRM_model_fit_CV_sparse, 28},
     {"_inferCSN_SRM_model_fit_CV_dense", (DL_FUNC) &_inferCSN_SRM_model_fit_CV_dense, 28},
-    {"_inferCSN_cor_matrix", (DL_FUNC) &_inferCSN_cor_matrix, 2},
     {"_inferCSN_R_matrix_column_get_dense", (DL_FUNC) &_inferCSN_R_matrix_column_get_dense, 2},
     {"_inferCSN_R_matrix_column_get_sparse", (DL_FUNC) &_inferCSN_R_matrix_column_get_sparse, 2},
     {"_inferCSN_R_matrix_rows_get_dense", (DL_FUNC) &_inferCSN_R_matrix_rows_get_dense, 2},
