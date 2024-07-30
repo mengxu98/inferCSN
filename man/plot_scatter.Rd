@@ -19,7 +19,7 @@ plot_scatter(
   margins_size = 10,
   compute_correlation = TRUE,
   compute_correlation_method = "pearson",
-  keep_aspect_ratio = FALSE,
+  keep_aspect_ratio = TRUE,
   facet = FALSE,
   se = FALSE,
   pointdensity = TRUE
@@ -82,27 +82,23 @@ test_data <- data.frame(
 )
 
 p1 <- plot_scatter(
-  test_data,
-  keep_aspect_ratio = TRUE
+  test_data
 )
 p2 <- plot_scatter(
   test_data,
-  marginal_type = "boxplot",
-  keep_aspect_ratio = TRUE
+  marginal_type = "boxplot"
 )
 p1 + p2
 
 p3 <- plot_scatter(
   test_data,
-  facet = TRUE,
-  keep_aspect_ratio = TRUE
+  facet = TRUE
 )
 p3
 
 p4 <- plot_scatter(
   test_data[, 1:2],
-  marginal_type = "histogram",
-  keep_aspect_ratio = TRUE
+  marginal_type = "histogram"
 )
 p4
 }

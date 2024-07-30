@@ -141,6 +141,7 @@ plot_scatter(
   data.frame(
     network_table_sparse$weight,
     network_table$weight
-  )
+  ),
+  legend_position = "none"
 )
 }

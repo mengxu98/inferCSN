@@ -48,4 +48,19 @@ identical(
   sparse_matrix,
   as_matrix(as.matrix(sparse_matrix), sparse = TRUE)
 )
+
+network_table_1 <- inferCSN(
+  as_matrix(example_matrix, sparse = TRUE)
+)
+network_table_2 <- inferCSN(
+  as(example_matrix, "sparseMatrix")
+)
+
+plot_scatter(
+  data.frame(
+    network_table_1$weight,
+    network_table_2$weight
+  ),
+  legend_position = "none"
+)
 }
