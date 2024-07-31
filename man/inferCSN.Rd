@@ -119,29 +119,46 @@ Inferring Cell-Specific Gene Regulatory Network
 }
 \examples{
 data("example_matrix")
-network_table <- inferCSN(example_matrix, verbose = TRUE)
-head(network_table)
+network_table_1 <- inferCSN(example_matrix, verbose = TRUE)
+head(network_table_1)
 
-network_table <- inferCSN(example_matrix, cores = 2)
-head(network_table)
+network_table_2 <- inferCSN(example_matrix, cores = 2)
+
+identical(network_table_1, network_table_2)
 data("example_matrix")
-network_table <- inferCSN(example_matrix, verbose = TRUE)
+network_table <- inferCSN(example_matrix)
 head(network_table)
 
-network_table <- inferCSN(example_matrix, cores = 2)
-head(network_table)
+network_table_sparse_1 <- inferCSN(
+  as(example_matrix, "sparseMatrix")
+)
+head(network_table_sparse_1)
 
-network_table_sparse <- inferCSN(
+network_table_sparse_2 <- inferCSN(
   as(example_matrix, "sparseMatrix"),
   cores = 2
 )
-head(network_table_sparse)
+identical(
+  network_table,
+  network_table_sparse_1
+)
+
+identical(
+  network_table_sparse_1,
+  network_table_sparse_2
+)
 
 plot_scatter(
   data.frame(
-    network_table_sparse$weight,
-    network_table$weight
+    network_table$weight,
+    network_table_sparse_1$weight
   ),
   legend_position = "none"
+)
+
+plot_weight_distribution(
+  network_table
+) + plot_weight_distribution(
+  network_table_sparse_1
 )
 }
