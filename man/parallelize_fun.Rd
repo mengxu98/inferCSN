@@ -11,7 +11,8 @@ parallelize_fun(x, fun, cores = 1, export_fun = NULL, verbose = TRUE)
 
 \item{fun}{The function to be applied to each element.}
 
-\item{cores}{Number of CPU cores used. Setting to parallelize the computation with \code{\link[foreach]{foreach}}.}
+\item{cores}{Number of CPU cores used.
+Setting to parallelize the computation with \code{\link[foreach]{foreach}}.}
 
 \item{export_fun}{export_fun.}
 
@@ -19,7 +20,7 @@ parallelize_fun(x, fun, cores = 1, export_fun = NULL, verbose = TRUE)
 Only works in sequential mode.}
 }
 \value{
-A list.
+A list of results.
 }
 \description{
 Apply function over a List or Vector

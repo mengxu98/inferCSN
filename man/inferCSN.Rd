@@ -112,19 +112,50 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 \item{...}{Parameters for other methods.}
 }
 \value{
-A data table of gene-gene regulatory relationship
+A data table of regulator-target regulatory relationships
 }
 \description{
 Inferring Cell-Specific Gene Regulatory Network
 }
 \examples{
 data("example_matrix")
-network_table_1 <- inferCSN(example_matrix, verbose = TRUE)
+network_table_1 <- inferCSN(
+  example_matrix,
+  verbose = TRUE
+)
 head(network_table_1)
 
-network_table_2 <- inferCSN(example_matrix, cores = 2)
+network_table_2 <- inferCSN(
+  example_matrix,
+  cores = 2
+)
 
 identical(network_table_1, network_table_2)
+
+inferCSN(
+  example_matrix,
+  regulators = c("g1", "g2"),
+  targets = c("g3", "g4"),
+  verbose = TRUE
+)
+inferCSN(
+  example_matrix,
+  regulators = c("g1", "g2"),
+  targets = c("g3", "g0"),
+  verbose = TRUE
+)
+inferCSN(
+  example_matrix,
+  regulators = c("g1", "g0"),
+  targets = c("g2", "g3"),
+  verbose = TRUE
+)
+inferCSN(
+  example_matrix,
+  regulators = c("g1"),
+  targets = c("g2"),
+  verbose = TRUE
+)
 data("example_matrix")
 network_table <- inferCSN(example_matrix)
 head(network_table)

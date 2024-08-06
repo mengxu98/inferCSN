@@ -9,12 +9,13 @@
 #' @export
 #' @examples
 #' data("example_matrix")
-#' network_table <- single_network(
-#'   example_matrix,
-#'   regulators = colnames(example_matrix),
-#'   target = "g1"
+#' head(
+#'   single_network(
+#'     example_matrix,
+#'     regulators = colnames(example_matrix),
+#'     target = "g1"
+#'   )
 #' )
-#' head(network_table)
 #'
 #' single_network(
 #'   example_matrix,
@@ -198,7 +199,8 @@ sparse_regression <- function(
   if (length(test_y) == length(pred_y)) {
     if (stats::var(test_y) != 0 && stats::var(pred_y) != 0) {
       computation_method <- match.arg(computation_method, c("r_square", "cor"))
-      r <- switch(computation_method,
+      r <- switch(
+        EXPR = computation_method,
         "cor" = stats::cor(test_y, pred_y),
         "r_square" = r_square(test_y, pred_y)
       )
@@ -210,7 +212,15 @@ sparse_regression <- function(
   }
 
   if (r >= r_threshold) {
-    return(as.vector(coef(fit, lambda = lambda, gamma = gamma))[-1])
+    return(
+      as.vector(
+        coef(
+          fit,
+          lambda = lambda,
+          gamma = gamma
+        )
+      )[-1]
+    )
   } else {
     return(rep(0, ncol(x)))
   }
@@ -245,13 +255,13 @@ sparse_regression <- function(
 #' @param lows Lower bounds for coefficients
 #' @param highs Upper bounds for coefficients
 #' @inheritParams sparse_regression
-#' 
+#'
 #' @references
-#'  Hazimeh, Hussein et al. 
-#'  “L0Learn: A Scalable Package for Sparse Learning using L0 Regularization.” 
+#'  Hazimeh, Hussein et al.
+#'  “L0Learn: A Scalable Package for Sparse Learning using L0 Regularization.”
 #'  J. Mach. Learn. Res. 24 (2022): 205:1-205:8.
-#'  Hazimeh, Hussein and Rahul Mazumder. 
-#'  “Fast Best Subset Selection: Coordinate Descent and Local Combinatorial Optimization Algorithms.” 
+#'  Hazimeh, Hussein and Rahul Mazumder.
+#'  “Fast Best Subset Selection: Coordinate Descent and Local Combinatorial Optimization Algorithms.”
 #'  Oper. Res. 68 (2018): 1517-1537.
 #'  https://github.com/hazimehh/L0Learn/blob/master/R/fit.R
 #'

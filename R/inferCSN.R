@@ -25,26 +25,25 @@
 #'
 #' @docType methods
 #' @rdname inferCSN
-#' @return A data table of gene-gene regulatory relationship
+#' @return A data table of regulator-target regulatory relationships
 #' @export
 setGeneric(
   name = "inferCSN",
   signature = c("object"),
-  def = function(
-      object,
-      penalty = "L0",
-      algorithm = "CD",
-      cross_validation = FALSE,
-      seed = 1,
-      n_folds = 10,
-      percent_samples = 1,
-      r_threshold = 0,
-      regulators = NULL,
-      targets = NULL,
-      regulators_num = NULL,
-      cores = 1,
-      verbose = FALSE,
-      ...) {
+  def = function(object,
+                 penalty = "L0",
+                 algorithm = "CD",
+                 cross_validation = FALSE,
+                 seed = 1,
+                 n_folds = 10,
+                 percent_samples = 1,
+                 r_threshold = 0,
+                 regulators = NULL,
+                 targets = NULL,
+                 regulators_num = NULL,
+                 cores = 1,
+                 verbose = FALSE,
+                 ...) {
     UseMethod(
       generic = "inferCSN",
       object = object
@@ -57,12 +56,43 @@ setGeneric(
 #'
 #' @examples
 #' data("example_matrix")
-#' network_table_1 <- inferCSN(example_matrix, verbose = TRUE)
+#' network_table_1 <- inferCSN(
+#'   example_matrix,
+#'   verbose = TRUE
+#' )
 #' head(network_table_1)
 #'
-#' network_table_2 <- inferCSN(example_matrix, cores = 2)
+#' network_table_2 <- inferCSN(
+#'   example_matrix,
+#'   cores = 2
+#' )
 #'
 #' identical(network_table_1, network_table_2)
+#'
+#' inferCSN(
+#'   example_matrix,
+#'   regulators = c("g1", "g2"),
+#'   targets = c("g3", "g4"),
+#'   verbose = TRUE
+#' )
+#' inferCSN(
+#'   example_matrix,
+#'   regulators = c("g1", "g2"),
+#'   targets = c("g3", "g0"),
+#'   verbose = TRUE
+#' )
+#' inferCSN(
+#'   example_matrix,
+#'   regulators = c("g1", "g0"),
+#'   targets = c("g2", "g3"),
+#'   verbose = TRUE
+#' )
+#' inferCSN(
+#'   example_matrix,
+#'   regulators = c("g1"),
+#'   targets = c("g2"),
+#'   verbose = TRUE
+#' )
 setMethod(
   f = "inferCSN",
   signature = signature(object = "matrix"),
@@ -81,7 +111,11 @@ setMethod(
                         verbose = FALSE,
                         ...) {
     if (verbose) {
-      message(paste("Running start for <", class(object)[1], ">."))
+      message(
+        paste(
+          "Running start for <", class(object)[1], ">."
+        )
+      )
     }
 
     # Check input parameters

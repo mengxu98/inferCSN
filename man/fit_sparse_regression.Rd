@@ -119,11 +119,11 @@ fit <- fit_sparse_regression(
 head(coef(fit))
 }
 \references{
-Hazimeh, Hussein et al. 
- “L0Learn: A Scalable Package for Sparse Learning using L0 Regularization.” 
+Hazimeh, Hussein et al.
+ “L0Learn: A Scalable Package for Sparse Learning using L0 Regularization.”
  J. Mach. Learn. Res. 24 (2022): 205:1-205:8.
- Hazimeh, Hussein and Rahul Mazumder. 
- “Fast Best Subset Selection: Coordinate Descent and Local Combinatorial Optimization Algorithms.” 
+ Hazimeh, Hussein and Rahul Mazumder.
+ “Fast Best Subset Selection: Coordinate Descent and Local Combinatorial Optimization Algorithms.”
  Oper. Res. 68 (2018): 1517-1537.
  https://github.com/hazimehh/L0Learn/blob/master/R/fit.R
 }

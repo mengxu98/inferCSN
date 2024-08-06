@@ -4,16 +4,31 @@
 \alias{normalization}
 \title{Normalize numeric vector}
 \usage{
-normalization(x, method = "max_min")
+normalization(x, method = "max_min", na_rm = TRUE)
 }
 \arguments{
-\item{x}{A numeric vector.}
+\item{x}{Input numeric vector.}
 
-\item{method}{Method for normalization.}
+\item{method}{Method used for normalization.}
+
+\item{na_rm}{Whether to remove \code{NA} values,
+and if setting TRUE, using \code{0} instead.}
 }
 \value{
-Normalized vector
+Normalized numeric vector
 }
 \description{
 Normalize numeric vector
+}
+\examples{
+nums <- c(runif(2), NA, -runif(2))
+nums
+normalization(nums, method = "max_min")
+normalization(nums, method = "maximum")
+normalization(nums, method = "sum")
+normalization(nums, method = "softmax")
+normalization(nums, method = "z_score")
+normalization(nums, method = "mad")
+normalization(nums, method = "unit_vector")
+normalization(nums, method = "unit_vector", na_rm = FALSE)
 }

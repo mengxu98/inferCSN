@@ -2,12 +2,13 @@
 #'
 #' @param x A vector or list to apply over.
 #' @param fun The function to be applied to each element.
-#' @param cores Number of CPU cores used. Setting to parallelize the computation with \code{\link[foreach]{foreach}}.
+#' @param cores Number of CPU cores used.
+#' Setting to parallelize the computation with \code{\link[foreach]{foreach}}.
 #' @param export_fun export_fun.
 #' @param verbose Logical. Whether to print progress bar.
 #' Only works in sequential mode.
 #'
-#' @return A list.
+#' @return A list of results.
 #'
 #' @export
 parallelize_fun <- function(
@@ -69,27 +70,25 @@ check_parameters <- function(
     message("Checking input parameters.")
   }
 
-  if (!is.matrix(matrix) && !is.array(matrix) && (length(dim(matrix)) != 2)) {
+  if (length(dim(matrix)) != 2) {
     stop(
-      "`matrix` must be a two-dimensional matrix,
-  where each column corresponds to a gene and each row corresponds to a sample/cell."
+      "The input matrix must be a two-dimensional matrix."
     )
   }
 
   if (is.null(colnames(matrix))) {
-    stop("`matrix` must contain the names of the genes as colnames.")
+    stop(
+      "The input matrix must contain the names of the genes as colnames."
+    )
   }
 
-  # Check the penalty term of the regression model
   match.arg(penalty, c("L0", "L0L1", "L0L2"))
-
-  # Check the algorithm of the regression model
   match.arg(algorithm, c("CD", "CDPSI"))
 
   if (!is.numeric(seed)) {
     seed <- 1
     if (verbose) {
-      warning("`seed` is not a valid integer, initialize to 1.")
+      message("Warning: random seed is not a valid value, initialize it to 1.")
     }
   }
 
@@ -98,35 +97,35 @@ check_parameters <- function(
   }
 
   if (!is.null(targets)) {
-    targets_intersect <- intersect(targets, colnames(matrix))
-    if (length(targets_intersect) == 0) {
+    intersect_targets <- intersect(targets, colnames(matrix))
+    if (length(intersect_targets) == 0) {
       stop("The input genes must contain at least 1 target.")
     }
 
-    if (length(targets_intersect) < length(targets)) {
+    if (length(intersect_targets) < length(targets)) {
       if (verbose) {
-        warning(
-          "Only ", length(targets_intersect), " out of ", length(targets), " candidate regulators are in `matrix`."
+        message(
+          "Warning: ",
+          length(intersect_targets), " out of ",
+          length(targets), " candidate targets are in the input matrix."
         )
       }
     }
   }
 
   if (!is.null(regulators)) {
-    regulators_intersect <- intersect(regulators, colnames(matrix))
-    if (length(regulators_intersect) == 0) {
+    intersect_regulators <- intersect(regulators, colnames(matrix))
+    if (length(intersect_regulators) == 0) {
       stop("The input genes must contain at least 1 regulator.")
     }
 
-    if (length(regulators_intersect) == 1) {
+    if (length(intersect_regulators) < length(regulators)) {
       if (verbose) {
-        message("Only 1 regulator found in `matrix`, `weight` calculated by `cor`.")
-      }
-    }
-
-    if (length(regulators_intersect) < length(regulators)) {
-      if (verbose) {
-        warning("Only ", length(regulators_intersect), " out of ", length(regulators), " candidate regulators are in the expression matrix.")
+        message(
+          "Warning: ",
+          length(intersect_regulators), " out of ",
+          length(regulators), " candidate regulators are in the input matrix."
+        )
       }
     }
   }
@@ -137,7 +136,9 @@ check_parameters <- function(
 
   if (verbose) {
     message("Using `", penalty, "` penalty.")
-    if (cross_validation) message("Using cross validation.")
+    if (cross_validation) {
+      message("Using cross validation.")
+    }
   }
 }
 
@@ -436,16 +437,17 @@ network_format <- function(
     abs(as.numeric(network_table$weight)),
     decreasing = TRUE
   ), ]
+  rownames(network_table) <- NULL
 
   return(network_table)
 }
 
 #' @title Extracts a specific solution in the regularization path
 #'
-#' @param object The output of fit_sparse_regression or inferCSN.cvfit
-#' @param lambda The value of lambda at which to extract the solution
-#' @param gamma The value of gamma at which to extract the solution
-#' @param supportSize The number of non-zeros each solution extracted will contain
+#' @param object The output of fit_sparse_regression.
+#' @param lambda The value of lambda at which to extract the solution.
+#' @param gamma The value of gamma at which to extract the solution.
+#' @param regulators_num The number of non-zeros each solution extracted will contain.
 #' @param ... Other parameters
 #'
 #' @method coef SRM_fit
@@ -456,13 +458,13 @@ coef.SRM_fit <- function(
     object,
     lambda = NULL,
     gamma = NULL,
-    supportSize = NULL,
+    regulators_num = NULL,
     ...) {
-  if (!is.null(supportSize) && !is.null(lambda)) {
-    stop("If 'supportSize' is provided to 'coef' only 'gamma' can also be provided.")
+  if (!is.null(regulators_num) && !is.null(lambda)) {
+    stop("If 'regulators_num' is provided to 'coef' only 'gamma' can also be provided.")
   }
 
-  if (is.null(lambda) && is.null(gamma) && is.null(supportSize)) {
+  if (is.null(lambda) && is.null(gamma) && is.null(regulators_num)) {
     # If all three are null, return all solutions
     t <- do.call(cbind, object$beta)
     if (object$settings$intercept) {
@@ -472,33 +474,35 @@ coef.SRM_fit <- function(
     return(t)
   }
 
-  if (is.null(gamma)) gamma <- object$gamma[1]
+  if (is.null(gamma)) {
+    gamma <- object$gamma[1]
+  }
 
-  diffGamma <- abs(object$gamma - gamma)
-  gammaindex <- which(diffGamma == min(diffGamma))
+  diff_gamma <- abs(object$gamma - gamma)
+  gamma_index <- which(diff_gamma == min(diff_gamma))
 
   indices <- NULL
   if (!is.null(lambda)) {
-    diffLambda <- abs(lambda - object$lambda[[gammaindex]])
+    diffLambda <- abs(lambda - object$lambda[[gamma_index]])
     indices <- which(diffLambda == min(diffLambda))
-  } else if (!is.null(supportSize)) {
-    diffSupportSize <- abs(supportSize - object$suppSize[[gammaindex]])
-    indices <- which(diffSupportSize == min(diffSupportSize))
+  } else if (!is.null(regulators_num)) {
+    diff_regulators_num <- abs(regulators_num - object$suppSize[[gamma_index]])
+    indices <- which(diff_regulators_num == min(diff_regulators_num))
   } else {
-    indices <- seq_along(object$lambda[[gammaindex]])
+    indices <- seq_along(object$lambda[[gamma_index]])
   }
 
   if (object$settings$intercept) {
     t <- rbind(
-      object$a0[[gammaindex]][indices],
-      object$beta[[gammaindex]][, indices, drop = FALSE]
+      object$a0[[gamma_index]][indices],
+      object$beta[[gamma_index]][, indices, drop = FALSE]
     )
     rownames(t) <- c(
       "Intercept",
       paste0(rep("V", object$p), 1:object$p)
     )
   } else {
-    t <- object$beta[[gammaindex]][, indices, drop = FALSE]
+    t <- object$beta[[gamma_index]][, indices, drop = FALSE]
     rownames(t) <- paste0(rep("V", object$p), 1:object$p)
   }
 
@@ -607,24 +611,58 @@ predict.SRM_fit_CV <- function(
 
 #' @title Normalize numeric vector
 #'
-#' @param x A numeric vector.
-#' @param method Method for normalization.
+#' @param x Input numeric vector.
+#' @param method Method used for normalization.
+#' @param na_rm Whether to remove `NA` values,
+#' and if setting TRUE, using `0` instead.
 #'
-#' @return Normalized vector
+#' @md
+#' @return Normalized numeric vector
 #' @export
+#'
+#' @examples
+#' nums <- c(runif(2), NA, -runif(2))
+#' nums
+#' normalization(nums, method = "max_min")
+#' normalization(nums, method = "maximum")
+#' normalization(nums, method = "sum")
+#' normalization(nums, method = "softmax")
+#' normalization(nums, method = "z_score")
+#' normalization(nums, method = "mad")
+#' normalization(nums, method = "unit_vector")
+#' normalization(nums, method = "unit_vector", na_rm = FALSE)
 normalization <- function(
     x,
-    method = "max_min") {
+    method = "max_min",
+    na_rm = TRUE) {
+  method <- match.arg(
+    method,
+    c("max_min", "maximum", "sum", "softmax", "z_score", "mad", "unit_vector")
+  )
   na_index <- which(is.na(x))
   x[na_index] <- 0
   x <- switch(
     EXPR = method,
-    "max_min" = ((x - min(x)) / (max(x) - min(x))),
-    "max" = (x / max(abs(x))),
+    "max_min" = {
+      (x - min(x)) / (max(x) - min(x))
+    },
+    "maximum" = (x / max(abs(x))),
     "sum" = (x / sum(abs(x))),
-    "softmax" = .softmax(x)
+    "softmax" = .softmax(x),
+    "z_score" = {
+      (x - mean(x)) / sd(x)
+    },
+    "mad" = {
+      (x - median(x)) / mad(x)
+    },
+    "unit_vector" = {
+      x / sqrt(sum(x^2))
+    }
   )
-  x[na_index] <- NA
+
+  if (!na_rm) {
+    x[na_index] <- NA
+  }
 
   return(x)
 }
@@ -641,9 +679,7 @@ normalization <- function(
   is.atomic(x) && length(x) == 1L && !is.character(x) && Im(x) == 0 && !is.nan(x) && !is.na(x)
 }
 
-.rmse <- function(
-    true,
-    pred) {
+.rmse <- function(true, pred) {
   sqrt(mean((true - pred)^2))
 }
 

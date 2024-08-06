@@ -5,18 +5,18 @@
 \alias{coef.SRM_fit_CV}
 \title{Extracts a specific solution in the regularization path}
 \usage{
-\method{coef}{SRM_fit}(object, lambda = NULL, gamma = NULL, supportSize = NULL, ...)
+\method{coef}{SRM_fit}(object, lambda = NULL, gamma = NULL, regulators_num = NULL, ...)
 
 \method{coef}{SRM_fit_CV}(object, lambda = NULL, gamma = NULL, ...)
 }
 \arguments{
-\item{object}{The output of fit_sparse_regression or inferCSN.cvfit}
+\item{object}{The output of fit_sparse_regression.}
 
-\item{lambda}{The value of lambda at which to extract the solution}
+\item{lambda}{The value of lambda at which to extract the solution.}
 
-\item{gamma}{The value of gamma at which to extract the solution}
+\item{gamma}{The value of gamma at which to extract the solution.}
 
-\item{supportSize}{The number of non-zeros each solution extracted will contain}
+\item{regulators_num}{The number of non-zeros each solution extracted will contain.}
 
 \item{...}{Other parameters}
 }

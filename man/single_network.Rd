@@ -61,12 +61,13 @@ Construct network for single gene
 }
 \examples{
 data("example_matrix")
-network_table <- single_network(
-  example_matrix,
-  regulators = colnames(example_matrix),
-  target = "g1"
+head(
+  single_network(
+    example_matrix,
+    regulators = colnames(example_matrix),
+    target = "g1"
+  )
 )
-head(network_table)
 
 single_network(
   example_matrix,
