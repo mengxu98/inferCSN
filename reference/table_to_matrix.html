@@ -85,13 +85,13 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">network_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">network_table</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     regulator target     weight</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 162       g17    g18  0.5443805</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9         g18     g1 -0.5390453</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 109       g16    g15  0.4818454</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 127       g17    g16  0.4599054</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 91        g15    g14  0.4516497</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 73        g14    g13  0.4483912</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   regulator target     weight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       g17    g18  0.5443805</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       g18     g1 -0.5390453</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       g16    g15  0.4818454</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       g17    g16  0.4599054</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       g15    g14  0.4516497</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       g14    g13  0.4483912</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">table_to_matrix</span><span class="op">(</span><span class="va">network_table</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              g1           g2            g3          g4          g5</span>

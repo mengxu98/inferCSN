@@ -57,7 +57,7 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'SRM_fit'</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">object</span>, lambda <span class="op">=</span> <span class="cn">NULL</span>, gamma <span class="op">=</span> <span class="cn">NULL</span>, supportSize <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">object</span>, lambda <span class="op">=</span> <span class="cn">NULL</span>, gamma <span class="op">=</span> <span class="cn">NULL</span>, regulators_num <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'SRM_fit_CV'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">object</span>, lambda <span class="op">=</span> <span class="cn">NULL</span>, gamma <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
@@ -68,19 +68,19 @@
 
 
 <dl><dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
-<dd><p>The output of fit_sparse_regression or inferCSN.cvfit</p></dd>
+<dd><p>The output of fit_sparse_regression.</p></dd>
 
 
 <dt id="arg-lambda">lambda<a class="anchor" aria-label="anchor" href="#arg-lambda"></a></dt>
-<dd><p>The value of lambda at which to extract the solution</p></dd>
+<dd><p>The value of lambda at which to extract the solution.</p></dd>
 
 
 <dt id="arg-gamma">gamma<a class="anchor" aria-label="anchor" href="#arg-gamma"></a></dt>
-<dd><p>The value of gamma at which to extract the solution</p></dd>
+<dd><p>The value of gamma at which to extract the solution.</p></dd>
 
 
-<dt id="arg-supportsize">supportSize<a class="anchor" aria-label="anchor" href="#arg-supportsize"></a></dt>
-<dd><p>The number of non-zeros each solution extracted will contain</p></dd>
+<dt id="arg-regulators-num">regulators_num<a class="anchor" aria-label="anchor" href="#arg-regulators-num"></a></dt>
+<dd><p>The number of non-zeros each solution extracted will contain.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
