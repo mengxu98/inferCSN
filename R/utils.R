@@ -44,14 +44,7 @@ parallelize_fun <- function(
   }
 }
 
-#' @title Check input parameters
-#'
-#' @param matrix An expression matrix, cells by genes
-#' @inheritParams inferCSN
-#'
-#' @return Not return value, called for check input parameters
-#' @export
-check_parameters <- function(
+.check_parameters <- function(
     matrix,
     penalty,
     algorithm,
@@ -375,6 +368,7 @@ filter_sort_matrix <- function(
 #'  default set to `TRUE`, and when set `abs_weight` to `TRUE`,
 #'  the output of weight table will create a new column named `Interaction`.
 #'
+#' @md
 #' @return Format weight table
 #' @export
 #'
@@ -444,7 +438,7 @@ network_format <- function(
 
 #' @title Extracts a specific solution in the regularization path
 #'
-#' @param object The output of fit_sparse_regression.
+#' @param object The output of \code{\link{fit_sparse_regression}}.
 #' @param lambda The value of lambda at which to extract the solution.
 #' @param gamma The value of gamma at which to extract the solution.
 #' @param regulators_num The number of non-zeros each solution extracted will contain.
@@ -486,8 +480,12 @@ coef.SRM_fit <- function(
     diffLambda <- abs(lambda - object$lambda[[gamma_index]])
     indices <- which(diffLambda == min(diffLambda))
   } else if (!is.null(regulators_num)) {
-    diff_regulators_num <- abs(regulators_num - object$suppSize[[gamma_index]])
-    indices <- which(diff_regulators_num == min(diff_regulators_num))
+    diff_regulators_num <- abs(
+      regulators_num - object$suppSize[[gamma_index]]
+    )
+    indices <- which(
+      diff_regulators_num == min(diff_regulators_num)
+    )
   } else {
     indices <- seq_along(object$lambda[[gamma_index]])
   }
@@ -510,10 +508,7 @@ coef.SRM_fit <- function(
 }
 
 #' @rdname coef.SRM_fit
-#'
 #' @method coef SRM_fit_CV
-#'
-#' @return Return the specific solution
 #' @export
 coef.SRM_fit_CV <- function(
     object,
@@ -523,14 +518,14 @@ coef.SRM_fit_CV <- function(
   coef.SRM_fit(object$fit, lambda, gamma, ...)
 }
 
-#' @title Prints a summary of fit_sparse_regression
+#' @title Prints a summary of \code{fit_sparse_regression}
 #'
-#' @param x The output of fit_sparse_regression or inferCSN.cvfit
+#' @param x The output of \code{\link{fit_sparse_regression}}.
 #' @param ... Other parameters
 #'
 #' @method print SRM_fit
 #'
-#' @return Return information of fit_sparse_regression
+#' @return Return information of \code{fit_sparse_regression}
 #' @export
 print.SRM_fit <- function(x, ...) {
   gammas <- rep(x$gamma, times = lapply(x$lambda, length))
@@ -543,10 +538,7 @@ print.SRM_fit <- function(x, ...) {
 }
 
 #' @rdname print.SRM_fit
-#'
 #' @method print SRM_fit_CV
-#'
-#' @return Return information of fit_sparse_regression
 #' @export
 print.SRM_fit_CV <- function(x, ...) {
   print.SRM_fit(x$fit)
@@ -559,9 +551,9 @@ print.SRM_fit_CV <- function(x, ...) {
 #' @param object The output of fit_sparse_regression
 #' @param newx A matrix on which predictions are made. The matrix should have p columns
 #' @param lambda The value of lambda to use for prediction.
-#' A summary of the lambdas in the regularization path can be obtained using \code{print(fit)}
+#' A summary of the lambdas in the regularization path can be obtained using \code{\link{print.SRM_fit}}.
 #' @param gamma The value of gamma to use for prediction.
-#' A summary of the gammas in the regularization path can be obtained using \code{print(fit)}
+#' A summary of the gammas in the regularization path can be obtained using \code{\link{print.SRM_fit}}.
 #' @param ... Other parameters
 #'
 #' @method predict SRM_fit
@@ -595,10 +587,7 @@ predict.SRM_fit <- function(
 }
 
 #' @rdname predict.SRM_fit
-#'
 #' @method predict SRM_fit_CV
-#'
-#' @return Return the predict value
 #' @export
 predict.SRM_fit_CV <- function(
     object,
@@ -650,10 +639,10 @@ normalization <- function(
     "sum" = (x / sum(abs(x))),
     "softmax" = .softmax(x),
     "z_score" = {
-      (x - mean(x)) / sd(x)
+      (x - mean(x)) / stats::sd(x)
     },
     "mad" = {
-      (x - median(x)) / mad(x)
+      (x - stats::median(x)) / stats::mad(x)
     },
     "unit_vector" = {
       x / sqrt(sum(x^2))

@@ -19,8 +19,8 @@ network_format(
 \item{targets}{Targets list.}
 
 \item{abs_weight}{Logical value, whether to perform absolute value on weights,
-default set to `TRUE`, and when set `abs_weight` to `TRUE`,
-the output of weight table will create a new column named `Interaction`.}
+default set to \code{TRUE}, and when set \code{abs_weight} to \code{TRUE},
+the output of weight table will create a new column named \code{Interaction}.}
 }
 \value{
 Format weight table

@@ -37,9 +37,9 @@ fit_sparse_regression(
 )
 }
 \arguments{
-\item{x}{The data matrix}
+\item{x}{The matrix of regulators.}
 
-\item{y}{The response vector}
+\item{y}{The vector of target.}
 
 \item{penalty}{The type of regularization.
 This can take either one of the following choices: \code{L0}, \code{L0L1} and \code{L0L2}.
@@ -61,46 +61,49 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 
 \item{loss}{The loss function.}
 
-\item{nLambda}{The number of Lambda values to select}
+\item{nLambda}{The number of Lambda values to select.}
 
-\item{nGamma}{The number of Gamma values to select}
+\item{nGamma}{The number of Gamma values to select.}
 
-\item{gammaMax}{The maximum value of Gamma when using the L0L2 penalty.
-For the L0L1 penalty this is automatically selected.}
+\item{gammaMax}{The maximum value of Gamma when using the \code{L0L2} penalty.
+For the \code{L0L1} penalty this is automatically selected.}
 
-\item{gammaMin}{The minimum value of Gamma when using the L0L2 penalty.
-For the L0L1 penalty, the minimum value of gamma in the grid is set to gammaMin * gammaMax.
+\item{gammaMin}{The minimum value of Gamma when using the \code{L0L2} penalty.
+For the \code{L0L1} penalty, the minimum value of gamma in the grid is set to gammaMin * gammaMax.
 Note that this should be a strictly positive quantity.}
 
-\item{partialSort}{If TRUE, partial sorting will be used for sorting the coordinates to do greedy cycling. Otherwise, full sorting is used}
+\item{partialSort}{If \code{TRUE}, partial sorting will be used for sorting the coordinates to do greedy cycling.
+Otherwise, full sorting is used.}
 
-\item{maxIters}{The maximum number of iterations (full cycles) for CD per grid point}
+\item{maxIters}{The maximum number of iterations (full cycles) for \code{CD} per grid point.}
 
-\item{rtol}{The relative tolerance which decides when to terminate optimization (based on the relative change in the objective between iterations)}
+\item{rtol}{The relative tolerance which decides when to terminate optimization,
+based on the relative change in the objective between iterations.}
 
-\item{atol}{The absolute tolerance which decides when to terminate optimization (based on the absolute L2 norm of the residuals)}
+\item{atol}{The absolute tolerance which decides when to terminate optimization,
+based on the absolute L2 norm of the residuals.}
 
-\item{activeSet}{If TRUE, performs active set updates}
+\item{activeSet}{If \code{TRUE}, performs active set updates.}
 
-\item{activeSetNum}{The number of consecutive times a support should appear before declaring support stabilization}
+\item{activeSetNum}{The number of consecutive times a support should appear before declaring support stabilization.}
 
-\item{maxSwaps}{The maximum number of swaps used by CDPSI for each grid point}
+\item{maxSwaps}{The maximum number of swaps used by \code{CDPSI} for each grid point.}
 
-\item{scaleDownFactor}{This parameter decides how close the selected Lambda values are}
+\item{scaleDownFactor}{This parameter decides how close the selected Lambda values are.}
 
-\item{screenSize}{The number of coordinates to cycle over when performing initial correlation screening}
+\item{screenSize}{The number of coordinates to cycle over when performing initial correlation screening.}
 
-\item{autoLambda}{Ignored parameter. Kept for backwards compatibility}
+\item{autoLambda}{Ignored parameter. Kept for backwards compatibility.}
 
-\item{lambdaGrid}{A grid of Lambda values to use in computing the regularization path}
+\item{lambdaGrid}{A grid of Lambda values to use in computing the regularization path.}
 
-\item{excludeFirstK}{This parameter takes non-negative integers}
+\item{excludeFirstK}{This parameter takes non-negative integers.}
 
-\item{intercept}{If FALSE, no intercept term is included in the model}
+\item{intercept}{If \code{FALSE}, no intercept term is included in the model.}
 
-\item{lows}{Lower bounds for coefficients}
+\item{lows}{Lower bounds for coefficients.}
 
-\item{highs}{Upper bounds for coefficients}
+\item{highs}{Upper bounds for coefficients.}
 
 \item{...}{Parameters for other methods.}
 }
@@ -120,10 +123,12 @@ head(coef(fit))
 }
 \references{
 Hazimeh, Hussein et al.
- “L0Learn: A Scalable Package for Sparse Learning using L0 Regularization.”
- J. Mach. Learn. Res. 24 (2022): 205:1-205:8.
- Hazimeh, Hussein and Rahul Mazumder.
- “Fast Best Subset Selection: Coordinate Descent and Local Combinatorial Optimization Algorithms.”
- Oper. Res. 68 (2018): 1517-1537.
- https://github.com/hazimehh/L0Learn/blob/master/R/fit.R
+“L0Learn: A Scalable Package for Sparse Learning using L0 Regularization.”
+J. Mach. Learn. Res. 24 (2022): 205:1-205:8.
+
+Hazimeh, Hussein and Rahul Mazumder.
+“Fast Best Subset Selection: Coordinate Descent and Local Combinatorial Optimization Algorithms.”
+Oper. Res. 68 (2018): 1517-1537.
+
+https://github.com/hazimehh/L0Learn/blob/master/R/fit.R
 }

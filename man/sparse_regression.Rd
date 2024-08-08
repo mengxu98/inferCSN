@@ -21,9 +21,9 @@ sparse_regression(
 )
 }
 \arguments{
-\item{x}{The data matrix}
+\item{x}{The matrix of regulators.}
 
-\item{y}{The response vector}
+\item{y}{The vector of target.}
 
 \item{cross_validation}{Check whether cross validation is used.}
 

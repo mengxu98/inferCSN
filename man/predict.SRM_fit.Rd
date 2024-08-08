@@ -15,17 +15,15 @@
 \item{newx}{A matrix on which predictions are made. The matrix should have p columns}
 
 \item{lambda}{The value of lambda to use for prediction.
-A summary of the lambdas in the regularization path can be obtained using \code{print(fit)}}
+A summary of the lambdas in the regularization path can be obtained using \code{\link{print.SRM_fit}}.}
 
 \item{gamma}{The value of gamma to use for prediction.
-A summary of the gammas in the regularization path can be obtained using \code{print(fit)}}
+A summary of the gammas in the regularization path can be obtained using \code{\link{print.SRM_fit}}.}
 
 \item{...}{Other parameters}
 }
 \value{
 Return predict value
-
-Return the predict value
 }
 \description{
 Predicts response for a given sample

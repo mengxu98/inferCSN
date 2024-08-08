@@ -3,22 +3,20 @@
 \name{print.SRM_fit}
 \alias{print.SRM_fit}
 \alias{print.SRM_fit_CV}
-\title{Prints a summary of fit_sparse_regression}
+\title{Prints a summary of \code{fit_sparse_regression}}
 \usage{
 \method{print}{SRM_fit}(x, ...)
 
 \method{print}{SRM_fit_CV}(x, ...)
 }
 \arguments{
-\item{x}{The output of fit_sparse_regression or inferCSN.cvfit}
+\item{x}{The output of \code{\link{fit_sparse_regression}}.}
 
 \item{...}{Other parameters}
 }
 \value{
-Return information of fit_sparse_regression
-
-Return information of fit_sparse_regression
+Return information of \code{fit_sparse_regression}
 }
 \description{
-Prints a summary of fit_sparse_regression
+Prints a summary of \code{fit_sparse_regression}
 }

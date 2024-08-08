@@ -2,7 +2,7 @@
 % Please edit documentation in R/sparse_regression.R
 \name{single_network}
 \alias{single_network}
-\title{Construct network for single gene}
+\title{Construct network for single target gene}
 \usage{
 single_network(
   matrix,
@@ -21,11 +21,11 @@ single_network(
 )
 }
 \arguments{
-\item{matrix}{An expression matrix, cells by genes.}
+\item{matrix}{An expression matrix.}
 
 \item{regulators}{A character vector with the regulators to consider for CSN inference.}
 
-\item{target}{Target gene.}
+\item{target}{The target gene.}
 
 \item{cross_validation}{Check whether cross validation is used.}
 
@@ -57,7 +57,7 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 The weight data table of sub-network
 }
 \description{
-Construct network for single gene
+Construct network for single target gene
 }
 \examples{
 data("example_matrix")
