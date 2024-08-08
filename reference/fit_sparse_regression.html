@@ -94,11 +94,11 @@
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>The data matrix</p></dd>
+<dd><p>The matrix of regulators.</p></dd>
 
 
 <dt id="arg-y">y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
-<dd><p>The response vector</p></dd>
+<dd><p>The vector of target.</p></dd>
 
 
 <dt id="arg-penalty">penalty<a class="anchor" aria-label="anchor" href="#arg-penalty"></a></dt>
@@ -136,82 +136,85 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 
 
 <dt id="arg-nlambda">nLambda<a class="anchor" aria-label="anchor" href="#arg-nlambda"></a></dt>
-<dd><p>The number of Lambda values to select</p></dd>
+<dd><p>The number of Lambda values to select.</p></dd>
 
 
 <dt id="arg-ngamma">nGamma<a class="anchor" aria-label="anchor" href="#arg-ngamma"></a></dt>
-<dd><p>The number of Gamma values to select</p></dd>
+<dd><p>The number of Gamma values to select.</p></dd>
 
 
 <dt id="arg-gammamax">gammaMax<a class="anchor" aria-label="anchor" href="#arg-gammamax"></a></dt>
-<dd><p>The maximum value of Gamma when using the L0L2 penalty.
-For the L0L1 penalty this is automatically selected.</p></dd>
+<dd><p>The maximum value of Gamma when using the <code>L0L2</code> penalty.
+For the <code>L0L1</code> penalty this is automatically selected.</p></dd>
 
 
 <dt id="arg-gammamin">gammaMin<a class="anchor" aria-label="anchor" href="#arg-gammamin"></a></dt>
-<dd><p>The minimum value of Gamma when using the L0L2 penalty.
-For the L0L1 penalty, the minimum value of gamma in the grid is set to gammaMin * gammaMax.
+<dd><p>The minimum value of Gamma when using the <code>L0L2</code> penalty.
+For the <code>L0L1</code> penalty, the minimum value of gamma in the grid is set to gammaMin * gammaMax.
 Note that this should be a strictly positive quantity.</p></dd>
 
 
 <dt id="arg-partialsort">partialSort<a class="anchor" aria-label="anchor" href="#arg-partialsort"></a></dt>
-<dd><p>If TRUE, partial sorting will be used for sorting the coordinates to do greedy cycling. Otherwise, full sorting is used</p></dd>
+<dd><p>If <code>TRUE</code>, partial sorting will be used for sorting the coordinates to do greedy cycling.
+Otherwise, full sorting is used.</p></dd>
 
 
 <dt id="arg-maxiters">maxIters<a class="anchor" aria-label="anchor" href="#arg-maxiters"></a></dt>
-<dd><p>The maximum number of iterations (full cycles) for CD per grid point</p></dd>
+<dd><p>The maximum number of iterations (full cycles) for <code>CD</code> per grid point.</p></dd>
 
 
 <dt id="arg-rtol">rtol<a class="anchor" aria-label="anchor" href="#arg-rtol"></a></dt>
-<dd><p>The relative tolerance which decides when to terminate optimization (based on the relative change in the objective between iterations)</p></dd>
+<dd><p>The relative tolerance which decides when to terminate optimization,
+based on the relative change in the objective between iterations.</p></dd>
 
 
 <dt id="arg-atol">atol<a class="anchor" aria-label="anchor" href="#arg-atol"></a></dt>
-<dd><p>The absolute tolerance which decides when to terminate optimization (based on the absolute L2 norm of the residuals)</p></dd>
+<dd><p>The absolute tolerance which decides when to terminate optimization,
+based on the absolute L2 norm of the residuals.</p></dd>
 
 
 <dt id="arg-activeset">activeSet<a class="anchor" aria-label="anchor" href="#arg-activeset"></a></dt>
-<dd><p>If TRUE, performs active set updates</p></dd>
+<dd><p>If <code>TRUE</code>, performs active set updates.</p></dd>
 
 
 <dt id="arg-activesetnum">activeSetNum<a class="anchor" aria-label="anchor" href="#arg-activesetnum"></a></dt>
-<dd><p>The number of consecutive times a support should appear before declaring support stabilization</p></dd>
+<dd><p>The number of consecutive times a support should appear before declaring support stabilization.</p></dd>
 
 
 <dt id="arg-maxswaps">maxSwaps<a class="anchor" aria-label="anchor" href="#arg-maxswaps"></a></dt>
-<dd><p>The maximum number of swaps used by CDPSI for each grid point</p></dd>
+<dd><p>The maximum number of swaps used by <code>CDPSI</code> for each grid point.</p></dd>
 
 
 <dt id="arg-scaledownfactor">scaleDownFactor<a class="anchor" aria-label="anchor" href="#arg-scaledownfactor"></a></dt>
-<dd><p>This parameter decides how close the selected Lambda values are</p></dd>
+<dd><p>This parameter decides how close the selected Lambda values are.</p></dd>
 
 
 <dt id="arg-screensize">screenSize<a class="anchor" aria-label="anchor" href="#arg-screensize"></a></dt>
-<dd><p>The number of coordinates to cycle over when performing initial correlation screening</p></dd>
+<dd><p>The number of coordinates to cycle over when performing initial correlation screening.</p></dd>
 
 
 <dt id="arg-autolambda">autoLambda<a class="anchor" aria-label="anchor" href="#arg-autolambda"></a></dt>
-<dd><p>Ignored parameter. Kept for backwards compatibility</p></dd>
+<dd><p>Ignored parameter. Kept for backwards compatibility.</p></dd>
 
 
 <dt id="arg-lambdagrid">lambdaGrid<a class="anchor" aria-label="anchor" href="#arg-lambdagrid"></a></dt>
-<dd><p>A grid of Lambda values to use in computing the regularization path</p></dd>
+<dd><p>A grid of Lambda values to use in computing the regularization path.</p></dd>
 
 
 <dt id="arg-excludefirstk">excludeFirstK<a class="anchor" aria-label="anchor" href="#arg-excludefirstk"></a></dt>
-<dd><p>This parameter takes non-negative integers</p></dd>
+<dd><p>This parameter takes non-negative integers.</p></dd>
 
 
 <dt id="arg-intercept">intercept<a class="anchor" aria-label="anchor" href="#arg-intercept"></a></dt>
-<dd><p>If FALSE, no intercept term is included in the model</p></dd>
+<dd><p>If <code>FALSE</code>, no intercept term is included in the model.</p></dd>
 
 
 <dt id="arg-lows">lows<a class="anchor" aria-label="anchor" href="#arg-lows"></a></dt>
-<dd><p>Lower bounds for coefficients</p></dd>
+<dd><p>Lower bounds for coefficients.</p></dd>
 
 
 <dt id="arg-highs">highs<a class="anchor" aria-label="anchor" href="#arg-highs"></a></dt>
-<dd><p>Upper bounds for coefficients</p></dd>
+<dd><p>Upper bounds for coefficients.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -225,12 +228,12 @@ Note that this should be a strictly positive quantity.</p></dd>
     <div id="references">
     <h2>References</h2>
     <p>Hazimeh, Hussein et al.
- “L0Learn: A Scalable Package for Sparse Learning using L0 Regularization.”
- J. Mach. Learn. Res. 24 (2022): 205:1-205:8.
- Hazimeh, Hussein and Rahul Mazumder.
- “Fast Best Subset Selection: Coordinate Descent and Local Combinatorial Optimization Algorithms.”
- Oper. Res. 68 (2018): 1517-1537.
- https://github.com/hazimehh/L0Learn/blob/master/R/fit.R</p>
+“L0Learn: A Scalable Package for Sparse Learning using L0 Regularization.”
+J. Mach. Learn. Res. 24 (2022): 205:1-205:8.</p>
+<p>Hazimeh, Hussein and Rahul Mazumder.
+“Fast Best Subset Selection: Coordinate Descent and Local Combinatorial Optimization Algorithms.”
+Oper. Res. 68 (2018): 1517-1537.</p>
+<p>https://github.com/hazimehh/L0Learn/blob/master/R/fit.R</p>
     </div>
 
     <div id="ref-examples">
