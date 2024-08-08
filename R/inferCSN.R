@@ -119,7 +119,7 @@ setMethod(
     }
 
     # Check input parameters
-    check_parameters(
+    .check_parameters(
       matrix = object,
       penalty = penalty,
       algorithm = algorithm,
@@ -249,7 +249,7 @@ setMethod(
       )
     }
 
-    check_parameters(
+    .check_parameters(
       matrix = object,
       penalty = penalty,
       algorithm = algorithm,
