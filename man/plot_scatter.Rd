@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotting_functions.R
 \name{plot_scatter}
 \alias{plot_scatter}
-\title{plot_scatter}
+\title{Plot expression data in a scatter plot}
 \usage{
 plot_scatter(
   data,
@@ -26,9 +26,9 @@ plot_scatter(
 )
 }
 \arguments{
-\item{data}{Input data}
+\item{data}{Input data.}
 
-\item{smoothing_method}{Method for smoothing curve, "lm" or "loess".}
+\item{smoothing_method}{Method for smoothing curve, \code{lm} or \code{loess}.}
 
 \item{group_colors}{Colors for different groups.}
 
@@ -46,13 +46,13 @@ plot_scatter(
 
 \item{margins}{The position of marginal figure ("both", "x", "y").}
 
-\item{marginal_type}{The type of marginal figure ("density", "histogram", "boxplot", "violin", "densigram").}
+\item{marginal_type}{The type of marginal figure (\code{density}, \code{histogram}, \code{boxplot}, \code{violin}, \code{densigram}).}
 
 \item{margins_size}{The size of marginal figure, note the bigger size the smaller figure.}
 
 \item{compute_correlation}{Whether to compute and print correlation on the figure.}
 
-\item{compute_correlation_method}{Method to compute correlation ("pearson" or "spearman").}
+\item{compute_correlation_method}{Method to compute correlation (\code{pearson} or \code{spearman}).}
 
 \item{keep_aspect_ratio}{Logical value, whether to set aspect ratio to 1:1.}
 
@@ -66,7 +66,7 @@ plot_scatter(
 ggplot object
 }
 \description{
-plot_scatter
+Plot expression data in a scatter plot
 }
 \examples{
 data("example_matrix")

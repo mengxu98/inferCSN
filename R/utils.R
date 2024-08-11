@@ -277,7 +277,6 @@ check_sparsity <- function(x) {
 
 #' @title Switch weight table to matrix
 #'
-#' @param network_table The weight data table of network.
 #' @inheritParams network_format
 #'
 #' @return Weight matrix
@@ -515,7 +514,11 @@ coef.SRM_fit_CV <- function(
     lambda = NULL,
     gamma = NULL,
     ...) {
-  coef.SRM_fit(object$fit, lambda, gamma, ...)
+  return(
+    coef.SRM_fit(
+      object$fit, lambda, gamma, ...
+    )
+  )
 }
 
 #' @title Prints a summary of \code{fit_sparse_regression}
@@ -529,11 +532,13 @@ coef.SRM_fit_CV <- function(
 #' @export
 print.SRM_fit <- function(x, ...) {
   gammas <- rep(x$gamma, times = lapply(x$lambda, length))
-  data.frame(
-    lambda = unlist(x["lambda"]),
-    gamma = gammas,
-    suppSize = unlist(x["suppSize"]),
-    row.names = NULL
+  return(
+    data.frame(
+      lambda = unlist(x["lambda"]),
+      gamma = gammas,
+      suppSize = unlist(x["suppSize"]),
+      row.names = NULL
+    )
   )
 }
 
@@ -541,7 +546,9 @@ print.SRM_fit <- function(x, ...) {
 #' @method print SRM_fit_CV
 #' @export
 print.SRM_fit_CV <- function(x, ...) {
-  print.SRM_fit(x$fit)
+  return(
+    print.SRM_fit(x$fit)
+  )
 }
 
 #' @title Predict Response
@@ -595,7 +602,11 @@ predict.SRM_fit_CV <- function(
     lambda = NULL,
     gamma = NULL,
     ...) {
-  predict.SRM_fit(object$fit, newx, lambda, gamma, ...)
+  return(
+    predict.SRM_fit(
+      object$fit, newx, lambda, gamma, ...
+    )
+  )
 }
 
 #' @title Normalize numeric vector
@@ -635,9 +646,15 @@ normalization <- function(
     "max_min" = {
       (x - min(x)) / (max(x) - min(x))
     },
-    "maximum" = (x / max(abs(x))),
-    "sum" = (x / sum(abs(x))),
-    "softmax" = .softmax(x),
+    "maximum" = {
+      x / max(abs(x))
+    },
+    "sum" = {
+      x / sum(abs(x))
+    },
+    "softmax" = {
+      (exp(abs(x)) / sum(exp(abs(x)))) * sign(x)
+    },
     "z_score" = {
       (x - mean(x)) / stats::sd(x)
     },
@@ -656,20 +673,14 @@ normalization <- function(
   return(x)
 }
 
-.softmax <- function(x) {
-  abs_x <- abs(x)
-  softmax_values <- exp(abs_x) / sum(exp(abs_x))
-  result <- softmax_values * sign(x)
-
-  return(result)
-}
-
 .is_scalar <- function(x) {
   is.atomic(x) && length(x) == 1L && !is.character(x) && Im(x) == 0 && !is.nan(x) && !is.na(x)
 }
 
 .rmse <- function(true, pred) {
-  sqrt(mean((true - pred)^2))
+  return(
+    sqrt(mean((true - pred)^2))
+  )
 }
 
 #' @title Sum of Squared Errors
@@ -677,19 +688,25 @@ normalization <- function(
 #' @param y_true A numeric vector with ground truth values.
 #' @param y_pred A numeric vector with predicted values.
 sse <- function(y_true, y_pred) {
-  return(sum((y_true - y_pred)**2))
+  return(
+    sum((y_true - y_pred)**2)
+  )
 }
 
 #' @title Relative Squared Error
 #'
 #' @inheritParams sse
 rse <- function(y_true, y_pred) {
-  return(sse(y_true, y_pred) / sse(y_true, mean(y_true)))
+  return(
+    sse(y_true, y_pred) / sse(y_true, mean(y_true))
+  )
 }
 
 #' @title \eqn{R^2} (coefficient of determination)
 #'
 #' @inheritParams sse
 r_square <- function(y_true, y_pred) {
-  1 - rse(y_true, y_pred)
+  return(
+    1 - rse(y_true, y_pred)
+  )
 }

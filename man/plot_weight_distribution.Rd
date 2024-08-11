@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotting_functions.R
 \name{plot_weight_distribution}
 \alias{plot_weight_distribution}
-\title{plot_weight_distribution}
+\title{Plot weight distribution}
 \usage{
 plot_weight_distribution(
   network_table,
@@ -18,7 +18,7 @@ plot_weight_distribution(
 )
 }
 \arguments{
-\item{network_table}{Input data frame.}
+\item{network_table}{The weight data table of network.}
 
 \item{binwidth}{Width of the bins.}
 
@@ -42,7 +42,7 @@ plot_weight_distribution(
 ggplot object
 }
 \description{
-plot_weight_distribution
+Plot weight distribution
 }
 \examples{
 data("example_matrix")

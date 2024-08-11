@@ -2,21 +2,22 @@
 % Please edit documentation in R/plotting_functions.R
 \name{plot_embedding}
 \alias{plot_embedding}
-\title{plot_embedding}
+\title{Plot embedding}
 \usage{
 plot_embedding(
-  expression_matrix,
+  matrix,
   labels = NULL,
-  method = "tsne",
+  method = "pca",
   colors = RColorBrewer::brewer.pal(length(unique(labels)), "Set1"),
   seed = 1,
-  point_size = 1
+  point_size = 1,
+  cores = 1
 )
 }
 \arguments{
-\item{expression_matrix}{Input data frame.}
+\item{matrix}{Input matrix.}
 
-\item{labels}{Input data frame.}
+\item{labels}{Input labels.}
 
 \item{method}{Method to use for dimensionality reduction.}
 
@@ -25,9 +26,11 @@ plot_embedding(
 \item{seed}{Seed for the random number generator.}
 
 \item{point_size}{Size of the points.}
+
+\item{cores}{Set the number of threads when setting \code{method} to \code{\link[uwot]{umap}} and \code{\link[Rtsne]{Rtsne}}.}
 }
 \value{
-ggplot object
+An embedding plot
 }
 \description{
 Plot embedding of the expression matrix.
@@ -35,27 +38,24 @@ Plot embedding of the expression matrix.
 \examples{
 data("example_matrix")
 samples_use <- 1:200
+plot_data <- example_matrix[samples_use, ]
 labels <- sample(
   c("A", "B", "C", "D", "E"),
-  nrow(example_matrix[samples_use, ]),
+  nrow(plot_data),
   replace = TRUE
 )
 
 plot_embedding(
-  example_matrix[samples_use, ],
-  point_size = 2
-)
-
-plot_embedding(
-  example_matrix[samples_use, ],
-  labels,
-  point_size = 2
-)
-
-plot_embedding(
-  example_matrix[samples_use, ],
+  plot_data,
   labels,
   method = "pca",
+  point_size = 2
+)
+
+plot_embedding(
+  plot_data,
+  labels,
+  method = "tsne",
   point_size = 2
 )
 }

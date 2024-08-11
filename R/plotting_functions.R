@@ -1,7 +1,7 @@
-#' @title plot_scatter
+#' @title Plot expression data in a scatter plot
 #'
-#' @param data Input data
-#' @param smoothing_method Method for smoothing curve, "lm" or "loess".
+#' @param data Input data.
+#' @param smoothing_method Method for smoothing curve, `lm` or `loess`.
 #' @param group_colors Colors for different groups.
 #' @param title_color Color for the title.
 #' @param title Main title for the plot.
@@ -10,15 +10,16 @@
 #' @param legend_title Title for the legend.
 #' @param legend_position The position of legend.
 #' @param margins The position of marginal figure ("both", "x", "y").
-#' @param marginal_type The type of marginal figure ("density", "histogram", "boxplot", "violin", "densigram").
+#' @param marginal_type The type of marginal figure (`density`, `histogram`, `boxplot`, `violin`, `densigram`).
 #' @param margins_size The size of marginal figure, note the bigger size the smaller figure.
 #' @param compute_correlation Whether to compute and print correlation on the figure.
-#' @param compute_correlation_method Method to compute correlation ("pearson" or "spearman").
+#' @param compute_correlation_method Method to compute correlation (`pearson` or `spearman`).
 #' @param keep_aspect_ratio Logical value, whether to set aspect ratio to 1:1.
 #' @param facet Faceting variable. If setting TRUE, all settings about margins will be inalidation.
 #' @param se Display confidence interval around smooth.
 #' @param pointdensity Plot point density when only provide 1 cluster.
 #'
+#' @md
 #' @return ggplot object
 #' @export
 #' @examples
@@ -171,9 +172,9 @@ plot_scatter <- function(
   return(p)
 }
 
-#' @title plot_weight_distribution
+#' @title Plot weight distribution
 #'
-#' @param network_table Input data frame.
+#' @param network_table The weight data table of network.
 #' @param binwidth Width of the bins.
 #' @param show_border Logical value, whether to show border of the bins.
 #' @param border_color Color of the border.
@@ -229,66 +230,76 @@ plot_weight_distribution <- function(
     theme_bw()
 }
 
-#' @title plot_embedding
+#' @title Plot embedding
 #' @description
 #'  Plot embedding of the expression matrix.
 #'
-#' @param expression_matrix Input data frame.
-#' @param labels Input data frame.
+#' @param matrix Input matrix.
+#' @param labels Input labels.
 #' @param method Method to use for dimensionality reduction.
 #' @param colors Colors to use for the plot.
 #' @param point_size Size of the points.
 #' @param seed Seed for the random number generator.
+#' @param cores Set the number of threads when setting \code{method} to \code{\link[uwot]{umap}} and \code{\link[Rtsne]{Rtsne}}.
 #'
-#' @return ggplot object
+#' @return An embedding plot
 #' @export
 #'
 #' @examples
 #' data("example_matrix")
 #' samples_use <- 1:200
+#' plot_data <- example_matrix[samples_use, ]
 #' labels <- sample(
 #'   c("A", "B", "C", "D", "E"),
-#'   nrow(example_matrix[samples_use, ]),
+#'   nrow(plot_data),
 #'   replace = TRUE
 #' )
 #'
 #' plot_embedding(
-#'   example_matrix[samples_use, ],
-#'   point_size = 2
-#' )
-#'
-#' plot_embedding(
-#'   example_matrix[samples_use, ],
-#'   labels,
-#'   point_size = 2
-#' )
-#'
-#' plot_embedding(
-#'   example_matrix[samples_use, ],
+#'   plot_data,
 #'   labels,
 #'   method = "pca",
 #'   point_size = 2
 #' )
+#'
+#' plot_embedding(
+#'   plot_data,
+#'   labels,
+#'   method = "tsne",
+#'   point_size = 2
+#' )
 plot_embedding <- function(
-    expression_matrix,
+    matrix,
     labels = NULL,
-    method = "tsne",
+    method = "pca",
     colors = RColorBrewer::brewer.pal(length(unique(labels)), "Set1"),
     seed = 1,
-    point_size = 1) {
+    point_size = 1,
+    cores = 1) {
   method <- match.arg(method, c("umap", "tsne", "pca"))
 
   set.seed(seed)
-  result <- switch(method,
-    "umap" = {
-      uwot::umap(expression_matrix, n_components = 3)
-    },
-    "tsne" = {
-      Rtsne::Rtsne(expression_matrix, dims = 3)$Y
-    },
-    "pca" = {
-      stats::prcomp(expression_matrix, rank. = 3)$x
-    }
+  result <- suppressMessages(
+    switch(method,
+      "umap" = {
+        uwot::umap(
+          matrix,
+          n_components = 3,
+          n_threads = cores,
+          seed = seed
+        )
+      },
+      "tsne" = {
+        Rtsne::Rtsne(
+          matrix,
+          dims = 3,
+          num_threads = cores
+        )$Y
+      },
+      "pca" = {
+        stats::prcomp(matrix, rank. = 3)$x
+      }
+    )
   )
 
   result_df <- as.data.frame(result)
