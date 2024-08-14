@@ -43,7 +43,6 @@ reference:
 - contents:
   - calculate_auc
   - calculate_acc
-  - prepare_network_data
 
 - subtitle: "Network visualization"
 - contents:

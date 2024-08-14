@@ -1,7 +1,5 @@
-#' @title Calculate auc
-#' @description
-#'  Calculate AUPRC and AUROC values
-#'
+#' @title Calculate AUPRC and AUROC values
+#' 
 #' @param network_table The weight data table of network
 #' @param ground_truth Ground truth for calculate AUC
 #' @param plot If true, draw and print figure of AUC
@@ -22,7 +20,7 @@ calculate_auc <- function(
     plot = FALSE,
     line_color = "#1563cc",
     line_width = 1) {
-  gold <- prepare_network_data(
+  gold <- .prepare_network_data(
     network_table,
     ground_truth
   )
@@ -93,9 +91,7 @@ calculate_auc <- function(
   return(auc_metric)
 }
 
-#' @title Calculate acc
-#' @description
-#'  Calculate accuracy value
+#' @title Calculate accuracy value
 #'
 #' @inheritParams calculate_auc
 #'
@@ -110,7 +106,7 @@ calculate_auc <- function(
 calculate_acc <- function(
     network_table,
     ground_truth) {
-  gold <- prepare_network_data(
+  gold <- .prepare_network_data(
     network_table,
     ground_truth
   )
@@ -147,15 +143,7 @@ calculate_acc <- function(
   return(acc)
 }
 
-#' @title Prepare network data
-#' @description
-#'  Formated network table
-#'
-#' @inheritParams calculate_auc
-#'
-#' @return Formated network table
-#' @export
-prepare_network_data <- function(
+.prepare_network_data <- function(
     network_table,
     ground_truth) {
   colnames(network_table) <- c("regulator", "target", "weight")
