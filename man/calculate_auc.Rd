@@ -2,7 +2,7 @@
 % Please edit documentation in R/performance_evaluation.R
 \name{calculate_auc}
 \alias{calculate_auc}
-\title{Calculate auc}
+\title{Calculate AUPRC and AUROC values}
 \usage{
 calculate_auc(
   network_table,

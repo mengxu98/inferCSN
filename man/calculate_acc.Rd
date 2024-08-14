@@ -2,7 +2,7 @@
 % Please edit documentation in R/performance_evaluation.R
 \name{calculate_acc}
 \alias{calculate_acc}
-\title{Calculate acc}
+\title{Calculate accuracy value}
 \usage{
 calculate_acc(network_table, ground_truth)
 }

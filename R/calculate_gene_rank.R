@@ -41,6 +41,7 @@ calculate_gene_rank <- function(
     page_rank_res$gene %in% unique(network_table$regulator),
     "TRUE", "FALSE"
   )
+  rownames(page_rank_res) <- NULL
 
   return(page_rank_res)
 }
