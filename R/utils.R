@@ -653,7 +653,7 @@ normalization <- function(
       x / sum(abs(x))
     },
     "softmax" = {
-      (exp(abs(x)) / sum(exp(abs(x)))) * sign(x)
+      exp(x - max(x)) / sum(exp(x - max(x)))
     },
     "z_score" = {
       (x - mean(x)) / stats::sd(x)
