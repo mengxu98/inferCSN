@@ -138,8 +138,10 @@ sparse_regression <- function(
 
     if (any(class(fit) == "try-error")) {
       if (verbose) {
-        message("Warning: cross validation error.")
-        message("Set `cross_validation` to `FALSE` and re-train model.")
+        message(
+          "Warning: cross validation error,
+          setting `cross_validation` to `FALSE` and re-train model."
+        )
       }
       fit <- try(
         fit_sparse_regression(
@@ -268,11 +270,11 @@ sparse_regression <- function(
 #'  Hazimeh, Hussein et al.
 #'  “L0Learn: A Scalable Package for Sparse Learning using L0 Regularization.”
 #'  J. Mach. Learn. Res. 24 (2022): 205:1-205:8.
-#' 
+#'
 #'  Hazimeh, Hussein and Rahul Mazumder.
 #'  “Fast Best Subset Selection: Coordinate Descent and Local Combinatorial Optimization Algorithms.”
 #'  Oper. Res. 68 (2018): 1517-1537.
-#' 
+#'
 #'  https://github.com/hazimehh/L0Learn/blob/master/R/fit.R
 #'
 #' @return An S3 object describing the regularization path
@@ -446,7 +448,7 @@ fit_sparse_regression <- function(
   if (!cross_validation) {
     if (methods::is(x, "sparseMatrix")) {
       m <- .Call(
-        "_inferCSN_SRM_model_fit_sparse",
+        "_inferCSN_srm_model_sparse",
         PACKAGE = "inferCSN",
         x, y, loss, penalty, algorithm, regulators_num,
         nLambda, nGamma, gammaMax, gammaMin, partialSort,
@@ -456,7 +458,7 @@ fit_sparse_regression <- function(
       )
     } else {
       m <- .Call(
-        "_inferCSN_SRM_model_fit_dense",
+        "_inferCSN_srm_model_dense",
         PACKAGE = "inferCSN",
         x, y, loss, penalty, algorithm, regulators_num,
         nLambda, nGamma, gammaMax, gammaMin, partialSort,
@@ -469,7 +471,7 @@ fit_sparse_regression <- function(
     set.seed(seed)
     if (methods::is(x, "sparseMatrix")) {
       m <- .Call(
-        "_inferCSN_SRM_model_fit_CV_sparse",
+        "_inferCSN_srm_model_cv_sparse",
         PACKAGE = "inferCSN",
         x, y, loss, penalty, algorithm, regulators_num,
         nLambda, nGamma, gammaMax, gammaMin, partialSort,
@@ -479,7 +481,7 @@ fit_sparse_regression <- function(
       )
     } else {
       m <- .Call(
-        "_inferCSN_SRM_model_fit_CV_dense",
+        "_inferCSN_srm_model_cv_dense",
         PACKAGE = "inferCSN",
         x, y, loss, penalty, algorithm, regulators_num,
         nLambda, nGamma, gammaMax, gammaMin, partialSort,
@@ -533,7 +535,7 @@ fit_sparse_regression <- function(
     varnames <- colnames(x)
   }
   fit$varnames <- varnames
-  class(fit) <- "SRM_fit"
+  class(fit) <- "srm"
   fit$n <- dim(x)[1]
   fit$p <- dim(x)[2]
 
@@ -541,7 +543,7 @@ fit_sparse_regression <- function(
     g <- fit
   } else {
     g <- list(fit = fit, cvMeans = m$CVMeans, cvSDs = m$CVSDs)
-    class(g) <- "SRM_fit_CV"
+    class(g) <- "srm_cv"
   }
 
   return(g)

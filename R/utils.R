@@ -443,11 +443,11 @@ network_format <- function(
 #' @param regulators_num The number of non-zeros each solution extracted will contain.
 #' @param ... Other parameters
 #'
-#' @method coef SRM_fit
+#' @method coef srm
 #'
 #' @return Return the specific solution
 #' @export
-coef.SRM_fit <- function(
+coef.srm <- function(
     object,
     lambda = NULL,
     gamma = NULL,
@@ -506,16 +506,16 @@ coef.SRM_fit <- function(
   return(t)
 }
 
-#' @rdname coef.SRM_fit
-#' @method coef SRM_fit_CV
+#' @rdname coef.srm
+#' @method coef srm_cv
 #' @export
-coef.SRM_fit_CV <- function(
+coef.srm_cv <- function(
     object,
     lambda = NULL,
     gamma = NULL,
     ...) {
   return(
-    coef.SRM_fit(
+    coef.srm(
       object$fit, lambda, gamma, ...
     )
   )
@@ -526,11 +526,11 @@ coef.SRM_fit_CV <- function(
 #' @param x The output of \code{\link{fit_sparse_regression}}.
 #' @param ... Other parameters
 #'
-#' @method print SRM_fit
+#' @method print srm
 #'
 #' @return Return information of \code{fit_sparse_regression}
 #' @export
-print.SRM_fit <- function(x, ...) {
+print.srm <- function(x, ...) {
   gammas <- rep(x$gamma, times = lapply(x$lambda, length))
   return(
     data.frame(
@@ -542,12 +542,12 @@ print.SRM_fit <- function(x, ...) {
   )
 }
 
-#' @rdname print.SRM_fit
-#' @method print SRM_fit_CV
+#' @rdname print.srm
+#' @method print srm_cv
 #' @export
-print.SRM_fit_CV <- function(x, ...) {
+print.srm_cv <- function(x, ...) {
   return(
-    print.SRM_fit(x$fit)
+    print.srm(x$fit)
   )
 }
 
@@ -558,12 +558,12 @@ print.SRM_fit_CV <- function(x, ...) {
 #' @param object The output of fit_sparse_regression
 #' @param newx A matrix on which predictions are made. The matrix should have p columns
 #' @param lambda The value of lambda to use for prediction.
-#' A summary of the lambdas in the regularization path can be obtained using \code{\link{print.SRM_fit}}.
+#' A summary of the lambdas in the regularization path can be obtained using \code{\link{print.srm}}.
 #' @param gamma The value of gamma to use for prediction.
-#' A summary of the gammas in the regularization path can be obtained using \code{\link{print.SRM_fit}}.
+#' A summary of the gammas in the regularization path can be obtained using \code{\link{print.srm}}.
 #' @param ... Other parameters
 #'
-#' @method predict SRM_fit
+#' @method predict srm
 #'
 #' @details
 #' If both lambda and gamma are not supplied, then a matrix of predictions for all the solutions in the regularization path is returned.
@@ -572,13 +572,13 @@ print.SRM_fit_CV <- function(x, ...) {
 #'
 #' @return Return predict value
 #' @export
-predict.SRM_fit <- function(
+predict.srm <- function(
     object,
     newx,
     lambda = NULL,
     gamma = NULL,
     ...) {
-  beta <- coef.SRM_fit(object, lambda, gamma)
+  beta <- coef.srm(object, lambda, gamma)
   if (object$settings$intercept) {
     # add a column of ones for the intercept
     x <- cbind(1, newx)
@@ -593,17 +593,17 @@ predict.SRM_fit <- function(
   return(prediction)
 }
 
-#' @rdname predict.SRM_fit
-#' @method predict SRM_fit_CV
+#' @rdname predict.srm
+#' @method predict srm_cv
 #' @export
-predict.SRM_fit_CV <- function(
+predict.srm_cv <- function(
     object,
     newx,
     lambda = NULL,
     gamma = NULL,
     ...) {
   return(
-    predict.SRM_fit(
+    predict.srm(
       object$fit, newx, lambda, gamma, ...
     )
   )
@@ -683,30 +683,24 @@ normalization <- function(
   )
 }
 
-#' @title Sum of Squared Errors
-#'
-#' @param y_true A numeric vector with ground truth values.
-#' @param y_pred A numeric vector with predicted values.
-sse <- function(y_true, y_pred) {
+.sse <- function(y_true, y_pred) {
   return(
     sum((y_true - y_pred)**2)
   )
 }
 
-#' @title Relative Squared Error
-#'
-#' @inheritParams sse
-rse <- function(y_true, y_pred) {
+.rse <- function(y_true, y_pred) {
   return(
-    sse(y_true, y_pred) / sse(y_true, mean(y_true))
+    .sse(y_true, y_pred) / .sse(y_true, mean(y_true))
   )
 }
 
 #' @title \eqn{R^2} (coefficient of determination)
 #'
-#' @inheritParams sse
+#' @param y_true A numeric vector with ground truth values.
+#' @param y_pred A numeric vector with predicted values.
 r_square <- function(y_true, y_pred) {
   return(
-    1 - rse(y_true, y_pred)
+    1 - .rse(y_true, y_pred)
   )
 }

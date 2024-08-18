@@ -75,7 +75,7 @@ GridParams<T> makeGridParams(
 }
 
 template <typename T>
-Rcpp::List _SRM_model_fit(
+Rcpp::List _srm_model(
     const T &X, const arma::vec &y, const std::string Loss,
     const std::string Penalty, const std::string Algorithm,
     const std::size_t NnzStopNum, const std::size_t G_ncols,
@@ -126,7 +126,7 @@ Rcpp::List _SRM_model_fit(
 }
 
 template <typename T>
-Rcpp::List _SRM_model_fit_CV(
+Rcpp::List _srm_model_cv(
     const T &X, const arma::vec &y, const std::string Loss,
     const std::string Penalty, const std::string Algorithm,
     const unsigned int NnzStopNum, const unsigned int G_ncols,
@@ -294,7 +294,7 @@ Rcpp::List _SRM_model_fit_CV(
 }
 
 // [[Rcpp::export]]
-Rcpp::List SRM_model_fit_sparse(
+Rcpp::List srm_model_sparse(
     const arma::sp_mat &X, const arma::vec &y, const std::string Loss,
     const std::string Penalty, const std::string Algorithm,
     const std::size_t NnzStopNum, const std::size_t G_ncols,
@@ -307,15 +307,15 @@ Rcpp::List SRM_model_fit_sparse(
     const std::size_t ExcludeFirstK, const bool Intercept,
     const bool withBounds, const arma::vec &Lows, const arma::vec &Highs) {
 
-  return _SRM_model_fit(X, y, Loss, Penalty, Algorithm, NnzStopNum, G_ncols,
-                        G_nrows, Lambda2Max, Lambda2Min, PartialSort, MaxIters,
-                        rtol, atol, ActiveSet, ActiveSetNum, MaxNumSwaps,
-                        ScaleDownFactor, ScreenSize, LambdaU, Lambdas,
-                        ExcludeFirstK, Intercept, withBounds, Lows, Highs);
+  return _srm_model(X, y, Loss, Penalty, Algorithm, NnzStopNum, G_ncols,
+                    G_nrows, Lambda2Max, Lambda2Min, PartialSort, MaxIters,
+                    rtol, atol, ActiveSet, ActiveSetNum, MaxNumSwaps,
+                    ScaleDownFactor, ScreenSize, LambdaU, Lambdas,
+                    ExcludeFirstK, Intercept, withBounds, Lows, Highs);
 }
 
 // [[Rcpp::export]]
-Rcpp::List SRM_model_fit_dense(
+Rcpp::List srm_model_dense(
     const arma::mat &X, const arma::vec &y, const std::string Loss,
     const std::string Penalty, const std::string Algorithm,
     const std::size_t NnzStopNum, const std::size_t G_ncols,
@@ -328,15 +328,15 @@ Rcpp::List SRM_model_fit_dense(
     const std::size_t ExcludeFirstK, const bool Intercept,
     const bool withBounds, const arma::vec &Lows, const arma::vec &Highs) {
 
-  return _SRM_model_fit(X, y, Loss, Penalty, Algorithm, NnzStopNum, G_ncols,
-                        G_nrows, Lambda2Max, Lambda2Min, PartialSort, MaxIters,
-                        rtol, atol, ActiveSet, ActiveSetNum, MaxNumSwaps,
-                        ScaleDownFactor, ScreenSize, LambdaU, Lambdas,
-                        ExcludeFirstK, Intercept, withBounds, Lows, Highs);
+  return _srm_model(X, y, Loss, Penalty, Algorithm, NnzStopNum, G_ncols,
+                    G_nrows, Lambda2Max, Lambda2Min, PartialSort, MaxIters,
+                    rtol, atol, ActiveSet, ActiveSetNum, MaxNumSwaps,
+                    ScaleDownFactor, ScreenSize, LambdaU, Lambdas,
+                    ExcludeFirstK, Intercept, withBounds, Lows, Highs);
 }
 
 // [[Rcpp::export]]
-Rcpp::List SRM_model_fit_CV_sparse(
+Rcpp::List srm_model_cv_sparse(
     const arma::sp_mat &X, const arma::vec &y, const std::string Loss,
     const std::string Penalty, const std::string Algorithm,
     const std::size_t NnzStopNum, const std::size_t G_ncols,
@@ -349,15 +349,15 @@ Rcpp::List SRM_model_fit_CV_sparse(
     const double seed, const std::size_t ExcludeFirstK, const bool Intercept,
     const bool withBounds, const arma::vec &Lows, const arma::vec &Highs) {
 
-  return _SRM_model_fit_CV(
-      X, y, Loss, Penalty, Algorithm, NnzStopNum, G_ncols, G_nrows, Lambda2Max,
-      Lambda2Min, PartialSort, MaxIters, rtol, atol, ActiveSet, ActiveSetNum,
-      MaxNumSwaps, ScaleDownFactor, ScreenSize, LambdaU, Lambdas, nfolds, seed,
-      ExcludeFirstK, Intercept, withBounds, Lows, Highs);
+  return _srm_model_cv(X, y, Loss, Penalty, Algorithm, NnzStopNum, G_ncols,
+                       G_nrows, Lambda2Max, Lambda2Min, PartialSort, MaxIters,
+                       rtol, atol, ActiveSet, ActiveSetNum, MaxNumSwaps,
+                       ScaleDownFactor, ScreenSize, LambdaU, Lambdas, nfolds,
+                       seed, ExcludeFirstK, Intercept, withBounds, Lows, Highs);
 }
 
 // [[Rcpp::export]]
-Rcpp::List SRM_model_fit_CV_dense(
+Rcpp::List srm_model_cv_dense(
     const arma::mat &X, const arma::vec &y, const std::string Loss,
     const std::string Penalty, const std::string Algorithm,
     const std::size_t NnzStopNum, const std::size_t G_ncols,
@@ -370,11 +370,11 @@ Rcpp::List SRM_model_fit_CV_dense(
     const double seed, const std::size_t ExcludeFirstK, const bool Intercept,
     const bool withBounds, const arma::vec &Lows, const arma::vec &Highs) {
 
-  return _SRM_model_fit_CV(
-      X, y, Loss, Penalty, Algorithm, NnzStopNum, G_ncols, G_nrows, Lambda2Max,
-      Lambda2Min, PartialSort, MaxIters, rtol, atol, ActiveSet, ActiveSetNum,
-      MaxNumSwaps, ScaleDownFactor, ScreenSize, LambdaU, Lambdas, nfolds, seed,
-      ExcludeFirstK, Intercept, withBounds, Lows, Highs);
+  return _srm_model_cv(X, y, Loss, Penalty, Algorithm, NnzStopNum, G_ncols,
+                       G_nrows, Lambda2Max, Lambda2Min, PartialSort, MaxIters,
+                       rtol, atol, ActiveSet, ActiveSetNum, MaxNumSwaps,
+                       ScaleDownFactor, ScreenSize, LambdaU, Lambdas, nfolds,
+                       seed, ExcludeFirstK, Intercept, withBounds, Lows, Highs);
 }
 
 // // [[Rcpp::export]]
