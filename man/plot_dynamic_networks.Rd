@@ -2,65 +2,69 @@
 % Please edit documentation in R/network_visualization.R
 \name{plot_dynamic_networks}
 \alias{plot_dynamic_networks}
-\title{plot_dynamic_networks}
+\title{Plot dynamic networks}
 \usage{
 plot_dynamic_networks(
   network_table,
   celltypes_order,
   ntop = 10,
-  width = 6,
-  height = 6,
-  seed = 2024,
+  title = NULL,
   theme_type = "theme_void",
   plot_type = "ggplot",
   layout = "fruchtermanreingold",
   nrow = 2,
-  title = NULL,
   figure_save = FALSE,
-  figure_name = NULL
+  figure_name = NULL,
+  figure_width = 6,
+  figure_height = 6,
+  seed = 1
 )
 }
 \arguments{
-\item{network_table}{network_table}
+\item{network_table}{The weight data table of network.}
 
-\item{celltypes_order}{celltypes_order}
+\item{celltypes_order}{The order of cell types.}
 
-\item{ntop}{ntop}
-
-\item{width}{width}
-
-\item{height}{height}
-
-\item{seed}{seed}
-
-\item{theme_type}{theme_type}
-
-\item{plot_type}{plot_type}
-
-\item{layout}{layout}
-
-\item{nrow}{nrow}
+\item{ntop}{The number of top genes to plot.}
 
 \item{title}{The title of figure.}
 
-\item{figure_save}{figure_save}
+\item{theme_type}{Default is \code{theme_void}, the theme of figure,
+could be \code{theme_void}, \code{theme_blank} or \code{theme_facet}.}
 
-\item{figure_name}{figure_name}
+\item{plot_type}{Default is \code{"ggplot"}, the type of figure,
+could be \code{ggplot}, \code{animate} or \code{ggplotly}.}
+
+\item{layout}{Default is \code{"fruchtermanreingold"}, the layout of figure,
+could be \code{fruchtermanreingold} or \code{kamadakawai}.}
+
+\item{nrow}{The number of rows of figure.}
+
+\item{figure_save}{Default is \code{FALSE},
+Logical value, whether to save the figure file.}
+
+\item{figure_name}{The name of figure file.}
+
+\item{figure_width}{The width of figure.}
+
+\item{figure_height}{The height of figure.}
+
+\item{seed}{Default is \code{1}, the seed random use to plot network.}
 }
 \value{
-ggplot object
+A dynamic figure object
 }
 \description{
-plot_dynamic_networks
+Plot dynamic networks
 }
 \examples{
 data("example_matrix")
 network <- inferCSN(example_matrix)[1:100, ]
 network$celltype <- c(
-  rep("cluster5", 20),
   rep("cluster1", 20),
-  rep("cluster3", 20),
   rep("cluster2", 20),
+  rep("cluster3", 20),
+  rep("cluster5", 20),
   rep("cluster6", 20)
 )
 
@@ -80,6 +84,12 @@ plot_dynamic_networks(
   celltypes_order = celltypes_order[1:3]
 )
 
+plot_dynamic_networks(
+  network,
+  celltypes_order = celltypes_order,
+  plot_type = "ggplotly"
+)
+
 \dontrun{
 # If setting `plot_type = "animate"` to plot and save `gif` figure,
 # please install `gifski` package first.
@@ -89,10 +99,4 @@ plot_dynamic_networks(
   plot_type = "animate"
 )
 }
-
-plot_dynamic_networks(
-  network,
-  celltypes_order = celltypes_order,
-  plot_type = "ggplotly"
-)
 }

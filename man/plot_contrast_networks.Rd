@@ -2,7 +2,7 @@
 % Please edit documentation in R/network_visualization.R
 \name{plot_contrast_networks}
 \alias{plot_contrast_networks}
-\title{plot_contrast_networks}
+\title{Contrast networks under different conditions}
 \usage{
 plot_contrast_networks(
   network_table,
@@ -14,17 +14,17 @@ plot_contrast_networks(
 \arguments{
 \item{network_table}{The weight data table of network.}
 
-\item{degree_value}{degree_value}
+\item{degree_value}{Degree value to filter nodes.}
 
-\item{weight_value}{weight_value}
+\item{weight_value}{Weight value to filter edges.}
 
 \item{legend_position}{The position of legend.}
 }
 \value{
-Return a ggplot2 object
+A ggplot2 object
 }
 \description{
-plot_contrast_networks
+Contrast networks under different conditions
 }
 \examples{
 data("example_matrix")

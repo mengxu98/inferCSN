@@ -1,4 +1,4 @@
-#' @title Inferring Cell-Specific Gene Regulatory Network
+#' @title **infer**ring **C**ell-**S**pecific gene regulatory **N**etwork
 #'
 #' @useDynLib inferCSN
 #'
@@ -23,6 +23,7 @@
 #' @param verbose Logical value. Whether to print detailed information.
 #' @param ... Parameters for other methods.
 #'
+#' @md
 #' @docType methods
 #' @rdname inferCSN
 #' @return A data table of regulator-target regulatory relationships
@@ -110,15 +111,11 @@ setMethod(
                         cores = 1,
                         verbose = FALSE,
                         ...) {
-    if (verbose) {
-      message(
-        paste(
-          "Running start for <", class(object)[1], ">."
-        )
-      )
-    }
+    log_message(
+      "Running start for <", class(object)[1], ">.",
+      verbose = verbose
+    )
 
-    # Check input parameters
     .check_parameters(
       matrix = object,
       penalty = penalty,
@@ -178,7 +175,7 @@ setMethod(
       network_table,
       abs_weight = FALSE
     )
-    if (verbose) message("Run done.")
+    log_message("Run done.", verbose = verbose)
 
     return(network_table)
   }
@@ -241,13 +238,10 @@ setMethod(
                         cores = 1,
                         verbose = FALSE,
                         ...) {
-    if (verbose) {
-      message(
-        paste0(
-          "The class type of input data is <", class(object), ">."
-        )
-      )
-    }
+    log_message(
+      "The class type of input data is <", class(object), ">.",
+      verbose = verbose
+    )
 
     .check_parameters(
       matrix = object,
@@ -308,7 +302,7 @@ setMethod(
       network_table,
       abs_weight = FALSE
     )
-    if (verbose) message("Run done.")
+    log_message("Run done.", verbose = verbose)
 
     return(network_table)
   }
@@ -333,13 +327,11 @@ setMethod(
                         cores = 1,
                         verbose = FALSE,
                         ...) {
-    if (verbose) {
-      message(
-        paste0(
-          "Converting class type of input data from <data.frame> to <matrix>."
-        )
-      )
-    }
+    log_message(
+      "Converting class type of input data from <data.frame> to <matrix>.",
+      message_type = "warning",
+      verbose = verbose
+    )
 
     inferCSN(
       object = as_matrix(object),

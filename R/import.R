@@ -1,4 +1,4 @@
-#' @import Matrix ggplot2 patchwork
+#' @import Matrix ggplot2 ggraph patchwork
 #'
 #' @importFrom Rcpp evalCpp sourceCpp
 #' @importFrom RcppArmadillo armadillo_version

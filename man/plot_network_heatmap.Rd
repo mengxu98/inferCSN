@@ -2,7 +2,7 @@
 % Please edit documentation in R/network_visualization.R
 \name{plot_network_heatmap}
 \alias{plot_network_heatmap}
-\title{The heatmap of network}
+\title{Plot network heatmap}
 \usage{
 plot_network_heatmap(
   network_table,
@@ -33,13 +33,13 @@ plot_network_heatmap(
 
 \item{targets}{Targets list.}
 
-\item{switch_matrix}{Logical value, default set to `TRUE`, whether to weight data table to matrix.}
+\item{switch_matrix}{Logical value, default is \emph{\code{TRUE}}, whether to weight data table to matrix.}
 
-\item{show_names}{Logical value, default set to `FALSE`, whether to show names of row and column.}
+\item{show_names}{Logical value, default is \emph{\code{FALSE}}, whether to show names of row and column.}
 
 \item{heatmap_size_lock}{Lock the size of heatmap.}
 
-\item{heatmap_size}{Default set to 5. The size of heatmap.}
+\item{heatmap_size}{Default is \emph{\code{5}}. The size of heatmap.}
 
 \item{heatmap_height}{The height of heatmap.}
 
@@ -49,27 +49,31 @@ plot_network_heatmap(
 
 \item{heatmap_color}{Colors of heatmap.}
 
-\item{border_color}{Default set to `gray`. Color of heatmap border.}
+\item{border_color}{Default is \emph{\code{gray}}. Color of heatmap border.}
 
-\item{rect_color}{Default set to `NA`. Color of heatmap rect.}
+\item{rect_color}{Default is \emph{\code{NA}}. Color of heatmap rect.}
 
 \item{anno_width}{Width of annotation.}
 
 \item{anno_height}{Height of annotation.}
 
-\item{row_anno_type}{Default set to `NULL`. c("boxplot", "barplot", "histogram", "density", "lines", "points", "horizon")}
+\item{row_anno_type}{Default is \emph{\code{NULL}},
+could add a annotation plot to row,
+choose one of \emph{\code{boxplot}}, \emph{\code{barplot}}, \emph{\code{histogram}}, \emph{\code{density}}, \emph{\code{lines}}, \emph{\code{points}}, and \emph{\code{horizon}}.}
 
-\item{column_anno_type}{Default set to `NULL`. c("boxplot", "barplot", "histogram", "density", "lines", "points")}
+\item{column_anno_type}{Default is \emph{\code{NULL}},
+could add a annotation plot to column,
+choose one of \emph{\code{boxplot}}, \emph{\code{barplot}}, \emph{\code{histogram}}, \emph{\code{density}}, \emph{\code{lines}}, and \emph{\code{points}}.}
 
 \item{legend_name}{The name of legend.}
 
 \item{row_title}{The title of row.}
 }
 \value{
-Return a heatmap
+A heatmap
 }
 \description{
-The heatmap of network
+Plot network heatmap
 }
 \examples{
 data("example_matrix")

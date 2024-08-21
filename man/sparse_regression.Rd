@@ -16,7 +16,7 @@ sparse_regression(
   percent_samples = 1,
   r_threshold = 0,
   computation_method = "cor",
-  verbose = FALSE,
+  verbose = TRUE,
   ...
 )
 }

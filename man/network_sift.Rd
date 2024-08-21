@@ -2,7 +2,7 @@
 % Please edit documentation in R/network_sift.R
 \name{network_sift}
 \alias{network_sift}
-\title{network_sift}
+\title{Sifting network}
 \usage{
 network_sift(
   network_table,
@@ -14,14 +14,14 @@ network_sift(
   effective_entropy = FALSE,
   shuffles = 100,
   entropy_nboot = 300,
-  history_length = 1,
+  lag_value = 1,
   entropy_p_value = 0.05,
   cores = 1,
   verbose = TRUE
 )
 }
 \arguments{
-\item{network_table}{network_table}
+\item{network_table}{The weight data table of network.}
 
 \item{matrix}{The expression matrix.}
 
@@ -29,43 +29,49 @@ network_sift(
 
 \item{pseudotime_column}{The column of pseudotime.}
 
-\item{method}{method The method used for filter edges. Could be choose \code{"entropy"} or \code{"max"}.}
+\item{method}{The method used for filter edges.
+Could be choose \code{entropy} or \code{max}.}
 
-\item{entropy_method}{If setting \code{'method'} to \code{'entropy'},
-could be choose \code{"Shannon"} or \code{"Renyi"} to compute entropy.}
+\item{entropy_method}{If setting \code{method} to \code{entropy},
+could be choose \code{Shannon} or \code{Renyi} to compute entropy.}
 
-\item{effective_entropy}{Logical value, using effective entropy to filter weights or not.}
+\item{effective_entropy}{Default is \code{FALSE}.
+Logical value, using effective entropy to filter weights or not.}
 
-\item{shuffles}{The number of shuffles used to calculate the effective transfer entropy. Default is \code{'shuffles'} = 100.}
+\item{shuffles}{Default is \code{100}.
+The number of shuffles used to calculate the effective transfer entropy.}
 
-\item{entropy_nboot}{entropy_nboot}
+\item{entropy_nboot}{Default is \code{300}.
+The number of bootstrap replications for each direction of the estimated transfer entropy.}
 
-\item{history_length}{history_length}
+\item{lag_value}{Default is \code{1}.
+Markov order of gene expression values,
+i.e. the number of lagged values affecting the current value of gene expression values.}
 
-\item{entropy_p_value}{P value.}
+\item{entropy_p_value}{P value used to filter edges by entropy.}
 
 \item{cores}{Number of CPU cores used. Setting to parallelize the computation with \code{\link[foreach]{foreach}}.}
 
 \item{verbose}{Logical value. Whether to print detailed information.}
 }
 \value{
-Filtered network table
+Sifted network table
 }
 \description{
-network_sift
+Sifting network
 }
 \examples{
 data("example_matrix")
 data("example_ground_truth")
 network_table <- inferCSN(example_matrix)
-network_table_filtered <- network_sift(network_table)
+network_table_sifted <- network_sift(network_table)
 data("example_meta_data")
-network_table_filtered_entropy <- network_sift(
+network_table_sifted_entropy <- network_sift(
   network_table,
   matrix = example_matrix,
   meta_data = example_meta_data,
   pseudotime_column = "pseudotime",
-  history_length = 2,
+  lag_value = 2,
   shuffles = 0,
   entropy_nboot = 0
 )
@@ -83,13 +89,13 @@ plot_network_heatmap(
   rect_color = "gray70"
 )
 plot_network_heatmap(
-  network_table_filtered,
+  network_table_sifted,
   heatmap_title = "Filtered",
   show_names = TRUE,
   rect_color = "gray70"
 )
 plot_network_heatmap(
-  network_table_filtered_entropy,
+  network_table_sifted_entropy,
   heatmap_title = "Filtered by entropy",
   show_names = TRUE,
   rect_color = "gray70"
@@ -101,12 +107,12 @@ calculate_auc(
   plot = TRUE
 )
 calculate_auc(
-  network_table_filtered,
+  network_table_sifted,
   example_ground_truth,
   plot = TRUE
 )
 calculate_auc(
-  network_table_filtered_entropy,
+  network_table_sifted_entropy,
   example_ground_truth,
   plot = TRUE
 )

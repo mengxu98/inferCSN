@@ -37,37 +37,43 @@
   return(table)
 }
 
-#' @title network_sift
+#' @title Sifting network
 #'
 #' @inheritParams inferCSN
-#' @param network_table network_table
+#' @inheritParams network_format
 #' @param matrix The expression matrix.
 #' @param meta_data The meta data for cells or samples.
 #' @param pseudotime_column The column of pseudotime.
-#' @param method method The method used for filter edges. Could be choose \code{"entropy"} or \code{"max"}.
-#' @param entropy_method If setting \code{'method'} to \code{'entropy'},
-#'  could be choose \code{"Shannon"} or \code{"Renyi"} to compute entropy.
-#' @param effective_entropy Logical value, using effective entropy to filter weights or not.
-#' @param shuffles The number of shuffles used to calculate the effective transfer entropy. Default is \code{'shuffles'} = 100.
-#' @param entropy_nboot entropy_nboot
-#' @param history_length history_length
-#' @param entropy_p_value P value.
+#' @param method The method used for filter edges.
+#' Could be choose \code{entropy} or \code{max}.
+#' @param entropy_method If setting \code{method} to \code{entropy},
+#'  could be choose \code{Shannon} or \code{Renyi} to compute entropy.
+#' @param effective_entropy Default is \code{FALSE}.
+#' Logical value, using effective entropy to filter weights or not.
+#' @param shuffles Default is \code{100}.
+#' The number of shuffles used to calculate the effective transfer entropy.
+#' @param entropy_nboot Default is \code{300}.
+#' The number of bootstrap replications for each direction of the estimated transfer entropy.
+#' @param lag_value Default is \code{1}.
+#' Markov order of gene expression values,
+#' i.e. the number of lagged values affecting the current value of gene expression values.
+#' @param entropy_p_value P value used to filter edges by entropy.
 #'
-#' @return Filtered network table
+#' @return Sifted network table
 #' @export
 #'
 #' @examples
 #' data("example_matrix")
 #' data("example_ground_truth")
 #' network_table <- inferCSN(example_matrix)
-#' network_table_filtered <- network_sift(network_table)
+#' network_table_sifted <- network_sift(network_table)
 #' data("example_meta_data")
-#' network_table_filtered_entropy <- network_sift(
+#' network_table_sifted_entropy <- network_sift(
 #'   network_table,
 #'   matrix = example_matrix,
 #'   meta_data = example_meta_data,
 #'   pseudotime_column = "pseudotime",
-#'   history_length = 2,
+#'   lag_value = 2,
 #'   shuffles = 0,
 #'   entropy_nboot = 0
 #' )
@@ -85,13 +91,13 @@
 #'   rect_color = "gray70"
 #' )
 #' plot_network_heatmap(
-#'   network_table_filtered,
+#'   network_table_sifted,
 #'   heatmap_title = "Filtered",
 #'   show_names = TRUE,
 #'   rect_color = "gray70"
 #' )
 #' plot_network_heatmap(
-#'   network_table_filtered_entropy,
+#'   network_table_sifted_entropy,
 #'   heatmap_title = "Filtered by entropy",
 #'   show_names = TRUE,
 #'   rect_color = "gray70"
@@ -103,12 +109,12 @@
 #'   plot = TRUE
 #' )
 #' calculate_auc(
-#'   network_table_filtered,
+#'   network_table_sifted,
 #'   example_ground_truth,
 #'   plot = TRUE
 #' )
 #' calculate_auc(
-#'   network_table_filtered_entropy,
+#'   network_table_sifted_entropy,
 #'   example_ground_truth,
 #'   plot = TRUE
 #' )
@@ -122,7 +128,7 @@ network_sift <- function(
     effective_entropy = FALSE,
     shuffles = 100,
     entropy_nboot = 300,
-    history_length = 1,
+    lag_value = 1,
     entropy_p_value = 0.05,
     cores = 1,
     verbose = TRUE) {
@@ -130,31 +136,28 @@ network_sift <- function(
   if (method != "max") {
     entropy_method <- match.arg(entropy_method)
     if (is.null(matrix) | is.null(meta_data) | is.null(pseudotime_column)) {
-      if (verbose) {
-        message(
-          "Parameters: 'matrix', 'meta_data' and 'pseudotime_column' not all provide, setting 'method' to 'max'."
-        )
-      }
+      log_message(
+        "Parameters: 'matrix', 'meta_data' and 'pseudotime_column' not all provide, setting 'method' to 'max'.",
+        verbose = verbose
+      )
       method <- "max"
       return(.weight_sift(network_table))
     }
     if (!(pseudotime_column %in% colnames(meta_data))) {
-      if (verbose) {
-        message(
-          "Parameters: 'pseudotime_column' not in meta data provided, setting 'method' to 'max'."
-        )
-      }
+      log_message(
+        "Parameters: 'pseudotime_column' not in meta data provided, setting 'method' to 'max'.",
+        verbose = verbose
+      )
       method <- "max"
       return(.weight_sift(network_table))
     }
 
     samples <- intersect(rownames(meta_data), rownames(matrix))
     if (is.null(samples)) {
-      if (verbose) {
-        message(
-          "No intersect samples in matrix and meta data, setting 'method' to 'max'."
-        )
-      }
+      log_message(
+        "No intersect samples in matrix and meta data, setting 'method' to 'max'.",
+        verbose = verbose
+      )
       method <- "max"
       return(.weight_sift(network_table))
     }
@@ -207,20 +210,18 @@ network_sift <- function(
 
   if (!effective_entropy) {
     if (shuffles != 0) {
-      if (verbose) {
-        message(
-          "Parameter: 'effective_entropy == FALSE' and 'shuffles != 0', setting 'shuffles == 0'."
-        )
-      }
+      log_message(
+        "Parameter: 'effective_entropy == FALSE' and 'shuffles != 0', setting 'shuffles == 0'.",
+        verbose = verbose
+      )
       shuffles <- 0
     }
   } else {
     if (shuffles <= 10) {
-      if (verbose) {
-        message(
-          "Parameter: 'shuffles' is too small, setting 'shuffles == 10'."
-        )
-      }
+      log_message(
+        "Parameter: 'shuffles' is too small, setting 'shuffles == 10'.",
+        verbose = verbose
+      )
       shuffles <- 10
     }
   }
@@ -234,8 +235,8 @@ network_sift <- function(
         RTransferEntropy::transfer_entropy(
           matrix[, x[1]],
           matrix[, x[2]],
-          lx = history_length,
-          ly = history_length,
+          lx = lag_value,
+          ly = lag_value,
           entropy = entropy_method,
           shuffles = shuffles,
           nboot = entropy_nboot,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{table_to_matrix}
 \alias{table_to_matrix}
-\title{Switch weight table to matrix}
+\title{Switch network table to matrix}
 \usage{
 table_to_matrix(network_table, regulators = NULL, targets = NULL)
 }
@@ -17,7 +17,7 @@ table_to_matrix(network_table, regulators = NULL, targets = NULL)
 Weight matrix
 }
 \description{
-Switch weight table to matrix
+Switch network table to matrix
 }
 \examples{
 data("example_matrix")

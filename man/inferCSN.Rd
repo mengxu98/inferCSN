@@ -6,7 +6,7 @@
 \alias{inferCSN,matrix-method}
 \alias{inferCSN,sparseMatrix-method}
 \alias{inferCSN,data.frame-method}
-\title{Inferring Cell-Specific Gene Regulatory Network}
+\title{\strong{infer}ring \strong{C}ell-\strong{S}pecific gene regulatory \strong{N}etwork}
 \usage{
 inferCSN(
   object,
@@ -115,7 +115,7 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 A data table of regulator-target regulatory relationships
 }
 \description{
-Inferring Cell-Specific Gene Regulatory Network
+\strong{infer}ring \strong{C}ell-\strong{S}pecific gene regulatory \strong{N}etwork
 }
 \examples{
 data("example_matrix")

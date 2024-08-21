@@ -1,24 +1,29 @@
-#' @title The heatmap of network
+#' @title Plot network heatmap
 #'
 #' @inheritParams network_format
-#' @param switch_matrix Logical value, default set to `TRUE`, whether to weight data table to matrix.
-#' @param show_names Logical value, default set to `FALSE`, whether to show names of row and column.
+#' @param switch_matrix Logical value, default is *`TRUE`*, whether to weight data table to matrix.
+#' @param show_names Logical value, default is *`FALSE`*, whether to show names of row and column.
 #' @param heatmap_size_lock Lock the size of heatmap.
-#' @param heatmap_size Default set to 5. The size of heatmap.
+#' @param heatmap_size Default is *`5`*. The size of heatmap.
 #' @param heatmap_height The height of heatmap.
 #' @param heatmap_width The width of heatmap.
 #' @param heatmap_title The title of heatmap.
 #' @param heatmap_color Colors of heatmap.
-#' @param border_color Default set to `gray`. Color of heatmap border.
-#' @param rect_color Default set to `NA`. Color of heatmap rect.
+#' @param border_color Default is *`gray`*. Color of heatmap border.
+#' @param rect_color Default is *`NA`*. Color of heatmap rect.
 #' @param anno_width Width of annotation.
 #' @param anno_height Height of annotation.
-#' @param row_anno_type Default set to `NULL`. c("boxplot", "barplot", "histogram", "density", "lines", "points", "horizon")
-#' @param column_anno_type Default set to `NULL`. c("boxplot", "barplot", "histogram", "density", "lines", "points")
+#' @param row_anno_type Default is *`NULL`*,
+#' could add a annotation plot to row,
+#' choose one of *`boxplot`*, *`barplot`*, *`histogram`*, *`density`*, *`lines`*, *`points`*, and *`horizon`*.
+#' @param column_anno_type Default is *`NULL`*,
+#' could add a annotation plot to column,
+#' choose one of *`boxplot`*, *`barplot`*, *`histogram`*, *`density`*, *`lines`*, and *`points`*.
 #' @param legend_name The name of legend.
 #' @param row_title The title of row.
 #'
-#' @return Return a heatmap
+#' @md
+#' @return A heatmap
 #' @export
 #'
 #' @examples
@@ -154,8 +159,7 @@ plot_network_heatmap <- function(
       row_anno_type,
       c("boxplot", "barplot", "histogram", "density", "lines", "points", "horizon")
     )
-    row_anno <- switch(
-      row_anno_type,
+    row_anno <- switch(row_anno_type,
       "boxplot" = ComplexHeatmap::rowAnnotation(
         Anno = ComplexHeatmap::anno_boxplot(
           weight_matrix,
@@ -215,8 +219,7 @@ plot_network_heatmap <- function(
       column_anno_type,
       c("boxplot", "barplot", "histogram", "density", "lines", "points")
     )
-    column_anno <- switch(
-      column_anno_type,
+    column_anno <- switch(column_anno_type,
       "boxplot" = ComplexHeatmap::columnAnnotation(
         Anno = ComplexHeatmap::anno_boxplot(
           weight_matrix,
@@ -299,10 +302,9 @@ plot_network_heatmap <- function(
 #' @inheritParams network_format
 #' @param legend_position The position of legend.
 #'
-#' @import ggplot2
 #' @import ggnetwork
 #'
-#' @return A list of ggplot2 objects
+#' @return A ggplot2 object
 #' @export
 #'
 #' @examples
@@ -326,7 +328,6 @@ plot_static_networks <- function(
     regulators = NULL,
     targets = NULL,
     legend_position = "right") {
-  # Format input data
   network_table <- network_format(
     network_table,
     regulators = regulators,
@@ -352,7 +353,6 @@ plot_static_networks <- function(
   )
   cols <- c("Activation" = "#3366cc", "Repression" = "#ff0066")
 
-  # Plot
   g <- ggplot() +
     geom_edges(
       data = regulator_network,
@@ -399,16 +399,13 @@ plot_static_networks <- function(
   return(g)
 }
 
-#' @title plot_contrast_networks
+#' @title Contrast networks under different conditions
 #'
 #' @inheritParams plot_static_networks
-#' @param degree_value degree_value
-#' @param weight_value weight_value
+#' @param degree_value Degree value to filter nodes.
+#' @param weight_value Weight value to filter edges.
 #'
-#' @import ggplot2
-#' @import ggraph
-#'
-#' @return Return a ggplot2 object
+#' @return A ggplot2 object
 #' @export
 #'
 #' @examples
@@ -456,33 +453,37 @@ plot_contrast_networks <- function(
   return(g)
 }
 
-#' @title plot_dynamic_networks
+#' @title Plot dynamic networks
 #'
-#' @param network_table network_table
-#' @param celltypes_order celltypes_order
-#' @param ntop ntop
-#' @param width width
-#' @param height height
-#' @param seed seed
-#' @param theme_type theme_type
-#' @param plot_type plot_type
-#' @param layout layout
-#' @param nrow nrow
+#' @inheritParams network_format
+#' @param celltypes_order The order of cell types.
+#' @param ntop The number of top genes to plot.
 #' @param title The title of figure.
-#' @param figure_save figure_save
-#' @param figure_name figure_name
+#' @param theme_type Default is \code{theme_void}, the theme of figure,
+#' could be \code{theme_void}, \code{theme_blank} or \code{theme_facet}.
+#' @param plot_type Default is \code{"ggplot"}, the type of figure,
+#' could be \code{ggplot}, \code{animate} or \code{ggplotly}.
+#' @param layout Default is \code{"fruchtermanreingold"}, the layout of figure,
+#' could be \code{fruchtermanreingold} or \code{kamadakawai}.
+#' @param nrow The number of rows of figure.
+#' @param figure_save Default is \code{FALSE},
+#' Logical value, whether to save the figure file.
+#' @param figure_name The name of figure file.
+#' @param figure_width The width of figure.
+#' @param figure_height The height of figure.
+#' @param seed Default is \code{1}, the seed random use to plot network.
 #'
-#' @return ggplot object
+#' @return A dynamic figure object
 #' @export
 #'
 #' @examples
 #' data("example_matrix")
 #' network <- inferCSN(example_matrix)[1:100, ]
 #' network$celltype <- c(
-#'   rep("cluster5", 20),
 #'   rep("cluster1", 20),
-#'   rep("cluster3", 20),
 #'   rep("cluster2", 20),
+#'   rep("cluster3", 20),
+#'   rep("cluster5", 20),
 #'   rep("cluster6", 20)
 #' )
 #'
@@ -502,6 +503,12 @@ plot_contrast_networks <- function(
 #'   celltypes_order = celltypes_order[1:3]
 #' )
 #'
+#' plot_dynamic_networks(
+#'   network,
+#'   celltypes_order = celltypes_order,
+#'   plot_type = "ggplotly"
+#' )
+#'
 #' \dontrun{
 #' # If setting `plot_type = "animate"` to plot and save `gif` figure,
 #' # please install `gifski` package first.
@@ -511,33 +518,27 @@ plot_contrast_networks <- function(
 #'   plot_type = "animate"
 #' )
 #' }
-#'
-#' plot_dynamic_networks(
-#'   network,
-#'   celltypes_order = celltypes_order,
-#'   plot_type = "ggplotly"
-#' )
 plot_dynamic_networks <- function(
     network_table,
     celltypes_order,
     ntop = 10,
-    width = 6,
-    height = 6,
-    seed = 2024,
+    title = NULL,
     theme_type = "theme_void",
     plot_type = "ggplot",
     layout = "fruchtermanreingold",
     nrow = 2,
-    title = NULL,
     figure_save = FALSE,
-    figure_name = NULL) {
+    figure_name = NULL,
+    figure_width = 6,
+    figure_height = 6,
+    seed = 1) {
   names(network_table) <- c("regulator", "target", "weight", "celltype")
   network_table$regulator <- as.character(network_table$regulator)
   network_table$target <- as.character(network_table$target)
-  celltypes_select <- unique(intersect(celltypes_order, network_table$celltype))
+  celltypes_list <- unique(intersect(celltypes_order, network_table$celltype))
 
   network_table <- purrr::map_dfr(
-    celltypes_select,
+    celltypes_list,
     .f = function(x) {
       network_table[which(network_table$celltype == x), ]
     }
@@ -546,12 +547,22 @@ plot_dynamic_networks <- function(
   # Get nodes information
   nodes <- unique(c(network_table$regulator, network_table$target))
   dnodes <- data.frame(id = 1:length(nodes), label = nodes)
-  edges <- dplyr::left_join(network_table, dnodes, by = c("regulator" = "label"))
+  edges <- dplyr::left_join(
+    network_table,
+    dnodes,
+    by = c("regulator" = "label")
+  )
   edges <- dplyr::rename(edges, from = id)
-  edges <- dplyr::left_join(edges, dnodes, by = c("target" = "label"))
+  edges <- dplyr::left_join(
+    edges,
+    dnodes,
+    by = c("target" = "label")
+  )
   edges <- dplyr::rename(edges, to = id)
   edges <- dplyr::select(edges, from, to, weight, celltype)
-  edges$Interaction <- ifelse(edges$weight > 0, "Activation", "Repression")
+  edges$Interaction <- ifelse(
+    edges$weight > 0, "Activation", "Repression"
+  )
   edges$weight <- abs(edges$weight)
 
   dedges <- unique(edges)
@@ -566,7 +577,10 @@ plot_dynamic_networks <- function(
   )
 
   set.seed(seed)
-  layout <- match.arg(layout, c("fruchtermanreingold", "kamadakawai"))
+  layout <- match.arg(
+    layout,
+    c("fruchtermanreingold", "kamadakawai")
+  )
   ggnetwork_data <- ggnetwork(
     network_data,
     arrow.size = 0.1,
@@ -576,9 +590,9 @@ plot_dynamic_networks <- function(
     layout = layout
   )
 
-  # get out-degree for each regulator node per celltype
+  # Get out-degree for each regulator node per celltype
   nodes_data <- purrr::map_dfr(
-    celltypes_select,
+    celltypes_list,
     .f = function(x) {
       nodes_data_celltype <- network_table[which(network_table$celltype == x), ]
       nodes_data_celltype <- dplyr::group_by(
@@ -594,7 +608,9 @@ plot_dynamic_networks <- function(
         dplyr::desc(targets_num)
       )
       nodes_data_celltype <- as.data.frame(nodes_data_celltype)
-      nodes_data_celltype$label_genes <- as.character(nodes_data_celltype$regulator)
+      nodes_data_celltype$label_genes <- as.character(
+        nodes_data_celltype$regulator
+      )
       if (nrow(nodes_data_celltype) > ntop) {
         cf <- nodes_data_celltype$targets_num[ntop]
         nodes_data_celltype$label_genes[which(nodes_data_celltype$targets_num < cf)] <- ""
@@ -608,13 +624,24 @@ plot_dynamic_networks <- function(
   )
 
   names(nodes_data)[1] <- "label"
-  ggnetwork_data <- merge(ggnetwork_data, nodes_data, by = c("label", "celltype"), all.x = T)
+  ggnetwork_data <- merge(
+    ggnetwork_data,
+    nodes_data,
+    by = c("label", "celltype"),
+    all.x = T
+  )
   ggnetwork_data$targets_num[which(is.na(ggnetwork_data$targets_num))] <- 0
   ggnetwork_data$label_genes[which(is.na(ggnetwork_data$label_genes))] <- ""
-  ggnetwork_data$celltype <- factor(ggnetwork_data$celltype, levels = celltypes_order)
+  ggnetwork_data$celltype <- factor(
+    ggnetwork_data$celltype,
+    levels = celltypes_order
+  )
   cols <- c("Activation" = "#3366cc", "Repression" = "#ff0066")
 
-  plot_type <- match.arg(plot_type, c("ggplot", "animate", "ggplotly"))
+  plot_type <- match.arg(
+    plot_type,
+    c("ggplot", "animate", "ggplotly")
+  )
   p <- ggplot(ggnetwork_data, aes(x, y, xend = xend, yend = yend))
   if (plot_type == "ggplotly") {
     p <- p + geom_edges(
@@ -646,9 +673,12 @@ plot_dynamic_networks <- function(
     p <- p + ggtitle(title)
   }
 
-  theme_type <- match.arg(theme_type, c("theme_blank", "theme_facet", "theme_void"))
-  p <- switch(
+  theme_type <- match.arg(
     theme_type,
+    c("theme_void", "theme_facet", "theme_blank")
+  )
+  p <- switch(
+    EXPR = theme_type,
     "theme_void" = p + theme_void(),
     "theme_blank" = p + theme_blank(),
     "theme_facet" = p + theme_facet()
@@ -660,13 +690,21 @@ plot_dynamic_networks <- function(
       if (is.null(figure_name)) {
         figure_name <- "networks.pdf"
       }
-      ggsave(figure_name, p, width = width, height = height)
+      ggsave(
+        figure_name,
+        p,
+        width = figure_width,
+        height = figure_height
+      )
     }
   }
 
   if (plot_type == "animate") {
     p <- p + gganimate::transition_states(states = celltype)
-    p <- gganimate::animate(p, render = gganimate::gifski_renderer())
+    p <- gganimate::animate(
+      p,
+      render = gganimate::gifski_renderer()
+    )
     if (figure_save) {
       if (is.null(figure_name)) {
         figure_name <- "networks.gif"

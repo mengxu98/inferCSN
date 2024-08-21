@@ -21,7 +21,7 @@ plot_static_networks(
 \item{legend_position}{The position of legend.}
 }
 \value{
-A list of ggplot2 objects
+A ggplot2 object
 }
 \description{
 Plot of dynamic networks

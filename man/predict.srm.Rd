@@ -3,7 +3,7 @@
 \name{predict.srm}
 \alias{predict.srm}
 \alias{predict.srm_cv}
-\title{Predict Response}
+\title{Predicts response for a given sample}
 \usage{
 \method{predict}{srm}(object, newx, lambda = NULL, gamma = NULL, ...)
 

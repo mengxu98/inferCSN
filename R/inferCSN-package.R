@@ -1,12 +1,13 @@
-#' inferCSN: Inferring Cell-Specific Gene Regulatory Network
+#' @title ***inferCSN***: **infer**ring **C**ell-**S**pecific gene regulatory **N**etwork
 #'
 #' @description
-#'  A method for inferring cell-specific gene regulatory network from single-cell sequencing data.
+#' An R package for **infer**ring **C**ell-**S**pecific gene regulatory **N**etwork from single-cell RNA data
 #'
 #' @author Meng xu (Maintainer), \email{mengxu98@qq.com}
 #'
 #' @source \url{https://github.com/mengxu98/inferCSN}
 #'
+#' @md
 #' @docType package
 #' @name inferCSN-package
 "_PACKAGE"

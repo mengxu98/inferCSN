@@ -4,10 +4,10 @@
 \alias{filter_sort_matrix}
 \title{Filter and sort matrix}
 \usage{
-filter_sort_matrix(weight_matrix, regulators = NULL, targets = NULL)
+filter_sort_matrix(network_matrix, regulators = NULL, targets = NULL)
 }
 \arguments{
-\item{weight_matrix}{The matrix of network weight.}
+\item{network_matrix}{The matrix of network weight.}
 
 \item{regulators}{Regulators list.}
 
@@ -22,11 +22,11 @@ Filter and sort matrix
 \examples{
 data("example_matrix")
 network_table <- inferCSN(example_matrix)
-weight_matrix <- table_to_matrix(network_table)
-filter_sort_matrix(weight_matrix)[1:6, 1:6]
+network_matrix <- table_to_matrix(network_table)
+filter_sort_matrix(network_matrix)[1:6, 1:6]
 
 filter_sort_matrix(
-  weight_matrix,
+  network_matrix,
   regulators = c("g1", "g2"),
   targets = c("g3", "g4")
 )

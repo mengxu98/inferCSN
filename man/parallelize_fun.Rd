@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{parallelize_fun}
 \alias{parallelize_fun}
-\title{Apply function over a List or Vector}
+\title{Parallelize a function}
 \usage{
 parallelize_fun(x, fun, cores = 1, export_fun = NULL, verbose = TRUE)
 }
@@ -11,17 +11,19 @@ parallelize_fun(x, fun, cores = 1, export_fun = NULL, verbose = TRUE)
 
 \item{fun}{The function to be applied to each element.}
 
-\item{cores}{Number of CPU cores used.
+\item{cores}{Default is \emph{\code{1}}.
+Number of CPU cores used.
 Setting to parallelize the computation with \code{\link[foreach]{foreach}}.}
 
-\item{export_fun}{export_fun.}
+\item{export_fun}{The functions to export the function to workers.}
 
-\item{verbose}{Logical. Whether to print progress bar.
+\item{verbose}{Logical value, default is \emph{\code{TRUE}}.
+Whether to print progress bar.
 Only works in sequential mode.}
 }
 \value{
-A list of results.
+A list of results
 }
 \description{
-Apply function over a List or Vector
+Parallelize a function
 }

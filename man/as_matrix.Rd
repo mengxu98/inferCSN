@@ -9,9 +9,11 @@ as_matrix(x, parallel = FALSE, sparse = FALSE)
 \arguments{
 \item{x}{A matrix.}
 
-\item{parallel}{Setting to parallelize the computation with \code{\link[RcppParallel]{setThreadOptions}}.}
+\item{parallel}{Logical value, default is \emph{\code{FALSE}}.
+Setting to parallelize the computation with \code{\link[RcppParallel]{setThreadOptions}}.}
 
-\item{sparse}{Logical. Whether to output a sparse matrix.}
+\item{sparse}{Logical value, default is \emph{\code{FALSE}}.
+Whether to output a sparse matrix.}
 }
 \description{
 Convert dgCMatrix into a dense matrix
