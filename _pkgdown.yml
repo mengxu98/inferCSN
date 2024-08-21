@@ -28,7 +28,7 @@ navbar:
       href: reference/index.html
 
 reference:
-- title: "Inferring gene regulatory network"
+- title: "Inferring Cell-Specific Gene Regulatory Network"
 
 - subtitle: "inferCSN"
 - contents:
@@ -46,10 +46,10 @@ reference:
 
 - subtitle: "Network visualization"
 - contents:
-  - plot_dynamic_networks
-  - plot_static_networks
   - plot_contrast_networks
+  - plot_dynamic_networks
   - plot_network_heatmap
+  - plot_static_networks
 
 - subtitle: "Plotting functions"
 - contents:
@@ -73,6 +73,7 @@ reference:
   - check_sparsity
   - coef.srm
   - coef.srm_cv
+  - log_message
   - network_format
   - table_to_matrix
   - filter_sort_matrix
