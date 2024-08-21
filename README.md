@@ -8,7 +8,7 @@
 
 ## **Introduction**
 
-[*`inferCSN`*](https://mengxu98.github.io/inferCSN/) is an R package for inferring cell-specific gene regulatory network from single-cell sequencing data.
+[*`inferCSN`*](https://mengxu98.github.io/inferCSN/) is an R package for **infer**ring **C**ell-**S**pecific gene regulatory **N**etwork from single-cell RNA data.
 
 <img src="man/figures/inferCSN.svg" width="75%"/>
 
@@ -18,6 +18,11 @@ You can install the released version from [*`CRAN`*](https://github.com/cran) us
 
 ``` r
 install.packages("inferCSN")
+# or
+if (!require("pak", quietly = TRUE)) {
+  install.packages("pak")
+}
+pak::pak("inferCSN")
 ```
 
 You can install the development version from [*`GitHub`*](https://github.com/mengxu98/inferCSN) use [*`pak`*](https://github.com/r-lib/pak):
