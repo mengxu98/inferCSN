@@ -297,7 +297,7 @@ plot_network_heatmap <- function(
   return(p)
 }
 
-#' @title Plot of dynamic networks
+#' @title Plot dynamic networks
 #'
 #' @inheritParams network_format
 #' @param legend_position The position of legend.
@@ -399,7 +399,7 @@ plot_static_networks <- function(
   return(g)
 }
 
-#' @title Contrast networks under different conditions
+#' @title Plot contrast networks
 #'
 #' @inheritParams plot_static_networks
 #' @param degree_value Degree value to filter nodes.

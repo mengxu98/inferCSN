@@ -2,7 +2,7 @@
 % Please edit documentation in R/network_visualization.R
 \name{plot_contrast_networks}
 \alias{plot_contrast_networks}
-\title{Contrast networks under different conditions}
+\title{Plot contrast networks}
 \usage{
 plot_contrast_networks(
   network_table,
@@ -24,7 +24,7 @@ plot_contrast_networks(
 A ggplot2 object
 }
 \description{
-Contrast networks under different conditions
+Plot contrast networks
 }
 \examples{
 data("example_matrix")

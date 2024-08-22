@@ -28,9 +28,8 @@ navbar:
       href: reference/index.html
 
 reference:
-- title: "Inferring Cell-Specific Gene Regulatory Network"
 
-- subtitle: "inferCSN"
+- subtitle: "Inferring cell-specific gene regulatory network"
 - contents:
   - inferCSN-package
   - inferCSN

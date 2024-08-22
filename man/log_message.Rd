@@ -36,5 +36,4 @@ Print diagnostic message
 log_message("Hello, ", "world!")
 log_message("Hello, world!", verbose = FALSE)
 log_message("Hello, world!", verbose = TRUE, message_type = "warning")
-log_message("Hello, world!", verbose = FALSE, message_type = "error")
 }
