@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">inferCSN</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.8</span>
       </span>
     </div>
 
@@ -86,23 +86,23 @@
 
 
 <dt id="arg-cross-validation">cross_validation<a class="anchor" aria-label="anchor" href="#arg-cross-validation"></a></dt>
-<dd><p>Check whether cross validation is used.</p></dd>
+<dd><p>Logical value, default is <em><code>FALSE</code></em>, whether to use cross-validation.</p></dd>
 
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
-<dd><p>The seed used in randomly shuffling the data for cross-validation.</p></dd>
+<dd><p>The random seed for cross-validation, default is <em><code>1</code></em>.</p></dd>
 
 
 <dt id="arg-penalty">penalty<a class="anchor" aria-label="anchor" href="#arg-penalty"></a></dt>
-<dd><p>The type of regularization.
-This can take either one of the following choices: <code>L0</code>, <code>L0L1</code> and <code>L0L2</code>.
-For high-dimensional and sparse data, such as single-cell sequencing data, <code>L0L2</code> is more effective.</p></dd>
+<dd><p>The type of regularization, default is <em><code>L0</code></em>.
+This can take either one of the following choices: <em><code>L0</code></em>, <em><code>L0L1</code></em>, and <em><code>L0L2</code></em>.
+For high-dimensional and sparse data, <em><code>L0L2</code></em> is more effective.</p></dd>
 
 
 <dt id="arg-algorithm">algorithm<a class="anchor" aria-label="anchor" href="#arg-algorithm"></a></dt>
-<dd><p>The type of algorithm used to minimize the objective function.
-Currently <code>CD</code> and <code>CDPSI</code> are supported.
-The <code>CDPSI</code> algorithm may yield better results, but it also increases running time.</p></dd>
+<dd><p>The type of algorithm used to minimize the objective function, default is <em><code>CD</code></em>.
+Currently <em><code>CD</code></em> and <em><code>CDPSI</code></em> are supported.
+The <em><code>CDPSI</code></em> algorithm may yield better results, but it also increases running time.</p></dd>
 
 
 <dt id="arg-regulators-num">regulators_num<a class="anchor" aria-label="anchor" href="#arg-regulators-num"></a></dt>
@@ -112,15 +112,15 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 
 
 <dt id="arg-n-folds">n_folds<a class="anchor" aria-label="anchor" href="#arg-n-folds"></a></dt>
-<dd><p>The number of folds for cross-validation.</p></dd>
+<dd><p>The number of folds for cross-validation, default is <em><code>10</code></em>.</p></dd>
 
 
 <dt id="arg-percent-samples">percent_samples<a class="anchor" aria-label="anchor" href="#arg-percent-samples"></a></dt>
-<dd><p>The percent of all samples used for <code>sparse_regression</code>. Default set to 1.</p></dd>
+<dd><p>The percent of all samples used for <code>sparse_regression</code>, default is <em><code>1</code></em>.</p></dd>
 
 
 <dt id="arg-r-threshold">r_threshold<a class="anchor" aria-label="anchor" href="#arg-r-threshold"></a></dt>
-<dd><p>Threshold of \(R^2\) or correlation coefficient.</p></dd>
+<dd><p>Threshold of \(R^2\) or correlation coefficient, default is <em><code>0</code></em>.</p></dd>
 
 
 <dt id="arg-computation-method">computation_method<a class="anchor" aria-label="anchor" href="#arg-computation-method"></a></dt>
@@ -128,7 +128,7 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>Logical value. Whether to print detailed information.</p></dd>
+<dd><p>Logical value, default is <em><code>TRUE</code></em>, whether to print progress messages.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
