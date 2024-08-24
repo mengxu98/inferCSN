@@ -231,8 +231,6 @@ plot_weight_distribution <- function(
 }
 
 #' @title Plot embedding
-#' @description
-#'  Plot embedding of the expression matrix.
 #'
 #' @param matrix Input matrix.
 #' @param labels Input labels.
@@ -240,8 +238,9 @@ plot_weight_distribution <- function(
 #' @param colors Colors to use for the plot.
 #' @param point_size Size of the points.
 #' @param seed Seed for the random number generator.
-#' @param cores Set the number of threads when setting \code{method} to \code{\link[uwot]{umap}} and \code{\link[Rtsne]{Rtsne}}.
+#' @param cores Set the number of threads when setting *`method`* to \code{\link[uwot]{umap}} and \code{\link[Rtsne]{Rtsne}}.
 #'
+#' @md
 #' @return An embedding plot
 #' @export
 #'

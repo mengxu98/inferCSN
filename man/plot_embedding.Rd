@@ -27,13 +27,13 @@ plot_embedding(
 
 \item{point_size}{Size of the points.}
 
-\item{cores}{Set the number of threads when setting \code{method} to \code{\link[uwot]{umap}} and \code{\link[Rtsne]{Rtsne}}.}
+\item{cores}{Set the number of threads when setting \emph{\code{method}} to \code{\link[uwot]{umap}} and \code{\link[Rtsne]{Rtsne}}.}
 }
 \value{
 An embedding plot
 }
 \description{
-Plot embedding of the expression matrix.
+Plot embedding
 }
 \examples{
 data("example_matrix")

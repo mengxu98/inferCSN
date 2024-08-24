@@ -1,5 +1,30 @@
+.prepare_network_data <- function(
+    network_table,
+    ground_truth) {
+  colnames(network_table) <- c("regulator", "target", "weight")
+  network_table$weight <- abs(as.numeric(network_table$weight))
+
+  if (ncol(ground_truth) > 2) {
+    ground_truth <- ground_truth[, 1:2]
+  }
+  names(ground_truth) <- c("regulator", "target")
+  ground_truth$label <- rep(1, nrow(ground_truth))
+
+  gold <- suppressWarnings(
+    merge(
+      network_table,
+      ground_truth,
+      by = c("regulator", "target"),
+      all.x = TRUE
+    )
+  )
+  gold$label[is.na(gold$label)] <- 0
+
+  return(gold)
+}
+
 #' @title Calculate AUPRC and AUROC values
-#' 
+#'
 #' @param network_table The weight data table of network
 #' @param ground_truth Ground truth for calculate AUC
 #' @param plot If true, draw and print figure of AUC
@@ -141,27 +166,4 @@ calculate_acc <- function(
   acc <- sprintf("%0.3f", acc)
 
   return(acc)
-}
-
-.prepare_network_data <- function(
-    network_table,
-    ground_truth) {
-  colnames(network_table) <- c("regulator", "target", "weight")
-  network_table$weight <- abs(as.numeric(network_table$weight))
-
-  if (ncol(ground_truth) > 2) ground_truth <- ground_truth[, 1:2]
-  names(ground_truth) <- c("regulator", "target")
-  ground_truth$label <- rep(1, nrow(ground_truth))
-
-  gold <- suppressWarnings(
-    merge(
-      network_table,
-      ground_truth,
-      by = c("regulator", "target"),
-      all.x = TRUE
-    )
-  )
-  gold$label[is.na(gold$label)] <- 0
-
-  return(gold)
 }

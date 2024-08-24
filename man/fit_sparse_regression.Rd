@@ -41,23 +41,23 @@ fit_sparse_regression(
 
 \item{y}{The vector of target.}
 
-\item{penalty}{The type of regularization.
-This can take either one of the following choices: \code{L0}, \code{L0L1} and \code{L0L2}.
-For high-dimensional and sparse data, such as single-cell sequencing data, \code{L0L2} is more effective.}
+\item{penalty}{The type of regularization, default is \emph{\code{L0}}.
+This can take either one of the following choices: \emph{\code{L0}}, \emph{\code{L0L1}}, and \emph{\code{L0L2}}.
+For high-dimensional and sparse data, \emph{\code{L0L2}} is more effective.}
 
-\item{algorithm}{The type of algorithm used to minimize the objective function.
-Currently \code{CD} and \code{CDPSI} are supported.
-The \code{CDPSI} algorithm may yield better results, but it also increases running time.}
+\item{algorithm}{The type of algorithm used to minimize the objective function, default is \emph{\code{CD}}.
+Currently \emph{\code{CD}} and \emph{\code{CDPSI}} are supported.
+The \emph{\code{CDPSI}} algorithm may yield better results, but it also increases running time.}
 
 \item{regulators_num}{The number of non-zore coefficients, this value will affect the final performance.
 The maximum support size at which to terminate the regularization path.
 Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.}
 
-\item{cross_validation}{Check whether cross validation is used.}
+\item{cross_validation}{Logical value, default is \emph{\code{FALSE}}, whether to use cross-validation.}
 
-\item{n_folds}{The number of folds for cross-validation.}
+\item{n_folds}{The number of folds for cross-validation, default is \emph{\code{10}}.}
 
-\item{seed}{The seed used in randomly shuffling the data for cross-validation.}
+\item{seed}{The random seed for cross-validation, default is \emph{\code{1}}.}
 
 \item{loss}{The loss function.}
 

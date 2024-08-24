@@ -50,9 +50,9 @@ i.e. the number of lagged values affecting the current value of gene expression 
 
 \item{entropy_p_value}{P value used to filter edges by entropy.}
 
-\item{cores}{Number of CPU cores used. Setting to parallelize the computation with \code{\link[foreach]{foreach}}.}
+\item{cores}{The number of cores to use for parallelization with \code{\link[foreach]{foreach}}, default is \emph{\code{1}}.}
 
-\item{verbose}{Logical value. Whether to print detailed information.}
+\item{verbose}{Logical value, default is \emph{\code{TRUE}}, whether to print progress messages.}
 }
 \value{
 Sifted network table
@@ -61,11 +61,12 @@ Sifted network table
 Sifting network
 }
 \examples{
+\dontrun{
 data("example_matrix")
+data("example_meta_data")
 data("example_ground_truth")
 network_table <- inferCSN(example_matrix)
 network_table_sifted <- network_sift(network_table)
-data("example_meta_data")
 network_table_sifted_entropy <- network_sift(
   network_table,
   matrix = example_matrix,
@@ -116,4 +117,5 @@ calculate_auc(
   example_ground_truth,
   plot = TRUE
 )
+}
 }

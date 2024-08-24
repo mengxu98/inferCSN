@@ -12,8 +12,7 @@ as_matrix(x, parallel = FALSE, sparse = FALSE)
 \item{parallel}{Logical value, default is \emph{\code{FALSE}}.
 Setting to parallelize the computation with \code{\link[RcppParallel]{setThreadOptions}}.}
 
-\item{sparse}{Logical value, default is \emph{\code{FALSE}}.
-Whether to output a sparse matrix.}
+\item{sparse}{Logical value, default is \emph{\code{FALSE}}, whether to output a sparse matrix.}
 }
 \description{
 Convert dgCMatrix into a dense matrix
@@ -51,6 +50,7 @@ identical(
   as_matrix(as.matrix(sparse_matrix), sparse = TRUE)
 )
 
+\dontrun{
 network_table_1 <- inferCSN(
   as_matrix(example_matrix, sparse = TRUE)
 )
@@ -65,4 +65,5 @@ plot_scatter(
   ),
   legend_position = "none"
 )
+}
 }

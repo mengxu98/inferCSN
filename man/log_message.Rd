@@ -4,13 +4,7 @@
 \alias{log_message}
 \title{Print diagnostic message}
 \usage{
-log_message(
-  ...,
-  verbose = TRUE,
-  message_type = "info",
-  cli_model = TRUE,
-  method = "message"
-)
+log_message(..., verbose = TRUE, message_type = "info", cli_model = TRUE)
 }
 \arguments{
 \item{...}{Text to print.}
@@ -25,15 +19,13 @@ Could be choose one of \emph{\code{info}}, \emph{\code{warning}}, and \emph{\cod
 Whether to use the \code{cli} package to print the message.
 Add because the message is printed by \code{\link[base]{message}},
 the message could be suppressed by \code{\link[base]{suppressMessages}}.}
-
-\item{method}{Method to print the message, default is \emph{\code{"message"}}.
-Could be \emph{\code{message}} or \emph{"cat`}.}
 }
 \description{
 Print diagnostic message
 }
 \examples{
 log_message("Hello, ", "world!")
+suppressMessages(log_message("Hello, ", "world!"))
 log_message("Hello, world!", verbose = FALSE)
 log_message("Hello, world!", verbose = TRUE, message_type = "warning")
 }

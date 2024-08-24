@@ -9,62 +9,48 @@
 #' Whether to use the `cli` package to print the message.
 #' Add because the message is printed by \code{\link[base]{message}},
 #' the message could be suppressed by \code{\link[base]{suppressMessages}}.
-#' @param method Method to print the message, default is *`"message"`*.
-#' Could be *`message`* or *"cat`*.
 #'
 #' @md
 #' @export
 #' @examples
 #' log_message("Hello, ", "world!")
+#' suppressMessages(log_message("Hello, ", "world!"))
 #' log_message("Hello, world!", verbose = FALSE)
 #' log_message("Hello, world!", verbose = TRUE, message_type = "warning")
 log_message <- function(
     ...,
     verbose = TRUE,
     message_type = "info",
-    cli_model = TRUE,
-    method = "message") {
+    cli_model = TRUE) {
   if (message_type == "error") {
     stop(...)
   }
   if (verbose) {
     if (cli_model) {
-      messages <- switch(
+      switch(
         EXPR = message_type,
-        "info" = cli::col_blue(...),
-        "warning" = cli::col_yellow(paste0("Warning: ", ...))
+        "info" = cli::cli_alert_success(paste0(...)),
+        "warning" = cli::cli_alert_warning(paste0("Warning: ", ...))
       )
     } else {
-      messages <- switch(
+      switch(
         EXPR = message_type,
-        "info" = paste0(...),
-        "warning" = paste0("Warning: ", ...)
+        "info" = message(paste0(...)),
+        "warning" = message(paste0("Warning: ", ...))
       )
     }
-    return(
-      switch(
-        EXPR = method,
-        "message" = message(messages),
-        "cat" = cat(messages)
-      )
-    )
   }
 }
 
 #' @title Parallelize a function
 #'
+#' @inheritParams inferCSN
 #' @param x A vector or list to apply over.
 #' @param fun The function to be applied to each element.
-#' @param cores Default is *`1`*.
-#' Number of CPU cores used.
-#' Setting to parallelize the computation with \code{\link[foreach]{foreach}}.
 #' @param export_fun The functions to export the function to workers.
-#' @param verbose Logical value, default is *`TRUE`*.
-#' Whether to print progress bar.
-#' Only works in sequential mode.
 #'
 #' @md
-#' @return A list of results
+#' @return A list of computed results
 #'
 #' @export
 parallelize_fun <- function(
@@ -78,13 +64,14 @@ parallelize_fun <- function(
       "Using 1 core.",
       verbose = verbose
     )
+    if (verbose) {
+      return(pbapply::pblapply(X = x, FUN = fun))
+    }
+    if (!verbose) {
+      return(base::lapply(X = x, FUN = fun))
+    }
   }
-  if (cores == 1 && verbose) {
-    return(pbapply::pblapply(X = x, FUN = fun))
-  }
-  if (cores == 1 && !verbose) {
-    return(base::lapply(X = x, FUN = fun))
-  }
+
   if (cores > 1) {
     doParallel::registerDoParallel(cores = cores)
     log_message(
@@ -206,12 +193,12 @@ parallelize_fun <- function(
   }
 
   log_message(
-    "Using `", penalty, "` penalty.",
+    "Using ", penalty, " sparse regression model.",
     verbose = verbose
   )
   if (cross_validation) {
     log_message(
-      "Using cross validation.",
+      "Using cross validation, and setting ", n_folds, " folds.",
       verbose = verbose
     )
   }
@@ -236,8 +223,7 @@ parallelize_fun <- function(
 #' @param x A matrix.
 #' @param parallel Logical value, default is *`FALSE`*.
 #' Setting to parallelize the computation with \code{\link[RcppParallel]{setThreadOptions}}.
-#' @param sparse Logical value, default is *`FALSE`*.
-#' Whether to output a sparse matrix.
+#' @param sparse Logical value, default is *`FALSE`*, whether to output a sparse matrix.
 #'
 #' @md
 #' @export
@@ -275,6 +261,7 @@ parallelize_fun <- function(
 #'   as_matrix(as.matrix(sparse_matrix), sparse = TRUE)
 #' )
 #'
+#' \dontrun{
 #' network_table_1 <- inferCSN(
 #'   as_matrix(example_matrix, sparse = TRUE)
 #' )
@@ -289,6 +276,7 @@ parallelize_fun <- function(
 #'   ),
 #'   legend_position = "none"
 #' )
+#' }
 as_matrix <- function(
     x,
     parallel = FALSE,
@@ -361,6 +349,125 @@ check_sparsity <- function(x) {
   return(sparsity)
 }
 
+#' @title Format network table
+#'
+#' @param network_table The weight data table of network.
+#' @param regulators Regulators list.
+#' @param targets Targets list.
+#' @param abs_weight Logical value, default is *`TRUE`*, whether to perform absolute value on weights,
+#'  and when set `abs_weight` to *`TRUE`*,
+#'  the output of weight table will create a new column named `Interaction`.
+#'
+#' @md
+#' @return Formated network table
+#' @export
+#'
+#' @examples
+#' data("example_matrix")
+#' network_table <- inferCSN(example_matrix)
+#'
+#' network_format(
+#'   network_table,
+#'   regulators = c("g1")
+#' )
+#'
+#' network_format(
+#'   network_table,
+#'   regulators = c("g1"),
+#'   abs_weight = FALSE
+#' )
+#'
+#' network_format(
+#'   network_table,
+#'   targets = c("g3")
+#' )
+#'
+#' network_format(
+#'   network_table,
+#'   regulators = c("g1", "g3"),
+#'   targets = c("g3", "g5")
+#' )
+network_format <- function(
+  network_table,
+  regulators = NULL,
+  targets = NULL,
+  abs_weight = TRUE) {
+colnames(network_table) <- c("regulator", "target", "weight")
+network_table$weight <- as.numeric(network_table$weight)
+network_table <- dplyr::filter(network_table, weight != 0)
+if (!is.null(regulators)) {
+  network_table <- purrr::map_dfr(
+    unique(regulators), function(x) {
+      dplyr::filter(network_table, regulator == x)
+    }
+  )
+}
+if (!is.null(targets)) {
+  network_table <- purrr::map_dfr(
+    unique(targets), function(x) {
+      dplyr::filter(network_table, target == x)
+    }
+  )
+}
+
+if (abs_weight) {
+  network_table$Interaction <- ifelse(
+    network_table$weight < 0, "Repression", "Activation"
+  )
+  network_table$weight <- abs(network_table$weight)
+}
+
+network_table <- network_table[order(
+  abs(as.numeric(network_table$weight)),
+  decreasing = TRUE
+), ]
+rownames(network_table) <- NULL
+
+return(network_table)
+}
+
+#' @title Filter and sort matrix
+#'
+#' @inheritParams network_format
+#' @param network_matrix The matrix of network weight.
+#'
+#' @return Filtered and sorted matrix
+#' @export
+#'
+#' @examples
+#' data("example_matrix")
+#' network_table <- inferCSN(example_matrix)
+#' network_matrix <- table_to_matrix(network_table)
+#' filter_sort_matrix(network_matrix)[1:6, 1:6]
+#'
+#' filter_sort_matrix(
+#'   network_matrix,
+#'   regulators = c("g1", "g2"),
+#'   targets = c("g3", "g4")
+#' )
+filter_sort_matrix <- function(
+  network_matrix,
+  regulators = NULL,
+  targets = NULL) {
+network_matrix[is.na(network_matrix)] <- 0
+if (!is.null(regulators)) {
+  regulators <- intersect(rownames(network_matrix), regulators)
+} else {
+  regulators <- rownames(network_matrix)
+}
+if (!is.null(targets)) {
+  targets <- intersect(colnames(network_matrix), targets)
+} else {
+  targets <- colnames(network_matrix)
+}
+
+unique_regulators <- gtools::mixedsort(unique(regulators))
+unique_targets <- gtools::mixedsort(unique(targets))
+network_matrix <- network_matrix[unique_regulators, unique_targets]
+
+return(network_matrix)
+}
+
 #' @title Switch network table to matrix
 #'
 #' @inheritParams network_format
@@ -400,125 +507,6 @@ table_to_matrix <- function(
   )
 
   return(network_matrix)
-}
-
-#' @title Filter and sort matrix
-#'
-#' @inheritParams network_format
-#' @param network_matrix The matrix of network weight.
-#'
-#' @return Filtered and sorted matrix
-#' @export
-#'
-#' @examples
-#' data("example_matrix")
-#' network_table <- inferCSN(example_matrix)
-#' network_matrix <- table_to_matrix(network_table)
-#' filter_sort_matrix(network_matrix)[1:6, 1:6]
-#'
-#' filter_sort_matrix(
-#'   network_matrix,
-#'   regulators = c("g1", "g2"),
-#'   targets = c("g3", "g4")
-#' )
-filter_sort_matrix <- function(
-    network_matrix,
-    regulators = NULL,
-    targets = NULL) {
-  network_matrix[is.na(network_matrix)] <- 0
-  if (!is.null(regulators)) {
-    regulators <- intersect(rownames(network_matrix), regulators)
-  } else {
-    regulators <- rownames(network_matrix)
-  }
-  if (!is.null(targets)) {
-    targets <- intersect(colnames(network_matrix), targets)
-  } else {
-    targets <- colnames(network_matrix)
-  }
-
-  unique_regulators <- gtools::mixedsort(unique(regulators))
-  unique_targets <- gtools::mixedsort(unique(targets))
-  network_matrix <- network_matrix[unique_regulators, unique_targets]
-
-  return(network_matrix)
-}
-
-#' @title Format weight table
-#'
-#' @param network_table The weight data table of network.
-#' @param regulators Regulators list.
-#' @param targets Targets list.
-#' @param abs_weight Logical value, whether to perform absolute value on weights,
-#'  default is `TRUE`, and when set `abs_weight` to `TRUE`,
-#'  the output of weight table will create a new column named `Interaction`.
-#'
-#' @md
-#' @return Format weight table
-#' @export
-#'
-#' @examples
-#' data("example_matrix")
-#' network_table <- inferCSN(example_matrix)
-#'
-#' network_format(
-#'   network_table,
-#'   regulators = c("g1")
-#' )
-#'
-#' network_format(
-#'   network_table,
-#'   regulators = c("g1"),
-#'   abs_weight = FALSE
-#' )
-#'
-#' network_format(
-#'   network_table,
-#'   targets = c("g3")
-#' )
-#'
-#' network_format(
-#'   network_table,
-#'   regulators = c("g1", "g3"),
-#'   targets = c("g3", "g5")
-#' )
-network_format <- function(
-    network_table,
-    regulators = NULL,
-    targets = NULL,
-    abs_weight = TRUE) {
-  colnames(network_table) <- c("regulator", "target", "weight")
-  network_table$weight <- as.numeric(network_table$weight)
-  network_table <- dplyr::filter(network_table, weight != 0)
-  if (!is.null(regulators)) {
-    network_table <- purrr::map_dfr(
-      unique(regulators), function(x) {
-        dplyr::filter(network_table, regulator == x)
-      }
-    )
-  }
-  if (!is.null(targets)) {
-    network_table <- purrr::map_dfr(
-      unique(targets), function(x) {
-        dplyr::filter(network_table, target == x)
-      }
-    )
-  }
-
-  if (abs_weight) {
-    network_table$Interaction <- ifelse(
-      network_table$weight < 0, "Repression", "Activation"
-    )
-    network_table$weight <- abs(network_table$weight)
-  }
-
-  network_table <- network_table[order(
-    abs(as.numeric(network_table$weight)),
-    decreasing = TRUE
-  ), ]
-  rownames(network_table) <- NULL
-
-  return(network_table)
 }
 
 #' @title Extracts a specific solution in the regularization path
@@ -640,7 +628,7 @@ print.srm_cv <- function(x, ...) {
 
 #' @title Predicts response for a given sample
 #'
-#' @param object The output of fit_sparse_regression
+#' @param object The output of fit_sparse_regression.
 #' @param newx A matrix on which predictions are made. The matrix should have p columns
 #' @param lambda The value of lambda to use for prediction.
 #' A summary of the lambdas in the regularization path can be obtained using \code{\link{print.srm}}.

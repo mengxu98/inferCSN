@@ -63,11 +63,12 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data("example_matrix")
+#' data("example_meta_data")
 #' data("example_ground_truth")
 #' network_table <- inferCSN(example_matrix)
 #' network_table_sifted <- network_sift(network_table)
-#' data("example_meta_data")
 #' network_table_sifted_entropy <- network_sift(
 #'   network_table,
 #'   matrix = example_matrix,
@@ -118,6 +119,7 @@
 #'   example_ground_truth,
 #'   plot = TRUE
 #' )
+#' }
 network_sift <- function(
     network_table,
     matrix = NULL,

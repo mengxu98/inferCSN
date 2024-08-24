@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{network_format}
 \alias{network_format}
-\title{Format weight table}
+\title{Format network table}
 \usage{
 network_format(
   network_table,
@@ -18,15 +18,15 @@ network_format(
 
 \item{targets}{Targets list.}
 
-\item{abs_weight}{Logical value, whether to perform absolute value on weights,
-default is \code{TRUE}, and when set \code{abs_weight} to \code{TRUE},
+\item{abs_weight}{Logical value, default is \emph{\code{TRUE}}, whether to perform absolute value on weights,
+and when set \code{abs_weight} to \emph{\code{TRUE}},
 the output of weight table will create a new column named \code{Interaction}.}
 }
 \value{
-Format weight table
+Formated network table
 }
 \description{
-Format weight table
+Format network table
 }
 \examples{
 data("example_matrix")

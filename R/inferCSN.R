@@ -2,25 +2,25 @@
 #'
 #' @useDynLib inferCSN
 #'
-#' @param object The input data for \code{inferCSN}.
-#' @param penalty The type of regularization.
-#' This can take either one of the following choices: \code{L0}, \code{L0L1} and \code{L0L2}.
-#' For high-dimensional and sparse data, such as single-cell sequencing data, \code{L0L2} is more effective.
-#' @param algorithm The type of algorithm used to minimize the objective function.
-#' Currently \code{CD} and \code{CDPSI} are supported.
-#' The \code{CDPSI} algorithm may yield better results, but it also increases running time.
-#' @param cross_validation Check whether cross validation is used.
-#' @param n_folds The number of folds for cross-validation.
-#' @param seed The seed used in randomly shuffling the data for cross-validation.
-#' @param percent_samples The percent of all samples used for \code{\link{sparse_regression}}. Default set to 1.
-#' @param r_threshold Threshold of \eqn{R^2} or correlation coefficient.
-#' @param regulators A character vector with the regulators to consider for CSN inference.
-#' @param targets A character vector with the targets to consider for CSN inference.
+#' @param object The input data for *`inferCSN`*.
+#' @param penalty The type of regularization, default is *`L0`*.
+#' This can take either one of the following choices: *`L0`*, *`L0L1`*, and *`L0L2`*.
+#' For high-dimensional and sparse data, *`L0L2`* is more effective.
+#' @param algorithm The type of algorithm used to minimize the objective function, default is *`CD`*.
+#' Currently *`CD`* and *`CDPSI`* are supported.
+#' The *`CDPSI`* algorithm may yield better results, but it also increases running time.
+#' @param cross_validation Logical value, default is *`FALSE`*, whether to use cross-validation.
+#' @param n_folds The number of folds for cross-validation, default is *`10`*.
+#' @param seed The random seed for cross-validation, default is *`1`*.
+#' @param percent_samples The percent of all samples used for \code{\link{sparse_regression}}, default is *`1`*.
+#' @param r_threshold Threshold of \eqn{R^2} or correlation coefficient, default is *`0`*.
+#' @param regulators The regulator genes for which to infer the regulatory network.
+#' @param targets The target genes for which to infer the regulatory network.
 #' @param regulators_num The number of non-zore coefficients, this value will affect the final performance.
 #' The maximum support size at which to terminate the regularization path.
 #' Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.
-#' @param cores Number of CPU cores used. Setting to parallelize the computation with \code{\link[foreach]{foreach}}.
-#' @param verbose Logical value. Whether to print detailed information.
+#' @param cores The number of cores to use for parallelization with \code{\link[foreach]{foreach}}, default is *`1`*.
+#' @param verbose Logical value, default is *`TRUE`*, whether to print progress messages.
 #' @param ... Parameters for other methods.
 #'
 #' @md
@@ -43,7 +43,7 @@ setGeneric(
                  targets = NULL,
                  regulators_num = NULL,
                  cores = 1,
-                 verbose = FALSE,
+                 verbose = TRUE,
                  ...) {
     UseMethod(
       generic = "inferCSN",
@@ -58,8 +58,7 @@ setGeneric(
 #' @examples
 #' data("example_matrix")
 #' network_table_1 <- inferCSN(
-#'   example_matrix,
-#'   verbose = TRUE
+#'   example_matrix
 #' )
 #' head(network_table_1)
 #'
@@ -68,31 +67,30 @@ setGeneric(
 #'   cores = 2
 #' )
 #'
-#' identical(network_table_1, network_table_2)
+#' identical(
+#'   network_table_1,
+#'   network_table_2
+#' )
 #'
 #' inferCSN(
 #'   example_matrix,
 #'   regulators = c("g1", "g2"),
-#'   targets = c("g3", "g4"),
-#'   verbose = TRUE
+#'   targets = c("g3", "g4")
 #' )
 #' inferCSN(
 #'   example_matrix,
 #'   regulators = c("g1", "g2"),
-#'   targets = c("g3", "g0"),
-#'   verbose = TRUE
+#'   targets = c("g3", "g0")
 #' )
 #' inferCSN(
 #'   example_matrix,
 #'   regulators = c("g1", "g0"),
-#'   targets = c("g2", "g3"),
-#'   verbose = TRUE
+#'   targets = c("g2", "g3")
 #' )
 #' inferCSN(
 #'   example_matrix,
 #'   regulators = c("g1"),
-#'   targets = c("g2"),
-#'   verbose = TRUE
+#'   targets = c("g2")
 #' )
 setMethod(
   f = "inferCSN",
@@ -109,10 +107,10 @@ setMethod(
                         targets = NULL,
                         regulators_num = NULL,
                         cores = 1,
-                        verbose = FALSE,
+                        verbose = TRUE,
                         ...) {
     log_message(
-      "Running start for <", class(object)[1], ">.",
+      "Running for <", class(object)[1], ">.",
       verbose = verbose
     )
 
@@ -185,6 +183,7 @@ setMethod(
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data("example_matrix")
 #' network_table <- inferCSN(example_matrix)
 #' head(network_table)
@@ -221,6 +220,7 @@ setMethod(
 #' ) + plot_weight_distribution(
 #'   network_table_sparse_1
 #' )
+#' }
 setMethod(
   f = "inferCSN",
   signature = signature(object = "sparseMatrix"),
@@ -236,10 +236,10 @@ setMethod(
                         targets = NULL,
                         regulators_num = NULL,
                         cores = 1,
-                        verbose = FALSE,
+                        verbose = TRUE,
                         ...) {
     log_message(
-      "The class type of input data is <", class(object), ">.",
+      "Running for <", class(object), ">.",
       verbose = verbose
     )
 
@@ -325,7 +325,7 @@ setMethod(
                         targets = NULL,
                         regulators_num = NULL,
                         cores = 1,
-                        verbose = FALSE,
+                        verbose = TRUE,
                         ...) {
     log_message(
       "Converting class type of input data from <data.frame> to <matrix>.",

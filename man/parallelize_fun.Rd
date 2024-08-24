@@ -11,18 +11,14 @@ parallelize_fun(x, fun, cores = 1, export_fun = NULL, verbose = TRUE)
 
 \item{fun}{The function to be applied to each element.}
 
-\item{cores}{Default is \emph{\code{1}}.
-Number of CPU cores used.
-Setting to parallelize the computation with \code{\link[foreach]{foreach}}.}
+\item{cores}{The number of cores to use for parallelization with \code{\link[foreach]{foreach}}, default is \emph{\code{1}}.}
 
 \item{export_fun}{The functions to export the function to workers.}
 
-\item{verbose}{Logical value, default is \emph{\code{TRUE}}.
-Whether to print progress bar.
-Only works in sequential mode.}
+\item{verbose}{Logical value, default is \emph{\code{TRUE}}, whether to print progress messages.}
 }
 \value{
-A list of results
+A list of computed results
 }
 \description{
 Parallelize a function
