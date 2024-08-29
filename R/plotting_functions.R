@@ -172,9 +172,9 @@ plot_scatter <- function(
   return(p)
 }
 
-#' @title Plot weight distribution
+#' @title Plot histogram
 #'
-#' @param network_table The weight data table of network.
+#' @param data A numeric vector.
 #' @param binwidth Width of the bins.
 #' @param show_border Logical value, whether to show border of the bins.
 #' @param border_color Color of the border.
@@ -185,15 +185,15 @@ plot_scatter <- function(
 #' @param theme_direction Direction of the theme.
 #' @param legend_position The position of legend.
 #'
-#' @return ggplot object
+#' @return A ggplot object
 #' @export
 #'
 #' @examples
 #' data("example_matrix")
 #' network_table <- inferCSN(example_matrix)
-#' plot_weight_distribution(network_table)
-plot_weight_distribution <- function(
-    network_table,
+#' plot_histogram(network_table[, 3])
+plot_histogram <- function(
+    data,
     binwidth = 0.01,
     show_border = FALSE,
     border_color = "black",
@@ -203,7 +203,8 @@ plot_weight_distribution <- function(
     theme_end = 0.5,
     theme_direction = -1,
     legend_position = "right") {
-  ggplot(network_table, aes(x = weight)) +
+  data <- data.frame(weight = data)
+  ggplot(data, aes(x = weight)) +
     geom_histogram(
       aes(fill = after_stat(count)),
       binwidth = binwidth,
