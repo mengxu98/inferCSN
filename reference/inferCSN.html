@@ -63,7 +63,7 @@
 <span>  cross_validation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  n_folds <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  percent_samples <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  subsampling <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  r_threshold <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  regulators <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  targets <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -81,7 +81,7 @@
 <span>  cross_validation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  n_folds <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  percent_samples <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  subsampling <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  r_threshold <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  regulators <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  targets <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -99,7 +99,7 @@
 <span>  cross_validation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  n_folds <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  percent_samples <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  subsampling <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  r_threshold <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  regulators <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  targets <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -117,7 +117,7 @@
 <span>  cross_validation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  n_folds <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  percent_samples <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  subsampling <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  r_threshold <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  regulators <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  targets <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -160,7 +160,7 @@ The <em><code>CDPSI</code></em> algorithm may yield better results, but it also 
 <dd><p>The number of folds for cross-validation, default is <em><code>10</code></em>.</p></dd>
 
 
-<dt id="arg-percent-samples">percent_samples<a class="anchor" aria-label="anchor" href="#arg-percent-samples"></a></dt>
+<dt id="arg-subsampling">subsampling<a class="anchor" aria-label="anchor" href="#arg-subsampling"></a></dt>
 <dd><p>The percent of all samples used for <code><a href="sparse_regression.html">sparse_regression</a></code>, default is <em><code>1</code></em>.</p></dd>
 
 
@@ -207,17 +207,9 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Running for &lt;matrix&gt;.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Checking input parameters.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using L0 sparse regression model.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using 1 core.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Run done.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .check_parameters(matrix = object, penalty = penalty, algorithm = algorithm,     cross_validation = cross_validation, seed = seed, n_folds = n_folds,     subsampling = subsampling, r_threshold = r_threshold, regulators = regulators,     targets = targets, regulators_num = regulators_num, verbose = verbose,     cores = cores, ...):</span> object 'intersect_regulators' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">network_table_1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   regulator target     weight</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       g17    g18  0.5443805</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       g18     g1 -0.5390453</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       g16    g15  0.4818454</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4       g17    g16  0.4599054</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5       g15    g14  0.4516497</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6       g14    g13  0.4483912</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'network_table_1' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">network_table_2</span> <span class="op">&lt;-</span> <span class="fu">inferCSN</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">example_matrix</span>,</span></span>
@@ -225,15 +217,13 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Running for &lt;matrix&gt;.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Checking input parameters.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using L0 sparse regression model.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using 2 cores.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Run done.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .check_parameters(matrix = object, penalty = penalty, algorithm = algorithm,     cross_validation = cross_validation, seed = seed, n_folds = n_folds,     subsampling = subsampling, r_threshold = r_threshold, regulators = regulators,     targets = targets, regulators_num = regulators_num, verbose = verbose,     cores = cores, ...):</span> object 'intersect_regulators' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table_1</span>,</span></span>
 <span class="r-in"><span>  <span class="va">network_table_2</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'network_table_1' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">inferCSN</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">example_matrix</span>,</span></span>
@@ -242,6 +232,7 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Running for &lt;matrix&gt;.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Checking input parameters.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using 2 regulator(s) and 2 target(s).</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using L0 sparse regression model.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using 1 core.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Run done.</span>
@@ -258,6 +249,7 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Running for &lt;matrix&gt;.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Checking input parameters.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Warning: 1 out of 2 candidate targets are in the input matrix.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using 2 regulator(s) and 1 target(s).</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using L0 sparse regression model.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using 1 core.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Run done.</span>
@@ -272,6 +264,7 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Running for &lt;matrix&gt;.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Checking input parameters.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Warning: 1 out of 2 candidate regulators are in the input matrix.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using 1 regulator(s) and 2 target(s).</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using L0 sparse regression model.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using 1 core.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Run done.</span>
@@ -285,6 +278,7 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Running for &lt;matrix&gt;.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Checking input parameters.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using 1 regulator(s) and 1 target(s).</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using L0 sparse regression model.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using 1 core.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Run done.</span>

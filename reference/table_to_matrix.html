@@ -86,42 +86,19 @@
 <span class="r-in"><span><span class="va">network_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Running for &lt;matrix&gt;.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Checking input parameters.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using L0 sparse regression model.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using 1 core.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Run done.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .check_parameters(matrix = object, penalty = penalty, algorithm = algorithm,     cross_validation = cross_validation, seed = seed, n_folds = n_folds,     subsampling = subsampling, r_threshold = r_threshold, regulators = regulators,     targets = targets, regulators_num = regulators_num, verbose = verbose,     cores = cores, ...):</span> object 'intersect_regulators' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">network_table</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   regulator target     weight</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       g17    g18  0.5443805</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       g18     g1 -0.5390453</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       g16    g15  0.4818454</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4       g17    g16  0.4599054</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5       g15    g14  0.4516497</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6       g14    g13  0.4483912</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'network_table' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">table_to_matrix</span><span class="op">(</span><span class="va">network_table</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              g1           g2            g3          g4          g5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g1  0.000000000  0.338137767  0.0092681907 -0.01975279 0.022905010</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g2  0.208240363  0.000000000  0.2814299337  0.01135446 0.006973898</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g3  0.007219557  0.357707045  0.0000000000  0.36993781 0.062181513</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g4 -0.016931373  0.016194043  0.4151977047  0.00000000 0.334764758</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g5  0.022599496  0.011010652  0.0788459511  0.38034320 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g6 -0.017414505 -0.006287723 -0.0002596662  0.08075083 0.371229345</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               g6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g1 -0.0159799588</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g2 -0.0039367559</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g3 -0.0006236106</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g4  0.0658743327</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g5  0.3460084473</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g6  0.0000000000</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'network_table' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">table_to_matrix</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
 <span class="r-in"><span>  regulators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span>, <span class="st">"g2"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g3"</span>, <span class="st">"g4"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             g3          g4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g1 0.009268191 -0.01975279</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g2 0.281429934  0.01135446</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'network_table' not found</span>
 </code></pre></div>
     </div>
   </div>

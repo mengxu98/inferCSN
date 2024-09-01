@@ -75,7 +75,7 @@
 
 
 <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
-<dd><p>The weight table of network.</p></dd>
+<dd><p>A numeric vector.</p></dd>
 
 
 <dt id="arg-binwidth">binwidth<a class="anchor" aria-label="anchor" href="#arg-binwidth"></a></dt>
@@ -116,7 +116,7 @@
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>ggplot object</p>
+    <p>A ggplot object</p>
     </div>
 
     <div id="ref-examples">
@@ -125,14 +125,9 @@
 <span class="r-in"><span><span class="va">network_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Running for &lt;matrix&gt;.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Checking input parameters.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using L0 sparse regression model.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using 1 core.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Run done.</span>
-<span class="r-in"><span><span class="fu">plot_histogram</span><span class="op">(</span><span class="va">network_table</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in geom_histogram(aes(fill = after_stat(count)), binwidth = binwidth,     color = ifelse(show_border, border_color, NA), alpha = alpha):</span> Problem while computing aesthetics.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Error occurred in the 1st layer.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error:</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> object 'weight' not found</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .check_parameters(matrix = object, penalty = penalty, algorithm = algorithm,     cross_validation = cross_validation, seed = seed, n_folds = n_folds,     subsampling = subsampling, r_threshold = r_threshold, regulators = regulators,     targets = targets, regulators_num = regulators_num, verbose = verbose,     cores = cores, ...):</span> object 'intersect_regulators' not found</span>
+<span class="r-in"><span><span class="fu">plot_histogram</span><span class="op">(</span><span class="va">network_table</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'network_table' not found</span>
 </code></pre></div>
     </div>
   </div>
