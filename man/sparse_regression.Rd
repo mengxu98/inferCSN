@@ -13,7 +13,7 @@ sparse_regression(
   algorithm = "CD",
   regulators_num = ncol(x),
   n_folds = 10,
-  percent_samples = 1,
+  subsampling = 1,
   r_threshold = 0,
   computation_method = "cor",
   verbose = TRUE,
@@ -43,11 +43,11 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 
 \item{n_folds}{The number of folds for cross-validation, default is \emph{\code{10}}.}
 
-\item{percent_samples}{The percent of all samples used for \code{\link{sparse_regression}}, default is \emph{\code{1}}.}
+\item{subsampling}{The percent of all samples used for \code{\link{sparse_regression}}, default is \emph{\code{1}}.}
 
 \item{r_threshold}{Threshold of \eqn{R^2} or correlation coefficient, default is \emph{\code{0}}.}
 
-\item{computation_method}{The method used to compute \code{r}.}
+\item{computation_method}{The method used to compute `r``.}
 
 \item{verbose}{Logical value, default is \emph{\code{TRUE}}, whether to print progress messages.}
 

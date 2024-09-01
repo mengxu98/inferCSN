@@ -101,7 +101,7 @@ parallelize_fun <- function(
     cross_validation,
     seed,
     n_folds,
-    percent_samples,
+    subsampling,
     r_threshold,
     regulators,
     targets,
@@ -141,9 +141,9 @@ parallelize_fun <- function(
     )
   }
 
-  if (!(is.numeric(percent_samples) && percent_samples > 0 && percent_samples <= 1)) {
+  if (!(is.numeric(subsampling) && subsampling > 0 && subsampling <= 1)) {
     log_message(
-      "Please set `percent_samples` value between: (0, 1].",
+      "Please set `subsampling` value between: (0, 1].",
       message_type = "error"
     )
   }
@@ -185,6 +185,11 @@ parallelize_fun <- function(
       )
     }
   }
+
+  log_message(
+    "Using ", length(intersect_regulators), " regulator(s) and ", length(intersect_targets), " target(s).",
+    verbose = verbose
+  )
 
   if (!is.numeric(cores) || cores < 1) {
     log_message(

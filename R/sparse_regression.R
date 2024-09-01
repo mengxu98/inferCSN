@@ -32,7 +32,7 @@ single_network <- function(
     algorithm = "CD",
     regulators_num = (ncol(matrix) - 1),
     n_folds = 10,
-    percent_samples = 1,
+    subsampling = 1,
     r_threshold = 0,
     verbose = FALSE,
     ...) {
@@ -57,7 +57,7 @@ single_network <- function(
     algorithm = algorithm,
     regulators_num = regulators_num,
     n_folds = n_folds,
-    percent_samples = percent_samples,
+    subsampling = subsampling,
     r_threshold = r_threshold,
     verbose = verbose,
     ...
@@ -85,8 +85,10 @@ single_network <- function(
 #' @inheritParams inferCSN
 #' @param x The matrix of regulators.
 #' @param y The vector of target.
-#' @param computation_method The method used to compute \code{r}.
+#' @param computation_method The method used to compute `r``.
 #'
+#' @md
+#' 
 #' @return Coefficients
 #' @export
 #' @examples
@@ -103,17 +105,17 @@ sparse_regression <- function(
     algorithm = "CD",
     regulators_num = ncol(x),
     n_folds = 10,
-    percent_samples = 1,
+    subsampling = 1,
     r_threshold = 0,
     computation_method = "cor",
     verbose = TRUE,
     ...) {
-  if (percent_samples == 1) {
+  if (subsampling == 1) {
     test_x <- x
     test_y <- y
   } else {
     samples <- sample(
-      nrow(x), percent_samples * nrow(x)
+      nrow(x), subsampling * nrow(x)
     )
     test_x <- x[-samples, ]
     x <- x[samples, ]
