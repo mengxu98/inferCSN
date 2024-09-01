@@ -18,7 +18,7 @@ plot_histogram(
 )
 }
 \arguments{
-\item{data}{The weight table of network.}
+\item{data}{A numeric vector.}
 
 \item{binwidth}{Width of the bins.}
 
@@ -39,7 +39,7 @@ plot_histogram(
 \item{legend_position}{The position of legend.}
 }
 \value{
-ggplot object
+A ggplot object
 }
 \description{
 Plot histogram
@@ -47,5 +47,5 @@ Plot histogram
 \examples{
 data("example_matrix")
 network_table <- inferCSN(example_matrix)
-plot_histogram(network_table)
+plot_histogram(network_table[, 3])
 }
