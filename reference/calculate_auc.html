@@ -99,11 +99,15 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_ground_truth"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">network_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Running for &lt;matrix&gt;.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Running for &lt;dense matrix&gt;.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Checking input parameters.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .check_parameters(matrix = object, penalty = penalty, algorithm = algorithm,     cross_validation = cross_validation, seed = seed, n_folds = n_folds,     subsampling = subsampling, r_threshold = r_threshold, regulators = regulators,     targets = targets, regulators_num = regulators_num, verbose = verbose,     cores = cores, ...):</span> object 'intersect_regulators' not found</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using L0 sparse regression model.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using 1 core.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Run done.</span>
 <span class="r-in"><span><span class="fu">calculate_auc</span><span class="op">(</span><span class="va">network_table</span>, <span class="va">example_ground_truth</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'network_table' not found</span>
+<span class="r-plt img"><img src="calculate_auc-1.png" alt="" width="700" height="433"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   AUROC AUPRC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.963 0.495</span>
 </code></pre></div>
     </div>
   </div>

@@ -173,9 +173,11 @@ choose one of <em><code>boxplot</code></em>, <em><code>barplot</code></em>, <em>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_ground_truth"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">network_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Running for &lt;matrix&gt;.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Running for &lt;dense matrix&gt;.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Checking input parameters.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .check_parameters(matrix = object, penalty = penalty, algorithm = algorithm,     cross_validation = cross_validation, seed = seed, n_folds = n_folds,     subsampling = subsampling, r_threshold = r_threshold, regulators = regulators,     targets = targets, regulators_num = regulators_num, verbose = verbose,     cores = cores, ...):</span> object 'intersect_regulators' not found</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using L0 sparse regression model.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using 1 core.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Run done.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">plot_network_heatmap</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">example_ground_truth</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>,</span></span>
@@ -187,9 +189,8 @@ choose one of <em><code>boxplot</code></em>, <em><code>barplot</code></em>, <em>
 <span class="r-in"><span>  heatmap_title <span class="op">=</span> <span class="st">"inferCSN"</span>,</span></span>
 <span class="r-in"><span>  legend_name <span class="op">=</span> <span class="st">"inferCSN"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'network_table' not found</span>
 <span class="r-in"><span><span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html" class="external-link">draw</a></span><span class="op">(</span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'object' in selecting a method for function 'draw': object 'p2' not found</span>
+<span class="r-plt img"><img src="plot_network_heatmap-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu">plot_network_heatmap</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
@@ -197,16 +198,14 @@ choose one of <em><code>boxplot</code></em>, <em><code>barplot</code></em>, <em>
 <span class="r-in"><span>  legend_name <span class="op">=</span> <span class="st">"Weight1"</span>,</span></span>
 <span class="r-in"><span>  heatmap_color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#20a485"</span>, <span class="st">"#410054"</span>, <span class="st">"#fee81f"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'network_table' not found</span>
 <span class="r-in"><span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu">plot_network_heatmap</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
 <span class="r-in"><span>  heatmap_title <span class="op">=</span> <span class="st">"inferCSN"</span>,</span></span>
 <span class="r-in"><span>  legend_name <span class="op">=</span> <span class="st">"Weight2"</span>,</span></span>
 <span class="r-in"><span>  heatmap_color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#20a485"</span>, <span class="st">"white"</span>, <span class="st">"#fee81f"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'network_table' not found</span>
 <span class="r-in"><span><span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html" class="external-link">draw</a></span><span class="op">(</span><span class="va">p3</span> <span class="op">+</span> <span class="va">p4</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'object' in selecting a method for function 'draw': object 'p3' not found</span>
+<span class="r-plt img"><img src="plot_network_heatmap-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">plot_network_heatmap</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
@@ -215,14 +214,14 @@ choose one of <em><code>boxplot</code></em>, <em><code>barplot</code></em>, <em>
 <span class="r-in"><span>  row_anno_type <span class="op">=</span> <span class="st">"density"</span>,</span></span>
 <span class="r-in"><span>  column_anno_type <span class="op">=</span> <span class="st">"barplot"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'network_table' not found</span>
+<span class="r-plt img"><img src="plot_network_heatmap-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">plot_network_heatmap</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
 <span class="r-in"><span>  regulators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span>, <span class="st">"g2"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  show_names <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'network_table' not found</span>
+<span class="r-plt img"><img src="plot_network_heatmap-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">plot_network_heatmap</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
@@ -231,7 +230,7 @@ choose one of <em><code>boxplot</code></em>, <em><code>barplot</code></em>, <em>
 <span class="r-in"><span>  column_anno_type <span class="op">=</span> <span class="st">"histogram"</span>,</span></span>
 <span class="r-in"><span>  show_names <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'network_table' not found</span>
+<span class="r-plt img"><img src="plot_network_heatmap-5.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">plot_network_heatmap</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
@@ -239,7 +238,7 @@ choose one of <em><code>boxplot</code></em>, <em><code>barplot</code></em>, <em>
 <span class="r-in"><span>  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g3"</span>, <span class="st">"g6"</span>, <span class="st">"g9"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  show_names <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'network_table' not found</span>
+<span class="r-plt img"><img src="plot_network_heatmap-6.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </div>
