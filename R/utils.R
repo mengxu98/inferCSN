@@ -148,25 +148,6 @@ parallelize_fun <- function(
     )
   }
 
-  if (!is.null(targets)) {
-    intersect_targets <- intersect(targets, colnames(matrix))
-    if (length(intersect_targets) == 0) {
-      log_message(
-        "The input genes must contain at least 1 target.",
-        message_type = "error"
-      )
-    }
-
-    if (length(intersect_targets) < length(targets)) {
-      log_message(
-        length(intersect_targets), " out of ",
-        length(targets), " candidate targets are in the input matrix.",
-        message_type = "warning",
-        verbose = verbose
-      )
-    }
-  }
-
   if (!is.null(regulators)) {
     intersect_regulators <- intersect(regulators, colnames(matrix))
     if (length(intersect_regulators) == 0) {
@@ -183,13 +164,37 @@ parallelize_fun <- function(
         message_type = "warning",
         verbose = verbose
       )
+    } else {
+      log_message(
+        "Using ", length(intersect_regulators), " regulator(s).",
+        verbose = verbose
+      )
     }
   }
 
-  log_message(
-    "Using ", length(intersect_regulators), " regulator(s) and ", length(intersect_targets), " target(s).",
-    verbose = verbose
-  )
+  if (!is.null(targets)) {
+    intersect_targets <- intersect(targets, colnames(matrix))
+    if (length(intersect_targets) == 0) {
+      log_message(
+        "The input genes must contain at least 1 target.",
+        message_type = "error"
+      )
+    }
+
+    if (length(intersect_targets) < length(targets)) {
+      log_message(
+        length(intersect_targets), " out of ",
+        length(targets), " candidate targets are in the input matrix.",
+        message_type = "warning",
+        verbose = verbose
+      )
+    } else {
+      log_message(
+        "Using ", length(intersect_targets), " target(s).",
+        verbose = verbose
+      )
+    }
+  }
 
   if (!is.numeric(cores) || cores < 1) {
     log_message(

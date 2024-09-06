@@ -300,16 +300,15 @@ plot_embedding <- function(
         stats::prcomp(matrix, rank. = 3)$x
       }
     )
-  )
-
-  result_df <- as.data.frame(result)
-  colnames(result_df) <- c("Dim1", "Dim2", "Dim3")
+  ) |>
+    as.data.frame()
+  colnames(result) <- c("Dim1", "Dim2", "Dim3")
 
   if (!is.null(labels)) {
-    result_df$label <- labels
+    result$label <- labels
 
     p <- plotly::plot_ly(
-      data = result_df,
+      data = result,
       x = ~Dim1,
       y = ~Dim2,
       z = ~Dim3,
@@ -321,7 +320,7 @@ plot_embedding <- function(
     )
   } else {
     p <- plotly::plot_ly(
-      data = result_df,
+      data = result,
       x = ~Dim1,
       y = ~Dim2,
       z = ~Dim3,

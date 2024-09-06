@@ -417,15 +417,13 @@ plot_contrast_networks <- function(
     degree_value = 0,
     weight_value = 0,
     legend_position = "bottom") {
-  network_table <- network_format(network_table)
-
-  graph <- tidygraph::as_tbl_graph(network_table)
-  graph <- dplyr::mutate(
-    graph,
-    degree = tidygraph::centrality_degree(mode = "out")
-  )
-  graph <- dplyr::filter(graph, degree > degree_value)
-  graph <- tidygraph::activate(graph, edges)
+  graph <- network_format(network_table) |>
+    tidygraph::as_tbl_graph() |>
+    dplyr::mutate(
+      degree = tidygraph::centrality_degree(mode = "out")
+    ) |>
+    dplyr::filter(degree > degree_value) |>
+    tidygraph::activate(edges)
 
   g <- ggraph(graph, layout = "linear", circular = TRUE) +
     geom_edge_arc(
@@ -544,22 +542,20 @@ plot_dynamic_networks <- function(
     }
   )
 
-  # Get nodes information
   nodes <- unique(c(network_table$regulator, network_table$target))
   dnodes <- data.frame(id = 1:length(nodes), label = nodes)
   edges <- dplyr::left_join(
     network_table,
     dnodes,
     by = c("regulator" = "label")
-  )
-  edges <- dplyr::rename(edges, from = id)
-  edges <- dplyr::left_join(
-    edges,
-    dnodes,
-    by = c("target" = "label")
-  )
-  edges <- dplyr::rename(edges, to = id)
-  edges <- dplyr::select(edges, from, to, weight, celltype)
+  ) |>
+    dplyr::rename(from = id) |>
+    dplyr::left_join(
+      dnodes,
+      by = c("target" = "label")
+    ) |>
+    dplyr::rename(to = id) |>
+    dplyr::select(from, to, weight, celltype)
   edges$Interaction <- ifelse(
     edges$weight > 0, "Activation", "Repression"
   )
@@ -594,20 +590,17 @@ plot_dynamic_networks <- function(
   nodes_data <- purrr::map_dfr(
     celltypes_list,
     .f = function(x) {
-      nodes_data_celltype <- network_table[which(network_table$celltype == x), ]
-      nodes_data_celltype <- dplyr::group_by(
-        nodes_data_celltype,
-        regulator
-      )
-      nodes_data_celltype <- dplyr::summarise(
-        nodes_data_celltype,
-        targets_num = dplyr::n()
-      )
-      nodes_data_celltype <- dplyr::arrange(
-        nodes_data_celltype,
-        dplyr::desc(targets_num)
-      )
-      nodes_data_celltype <- as.data.frame(nodes_data_celltype)
+      nodes_data_celltype <- network_table[which(network_table$celltype == x), ] |>
+        dplyr::group_by(
+          regulator
+        ) |>
+        dplyr::summarise(
+          targets_num = dplyr::n()
+        ) |>
+        dplyr::arrange(
+          dplyr::desc(targets_num)
+        ) |>
+        as.data.frame()
       nodes_data_celltype$label_genes <- as.character(
         nodes_data_celltype$regulator
       )

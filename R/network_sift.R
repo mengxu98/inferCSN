@@ -228,7 +228,7 @@ network_sift <- function(
     }
   }
 
-  transfer_entropy_list <- parallelize_fun(
+  transfer_entropy_table <- parallelize_fun(
     unique_pairs,
     cores = cores,
     verbose = verbose,
@@ -267,14 +267,8 @@ network_sift <- function(
         )
       }
     }
-  )
-
-  transfer_entropy_table <- purrr::map_dfr(
-    transfer_entropy_list,
-    .f = function(x) {
-      x
-    }
-  )
+  ) |>
+    purrr::list_rbind()
 
   if (entropy_nboot > 1) {
     transfer_entropy_table <- dplyr::filter(
@@ -288,9 +282,7 @@ network_sift <- function(
   transfer_entropy_table <- rbind(
     transfer_entropy_table[, c(1, 2, 3)],
     transfer_entropy_table_contrary
-  )
-
-  transfer_entropy_table <- .weight_sift(transfer_entropy_table)
+  ) |> .weight_sift()
 
   network_table <- merge(
     network_table,

@@ -110,7 +110,7 @@ setMethod(
                         verbose = TRUE,
                         ...) {
     log_message(
-      "Running for <", class(object)[1], ">.",
+      "Running for <dense matrix>.",
       verbose = verbose
     )
 
@@ -147,7 +147,7 @@ setMethod(
     names(targets) <- targets
     cores <- .cores_detect(cores, length(targets))
 
-    weight_list <- parallelize_fun(
+    network_table <- parallelize_fun(
       x = targets,
       fun = function(x) {
         single_network(
@@ -167,12 +167,10 @@ setMethod(
       },
       cores = cores,
       verbose = verbose
-    )
-    network_table <- purrr::list_rbind(weight_list)
-    network_table <- network_format(
-      network_table,
-      abs_weight = FALSE
-    )
+    ) |>
+      purrr::list_rbind() |>
+      network_format(abs_weight = FALSE)
+
     log_message("Run done.", verbose = verbose)
 
     return(network_table)
@@ -276,7 +274,7 @@ setMethod(
     names(targets) <- targets
     cores <- .cores_detect(cores, length(targets))
 
-    weight_list <- parallelize_fun(
+    network_table <- parallelize_fun(
       x = targets,
       fun = function(x) {
         single_network(
@@ -296,12 +294,10 @@ setMethod(
       },
       cores = cores,
       verbose = verbose
-    )
-    network_table <- purrr::list_rbind(weight_list)
-    network_table <- network_format(
-      network_table,
-      abs_weight = FALSE
-    )
+    ) |>
+      purrr::list_rbind() |>
+      network_format(abs_weight = FALSE)
+
     log_message("Run done.", verbose = verbose)
 
     return(network_table)
@@ -328,7 +324,7 @@ setMethod(
                         verbose = TRUE,
                         ...) {
     log_message(
-      "Converting class type of input data from <data.frame> to <matrix>.",
+      "convert the class type of the input data from <data.frame> to <matrix>.",
       message_type = "warning",
       verbose = verbose
     )

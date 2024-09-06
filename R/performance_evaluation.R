@@ -1,4 +1,4 @@
-.prepare_network_data <- function(
+.prepare_network_table <- function(
     network_table,
     ground_truth) {
   colnames(network_table) <- c("regulator", "target", "weight")
@@ -45,7 +45,7 @@ calculate_auc <- function(
     plot = FALSE,
     line_color = "#1563cc",
     line_width = 1) {
-  gold <- .prepare_network_data(
+  gold <- .prepare_network_table(
     network_table,
     ground_truth
   )
@@ -131,7 +131,7 @@ calculate_auc <- function(
 calculate_acc <- function(
     network_table,
     ground_truth) {
-  gold <- .prepare_network_data(
+  gold <- .prepare_network_table(
     network_table,
     ground_truth
   )
