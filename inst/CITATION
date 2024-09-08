@@ -1,0 +1,57 @@
+citHeader("To cite inferCSN in publications, please consider citing the following papers:")
+
+bibentry(bibtype = "article",
+  author = c(
+  as.person("Xiong Li"),
+  as.person("Xu Meng"),
+  as.person("Haowen Chen"),
+  as.person("Xiangzheng Fu"),
+  as.person("Peng Wang"),
+  as.person("Xia Chen"),
+  as.person("Changlong Gu"),
+  as.person("Juan Zhou")
+  ),
+  title = "Integration of single sample and population analysis for understanding immune evasion mechanisms of lung cancer",
+  journal = "npj Systems Biology and Applications",
+  year = "2023",
+  volume = "9",
+  number = "1",
+  pages = "4",
+  doi = "10.1038/s41540-023-00267-8",
+  url = "https://doi.org/10.1038/s41540-023-00267-8",
+  textVersion = "Li X, Meng X, Chen H, et al. Integration of single sample and population analysis for understanding immune evasion mechanisms of lung cancer. NPJ Syst Biol Appl. 2023;9(1):4."
+)
+
+bibentry(bibtype = "article",
+  author = c(
+  as.person("Hazimeh Hussein"),
+  as.person("Mazumder Rahul"),
+  as.person("Nonet Tim")
+  ),
+  title = "L0learn: A scalable package for sparse learning using l0 regularization",
+  journal = "Journal of Machine Learning Research",
+  year = "2023",
+  volume = "24",
+  number = "205",
+  pages = "1-8",
+  textVersion = "Hazimeh, Hussein et al. “L0Learn: A Scalable Package for Sparse Learning using L0 Regularization.” J. Mach. Learn. Res. 24 (2022): 205:1-205:8."
+)
+
+bibentry(bibtype = "article",
+  author = c(
+  as.person("Hazimeh Hussein"),
+  as.person("Mazumder Rahul"),
+  as.person("Peter Smibert"),
+  as.person("Efthymia Papalexi"),
+  as.person("Rahul Satija")
+  ),
+  title = "Fast Best Subset Selection: Coordinate Descent and Local Combinatorial Optimization Algorithms",
+  journal = "Operations Research",
+  year = "2020",
+  volume = "68",
+  number = "5",
+  pages = "1517-1537",
+  doi = "10.1287/opre.2019.1919",
+  url = "https://doi.org/10.1287/opre.2019.1919",
+  textVersion = "Hazimeh, Hussein and Rahul Mazumder. “Fast Best Subset Selection: Coordinate Descent and Local Combinatorial Optimization Algorithms.” Oper. Res. 68 (2018): 1517-1537."
+)
