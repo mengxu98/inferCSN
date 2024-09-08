@@ -67,9 +67,13 @@ public:
 
   virtual ~CDBase() {}
 
-  virtual inline double Objective(const arma::vec &, const beta_vector &) = 0;
+  // virtual inline double Objective(const arma::vec &, const beta_vector &) = 0;
 
-  virtual inline double Objective() = 0;
+  // virtual inline double Objective() = 0;
+
+  virtual double Objective(const arma::vec &, const beta_vector &) = 0;
+
+  virtual double Objective() = 0;
 
   virtual FitResult<T> _FitWithBounds() = 0;
 

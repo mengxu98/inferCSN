@@ -73,7 +73,7 @@ template <class T> FitResult<T> CDL012SquaredHingeSwaps<T>::_Fit() {
             // std::cout<<"Adding: "<<i<< std::endl;
             arma::vec onemyxbnoji = onemyxbnoj;
 
-            std::size_t l = 0;
+            // std::size_t l = 0;
             beta_vector Btemp = this->B;
             Btemp[j] = 0;
             // double ObjTemp = Objective(onemyxbnoj,Btemp);
@@ -100,7 +100,7 @@ template <class T> FitResult<T> CDL012SquaredHingeSwaps<T>::_Fit() {
               }
 
               Biold = Binew;
-              l += 1;
+              // l += 1;
             }
 
             Btemp[i] = Binew;
