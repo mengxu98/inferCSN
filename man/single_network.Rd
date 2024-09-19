@@ -16,7 +16,7 @@ single_network(
   n_folds = 10,
   subsampling = 1,
   r_threshold = 0,
-  verbose = FALSE,
+  verbose = TRUE,
   ...
 )
 }
@@ -71,7 +71,12 @@ head(
 
 single_network(
   example_matrix,
-  regulators = "g1",
-  target = "g2"
+  regulators = c("g1", "g2", "g3"),
+  target = "g1"
+)
+single_network(
+  example_matrix,
+  regulators = c("g1", "g2"),
+  target = "g1"
 )
 }

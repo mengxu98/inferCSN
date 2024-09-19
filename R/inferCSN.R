@@ -82,16 +82,6 @@ setGeneric(
 #'   regulators = c("g1", "g2"),
 #'   targets = c("g3", "g0")
 #' )
-#' inferCSN(
-#'   example_matrix,
-#'   regulators = c("g1", "g0"),
-#'   targets = c("g2", "g3")
-#' )
-#' inferCSN(
-#'   example_matrix,
-#'   regulators = c("g1"),
-#'   targets = c("g2")
-#' )
 setMethod(
   f = "inferCSN",
   signature = signature(object = "matrix"),
@@ -162,7 +152,8 @@ setMethod(
           subsampling = subsampling,
           r_threshold = r_threshold,
           regulators_num = regulators_num,
-          verbose = verbose
+          verbose = verbose,
+          ...
         )
       },
       cores = cores,
@@ -289,7 +280,8 @@ setMethod(
           subsampling = subsampling,
           r_threshold = r_threshold,
           regulators_num = regulators_num,
-          verbose = verbose
+          verbose = verbose,
+          ...
         )
       },
       cores = cores,

@@ -144,16 +144,6 @@ inferCSN(
   regulators = c("g1", "g2"),
   targets = c("g3", "g0")
 )
-inferCSN(
-  example_matrix,
-  regulators = c("g1", "g0"),
-  targets = c("g2", "g3")
-)
-inferCSN(
-  example_matrix,
-  regulators = c("g1"),
-  targets = c("g2")
-)
 \dontrun{
 data("example_matrix")
 network_table <- inferCSN(example_matrix)

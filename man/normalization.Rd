@@ -4,7 +4,7 @@
 \alias{normalization}
 \title{Normalize numeric vector}
 \usage{
-normalization(x, method = "max_min", na_rm = TRUE)
+normalization(x, method = "max_min", na_rm = TRUE, ...)
 }
 \arguments{
 \item{x}{Input numeric vector.}
@@ -13,6 +13,8 @@ normalization(x, method = "max_min", na_rm = TRUE)
 
 \item{na_rm}{Whether to remove \code{NA} values,
 and if setting TRUE, using \code{0} instead.}
+
+\item{...}{Parameters for other methods.}
 }
 \value{
 Normalized numeric vector

@@ -4,7 +4,6 @@
 #' @param matrix An expression matrix.
 #' @param target The target gene.
 #'
-#'
 #' @return The weight data table of sub-network
 #' @export
 #' @examples
@@ -19,8 +18,13 @@
 #'
 #' single_network(
 #'   example_matrix,
-#'   regulators = "g1",
-#'   target = "g2"
+#'   regulators = c("g1", "g2", "g3"),
+#'   target = "g1"
+#' )
+#' single_network(
+#'   example_matrix,
+#'   regulators = c("g1", "g2"),
+#'   target = "g1"
 #' )
 single_network <- function(
     matrix,
@@ -34,20 +38,19 @@ single_network <- function(
     n_folds = 10,
     subsampling = 1,
     r_threshold = 0,
-    verbose = FALSE,
+    verbose = TRUE,
     ...) {
   regulators <- setdiff(regulators, target)
+  if (length(regulators) < 2) {
+    log_message(
+      "less than 2 regulators found while modeling: ", target,
+      message_type = "warning",
+      verbose = verbose
+    )
+    return()
+  }
   x <- matrix[, regulators]
   y <- matrix[, target]
-  if (length(regulators) == 1) {
-    return(
-      data.frame(
-        regulator = regulators,
-        target = target,
-        weight = stats::cor(x, y, method = "spearman")
-      )
-    )
-  }
 
   coefficients <- sparse_regression(
     x, y,
@@ -61,11 +64,8 @@ single_network <- function(
     r_threshold = r_threshold,
     verbose = verbose,
     ...
-  )
-
-  coefficients <- normalization(
-    coefficients,
-    method = "sum"
+  ) |> normalization(
+    method = "sum", ...
   )
   if (length(coefficients) != ncol(x)) {
     coefficients <- rep(0, ncol(x))
@@ -88,7 +88,7 @@ single_network <- function(
 #' @param computation_method The method used to compute `r``.
 #'
 #' @md
-#' 
+#'
 #' @return Coefficients
 #' @export
 #' @examples
@@ -114,6 +114,7 @@ sparse_regression <- function(
     test_x <- x
     test_y <- y
   } else {
+    set.seed(seed)
     samples <- sample(
       nrow(x), subsampling * nrow(x)
     )

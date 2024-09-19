@@ -72,10 +72,10 @@ reference:
   - check_sparsity
   - coef.srm
   - coef.srm_cv
-  - log_message
-  - network_format
-  - table_to_matrix
   - filter_sort_matrix
+  - log_message
+  - meta_cells
+  - network_format
   - normalization
   - parallelize_fun
   - print.srm
@@ -83,6 +83,9 @@ reference:
   - predict.srm
   - predict.srm_cv
   - r_square
+  - sparse_cor
+  - sparse_covcor
+  - table_to_matrix
 
 - subtitle: "Example data"
 - contents:
