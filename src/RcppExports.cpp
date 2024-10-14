@@ -407,6 +407,29 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// matrixToTable
+DataFrame matrixToTable(NumericMatrix network_matrix);
+RcppExport SEXP _inferCSN_matrixToTable(SEXP network_matrixSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type network_matrix(network_matrixSEXP);
+    rcpp_result_gen = Rcpp::wrap(matrixToTable(network_matrix));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sparseCovCor
+List sparseCovCor(const arma::sp_mat& x, const Nullable<arma::sp_mat>& y_nullable);
+RcppExport SEXP _inferCSN_sparseCovCor(SEXP xSEXP, SEXP y_nullableSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::sp_mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Nullable<arma::sp_mat>& >::type y_nullable(y_nullableSEXP);
+    rcpp_result_gen = Rcpp::wrap(sparseCovCor(x, y_nullable));
+    return rcpp_result_gen;
+END_RCPP
+}
 // tableToMatrix
 NumericMatrix tableToMatrix(DataFrame weight_table);
 RcppExport SEXP _inferCSN_tableToMatrix(SEXP weight_tableSEXP) {
@@ -444,6 +467,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_inferCSN_R_matrix_center_sparse", (DL_FUNC) &_inferCSN_R_matrix_center_sparse, 3},
     {"_inferCSN_asMatrix", (DL_FUNC) &_inferCSN_asMatrix, 5},
     {"_inferCSN_asMatrixParallel", (DL_FUNC) &_inferCSN_asMatrixParallel, 5},
+    {"_inferCSN_matrixToTable", (DL_FUNC) &_inferCSN_matrixToTable, 1},
+    {"_inferCSN_sparseCovCor", (DL_FUNC) &_inferCSN_sparseCovCor, 2},
     {"_inferCSN_tableToMatrix", (DL_FUNC) &_inferCSN_tableToMatrix, 1},
     {NULL, NULL, 0}
 };

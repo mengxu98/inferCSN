@@ -97,6 +97,14 @@ asMatrixParallel <- function(rp, cp, z, nrows, ncols) {
     .Call('_inferCSN_asMatrixParallel', PACKAGE = 'inferCSN', rp, cp, z, nrows, ncols)
 }
 
+matrixToTable <- function(network_matrix) {
+    .Call('_inferCSN_matrixToTable', PACKAGE = 'inferCSN', network_matrix)
+}
+
+sparseCovCor <- function(x, y_nullable = NULL) {
+    .Call('_inferCSN_sparseCovCor', PACKAGE = 'inferCSN', x, y_nullable)
+}
+
 tableToMatrix <- function(weight_table) {
     .Call('_inferCSN_tableToMatrix', PACKAGE = 'inferCSN', weight_table)
 }

@@ -1,3 +1,28 @@
+#' @title Value selection operator
+#'
+#' @description
+#' This operator returns the left side if it's not NULL,
+#' otherwise it returns the right side.
+#'
+#' @param a The left side value to check
+#' @param b The right side value to use if a is NULL
+#'
+#' @export
+#'
+#' @examples
+#' NULL %s% 10
+#' 5 %s% 10
+`%s%` <- function(a, b) {
+  if (is.null(a)) {
+    if (isTRUE(getOption("log_default_operator", default = FALSE))) {
+      log_message("Using default value in %s% operator", verbose = TRUE)
+    }
+    return(b)
+  } else {
+    return(a)
+  }
+}
+
 #' @title Print diagnostic message
 #'
 #' @param ... Text to print.
@@ -230,46 +255,68 @@ parallelize_fun <- function(
   }
 }
 
-#' @title Fast correlation and covariance calcualtion for sparse matrices
+#' @title Generate a simulated sparse matrix for single-cell data testing
+#'
+#' @param nrow Number of rows (genes) in the matrix.
+#' @param ncol Number of columns (cells) in the matrix.
+#' @param density Density of non-zero elements (default: 0.1, representing 90 sparsity).
+#' @param distribution_fun Function to generate non-zero values.
+#' @param seed Random seed for reproducibility.
+#'
+#' @return A sparse matrix of class "dgCMatrix"
+#' @export
+#'
+#' @examples
+#' simulate_sparse_matrix(2000, 500) |>
+#'   check_sparsity()
+simulate_sparse_matrix <- function(
+    nrow,
+    ncol,
+    density = 0.1,
+    distribution_fun = function(n) stats::rpois(n, lambda = 0.5) + 1,
+    seed = 1) {
+  set.seed(seed)
+
+  nnz <- round(nrow * ncol * density)
+
+  i <- sample(1:nrow, nnz, replace = TRUE)
+  j <- sample(1:ncol, nnz, replace = TRUE)
+  x <- distribution_fun(nnz)
+
+  Matrix::sparseMatrix(
+    i = i,
+    j = j,
+    x = x,
+    dims = c(nrow, ncol),
+    dimnames = list(
+      paste0("cell_", 1:nrow),
+      paste0("gene_", 1:ncol)
+    )
+  )
+}
+
+#' @title Correlation and covariance calculation for sparse matrix
 #'
 #' @inheritParams sparse_cor
-sparse_covcor <- function(x, y = NULL) {
+pearson_correlation <- function(x, y = NULL) {
   if (!methods::is(x, "sparseMatrix")) {
-    log_message(
-      "x should be a dgCMatrix",
-      message_type = "error"
-    )
+    stop("x should be a sparse matrix.")
   }
-  n <- nrow(x)
-  mu_x <- colMeans(x)
-  if (is.null(y)) {
-    covmat <- (as.matrix(crossprod(x)) - n * tcrossprod(mu_x)) / (n - 1)
-    sdvec <- sqrt(diag(covmat))
-    cormat <- covmat / tcrossprod(sdvec)
-  } else {
-    if (!methods::is(y, "sparseMatrix")) {
-      log_message(
-        "y should be a dgCMatrix",
-        message_type = "error"
-      )
-    }
-    if (nrow(x) != nrow(y)) {
-      log_message(
-        "x and y should have the same number of rows",
-        message_type = "error"
-      )
-    }
+  if (!is.null(y) && !methods::is(y, "sparseMatrix")) {
+    stop("y should be a sparse matrix.")
+  }
 
-    mu_y <- colMeans(y)
-    covmat <- (as.matrix(crossprod(x, y)) - n * tcrossprod(mu_x, mu_y)) / (n - 1)
-    sdvecX <- sqrt((colSums(x^2) - n * mu_x^2) / (n - 1))
-    sdvecY <- sqrt((colSums(y^2) - n * mu_y^2) / (n - 1))
-    cormat <- covmat / tcrossprod(sdvecX, sdvecY)
-  }
+  # sparseCovCor(x, y)
+  result <- .Call(
+    "_inferCSN_sparseCovCor",
+    PACKAGE = "inferCSN",
+    x, y
+  )
+
   return(
     list(
-      cov = covmat,
-      cor = cormat
+      cov = result$cov,
+      cor = result$cor
     )
   )
 }
@@ -280,13 +327,55 @@ sparse_covcor <- function(x, y = NULL) {
 #' @param y Sparse matrix or character vector.
 #' @param method Method to use for calculating the correlation coefficient.
 #' @param allow_neg Logical. Whether to allow negative values or set them to 0.
-#' @param remove_na Logical.
-#' @param remove_inf Logical.
+#' @param remove_na Logical. Whether to replace NA values with 0.
+#' @param remove_inf Logical. Whether to replace infinite values with 1.
 #' @param ... Other arguments passed to the correlation function.
 #'
 #' @return A correlation matrix.
 #'
 #' @export
+#'
+#' @examples
+#' m1 <- simulate_sparse_matrix(
+#'   1000, 1000,
+#'   density = 0.05
+#' )
+#' m2 <- simulate_sparse_matrix(
+#'   1000, 500,
+#'   density = 0.05
+#' )
+#'
+#' all.equal(
+#'   as.matrix(sparse_cor(m1)),
+#'   cor(as_matrix(m1))
+#' )
+#' all.equal(
+#'   as.matrix(sparse_cor(m1, m2)),
+#'   cor(as_matrix(m1), as_matrix(m2))
+#' )
+#'
+#' system.time(
+#'   sparse_cor(m1)
+#' )
+#' system.time(
+#'   cor(as_matrix(m1))
+#' )
+#' system.time(
+#'   sparse_cor(m1, m2)
+#' )
+#' system.time(
+#'   cor(as_matrix(m1), as_matrix(m2))
+#' )
+#'
+#' # remove infinite values
+#' m1[sample(1:500, 10)] <- Inf
+#' m2[sample(1:500, 10)] <- Inf
+#'
+#' # add missing values
+#' m1[sample(1:500, 10)] <- NA
+#' m2[sample(1:500, 10)] <- NA
+#'
+#' sparse_cor(m1, m2)[1:5, 1:5]
 sparse_cor <- function(
     x,
     y = NULL,
@@ -295,26 +384,73 @@ sparse_cor <- function(
     remove_na = TRUE,
     remove_inf = TRUE,
     ...) {
-  if (method == "pearson") {
-    x <- Matrix::Matrix(x, sparse = TRUE)
-    if (!is.null(y)) {
-      y <- Matrix::Matrix(y, sparse = TRUE)
-    }
-    corr_mat <- sparse_covcor(x, y)$cor
-  } else {
-    x <- as.matrix(x)
-    if (!is.null(y)) {
-      y <- as.matrix(y)
-    }
-    corr_mat <- stats::cor(x, y, method = method, ...)
+  if (!methods::is(x, "sparseMatrix")) {
+    x <- as_matrix(x, sparse = TRUE)
   }
+
+  if (!is.null(y)) {
+    if (!methods::is(y, "sparseMatrix")) {
+      y <- as_matrix(y, sparse = TRUE)
+    }
+    if (nrow(x) != nrow(y)) {
+      stop("x and y must have the same number of rows.")
+    }
+  }
+
+  corr_mat <- switch(
+    EXPR = method,
+    "pearson" = pearson_correlation(x, y)$cor,
+    "spearman" = {
+      if (is.null(y)) {
+        stats::cor(
+          as_matrix(x),
+          method = "spearman",
+          ...
+        )
+      } else {
+        stats::cor(
+          as_matrix(x),
+          as_matrix(y),
+          method = "spearman",
+          ...
+        )
+      }
+    },
+    "kendall" = {
+      if (is.null(y)) {
+        stats::cor(
+          as_matrix(x),
+          method = "kendall",
+          ...
+        )
+      } else {
+        stats::cor(
+          as_matrix(x),
+          as_matrix(y),
+          method = "kendall",
+          ...
+        )
+      }
+    }
+  )
+
+  if (is.null(y)) {
+    colnames(corr_mat) <- colnames(x)
+    rownames(corr_mat) <- colnames(x)
+  } else {
+    colnames(corr_mat) <- colnames(y)
+    rownames(corr_mat) <- colnames(x)
+  }
+
   if (remove_na) {
     corr_mat[is.na(corr_mat)] <- 0
   }
   if (remove_inf) {
     corr_mat[is.infinite(corr_mat)] <- 1
   }
-  corr_mat <- Matrix::Matrix(corr_mat, sparse = TRUE)
+
+  corr_mat <- as_matrix(corr_mat, sparse = TRUE)
+
   if (!allow_neg) {
     corr_mat[corr_mat < 0] <- 0
   }
@@ -322,7 +458,7 @@ sparse_cor <- function(
   return(corr_mat)
 }
 
-#' @title Convert dgCMatrix into a dense matrix
+#' @title Convert sparse matrix into dense matrix
 #'
 #' @param x A matrix.
 #' @param parallel Logical value, default is *`FALSE`*.
@@ -387,13 +523,10 @@ as_matrix <- function(
     sparse = FALSE) {
   if (!methods::is(x, "sparseMatrix")) {
     if (sparse) {
-      non_zero <- which(x != 0, arr.ind = TRUE)
       return(
-        Matrix::sparseMatrix(
-          i = non_zero[, 1],
-          j = non_zero[, 2],
-          x = x[non_zero],
-          dims = dim(x),
+        Matrix::Matrix(
+          x,
+          sparse = TRUE,
           dimnames = dimnames(x)
         )
       )
@@ -406,7 +539,6 @@ as_matrix <- function(
     if (parallel) {
       matrix <- .Call(
         "_inferCSN_asMatrixParallel",
-        # PACKAGE = "inferCSN",
         row_pos,
         col_pos,
         x@x,
@@ -416,7 +548,6 @@ as_matrix <- function(
     } else {
       matrix <- .Call(
         "_inferCSN_asMatrix",
-        # PACKAGE = "inferCSN",
         row_pos,
         col_pos,
         x@x,
@@ -458,9 +589,10 @@ check_sparsity <- function(x) {
 #' @param network_table The weight data table of network.
 #' @param regulators Regulators list.
 #' @param targets Targets list.
-#' @param abs_weight Logical value, default is *`TRUE`*, whether to perform absolute value on weights,
-#'  and when set `abs_weight` to *`TRUE`*,
-#'  the output of weight table will create a new column named `Interaction`.
+#' @param abs_weight Logical value, default is *`TRUE`*,
+#' whether to perform absolute value on weights,
+#' and when set `abs_weight` to *`TRUE`*,
+#' the output of weight table will create a new column named `Interaction`.
 #'
 #' @md
 #' @return Formated network table
@@ -611,6 +743,41 @@ table_to_matrix <- function(
   )
 
   return(network_matrix)
+}
+
+#' @title Switch matrix to network table
+#'
+#' @inheritParams table_to_matrix
+#' @param network_matrix The matrix of network weight.
+#'
+#' @return Network table
+#' @export
+#'
+#' @examples
+#' data("example_matrix")
+#' network_table <- inferCSN(example_matrix)
+#' network_matrix <- table_to_matrix(network_table)
+#' network_table_new <- matrix_to_table(network_matrix)
+#' head(network_table)
+#' head(network_table_new)
+#' identical(
+#'   network_table,
+#'   network_table_new
+#' )
+matrix_to_table <- function(
+    network_matrix,
+    regulators = NULL,
+    targets = NULL) {
+  network_matrix <- filter_sort_matrix(
+    network_matrix,
+    regulators = regulators,
+    targets = targets
+  )
+  .Call(
+    "_inferCSN_matrixToTable",
+    PACKAGE = "inferCSN",
+    network_matrix
+  ) |> network_format(abs_weight = FALSE)
 }
 
 #' @title Extracts a specific solution in the regularization path

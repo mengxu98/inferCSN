@@ -52,9 +52,11 @@ reference:
 
 - subtitle: "Plotting functions"
 - contents:
-  - plot_scatter
+  - plot_coefficient
+  - plot_coefficients
   - plot_embedding
   - plot_histogram
+  - plot_scatter
 
 - subtitle: "Calculate gene rank"
 - contents:
@@ -68,23 +70,26 @@ reference:
 
 - subtitle: "Utils functions"
 - contents:
+  - '%s%'
   - as_matrix
   - check_sparsity
   - coef.srm
   - coef.srm_cv
   - filter_sort_matrix
   - log_message
+  - matrix_to_table
   - meta_cells
   - network_format
   - normalization
   - parallelize_fun
+  - pearson_correlation
   - print.srm
   - print.srm_cv
   - predict.srm
   - predict.srm_cv
   - r_square
   - sparse_cor
-  - sparse_covcor
+  - simulate_sparse_matrix
   - table_to_matrix
 
 - subtitle: "Example data"
