@@ -1,33 +1,46 @@
 #' @title Detection of metacells from single-cell gene expression matrix
 #'
-#' @param matrix log-normalized gene expression matrix with rows to be genes and cols to be cells
-#' @param genes_use a vector of genes used to compute PCA
-#' @param genes_exclude a vector of genes to be excluded when computing PCA
-#' @param var_genes_num if \code{"genes.use"} is not provided, \code{"var_genes_num"} genes with the largest variation are used
-#' @param gamma graining level of data (proportion of number of single cells in the initial dataset to the number of metacells in the final dataset)
-#' @param knn_k parameter to compute single-cell kNN network
-#' @param do_scale whether to scale gene expression matrix when computing PCA
-#' @param pc_num number of principal components to use for construction of single-cell kNN network
-#' @param fast_pca use \link[irlba]{irlba} as a faster version of prcomp
-#' @param do_approx compute approximate kNN in case of a large dataset (>50'000)
-#' @param approx_num number of cells to subsample for an approximate approach
-#' @param directed directed
-#' @param use_nn2 use_nn2
-#' @param seed seed to use to subsample cells for an approximate approach
-#' @param weights vector of a cell weight (NULL by default), used for computing average gene expression withing cluster of metaells
-#' @param do_median_norm whether to normalize by median value (FALSE by default)
-#' @param block_size number of cells to map to the nearest metacell at the time (for approx coarse-graining)
-#' @param cluster_method clustering method to identify metacells (available methods "walktrap" (default) and "louvain" (not recommended, gamma is ignored)).
-#' @param ... Parameters for other methods.
+#' @description This function detects metacells from a single-cell gene expression matrix
+#' using dimensionality reduction and clustering techniques.
 #'
-#' @return a metacell matrix
-#' 
+#' @param matrix Log-normalized gene expression matrix with rows as genes and columns as cells.
+#' @param genes_use A vector of genes used to compute PCA, default is *`NULL`*.
+#' @param genes_exclude A vector of genes to be excluded when computing PCA, default is *`NULL`*.
+#' @param var_genes_num If *`genes_use`* is not provided, *`var_genes_num`* genes with the largest
+#'   variation are used. Default is *`min(1000, nrow(matrix))`*.
+#' @param gamma Graining level of data (proportion of number of single cells in the initial dataset
+#'   to the number of metacells in the final dataset), default is *`10`*.
+#' @param knn_k Parameter to compute single-cell kNN network, default is *`5`*.
+#' @param do_scale Logical value, default is *`TRUE`*, whether to scale gene expression matrix
+#'   when computing PCA.
+#' @param pc_num Number of principal components to use for construction of single-cell kNN network,
+#'   default is *`25`*.
+#' @param fast_pca Logical value, default is *`TRUE`*, use \link[irlba]{irlba} as a faster version
+#'   of prcomp.
+#' @param do_approx Logical value, default is *`FALSE`*, compute approximate kNN in case of a large
+#'   dataset (>50'000).
+#' @param approx_num Number of cells to subsample for an approximate approach, default is *`20000`*.
+#' @param directed Logical value, default is *`FALSE`*, whether to use directed graph.
+#' @param use_nn2 Logical value, default is *`TRUE`*, whether to use nn2 function.
+#' @param seed Seed to use to subsample cells for an approximate approach, default is *`1`*.
+#' @param cluster_method Clustering method to identify metacells, default is *`walktrap`*.
+#'   Available methods are *`walktrap`* and *`louvain`* (not recommended, gamma is ignored).
+#' @param block_size Number of cells to map to the nearest metacell at a time (for approx
+#'   coarse-graining), default is *`10000`*.
+#' @param weights Vector of cell weights (NULL by default),
+#' used for computing average gene expression within cluster of metacells.
+#' @param do_median_norm Logical value, default is *`FALSE`*,
+#' whether to normalize by median value.
+#' @param ... Additional parameters passed to other methods.
+#'
+#' @return A metacell matrix where rows represent metacells and columns represent genes.
+#' @export
+#'
+#' @md
+#'
 #' @references
 #' https://github.com/GfellerLab/SuperCell
-#' 
 #' https://github.com/kuijjerlab/SCORPION
-#'
-#' @export
 #'
 #' @examples
 #' data("example_matrix")
@@ -37,7 +50,7 @@
 #'   fast_pca = FALSE
 #' )
 #' dim(meta_cells_matrix)
-#' meta_cells_matrix[1:6,1:6]
+#' meta_cells_matrix[1:6, 1:6]
 meta_cells <- function(
     matrix,
     genes_use = NULL,

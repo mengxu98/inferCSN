@@ -2,7 +2,7 @@
 % Please edit documentation in R/meta_cells.R
 \name{meta_cells}
 \alias{meta_cells}
-\title{Detection of metacells with the SuperCell approach}
+\title{Detection of metacells from single-cell gene expression matrix}
 \usage{
 meta_cells(
   matrix,
@@ -27,49 +27,60 @@ meta_cells(
 )
 }
 \arguments{
-\item{matrix}{log-normalized gene expression matrix with rows to be genes and cols to be cells}
+\item{matrix}{Log-normalized gene expression matrix with rows as genes and columns as cells.}
 
-\item{genes_use}{a vector of genes used to compute PCA}
+\item{genes_use}{A vector of genes used to compute PCA, default is \emph{\code{NULL}}.}
 
-\item{genes_exclude}{a vector of genes to be excluded when computing PCA}
+\item{genes_exclude}{A vector of genes to be excluded when computing PCA, default is \emph{\code{NULL}}.}
 
-\item{var_genes_num}{if \code{"genes.use"} is not provided, \code{"var_genes_num"} genes with the largest variation are used}
+\item{var_genes_num}{If \emph{\code{genes_use}} is not provided, \emph{\code{var_genes_num}} genes with the largest
+variation are used. Default is \emph{\code{min(1000, nrow(matrix))}}.}
 
-\item{gamma}{graining level of data (proportion of number of single cells in the initial dataset to the number of metacells in the final dataset)}
+\item{gamma}{Graining level of data (proportion of number of single cells in the initial dataset
+to the number of metacells in the final dataset), default is \emph{\code{10}}.}
 
-\item{knn_k}{parameter to compute single-cell kNN network}
+\item{knn_k}{Parameter to compute single-cell kNN network, default is \emph{\code{5}}.}
 
-\item{do_scale}{whether to scale gene expression matrix when computing PCA}
+\item{do_scale}{Logical value, default is \emph{\code{TRUE}}, whether to scale gene expression matrix
+when computing PCA.}
 
-\item{pc_num}{number of principal components to use for construction of single-cell kNN network}
+\item{pc_num}{Number of principal components to use for construction of single-cell kNN network,
+default is \emph{\code{25}}.}
 
-\item{fast_pca}{use \link[irlba]{irlba} as a faster version of prcomp}
+\item{fast_pca}{Logical value, default is \emph{\code{TRUE}}, use \link[irlba]{irlba} as a faster version
+of prcomp.}
 
-\item{do_approx}{compute approximate kNN in case of a large dataset (>50'000)}
+\item{do_approx}{Logical value, default is \emph{\code{FALSE}}, compute approximate kNN in case of a large
+dataset (>50'000).}
 
-\item{approx_num}{number of cells to subsample for an approximate approach}
+\item{approx_num}{Number of cells to subsample for an approximate approach, default is \emph{\code{20000}}.}
 
-\item{directed}{directed}
+\item{directed}{Logical value, default is \emph{\code{FALSE}}, whether to use directed graph.}
 
-\item{use_nn2}{use_nn2}
+\item{use_nn2}{Logical value, default is \emph{\code{TRUE}}, whether to use nn2 function.}
 
-\item{seed}{seed to use to subsample cells for an approximate approach}
+\item{seed}{Seed to use to subsample cells for an approximate approach, default is \emph{\code{1}}.}
 
-\item{cluster_method}{clustering method to identify metacells (available methods "walktrap" (default) and "louvain" (not recommended, gamma is ignored)).}
+\item{cluster_method}{Clustering method to identify metacells, default is \emph{\code{walktrap}}.
+Available methods are \emph{\code{walktrap}} and \emph{\code{louvain}} (not recommended, gamma is ignored).}
 
-\item{block_size}{number of cells to map to the nearest metacell at the time (for approx coarse-graining)}
+\item{block_size}{Number of cells to map to the nearest metacell at a time (for approx
+coarse-graining), default is \emph{\code{10000}}.}
 
-\item{weights}{vector of a cell weight (NULL by default), used for computing average gene expression withing cluster of metaells}
+\item{weights}{Vector of cell weights (NULL by default),
+used for computing average gene expression within cluster of metacells.}
 
-\item{do_median_norm}{whether to normalize by median value (FALSE by default)}
+\item{do_median_norm}{Logical value, default is \emph{\code{FALSE}},
+whether to normalize by median value.}
 
-\item{...}{Parameters for other methods.}
+\item{...}{Additional parameters passed to other methods.}
 }
 \value{
-a metacell matrix
+A metacell matrix where rows represent metacells and columns represent genes.
 }
 \description{
-This function detects metacells (former super-cells) from single-cell gene expression matrix
+This function detects metacells from a single-cell gene expression matrix
+using dimensionality reduction and clustering techniques.
 }
 \examples{
 data("example_matrix")
@@ -79,5 +90,9 @@ meta_cells_matrix <- meta_cells(
   fast_pca = FALSE
 )
 dim(meta_cells_matrix)
-meta_cells_matrix[1:6,1:6]
+meta_cells_matrix[1:6, 1:6]
+}
+\references{
+https://github.com/GfellerLab/SuperCell
+https://github.com/kuijjerlab/SCORPION
 }

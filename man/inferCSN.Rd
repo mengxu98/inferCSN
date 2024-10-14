@@ -122,12 +122,13 @@ data("example_matrix")
 network_table_1 <- inferCSN(
   example_matrix
 )
-head(network_table_1)
 
 network_table_2 <- inferCSN(
   example_matrix,
   cores = 2
 )
+
+head(network_table_1)
 
 identical(
   network_table_1,

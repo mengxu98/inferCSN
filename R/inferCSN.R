@@ -60,12 +60,13 @@ setGeneric(
 #' network_table_1 <- inferCSN(
 #'   example_matrix
 #' )
-#' head(network_table_1)
 #'
 #' network_table_2 <- inferCSN(
 #'   example_matrix,
 #'   cores = 2
 #' )
+#'
+#' head(network_table_1)
 #'
 #' identical(
 #'   network_table_1,
@@ -121,19 +122,16 @@ setMethod(
       ...
     )
 
-    if (!is.null(regulators)) {
-      regulators <- intersect(colnames(object), regulators)
-    } else {
-      regulators <- colnames(object)
-    }
-    if (!is.null(targets)) {
-      targets <- intersect(colnames(object), targets)
-    } else {
-      targets <- colnames(object)
-    }
-    if (is.null(regulators_num)) {
-      regulators_num <- (ncol(object) - 1)
-    }
+    regulators <- intersect(
+      colnames(object),
+      regulators %s% colnames(object)
+    )
+    targets <- intersect(
+      colnames(object),
+      targets %s% colnames(object)
+    )
+    regulators_num <- regulators_num %s% (ncol(object) - 1)
+
     names(targets) <- targets
     cores <- .cores_detect(cores, length(targets))
 
@@ -249,19 +247,16 @@ setMethod(
       ...
     )
 
-    if (!is.null(regulators)) {
-      regulators <- intersect(colnames(object), regulators)
-    } else {
-      regulators <- colnames(object)
-    }
-    if (!is.null(targets)) {
-      targets <- intersect(colnames(object), targets)
-    } else {
-      targets <- colnames(object)
-    }
-    if (is.null(regulators_num)) {
-      regulators_num <- (ncol(object) - 1)
-    }
+    regulators <- intersect(
+      colnames(object),
+      regulators %s% colnames(object)
+    )
+    targets <- intersect(
+      colnames(object),
+      targets %s% colnames(object)
+    )
+    regulators_num <- regulators_num %s% (ncol(object) - 1)
+
     names(targets) <- targets
     cores <- .cores_detect(cores, length(targets))
 

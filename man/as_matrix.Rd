@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{as_matrix}
 \alias{as_matrix}
-\title{Convert dgCMatrix into a dense matrix}
+\title{Convert sparse matrix into dense matrix}
 \usage{
 as_matrix(x, parallel = FALSE, sparse = FALSE)
 }
@@ -15,7 +15,7 @@ Setting to parallelize the computation with \code{\link[RcppParallel]{setThreadO
 \item{sparse}{Logical value, default is \emph{\code{FALSE}}, whether to output a sparse matrix.}
 }
 \description{
-Convert dgCMatrix into a dense matrix
+Convert sparse matrix into dense matrix
 }
 \examples{
 dims_i <- 2000
