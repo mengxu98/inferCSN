@@ -88,11 +88,11 @@
 
 
 <dt id="arg-remove-na">remove_na<a class="anchor" aria-label="anchor" href="#arg-remove-na"></a></dt>
-<dd><p>Logical.</p></dd>
+<dd><p>Logical. Whether to replace NA values with 0.</p></dd>
 
 
 <dt id="arg-remove-inf">remove_inf<a class="anchor" aria-label="anchor" href="#arg-remove-inf"></a></dt>
-<dd><p>Logical.</p></dd>
+<dd><p>Logical. Whether to replace infinite values with 1.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -104,6 +104,67 @@
     <p>A correlation matrix.</p>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="simulate_sparse_matrix.html">simulate_sparse_matrix</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fl">1000</span>, <span class="fl">1000</span>,</span></span>
+<span class="r-in"><span>  density <span class="op">=</span> <span class="fl">0.05</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="simulate_sparse_matrix.html">simulate_sparse_matrix</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fl">1000</span>, <span class="fl">500</span>,</span></span>
+<span class="r-in"><span>  density <span class="op">=</span> <span class="fl">0.05</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="fu">sparse_cor</span><span class="op">(</span><span class="va">m1</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="fu"><a href="as_matrix.html">as_matrix</a></span><span class="op">(</span><span class="va">m1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="fu">sparse_cor</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="fu"><a href="as_matrix.html">as_matrix</a></span><span class="op">(</span><span class="va">m1</span><span class="op">)</span>, <span class="fu"><a href="as_matrix.html">as_matrix</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu">sparse_cor</span><span class="op">(</span><span class="va">m1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    user  system elapsed </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.088   0.012   0.099 </span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="fu"><a href="as_matrix.html">as_matrix</a></span><span class="op">(</span><span class="va">m1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    user  system elapsed </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1.125   0.000   1.124 </span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu">sparse_cor</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    user  system elapsed </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.064   0.133   0.050 </span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="fu"><a href="as_matrix.html">as_matrix</a></span><span class="op">(</span><span class="va">m1</span><span class="op">)</span>, <span class="fu"><a href="as_matrix.html">as_matrix</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    user  system elapsed </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1.103   0.000   1.104 </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># remove infinite values</span></span></span>
+<span class="r-in"><span><span class="va">m1</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">500</span>, <span class="fl">10</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">Inf</span></span></span>
+<span class="r-in"><span><span class="va">m2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">500</span>, <span class="fl">10</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">Inf</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># add missing values</span></span></span>
+<span class="r-in"><span><span class="va">m1</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">500</span>, <span class="fl">10</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span></span>
+<span class="r-in"><span><span class="va">m2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">500</span>, <span class="fl">10</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">sparse_cor</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 x 5 sparse Matrix of class "dgCMatrix"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        gene_1       gene_2      gene_3       gene_4       gene_5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> gene_1      .  .            .           .            .          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> gene_2      . -0.003526201  0.03513284  0.017012522 -0.025108573</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> gene_3      . -0.036149852 -0.01842075 -0.035091244 -0.034126734</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> gene_4      . -0.009618833 -0.01509936 -0.032335080  0.001989427</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> gene_5      . -0.007101459 -0.01018799  0.003607248 -0.016975775</span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
