@@ -430,6 +430,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// split_indices
+std::vector<std::vector<int>> split_indices(IntegerVector group, int n);
+RcppExport SEXP _inferCSN_split_indices(SEXP groupSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type group(groupSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(split_indices(group, n));
+    return rcpp_result_gen;
+END_RCPP
+}
 // tableToMatrix
 NumericMatrix tableToMatrix(DataFrame weight_table);
 RcppExport SEXP _inferCSN_tableToMatrix(SEXP weight_tableSEXP) {
@@ -469,6 +481,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_inferCSN_asMatrixParallel", (DL_FUNC) &_inferCSN_asMatrixParallel, 5},
     {"_inferCSN_matrixToTable", (DL_FUNC) &_inferCSN_matrixToTable, 1},
     {"_inferCSN_sparseCovCor", (DL_FUNC) &_inferCSN_sparseCovCor, 2},
+    {"_inferCSN_split_indices", (DL_FUNC) &_inferCSN_split_indices, 2},
     {"_inferCSN_tableToMatrix", (DL_FUNC) &_inferCSN_tableToMatrix, 1},
     {NULL, NULL, 0}
 };

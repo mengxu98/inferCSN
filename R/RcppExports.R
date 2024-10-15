@@ -105,6 +105,27 @@ sparseCovCor <- function(x, y_nullable = NULL) {
     .Call('_inferCSN_sparseCovCor', PACKAGE = 'inferCSN', x, y_nullable)
 }
 
+#' @title Split indices.
+#'
+#' @description An optimised version of split for the special case of splitting row indices into groups.
+#'
+#' @param group Integer indices
+#' @param n The largest integer (may not appear in index).
+#' This is hint: if the largest value of \code{group} is bigger than \code{n},
+#' the output will silently expand.
+#' @useDynLib inferCSN
+#' @return A list of vectors of indices.
+#'
+#' @references
+#' https://github.com/hadley/plyr/blob/d57f9377eb5d56107ba3136775f2f0f005f33aa3/src/split-numeric.cpp#L20
+#' @export
+#' @examples
+#' split_indices(sample(10, 100, rep = TRUE))
+#' split_indices(sample(10, 100, rep = TRUE), 10)
+split_indices <- function(group, n = 0L) {
+    .Call('_inferCSN_split_indices', PACKAGE = 'inferCSN', group, n)
+}
+
 tableToMatrix <- function(weight_table) {
     .Call('_inferCSN_tableToMatrix', PACKAGE = 'inferCSN', weight_table)
 }

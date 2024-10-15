@@ -89,6 +89,7 @@ reference:
   - predict.srm_cv
   - r_square
   - sparse_cor
+  - split_indices
   - simulate_sparse_matrix
   - table_to_matrix
 
