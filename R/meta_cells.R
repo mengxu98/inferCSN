@@ -198,7 +198,7 @@ meta_cells <- function(
   # )
 
   if (do_approx) {
-    PCA.averaged.SC <- as.matrix(
+    pca_averaged_sc <- as.matrix(
       Matrix::t(
         .supercell_ge(
           t(
@@ -220,31 +220,39 @@ meta_cells <- function(
       block_size <- 10000
     }
 
-    N.blocks <- length(rest_cells) %/% block_size
+    blocks_num <- length(rest_cells) %/% block_size
     if (length(rest_cells) %% block_size > 0) {
-      N.blocks <- N.blocks + 1
+      blocks_num <- blocks_num + 1
     }
 
-    if (N.blocks > 0) {
-      for (i in 1:N.blocks) {
+    if (blocks_num > 0) {
+      for (i in 1:blocks_num) {
         # compute knn by blocks
         idx_begin <- (i - 1) * block_size + 1
         idx_end <- min(i * block_size, length(rest_cells))
 
         cur_rest_cell_ids <- rest_cells[idx_begin:idx_end]
 
-        PCA.ommited <- matrix_roration[cur_rest_cell_ids, ] %*% pca_results$rotation[, pc_num]
+        pca_ommited <- matrix_roration[cur_rest_cell_ids, ] %*% pca_results$rotation[, pc_num]
 
-        D.omitted.subsampled <- proxy::dist(PCA.ommited, PCA.averaged.SC)
+        dist_omitted_subsampled <- proxy::dist(
+          pca_ommited, pca_averaged_sc
+        )
 
-        membership_omitted_cur <- apply(D.omitted.subsampled, 1, which.min)
+        membership_omitted_cur <- apply(
+          dist_omitted_subsampled, 1, which.min
+        )
         names(membership_omitted_cur) <- cur_rest_cell_ids
 
-        membership_omitted <- c(membership_omitted, membership_omitted_cur)
+        membership_omitted <- c(
+          membership_omitted, membership_omitted_cur
+        )
       }
     }
 
-    membership_all <- c(membership_results, membership_omitted)
+    membership_all <- c(
+      membership_results, membership_omitted
+    )
     membership_all <- membership_all[colnames(matrix)]
   } else {
     membership_all <- membership_results[colnames(matrix)]
@@ -256,12 +264,16 @@ meta_cells <- function(
   meta_cells_num <- base::as.vector(table(membership))
   j <- rep(1:max(membership), meta_cells_num)
 
-  goups_idx <- base::split(seq_len(ncol(matrix)), membership)
+  goups_idx <- base::split(
+    seq_len(ncol(matrix)), membership
+  )
   i <- unlist(goups_idx)
 
   if (is.null(weights)) {
     matrix_metacells <- matrix %*% Matrix::sparseMatrix(i = i, j = j)
-    matrix_metacells <- sweep(matrix_metacells, 2, meta_cells_num, "/")
+    matrix_metacells <- sweep(
+      matrix_metacells, 2, meta_cells_num, "/"
+    )
   } else {
     if (length(weights) != length(membership)) {
       stop("weights must be the same length as groups or NULL in case of unweighted averaging")
@@ -294,7 +306,7 @@ meta_cells <- function(
     groups,
     mode = c("average", "sum"),
     weights = NULL,
-    do.median.norm = FALSE) {
+    do_median_norm = FALSE) {
   if (ncol(ge) != length(groups)) {
     stop("Length of the vector groups has to be equal to the number of cols in matrix ge")
   }
@@ -307,14 +319,14 @@ meta_cells <- function(
   supercell_size <- as.vector(table(groups))
   j <- rep(1:max(groups), supercell_size)
 
-  goups_idx <- plyr::split_indices(groups)
+  goups_idx <- split_indices(groups)
   i <- unlist(goups_idx)
 
   if (is.null(weights)) {
-    GE.SC <- ge %*% Matrix::sparseMatrix(i = i, j = j)
+    ge_sc <- ge %*% Matrix::sparseMatrix(i = i, j = j)
 
     if (mode == "average") {
-      GE.SC <- sweep(GE.SC, 2, supercell_size, "/")
+      ge_sc <- sweep(ge_sc, 2, supercell_size, "/")
     }
   } else {
     if (length(weights) != length(groups)) {
@@ -322,10 +334,10 @@ meta_cells <- function(
     }
 
     if (mode != "average") {
-      stop(paste("weighted averaging is supposted only for mode = 'average', not for", mode))
+      stop("weighted averaging is supposted only for mode = 'average', not for ", mode)
     }
 
-    GE.SC <- ge %*% Matrix::sparseMatrix(i = i, j = j, x = weights[i])
+    ge_sc <- ge %*% Matrix::sparseMatrix(i = i, j = j, x = weights[i])
 
     weighted_supercell_size <- unlist(
       lapply(
@@ -335,14 +347,14 @@ meta_cells <- function(
         }
       )
     )
-    GE.SC <- sweep(GE.SC, 2, weighted_supercell_size, "/")
+    ge_sc <- sweep(ge_sc, 2, weighted_supercell_size, "/")
   }
 
-  if (do.median.norm) {
-    GE.SC <- (GE.SC + 0.01) / apply(GE.SC + 0.01, 1, stats::median)
+  if (do_median_norm) {
+    ge_sc <- (ge_sc + 0.01) / apply(ge_sc + 0.01, 1, stats::median)
   }
 
-  return(GE.SC)
+  return(ge_sc)
 }
 
 .build_knn <- function(

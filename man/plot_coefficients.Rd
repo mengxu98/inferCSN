@@ -4,10 +4,12 @@
 \alias{plot_coefficients}
 \title{Plot coefficients for multiple targets}
 \usage{
-plot_coefficients(data, nrow = NULL, ...)
+plot_coefficients(data, targets = NULL, nrow = NULL, ...)
 }
 \arguments{
 \item{data}{Input data.}
+
+\item{targets}{Targets to plot.}
 
 \item{nrow}{Number of rows for the plot.}
 
@@ -26,4 +28,5 @@ network_table <- inferCSN(
   targets = c("g1", "g2", "g3")
 )
 plot_coefficients(network_table, show_values = FALSE)
+plot_coefficients(network_table, targets = "g1")
 }

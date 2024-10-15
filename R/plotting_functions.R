@@ -427,6 +427,7 @@ plot_coefficient <- function(
 #' @title Plot coefficients for multiple targets
 #'
 #' @param data Input data.
+#' @param targets Targets to plot.
 #' @param nrow Number of rows for the plot.
 #' @param ... Other arguments passed to \code{\link{plot_coefficient}}.
 #'
@@ -440,11 +441,15 @@ plot_coefficient <- function(
 #'   targets = c("g1", "g2", "g3")
 #' )
 #' plot_coefficients(network_table, show_values = FALSE)
+#' plot_coefficients(network_table, targets = "g1")
 plot_coefficients <- function(
     data,
+    targets = NULL,
     nrow = NULL,
     ...) {
-  targets <- unique(data$target)
+  if (is.null(targets)) {
+    targets <- unique(data$target)
+  }
   p_list <- lapply(targets, function(target) {
     plot_coefficient(data[data$target == target, ], ...)
   })
