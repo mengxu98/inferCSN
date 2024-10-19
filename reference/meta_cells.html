@@ -186,20 +186,20 @@ https://github.com/kuijjerlab/SCORPION</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">meta_cells_matrix</span> <span class="op">&lt;-</span> <span class="fu">meta_cells</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">example_matrix</span>,</span></span>
-<span class="r-in"><span>  pc_num <span class="op">=</span> <span class="fl">10</span>,</span></span>
 <span class="r-in"><span>  fast_pca <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Warning: number of PCs of PCA result is less than the desired number, using all PCs</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">meta_cells_matrix</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 500  18</span>
 <span class="r-in"><span><span class="va">meta_cells_matrix</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 x 6 Matrix of class "dgeMatrix"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             g1        g10        g11        g12        g13        g14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 2.0545057 2.08367091 2.19895110 1.51677313 0.11024463 0.01935760</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 2.2880546 2.27451038 2.30015670 2.28168354 1.60320552 0.10528643</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] 1.8903876 0.02312097 0.01589155 0.02682636 0.02432362 0.02568322</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] 2.0238664 2.13578014 2.10612123 2.12087076 2.16751773 2.08957642</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5,] 0.1361268 2.07312365 2.11331095 2.11336063 2.02598610 2.22708277</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [6,] 2.1689733 0.01482280 0.01606891 0.01890738 0.02267026 0.01781319</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            g1        g10        g11        g12        g13        g14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 2.180972 0.01930300 0.01449894 0.01160265 0.02435281 0.01841153</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 2.372229 2.10205419 1.80734123 0.15135284 0.01745755 0.02049155</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] 2.300118 2.08998564 2.09137782 2.14921081 2.04650528 1.98375086</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] 2.042536 2.10596609 2.17743746 2.08665213 1.95181949 2.08697567</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,] 2.666293 0.01307076 0.02208754 0.02237016 0.03820944 0.01280634</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6,] 1.965666 0.02490150 0.02487194 0.02585257 0.01419496 0.02565518</span>
 </code></pre></div>
     </div>
   </div>
