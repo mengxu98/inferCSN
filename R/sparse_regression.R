@@ -36,7 +36,7 @@ single_network <- function(
     algorithm = "CD",
     regulators_num = (ncol(matrix) - 1),
     n_folds = 10,
-    subsampling = 1,
+    subsampling_ratio = 1,
     r_threshold = 0,
     verbose = TRUE,
     ...) {
@@ -60,7 +60,7 @@ single_network <- function(
     algorithm = algorithm,
     regulators_num = regulators_num,
     n_folds = n_folds,
-    subsampling = subsampling,
+    subsampling_ratio = subsampling_ratio,
     r_threshold = r_threshold,
     verbose = verbose,
     ...
@@ -105,18 +105,18 @@ sparse_regression <- function(
     algorithm = "CD",
     regulators_num = ncol(x),
     n_folds = 10,
-    subsampling = 1,
+    subsampling_ratio = 1,
     r_threshold = 0,
     computation_method = "cor",
     verbose = TRUE,
     ...) {
-  if (subsampling == 1) {
+  if (subsampling_ratio == 1) {
     test_x <- x
     test_y <- y
   } else {
     set.seed(seed)
     samples <- sample(
-      nrow(x), subsampling * nrow(x)
+      nrow(x), subsampling_ratio * nrow(x)
     )
     test_x <- x[-samples, ]
     x <- x[samples, ]
@@ -445,13 +445,10 @@ fit_sparse_regression <- function(
     }
   }
 
-  # Call appropriate C++ function based on matrix type
   m <- list()
   if (!cross_validation) {
     if (methods::is(x, "sparseMatrix")) {
-      m <- .Call(
-        "_inferCSN_srm_model_sparse",
-        PACKAGE = "inferCSN",
+      m <- srm_model_sparse(
         x, y, loss, penalty, algorithm, regulators_num,
         nLambda, nGamma, gammaMax, gammaMin, partialSort,
         maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
@@ -459,9 +456,7 @@ fit_sparse_regression <- function(
         excludeFirstK, intercept, withBounds, lows, highs
       )
     } else {
-      m <- .Call(
-        "_inferCSN_srm_model_dense",
-        PACKAGE = "inferCSN",
+      m <- srm_model_dense(
         x, y, loss, penalty, algorithm, regulators_num,
         nLambda, nGamma, gammaMax, gammaMin, partialSort,
         maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
@@ -472,9 +467,7 @@ fit_sparse_regression <- function(
   } else {
     set.seed(seed)
     if (methods::is(x, "sparseMatrix")) {
-      m <- .Call(
-        "_inferCSN_srm_model_cv_sparse",
-        PACKAGE = "inferCSN",
+      m <- srm_model_cv_sparse(
         x, y, loss, penalty, algorithm, regulators_num,
         nLambda, nGamma, gammaMax, gammaMin, partialSort,
         maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,
@@ -482,9 +475,7 @@ fit_sparse_regression <- function(
         seed, excludeFirstK, intercept, withBounds, lows, highs
       )
     } else {
-      m <- .Call(
-        "_inferCSN_srm_model_cv_dense",
-        PACKAGE = "inferCSN",
+      m <- srm_model_cv_dense(
         x, y, loss, penalty, algorithm, regulators_num,
         nLambda, nGamma, gammaMax, gammaMin, partialSort,
         maxIters, rtol, atol, activeSet, activeSetNum, maxSwaps,

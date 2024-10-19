@@ -46,7 +46,6 @@
 #' data("example_matrix")
 #' meta_cells_matrix <- meta_cells(
 #'   example_matrix,
-#'   pc_num = 10,
 #'   fast_pca = FALSE
 #' )
 #' dim(meta_cells_matrix)
@@ -80,8 +79,7 @@ meta_cells <- function(
   )
 
   matrix <- matrix[rowSums(matrix) > 0, ]
-  keep.genes <- setdiff(rownames(matrix), genes_exclude)
-  matrix <- matrix[keep.genes, ]
+  matrix <- matrix[setdiff(rownames(matrix), genes_exclude), ]
 
   if (is.null(genes_use)) {
     var_genes_num <- min(var_genes_num, nrow(matrix))
@@ -103,7 +101,7 @@ meta_cells <- function(
   genes_use <- genes_use[genes_use %in% rownames(matrix)]
   matrix <- matrix[genes_use, ]
 
-  if (do_approx & approx_num >= cells_num) {
+  if (do_approx && approx_num >= cells_num) {
     do_approx <- FALSE
     warning(
       "number of obtained metacells is larger or equal to the number of single cells,
@@ -111,12 +109,12 @@ meta_cells <- function(
     )
   }
 
-  if (do_approx & (approx_num < round(cells_num / gamma))) {
+  if (do_approx && (approx_num < round(cells_num / gamma))) {
     approx_num <- round(cells_num / gamma)
     warning("number of obtained metacells is set to ", approx_num)
   }
 
-  if (do_approx & ((cells_num / gamma) > (approx_num / 3))) {
+  if (do_approx && ((cells_num / gamma) > (approx_num / 3))) {
     warning(
       "number of obtained metacells is not much larger than desired number of super-cells,
       so an approximate simplification may take londer than an exact one!"
@@ -144,7 +142,7 @@ meta_cells <- function(
     pc_num <- 1:pc_num
   }
 
-  if (fast_pca & (cells_num < 1000)) {
+  if (fast_pca && (cells_num < 1000)) {
     fast_pca <- FALSE
   }
 
@@ -152,22 +150,30 @@ meta_cells <- function(
     pca_results <- stats::prcomp(
       matrix_pca,
       rank. = max(pc_num),
-      scale. = F,
-      center = F
+      scale. = FALSE,
+      center = FALSE
     )
   } else {
-    pca_results <- irlba::irlba(matrix_pca, pc_num)
+    pca_results <- irlba::irlba(matrix_pca, max(pc_num))
     pca_results$x <- pca_results$u %*% diag(pca_results$d)
     pca_results$rotation <- pca_results$v
   }
 
+  if(ncol(pca_results$x) < max(pc_num)) {
+    log_message(
+      "number of PCs of PCA result is less than the desired number, using all PCs",
+      message_type = "warning"
+    )
+    pc_num <- 1:ncol(pca_results$x)
+  }
   sc_nw <- .build_knn(
     matrix = pca_results$x[, pc_num],
     k = knn_k,
     from = "coordinates",
     use_nn2 = use_nn2,
     dist_method = "euclidean",
-    directed = directed
+    directed = directed,
+    ...
   )
 
   k <- round(cells_num / gamma)
@@ -216,7 +222,7 @@ meta_cells <- function(
     matrix_roration[is.na(matrix_roration)] <- 0
 
     membership_omitted <- c()
-    if (is.null(block_size) | is.na(block_size)) {
+    if (is.null(block_size) || is.na(block_size)) {
       block_size <- 10000
     }
 
@@ -276,7 +282,9 @@ meta_cells <- function(
     )
   } else {
     if (length(weights) != length(membership)) {
-      stop("weights must be the same length as groups or NULL in case of unweighted averaging")
+      stop(
+        "weights must be the same length as groups or NULL in case of unweighted averaging."
+      )
     }
     matrix_metacells <- matrix_metacells %*% Matrix::sparseMatrix(i = i, j = j, x = weights[i])
     weighted_supercell_size <- unlist(
@@ -306,14 +314,19 @@ meta_cells <- function(
     groups,
     mode = c("average", "sum"),
     weights = NULL,
-    do_median_norm = FALSE) {
+    do_median_norm = FALSE,
+    ...) {
   if (ncol(ge) != length(groups)) {
-    stop("Length of the vector groups has to be equal to the number of cols in matrix ge")
+    stop(
+      "Length of the vector groups has to be equal to the number of cols in matrix ge."
+    )
   }
 
   mode <- mode[1]
   if (!(mode %in% c("average", "sum"))) {
-    stop(paste("mode", mode, "is unknown. Available values are 'average' and 'sum'."))
+    stop(
+      "mode ", mode, " is unknown. Available values are 'average' and 'sum'."
+    )
   }
 
   supercell_size <- as.vector(table(groups))
@@ -330,11 +343,15 @@ meta_cells <- function(
     }
   } else {
     if (length(weights) != length(groups)) {
-      stop("weights must be the same length as groups or NULL in case of unweighted averaging")
+      stop(
+        "weights must be the same length as groups or NULL in case of unweighted averaging."
+      )
     }
 
     if (mode != "average") {
-      stop("weighted averaging is supposted only for mode = 'average', not for ", mode)
+      stop(
+        "weighted averaging is supposted only for mode = 'average', not for ", mode
+      )
     }
 
     ge_sc <- ge %*% Matrix::sparseMatrix(i = i, j = j, x = weights[i])
@@ -366,7 +383,8 @@ meta_cells <- function(
     dist_method = "euclidean",
     cor_method = "pearson",
     p = 2,
-    directed = FALSE) {
+    directed = FALSE,
+    ...) {
   method <- match.arg(from, c("dist", "coordinates"))
 
   if (method == "coordinates") {
@@ -374,15 +392,13 @@ meta_cells <- function(
     if (use_nn2) {
       if (dist_method != "euclidean") {
         stop(
-          paste0(
-            "Fast nn2 function from RANN package is used, so",
-            dist_method,
-            "distnce is not acceptable.
-          To use nn2 method, please, choose eucleadian distance.
-          If you want to use",
-            dist_method,
-            "distance, please set parameter use_nn2 to FALSE"
-          )
+          "Fast nn2 function from RANN package is used, so ",
+          dist_method,
+          " distance is not acceptable.
+          To use nn2 method, please, choose euclidean distance.
+          If you want to use ",
+          dist_method,
+          " distance, please set parameter use_nn2 to FALSE"
         )
       }
       mode <- ifelse(directed, "out", "all")
@@ -404,7 +420,7 @@ meta_cells <- function(
       )
 
       if (dist_method_ == "cor") {
-        cor_method_ <- match.arg(
+        cor_method <- match.arg(
           cor_method,
           c("pearson", "kendall", "spearman")
         )
@@ -449,40 +465,40 @@ meta_cells <- function(
     k = 5,
     return_neighbors_order = TRUE,
     mode = "all") {
-  if (!methods::is(D, "matrix") | !methods::is(D, "dist")) {
-    stop("D (matrix) mast be a matrix or dist!")
+  if (!methods::is(D, "matrix") || !methods::is(D, "dist")) {
+    stop("D (matrix) must be a matrix or dist!")
   }
 
   if (!methods::is(D, "dist")) {
     D <- stats::as.dist(D)
   }
 
-  N <- (1 + sqrt(1 + 8 * length(D))) / 2 # number of cells
+  cells_num <- (1 + sqrt(1 + 8 * length(D))) / 2 # number of cells
 
-  if (k >= N) {
+  if (k >= cells_num) {
     stop("Not enought neighbors in data set!")
   }
   if (k < 1) {
     stop("Invalid number of nearest neighbors, k must be >= 1!")
   }
 
-  row <- function(i, N) {
+  row <- function(i, cells_num) {
     return(
       c(
         if (i > 1) {
-          D[(i - 1) + c(0:(i - 2)) * (N - 1 - c(1:(i - 1)) / 2)]
+          D[(i - 1) + c(0:(i - 2)) * (cells_num - 1 - c(1:(i - 1)) / 2)]
         },
         NA,
-        if (i < N) {
-          D[((i - 1) * (N - 1) - ((i - 1) * (i - 2) / 2) + 1):(((i - 1) * (N - 1) - ((i - 1) * (i - 2) / 2) + 1) + N - i - 1)]
+        if (i < cells_num) {
+          D[((i - 1) * (cells_num - 1) - ((i - 1) * (i - 2) / 2) + 1):(((i - 1) * (cells_num - 1) - ((i - 1) * (i - 2) / 2) + 1) + cells_num - i - 1)]
         }
       )
     )
   }
 
   neighbors <- t(
-    sapply(1:N, function(i) {
-      order(row(i, N))[1:k]
+    sapply(1:cells_num, function(i) {
+      order(row(i, cells_num))[1:k]
     })
   )
 
@@ -520,13 +536,14 @@ meta_cells <- function(
 .build_nn2 <- function(
     matrix,
     k = min(5, ncol(matrix)),
-    mode = "all") {
-  nn2.res <- RANN::nn2(data = matrix, k = k)
-  nn2.res <- nn2.res$nn.idx
+    mode = "all",
+    ...) {
+  nn2_res <- RANN::nn2(data = matrix, k = k, ...)
+  nn2_res <- nn2_res$nn.idx
 
   graph_knn <- split(
-    nn2.res,
-    rep(1:nrow(nn2.res), times = ncol(nn2.res))
+    nn2_res,
+    rep(1:nrow(nn2_res), times = ncol(nn2_res))
   ) |>
     igraph::graph_from_adj_list(
       duplicate = FALSE,

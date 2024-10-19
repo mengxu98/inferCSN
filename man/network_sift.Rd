@@ -65,6 +65,7 @@ Sifting network
 data("example_matrix")
 data("example_meta_data")
 data("example_ground_truth")
+
 network_table <- inferCSN(example_matrix)
 network_table_sifted <- network_sift(network_table)
 network_table_sifted_entropy <- network_sift(

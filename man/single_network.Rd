@@ -14,7 +14,7 @@ single_network(
   algorithm = "CD",
   regulators_num = (ncol(matrix) - 1),
   n_folds = 10,
-  subsampling = 1,
+  subsampling_ratio = 1,
   r_threshold = 0,
   verbose = TRUE,
   ...
@@ -45,7 +45,7 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 
 \item{n_folds}{The number of folds for cross-validation, default is \emph{\code{10}}.}
 
-\item{subsampling}{The percent of all samples used for \code{\link{sparse_regression}}, default is \emph{\code{1}}.}
+\item{subsampling_ratio}{The percent of all samples used for \code{\link{sparse_regression}}, default is \emph{\code{1}}.}
 
 \item{r_threshold}{Threshold of \eqn{R^2} or correlation coefficient, default is \emph{\code{0}}.}
 

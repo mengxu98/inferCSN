@@ -86,7 +86,6 @@ using dimensionality reduction and clustering techniques.
 data("example_matrix")
 meta_cells_matrix <- meta_cells(
   example_matrix,
-  pc_num = 10,
   fast_pca = FALSE
 )
 dim(meta_cells_matrix)

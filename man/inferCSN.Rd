@@ -15,7 +15,7 @@ inferCSN(
   cross_validation = FALSE,
   seed = 1,
   n_folds = 10,
-  subsampling = 1,
+  subsampling_ratio = 1,
   r_threshold = 0,
   regulators = NULL,
   targets = NULL,
@@ -32,7 +32,7 @@ inferCSN(
   cross_validation = FALSE,
   seed = 1,
   n_folds = 10,
-  subsampling = 1,
+  subsampling_ratio = 1,
   r_threshold = 0,
   regulators = NULL,
   targets = NULL,
@@ -49,7 +49,7 @@ inferCSN(
   cross_validation = FALSE,
   seed = 1,
   n_folds = 10,
-  subsampling = 1,
+  subsampling_ratio = 1,
   r_threshold = 0,
   regulators = NULL,
   targets = NULL,
@@ -66,7 +66,7 @@ inferCSN(
   cross_validation = FALSE,
   seed = 1,
   n_folds = 10,
-  subsampling = 1,
+  subsampling_ratio = 1,
   r_threshold = 0,
   regulators = NULL,
   targets = NULL,
@@ -93,7 +93,7 @@ The \emph{\code{CDPSI}} algorithm may yield better results, but it also increase
 
 \item{n_folds}{The number of folds for cross-validation, default is \emph{\code{10}}.}
 
-\item{subsampling}{The percent of all samples used for \code{\link{sparse_regression}}, default is \emph{\code{1}}.}
+\item{subsampling_ratio}{The percent of all samples used for \code{\link{sparse_regression}}, default is \emph{\code{1}}.}
 
 \item{r_threshold}{Threshold of \eqn{R^2} or correlation coefficient, default is \emph{\code{0}}.}
 

@@ -1,28 +1,3 @@
-#' @title Value selection operator
-#'
-#' @description
-#' This operator returns the left side if it's not NULL,
-#' otherwise it returns the right side.
-#'
-#' @param a The left side value to check
-#' @param b The right side value to use if a is NULL
-#'
-#' @export
-#'
-#' @examples
-#' NULL %s% 10
-#' 5 %s% 10
-`%s%` <- function(a, b) {
-  if (is.null(a)) {
-    if (isTRUE(getOption("log_default_operator", default = FALSE))) {
-      log_message("Using default value in %s% operator", verbose = TRUE)
-    }
-    return(b)
-  } else {
-    return(a)
-  }
-}
-
 #' @title Print diagnostic message
 #'
 #' @param ... Text to print.
@@ -64,6 +39,31 @@ log_message <- function(
         "warning" = message(paste0("Warning: ", ...))
       )
     }
+  }
+}
+
+#' @title Value selection operator
+#'
+#' @description
+#' This operator returns the left side if it's not NULL,
+#' otherwise it returns the right side.
+#'
+#' @param a The left side value to check
+#' @param b The right side value to use if a is NULL
+#'
+#' @export
+#'
+#' @examples
+#' NULL %s% 10
+#' 5 %s% 10
+`%s%` <- function(a, b) {
+  if (is.null(a)) {
+    if (isTRUE(getOption("log_default_operator", default = FALSE))) {
+      log_message("Using default value in %s% operator", verbose = TRUE)
+    }
+    return(b)
+  } else {
+    return(a)
   }
 }
 
@@ -126,7 +126,7 @@ parallelize_fun <- function(
     cross_validation,
     seed,
     n_folds,
-    subsampling,
+    subsampling_ratio,
     r_threshold,
     regulators,
     targets,
@@ -166,9 +166,9 @@ parallelize_fun <- function(
     )
   }
 
-  if (!(is.numeric(subsampling) && subsampling > 0 && subsampling <= 1)) {
+  if (!(is.numeric(subsampling_ratio) && subsampling_ratio > 0 && subsampling_ratio <= 1)) {
     log_message(
-      "Please set `subsampling` value between: (0, 1].",
+      "Please set `subsampling_ratio` value between: (0, 1].",
       message_type = "error"
     )
   }
