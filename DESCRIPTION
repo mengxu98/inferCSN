@@ -20,17 +20,14 @@ Imports:
     ggnetwork,
     ggplot2,
     ggraph,
-    Matrix,
     methods,
     parallel,
-    patchwork,
     pbapply,
     purrr,
     Rcpp,
     RcppArmadillo,
     RcppParallel,
-    stats,
-    utils
+    stats
 Suggests:
     ComplexHeatmap,
     circlize,
@@ -41,7 +38,9 @@ Suggests:
     ggpubr,
     igraph,
     irlba,
+    Matrix,
     network,
+    patchwork,
     plotly,
     precrec,
     pROC,
