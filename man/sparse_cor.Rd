@@ -27,7 +27,7 @@ sparse_cor(
 
 \item{remove_inf}{Logical. Whether to replace infinite values with 1.}
 
-\item{...}{Other arguments passed to the correlation function.}
+\item{...}{Other arguments passed to \code{\link[stats]{cor}} function.}
 }
 \value{
 A correlation matrix.

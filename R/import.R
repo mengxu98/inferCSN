@@ -1,10 +1,9 @@
-#' @import Matrix ggplot2 ggraph patchwork
+#' @import ggplot2 ggraph ggnetwork
 #'
 #' @importFrom Rcpp evalCpp sourceCpp
 #' @importFrom RcppArmadillo armadillo_version
 #' @importFrom RcppParallel RcppParallelLibs
 #' @importFrom stats coef predict
-#' @importFrom utils methods
 NULL
 
 utils::globalVariables(
@@ -24,7 +23,6 @@ utils::globalVariables(
     "edges",
     "cluster",
     "curvetype",
-    "weight_new",
     "celltype",
     "from",
     "id",
@@ -32,8 +30,6 @@ utils::globalVariables(
     "targets_num",
     "to",
     "P_value",
-    "P_value_contrary",
-    "v",
-    "v_new"
+    "P_value_contrary"
   )
 )

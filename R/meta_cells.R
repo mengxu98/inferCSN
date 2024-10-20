@@ -70,7 +70,7 @@ meta_cells <- function(
     weights = NULL,
     do_median_norm = FALSE,
     ...) {
-  matrix <- t(matrix)
+  matrix <- Matrix::t(matrix)
   cells_num <- ncol(matrix)
   matrix_raw <- matrix
   cluster_method <- match.arg(
@@ -154,14 +154,17 @@ meta_cells <- function(
       center = FALSE
     )
   } else {
-    pca_results <- irlba::irlba(matrix_pca, max(pc_num))
+    pca_results <- irlba::irlba(
+      matrix_pca,
+      max(pc_num)
+    )
     pca_results$x <- pca_results$u %*% diag(pca_results$d)
     pca_results$rotation <- pca_results$v
   }
 
-  if(ncol(pca_results$x) < max(pc_num)) {
+  if (ncol(pca_results$x) < max(pc_num)) {
     log_message(
-      "number of PCs of PCA result is less than the desired number, using all PCs",
+      "number of PCs of PCA result is less than the desired number, using all PCs.",
       message_type = "warning"
     )
     pc_num <- 1:ncol(pca_results$x)
@@ -195,19 +198,11 @@ meta_cells <- function(
 
   names(membership_results) <- presampled_cells
 
-  # SC.NW <- igraph::contract(
-  #   sc_nw$graph_knn,
-  #   membership_results
-  # ) |> igraph::simplify(
-  #   remove.loops = T,
-  #   edge.attr.comb = "sum"
-  # )
-
   if (do_approx) {
     pca_averaged_sc <- as.matrix(
       Matrix::t(
         .supercell_ge(
-          t(
+          Matrix::t(
             pca_results$x[, pc_num]
           ),
           groups = membership_results
@@ -305,7 +300,7 @@ meta_cells <- function(
   }
 
   return(
-    t(matrix_metacells)
+    Matrix::t(matrix_metacells)
   )
 }
 
@@ -427,7 +422,7 @@ meta_cells <- function(
 
         matrix <- stats::as.dist(
           as.matrix(
-            1 - stats::cor(t(matrix), method = cor_method)
+            1 - stats::cor(Matrix::t(matrix), method = cor_method)
           )
         )
       } else {
@@ -496,7 +491,7 @@ meta_cells <- function(
     )
   }
 
-  neighbors <- t(
+  neighbors <- Matrix::t(
     sapply(1:cells_num, function(i) {
       order(row(i, cells_num))[1:k]
     })

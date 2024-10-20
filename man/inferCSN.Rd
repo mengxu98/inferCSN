@@ -15,6 +15,7 @@ inferCSN(
   cross_validation = FALSE,
   seed = 1,
   n_folds = 10,
+  subsampling_method = "sample",
   subsampling_ratio = 1,
   r_threshold = 0,
   regulators = NULL,
@@ -32,6 +33,7 @@ inferCSN(
   cross_validation = FALSE,
   seed = 1,
   n_folds = 10,
+  subsampling_method = "sample",
   subsampling_ratio = 1,
   r_threshold = 0,
   regulators = NULL,
@@ -49,6 +51,7 @@ inferCSN(
   cross_validation = FALSE,
   seed = 1,
   n_folds = 10,
+  subsampling_method = "sample",
   subsampling_ratio = 1,
   r_threshold = 0,
   regulators = NULL,
@@ -66,6 +69,7 @@ inferCSN(
   cross_validation = FALSE,
   seed = 1,
   n_folds = 10,
+  subsampling_method = "sample",
   subsampling_ratio = 1,
   r_threshold = 0,
   regulators = NULL,
@@ -92,6 +96,8 @@ The \emph{\code{CDPSI}} algorithm may yield better results, but it also increase
 \item{seed}{The random seed for cross-validation, default is \emph{\code{1}}.}
 
 \item{n_folds}{The number of folds for cross-validation, default is \emph{\code{10}}.}
+
+\item{subsampling_method}{The method to use for subsampling. Options are "sample" or "meta_cells".}
 
 \item{subsampling_ratio}{The percent of all samples used for \code{\link{sparse_regression}}, default is \emph{\code{1}}.}
 

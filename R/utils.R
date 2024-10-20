@@ -126,6 +126,7 @@ parallelize_fun <- function(
     cross_validation,
     seed,
     n_folds,
+    subsampling_method,
     subsampling_ratio,
     r_threshold,
     regulators,
@@ -142,8 +143,7 @@ parallelize_fun <- function(
   if (length(dim(matrix)) != 2) {
     log_message(
       "The input matrix must be a two-dimensional matrix.",
-      message_type = "error",
-      verbose = verbose
+      message_type = "error"
     )
   }
 
@@ -165,6 +165,11 @@ parallelize_fun <- function(
       verbose = verbose
     )
   }
+
+  match.arg(
+    subsampling_method,
+    c("sample", "meta_cells")
+  )
 
   if (!(is.numeric(subsampling_ratio) && subsampling_ratio > 0 && subsampling_ratio <= 1)) {
     log_message(
@@ -306,12 +311,7 @@ pearson_correlation <- function(x, y = NULL) {
     stop("y should be a sparse matrix.")
   }
 
-  # sparseCovCor(x, y)
-  result <- .Call(
-    "_inferCSN_sparseCovCor",
-    PACKAGE = "inferCSN",
-    x, y
-  )
+  result <- sparseCovCor(x, y)
 
   return(
     list(
@@ -329,7 +329,7 @@ pearson_correlation <- function(x, y = NULL) {
 #' @param allow_neg Logical. Whether to allow negative values or set them to 0.
 #' @param remove_na Logical. Whether to replace NA values with 0.
 #' @param remove_inf Logical. Whether to replace infinite values with 1.
-#' @param ... Other arguments passed to the correlation function.
+#' @param ... Other arguments passed to \code{\link[stats]{cor}} function.
 #'
 #' @return A correlation matrix.
 #'

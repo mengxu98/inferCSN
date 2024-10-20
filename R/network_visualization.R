@@ -302,8 +302,6 @@ plot_network_heatmap <- function(
 #' @inheritParams network_format
 #' @param legend_position The position of legend.
 #'
-#' @import ggnetwork
-#'
 #' @return A ggplot2 object
 #' @export
 #'
@@ -312,16 +310,16 @@ plot_network_heatmap <- function(
 #' network_table <- inferCSN(example_matrix)
 #' plot_static_networks(
 #'   network_table,
-#'   regulators = network_table[1, 1]
+#'   regulators = "g1"
 #' )
 #' plot_static_networks(
 #'   network_table,
-#'   targets = network_table[1, 1]
+#'   targets = "g1"
 #' )
 #' plot_static_networks(
 #'   network_table,
-#'   regulators = network_table[1, 1],
-#'   targets = network_table[1, 2]
+#'   regulators = "g1",
+#'   targets = "g2"
 #' )
 plot_static_networks <- function(
     network_table,
@@ -542,7 +540,9 @@ plot_dynamic_networks <- function(
     }
   )
 
-  nodes <- unique(c(network_table$regulator, network_table$target))
+  nodes <- unique(
+    c(network_table$regulator, network_table$target)
+  )
   dnodes <- data.frame(id = 1:length(nodes), label = nodes)
   edges <- dplyr::left_join(
     network_table,

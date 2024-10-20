@@ -31,15 +31,15 @@ data("example_matrix")
 network_table <- inferCSN(example_matrix)
 plot_static_networks(
   network_table,
-  regulators = network_table[1, 1]
+  regulators = "g1"
 )
 plot_static_networks(
   network_table,
-  targets = network_table[1, 1]
+  targets = "g1"
 )
 plot_static_networks(
   network_table,
-  regulators = network_table[1, 1],
-  targets = network_table[1, 2]
+  regulators = "g1",
+  targets = "g2"
 )
 }

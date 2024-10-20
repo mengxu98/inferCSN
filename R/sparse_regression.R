@@ -110,20 +110,6 @@ sparse_regression <- function(
     computation_method = "cor",
     verbose = TRUE,
     ...) {
-  if (subsampling_ratio == 1) {
-    test_x <- x
-    test_y <- y
-  } else {
-    set.seed(seed)
-    samples <- sample(
-      nrow(x), subsampling_ratio * nrow(x)
-    )
-    test_x <- x[-samples, ]
-    x <- x[samples, ]
-    test_y <- y[-samples]
-    y <- y[samples]
-  }
-
   if (cross_validation) {
     fit <- try(
       fit_sparse_regression(
@@ -197,19 +183,19 @@ sparse_regression <- function(
   pred_y <- as.numeric(
     predict(
       fit,
-      newx = test_x,
+      newx = x,
       lambda = lambda,
       gamma = gamma
     )
   )
 
-  if (length(test_y) == length(pred_y)) {
-    if (stats::var(test_y) != 0 && stats::var(pred_y) != 0) {
+  if (length(y) == length(pred_y)) {
+    if (stats::var(y) != 0 && stats::var(pred_y) != 0) {
       computation_method <- match.arg(computation_method, c("r_square", "cor"))
       r <- switch(
         EXPR = computation_method,
-        "cor" = stats::cor(test_y, pred_y),
-        "r_square" = r_square(test_y, pred_y)
+        "cor" = stats::cor(y, pred_y),
+        "r_square" = r_square(y, pred_y)
       )
     } else {
       r <- 0

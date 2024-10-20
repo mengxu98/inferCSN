@@ -109,7 +109,11 @@ calculate_auc <- function(
       coord_fixed() +
       theme_bw()
 
-    p <- auroc + auprc
+    p <- patchwork::wrap_plots(
+      list(auroc, auprc),
+      ncol = 2
+    )
+
     print(p)
   }
 
