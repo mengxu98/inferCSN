@@ -37,6 +37,7 @@ reference:
 - subtitle: "Network processing"
 - contents:
   - network_sift
+  - weight_sift
 
 - subtitle: "Network evaluation"
 - contents:
@@ -91,6 +92,7 @@ reference:
   - sparse_cor
   - split_indices
   - simulate_sparse_matrix
+  - subsampling_fun
   - table_to_matrix
 
 - subtitle: "Example data"
