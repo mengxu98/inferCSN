@@ -130,3 +130,18 @@ tableToMatrix <- function(weight_table) {
     .Call('_inferCSN_tableToMatrix', PACKAGE = 'inferCSN', weight_table)
 }
 
+#' @title Weight sift
+#' @description Remove edges with smaller weights in the reverse direction.
+#'
+#' @param table A data frame with three columns: "regulator", "target", and "weight".
+#'
+#' @export
+#'
+#' @examples
+#' data("example_matrix")
+#' network_table <- inferCSN(example_matrix)
+#' weight_sift(network_table) |> head()
+weight_sift <- function(table) {
+    .Call('_inferCSN_weight_sift', PACKAGE = 'inferCSN', table)
+}
+

@@ -453,6 +453,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// weight_sift
+Rcpp::DataFrame weight_sift(Rcpp::DataFrame table);
+RcppExport SEXP _inferCSN_weight_sift(SEXP tableSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type table(tableSEXP);
+    rcpp_result_gen = Rcpp::wrap(weight_sift(table));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_inferCSN_srm_model_sparse", (DL_FUNC) &_inferCSN_srm_model_sparse, 26},
@@ -483,6 +494,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_inferCSN_sparseCovCor", (DL_FUNC) &_inferCSN_sparseCovCor, 2},
     {"_inferCSN_split_indices", (DL_FUNC) &_inferCSN_split_indices, 2},
     {"_inferCSN_tableToMatrix", (DL_FUNC) &_inferCSN_tableToMatrix, 1},
+    {"_inferCSN_weight_sift", (DL_FUNC) &_inferCSN_weight_sift, 1},
     {NULL, NULL, 0}
 };
 
