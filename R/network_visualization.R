@@ -595,18 +595,18 @@ plot_dynamic_networks <- function(
           regulator
         ) |>
         dplyr::summarise(
-          targets_num = dplyr::n()
+          regulators_num = dplyr::n()
         ) |>
         dplyr::arrange(
-          dplyr::desc(targets_num)
+          dplyr::desc(regulators_num)
         ) |>
         as.data.frame()
       nodes_data_celltype$label_genes <- as.character(
         nodes_data_celltype$regulator
       )
       if (nrow(nodes_data_celltype) > ntop) {
-        cf <- nodes_data_celltype$targets_num[ntop]
-        nodes_data_celltype$label_genes[which(nodes_data_celltype$targets_num < cf)] <- ""
+        cf <- nodes_data_celltype$regulators_num[ntop]
+        nodes_data_celltype$label_genes[which(nodes_data_celltype$regulators_num < cf)] <- ""
       } else if (nrow(nodes_data_celltype) == 0) {
         return()
       }
@@ -623,7 +623,7 @@ plot_dynamic_networks <- function(
     by = c("label", "celltype"),
     all.x = T
   )
-  ggnetwork_data$targets_num[which(is.na(ggnetwork_data$targets_num))] <- 0
+  ggnetwork_data$regulators_num[which(is.na(ggnetwork_data$regulators_num))] <- 0
   ggnetwork_data$label_genes[which(is.na(ggnetwork_data$label_genes))] <- ""
   ggnetwork_data$celltype <- factor(
     ggnetwork_data$celltype,
@@ -651,12 +651,12 @@ plot_dynamic_networks <- function(
   }
   p <- p +
     geom_nodes(
-      aes(size = targets_num),
+      aes(size = regulators_num),
       color = "darkgray",
       alpha = 0.9
     ) +
     geom_nodetext(
-      aes(label = label_genes), # , size = targets_num - 1
+      aes(label = label_genes), # , size = regulators_num - 1
       color = "black"
     ) +
     theme(aspect.ratio = 2, legend.position = "bottom") +

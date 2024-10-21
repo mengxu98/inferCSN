@@ -14,6 +14,7 @@ utils::globalVariables(
     "xend",
     "yend",
     "regulator",
+    "regulators_num",
     "target",
     "weight",
     "i",
@@ -27,7 +28,6 @@ utils::globalVariables(
     "from",
     "id",
     "label_genes",
-    "targets_num",
     "to",
     "P_value",
     "P_value_contrary"

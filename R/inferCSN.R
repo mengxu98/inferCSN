@@ -75,6 +75,21 @@ setGeneric(
 #'   network_table_2
 #' )
 #'
+#' network_table_07 <- inferCSN(
+#'   example_matrix,
+#'   r_threshold = 0.7
+#' )
+#' calculate_auc(
+#'   network_table_1,
+#'   example_ground_truth,
+#'   plot = TRUE
+#' )
+#' calculate_auc(
+#'   network_table_07,
+#'   example_ground_truth,
+#'   plot = TRUE
+#' )
+#'
 #' inferCSN(
 #'   example_matrix,
 #'   regulators = c("g1", "g2"),
@@ -131,7 +146,8 @@ setMethod(
       subsampling_method = subsampling_method,
       subsampling_ratio = subsampling_ratio,
       seed = seed,
-      verbose = verbose
+      verbose = verbose,
+      ...
     )
 
     regulators <- intersect(
@@ -266,7 +282,8 @@ setMethod(
       subsampling_method = subsampling_method,
       subsampling_ratio = subsampling_ratio,
       seed = seed,
-      verbose = verbose
+      verbose = verbose,
+      ...
     )
 
     regulators <- intersect(

@@ -37,8 +37,8 @@
 #' @examples
 #' data("example_matrix")
 #' data("example_ground_truth")
-#' network_table <- inferCSN(example_matrix)
-#' calculate_auc(network_table, example_ground_truth, plot = TRUE)
+#' inferCSN(example_matrix) |>
+#'   calculate_auc(example_ground_truth, plot = TRUE)
 calculate_auc <- function(
     network_table,
     ground_truth,
