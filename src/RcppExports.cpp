@@ -418,6 +418,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// network_format
+DataFrame network_format(DataFrame network_table, Nullable<CharacterVector> regulators, Nullable<CharacterVector> targets, bool abs_weight);
+RcppExport SEXP _inferCSN_network_format(SEXP network_tableSEXP, SEXP regulatorsSEXP, SEXP targetsSEXP, SEXP abs_weightSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type network_table(network_tableSEXP);
+    Rcpp::traits::input_parameter< Nullable<CharacterVector> >::type regulators(regulatorsSEXP);
+    Rcpp::traits::input_parameter< Nullable<CharacterVector> >::type targets(targetsSEXP);
+    Rcpp::traits::input_parameter< bool >::type abs_weight(abs_weightSEXP);
+    rcpp_result_gen = Rcpp::wrap(network_format(network_table, regulators, targets, abs_weight));
+    return rcpp_result_gen;
+END_RCPP
+}
 // sparseCovCor
 List sparseCovCor(const arma::sp_mat& x, const Nullable<arma::sp_mat>& y_nullable);
 RcppExport SEXP _inferCSN_sparseCovCor(SEXP xSEXP, SEXP y_nullableSEXP) {
@@ -491,6 +505,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_inferCSN_asMatrix", (DL_FUNC) &_inferCSN_asMatrix, 5},
     {"_inferCSN_asMatrixParallel", (DL_FUNC) &_inferCSN_asMatrixParallel, 5},
     {"_inferCSN_matrixToTable", (DL_FUNC) &_inferCSN_matrixToTable, 1},
+    {"_inferCSN_network_format", (DL_FUNC) &_inferCSN_network_format, 4},
     {"_inferCSN_sparseCovCor", (DL_FUNC) &_inferCSN_sparseCovCor, 2},
     {"_inferCSN_split_indices", (DL_FUNC) &_inferCSN_split_indices, 2},
     {"_inferCSN_tableToMatrix", (DL_FUNC) &_inferCSN_tableToMatrix, 1},
