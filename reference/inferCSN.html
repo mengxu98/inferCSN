@@ -210,6 +210,7 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_ground_truth"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">network_table_1</span> <span class="op">&lt;-</span> <span class="fu">inferCSN</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">example_matrix</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
@@ -252,7 +253,7 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Checking input parameters.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using L0 sparse regression model.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using 1 core.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Run done.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> can't subset using a logical vector with NAs</span>
 <span class="r-in"><span><span class="fu"><a href="calculate_auc.html">calculate_auc</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table_1</span>,</span></span>
 <span class="r-in"><span>  <span class="va">example_ground_truth</span>,</span></span>
@@ -266,9 +267,7 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 <span class="r-in"><span>  <span class="va">example_ground_truth</span>,</span></span>
 <span class="r-in"><span>  plot <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="inferCSN-2.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   AUROC AUPRC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.959 0.443</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'network_table_07' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">inferCSN</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">example_matrix</span>,</span></span>

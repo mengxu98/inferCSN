@@ -47,7 +47,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Format network table</h1>
-    <small class="dont-index">Source: <a href="https://github.com/mengxu98/inferCSN/blob/main/R/utils.R" class="external-link"><code>R/utils.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/mengxu98/inferCSN/blob/main/R/RcppExports.R" class="external-link"><code>R/RcppExports.R</code></a></small>
     <div class="hidden name"><code>network_format.Rd</code></div>
     </div>
 
@@ -104,7 +104,7 @@ the output of weight table will create a new column named <code>Interaction</cod
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">network_format</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
-<span class="r-in"><span>  regulators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  regulators <span class="op">=</span> <span class="st">"g1"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    regulator target      weight Interaction</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1         g1     g2 0.338137767  Activation</span>
@@ -127,7 +127,7 @@ the output of weight table will create a new column named <code>Interaction</cod
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">network_format</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
-<span class="r-in"><span>  regulators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  regulators <span class="op">=</span> <span class="st">"g1"</span>,</span></span>
 <span class="r-in"><span>  abs_weight <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    regulator target       weight</span>
@@ -151,7 +151,7 @@ the output of weight table will create a new column named <code>Interaction</cod
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">network_format</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
-<span class="r-in"><span>  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g3"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  targets <span class="op">=</span> <span class="st">"g3"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    regulator target       weight Interaction</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1         g4     g3 0.4151977047  Activation</span>
