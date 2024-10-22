@@ -62,7 +62,7 @@ Sparse regression model
 \examples{
 data("example_matrix")
 sparse_regression(
-  example_matrix[, -1],
-  example_matrix[, 1]
+  x = example_matrix[, -1],
+  y = example_matrix[, 1]
 )
 }

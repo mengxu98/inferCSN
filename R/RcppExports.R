@@ -101,6 +101,49 @@ matrixToTable <- function(network_matrix) {
     .Call('_inferCSN_matrixToTable', PACKAGE = 'inferCSN', network_matrix)
 }
 
+#' @title Format network table
+#'
+#' @param network_table The weight data table of network.
+#' @param regulators Regulators list.
+#' @param targets Targets list.
+#' @param abs_weight Logical value, default is *`TRUE`*,
+#' whether to perform absolute value on weights,
+#' and when set `abs_weight` to *`TRUE`*,
+#' the output of weight table will create a new column named `Interaction`.
+#'
+#' @md
+#' @return Formated network table
+#' @export
+#'
+#' @examples
+#' data("example_matrix")
+#' network_table <- inferCSN(example_matrix)
+#'
+#' network_format(
+#'   network_table,
+#'   regulators = "g1"
+#' )
+#'
+#' network_format(
+#'   network_table,
+#'   regulators = "g1",
+#'   abs_weight = FALSE
+#' )
+#'
+#' network_format(
+#'   network_table,
+#'   targets = "g3"
+#' )
+#'
+#' network_format(
+#'   network_table,
+#'   regulators = c("g1", "g3"),
+#'   targets = c("g3", "g5")
+#' )
+network_format <- function(network_table, regulators = NULL, targets = NULL, abs_weight = TRUE) {
+    .Call('_inferCSN_network_format', PACKAGE = 'inferCSN', network_table, regulators, targets, abs_weight)
+}
+
 sparseCovCor <- function(x, y_nullable = NULL) {
     .Call('_inferCSN_sparseCovCor', PACKAGE = 'inferCSN', x, y_nullable)
 }

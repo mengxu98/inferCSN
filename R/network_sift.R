@@ -102,6 +102,7 @@ network_sift <- function(
     if (is.null(matrix) | is.null(meta_data) | is.null(pseudotime_column)) {
       log_message(
         "Parameters: 'matrix', 'meta_data' and 'pseudotime_column' not all provide, setting 'method' to 'max'.",
+        message_type = "warning",
         verbose = verbose
       )
       method <- "max"
@@ -110,6 +111,7 @@ network_sift <- function(
     if (!(pseudotime_column %in% colnames(meta_data))) {
       log_message(
         "Parameters: 'pseudotime_column' not in meta data provided, setting 'method' to 'max'.",
+        message_type = "warning",
         verbose = verbose
       )
       method <- "max"
@@ -120,6 +122,7 @@ network_sift <- function(
     if (is.null(samples)) {
       log_message(
         "No intersect samples in matrix and meta data, setting 'method' to 'max'.",
+        message_type = "warning",
         verbose = verbose
       )
       method <- "max"

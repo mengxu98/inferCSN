@@ -38,11 +38,11 @@ Safe correlation function which returns a sparse matrix without missing values
 \examples{
 m1 <- simulate_sparse_matrix(
   1000, 1000,
-  density = 0.05
+  density = 0.01
 )
 m2 <- simulate_sparse_matrix(
   1000, 500,
-  density = 0.05
+  density = 0.01
 )
 
 all.equal(
@@ -66,10 +66,6 @@ system.time(
 system.time(
   cor(as_matrix(m1), as_matrix(m2))
 )
-
-# remove infinite values
-m1[sample(1:500, 10)] <- Inf
-m2[sample(1:500, 10)] <- Inf
 
 # add missing values
 m1[sample(1:500, 10)] <- NA

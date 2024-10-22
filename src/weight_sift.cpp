@@ -15,57 +15,62 @@
 //' network_table <- inferCSN(example_matrix)
 //' weight_sift(network_table) |> head()
 // [[Rcpp::export]]
-Rcpp::DataFrame weight_sift(Rcpp::DataFrame table) {
-    Rcpp::StringVector x = table["regulator"];
-    Rcpp::StringVector y = table["target"];
-    Rcpp::NumericVector v = table["weight"];
-    
-    int n = x.size();
-    
-    // Preallocate memory
-    Rcpp::StringVector edges(n);
-    Rcpp::StringVector reversed_edges(n);
-    Rcpp::NumericVector reversed_v(n);
-    
-    std::string edge, reversed_edge;
-    edge.reserve(50);  // Estimated maximum length
-    reversed_edge.reserve(50);
-    
-    for(int i = 0; i < n; ++i) {
-        edge = x[i];
-        edge += "_";
-        edge += y[i];
-        edges[i] = edge;
-        
-        reversed_edge = y[i];
-        reversed_edge += "_";
-        reversed_edge += x[i];
-        reversed_edges[i] = reversed_edge;
-        reversed_v[i] = v[i];
+Rcpp::DataFrame weight_sift(Rcpp::DataFrame table)
+{
+  Rcpp::StringVector x = table["regulator"];
+  Rcpp::StringVector y = table["target"];
+  Rcpp::NumericVector v = table["weight"];
+
+  int n = x.size();
+
+  // Preallocate memory
+  Rcpp::StringVector edges(n);
+  Rcpp::StringVector reversed_edges(n);
+  Rcpp::NumericVector reversed_v(n);
+
+  std::string edge, reversed_edge;
+  edge.reserve(50); // Estimated maximum length
+  reversed_edge.reserve(50);
+
+  for (int i = 0; i < n; ++i)
+  {
+    edge = x[i];
+    edge += "_";
+    edge += y[i];
+    edges[i] = edge;
+
+    reversed_edge = y[i];
+    reversed_edge += "_";
+    reversed_edge += x[i];
+    reversed_edges[i] = reversed_edge;
+    reversed_v[i] = v[i];
+  }
+
+  // Use Rcpp sugar functions
+  Rcpp::LogicalVector is_common = Rcpp::in(edges, reversed_edges);
+
+  if (Rcpp::sum(is_common) == 0)
+    return table;
+
+  Rcpp::LogicalVector keep(n, true);
+  Rcpp::IntegerVector match_indices = Rcpp::match(edges, reversed_edges) - 1;
+
+  for (int i = 0; i < n; ++i)
+  {
+    if (is_common[i])
+    {
+      int rev_index = match_indices[i];
+      if (std::abs(v[i]) < std::abs(reversed_v[rev_index]))
+      {
+        keep[i] = false;
+      }
     }
-    
-    // Use Rcpp sugar functions
-    Rcpp::LogicalVector is_common = Rcpp::in(edges, reversed_edges);
-    
-    if(Rcpp::sum(is_common) == 0) return table;
-    
-    Rcpp::LogicalVector keep(n, true);
-    Rcpp::IntegerVector match_indices = Rcpp::match(edges, reversed_edges) - 1;
-    
-    for(int i = 0; i < n; ++i) {
-        if(is_common[i]) {
-            int rev_index = match_indices[i];
-            if(std::abs(v[i]) < std::abs(reversed_v[rev_index])) {
-                keep[i] = false;
-            }
-        }
-    }
-    
-    return Rcpp::DataFrame::create(
-        Rcpp::_["regulator"] = x[keep],
-        Rcpp::_["target"] = y[keep],
-        Rcpp::_["weight"] = v[keep]
-    );
+  }
+
+  return Rcpp::DataFrame::create(
+      Rcpp::Named("regulator") = x[keep],
+      Rcpp::Named("target") = y[keep],
+      Rcpp::Named("weight") = v[keep]);
 }
 
 /*

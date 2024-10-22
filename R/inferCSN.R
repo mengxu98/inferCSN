@@ -59,6 +59,7 @@ setGeneric(
 #'
 #' @examples
 #' data("example_matrix")
+#' data("example_ground_truth")
 #' network_table_1 <- inferCSN(
 #'   example_matrix
 #' )

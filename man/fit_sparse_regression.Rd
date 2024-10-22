@@ -33,6 +33,7 @@ fit_sparse_regression(
   intercept = TRUE,
   lows = -Inf,
   highs = Inf,
+  verbose = TRUE,
   ...
 )
 }
@@ -104,6 +105,8 @@ based on the absolute L2 norm of the residuals.}
 \item{lows}{Lower bounds for coefficients.}
 
 \item{highs}{Upper bounds for coefficients.}
+
+\item{verbose}{Logical value, default is \emph{\code{TRUE}}, whether to print progress messages.}
 
 \item{...}{Parameters for other methods.}
 }

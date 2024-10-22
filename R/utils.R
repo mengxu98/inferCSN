@@ -58,9 +58,6 @@ log_message <- function(
 #' 5 %s% 10
 `%s%` <- function(a, b) {
   if (is.null(a)) {
-    if (isTRUE(getOption("log_default_operator", default = FALSE))) {
-      log_message("Using default value in %s% operator", verbose = TRUE)
-    }
     return(b)
   } else {
     return(a)
@@ -173,7 +170,7 @@ parallelize_fun <- function(
 
   if (!(is.numeric(subsampling_ratio) && subsampling_ratio > 0 && subsampling_ratio <= 1)) {
     log_message(
-      "Please set `subsampling_ratio` value between: (0, 1].",
+      "Please set 'subsampling_ratio' value between: (0, 1].",
       message_type = "error"
     )
   }
@@ -338,11 +335,11 @@ pearson_correlation <- function(x, y = NULL) {
 #' @examples
 #' m1 <- simulate_sparse_matrix(
 #'   1000, 1000,
-#'   density = 0.05
+#'   density = 0.01
 #' )
 #' m2 <- simulate_sparse_matrix(
 #'   1000, 500,
-#'   density = 0.05
+#'   density = 0.01
 #' )
 #'
 #' all.equal(
@@ -366,10 +363,6 @@ pearson_correlation <- function(x, y = NULL) {
 #' system.time(
 #'   cor(as_matrix(m1), as_matrix(m2))
 #' )
-#'
-#' # remove infinite values
-#' m1[sample(1:500, 10)] <- Inf
-#' m2[sample(1:500, 10)] <- Inf
 #'
 #' # add missing values
 #' m1[sample(1:500, 10)] <- NA
@@ -469,17 +462,10 @@ sparse_cor <- function(
 #' @export
 #'
 #' @examples
-#' dims_i <- 2000
-#' dims_j <- 2000
-#' sparse_matrix <- Matrix::sparseMatrix(
-#'   i = sample(1:dims_i, 500),
-#'   j = sample(1:dims_j, 500),
-#'   x = rnorm(500),
-#'   dims = c(dims_i, dims_j),
-#'   dimnames = list(
-#'     paste0("a", rep(1:dims_i)),
-#'     paste0("b", rep(1:dims_j))
-#'   )
+#' sparse_matrix <- simulate_sparse_matrix(
+#'   2000,
+#'   2000,
+#'   density = 0.01
 #' )
 #'
 #' system.time(as.matrix(sparse_matrix))
@@ -502,11 +488,21 @@ sparse_cor <- function(
 #' )
 #'
 #' \dontrun{
+#' network_table_0 <- inferCSN(example_matrix)
+#'
 #' network_table_1 <- inferCSN(
 #'   as_matrix(example_matrix, sparse = TRUE)
 #' )
 #' network_table_2 <- inferCSN(
 #'   as(example_matrix, "sparseMatrix")
+#' )
+#'
+#' plot_scatter(
+#'   data.frame(
+#'     network_table_0$weight,
+#'     network_table_1$weight
+#'   ),
+#'   legend_position = "none"
 #' )
 #'
 #' plot_scatter(
@@ -537,8 +533,7 @@ as_matrix <- function(
     row_pos <- x@i
     col_pos <- findInterval(seq_along(x@x) - 1, x@p[-1])
     if (parallel) {
-      matrix <- .Call(
-        "_inferCSN_asMatrixParallel",
+      matrix <- asMatrixParallel(
         row_pos,
         col_pos,
         x@x,
@@ -546,8 +541,7 @@ as_matrix <- function(
         x@Dim[2]
       )
     } else {
-      matrix <- .Call(
-        "_inferCSN_asMatrix",
+      matrix <- asMatrix(
         row_pos,
         col_pos,
         x@x,
@@ -582,84 +576,6 @@ check_sparsity <- function(x) {
   sparsity <- 1 - sparsity_ratio
 
   return(sparsity)
-}
-
-#' @title Format network table
-#'
-#' @param network_table The weight data table of network.
-#' @param regulators Regulators list.
-#' @param targets Targets list.
-#' @param abs_weight Logical value, default is *`TRUE`*,
-#' whether to perform absolute value on weights,
-#' and when set `abs_weight` to *`TRUE`*,
-#' the output of weight table will create a new column named `Interaction`.
-#'
-#' @md
-#' @return Formated network table
-#' @export
-#'
-#' @examples
-#' data("example_matrix")
-#' network_table <- inferCSN(example_matrix)
-#'
-#' network_format(
-#'   network_table,
-#'   regulators = c("g1")
-#' )
-#'
-#' network_format(
-#'   network_table,
-#'   regulators = c("g1"),
-#'   abs_weight = FALSE
-#' )
-#'
-#' network_format(
-#'   network_table,
-#'   targets = c("g3")
-#' )
-#'
-#' network_format(
-#'   network_table,
-#'   regulators = c("g1", "g3"),
-#'   targets = c("g3", "g5")
-#' )
-network_format <- function(
-    network_table,
-    regulators = NULL,
-    targets = NULL,
-    abs_weight = TRUE) {
-  colnames(network_table) <- c("regulator", "target", "weight")
-  network_table$weight <- as.numeric(network_table$weight)
-  network_table <- dplyr::filter(network_table, weight != 0)
-  if (!is.null(regulators)) {
-    network_table <- purrr::map_dfr(
-      unique(regulators), function(x) {
-        dplyr::filter(network_table, regulator == x)
-      }
-    )
-  }
-  if (!is.null(targets)) {
-    network_table <- purrr::map_dfr(
-      unique(targets), function(x) {
-        dplyr::filter(network_table, target == x)
-      }
-    )
-  }
-
-  if (abs_weight) {
-    network_table$Interaction <- ifelse(
-      network_table$weight < 0, "Repression", "Activation"
-    )
-    network_table$weight <- abs(network_table$weight)
-  }
-
-  network_table <- network_table[order(
-    abs(as.numeric(network_table$weight)),
-    decreasing = TRUE
-  ), ]
-  rownames(network_table) <- NULL
-
-  return(network_table)
 }
 
 #' @title Filter and sort matrix
@@ -731,11 +647,7 @@ table_to_matrix <- function(
     network_table,
     abs_weight = FALSE
   )
-  network_matrix <- .Call(
-    "_inferCSN_tableToMatrix",
-    PACKAGE = "inferCSN",
-    network_table
-  )
+  network_matrix <- tableToMatrix(network_table)
   network_matrix <- filter_sort_matrix(
     network_matrix,
     regulators = regulators,
@@ -768,16 +680,13 @@ matrix_to_table <- function(
     network_matrix,
     regulators = NULL,
     targets = NULL) {
-  network_matrix <- filter_sort_matrix(
+  filter_sort_matrix(
     network_matrix,
     regulators = regulators,
     targets = targets
-  )
-  .Call(
-    "_inferCSN_matrixToTable",
-    PACKAGE = "inferCSN",
-    network_matrix
-  ) |> network_format(abs_weight = FALSE)
+  ) |>
+    matrixToTable() |>
+    network_format(abs_weight = FALSE)
 }
 
 #' @title Extracts a specific solution in the regularization path

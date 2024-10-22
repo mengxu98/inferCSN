@@ -94,8 +94,8 @@ single_network <- function(
 #' @examples
 #' data("example_matrix")
 #' sparse_regression(
-#'   example_matrix[, -1],
-#'   example_matrix[, 1]
+#'   x = example_matrix[, -1],
+#'   y = example_matrix[, 1]
 #' )
 sparse_regression <- function(
     x, y,
@@ -120,6 +120,7 @@ sparse_regression <- function(
         cross_validation = cross_validation,
         n_folds = n_folds,
         seed = seed,
+        verbose = verbose,
         ...
       )
     )
@@ -138,6 +139,7 @@ sparse_regression <- function(
           algorithm = algorithm,
           regulators_num = regulators_num,
           cross_validation = FALSE,
+          verbose = verbose,
           ...
         )
       )
@@ -169,7 +171,9 @@ sparse_regression <- function(
         penalty = penalty,
         algorithm = algorithm,
         regulators_num = regulators_num,
-        cross_validation = FALSE
+        cross_validation = FALSE,
+        verbose = verbose,
+        ...
       )
     )
     if (any(class(fit) == "try-error")) {
@@ -302,6 +306,7 @@ fit_sparse_regression <- function(
     intercept = TRUE,
     lows = -Inf,
     highs = Inf,
+    verbose = TRUE,
     ...) {
   # Check parameter values
   if ((rtol < 0) || (rtol >= 1)) {
@@ -340,7 +345,11 @@ fit_sparse_regression <- function(
   # Handle Lambda Grids
   if (length(lambdaGrid) != 0) {
     if (!is.null(autoLambda) && !autoLambda) {
-      warning("'autoLambda' is ignored and inferred if 'lambdaGrid' is supplied.")
+      log_message(
+        "'autoLambda' is ignored and inferred if 'lambdaGrid' is supplied.",
+        message_type = "warning",
+        verbose = verbose
+      )
     }
     autoLambda <- FALSE
   } else {
@@ -374,7 +383,11 @@ fit_sparse_regression <- function(
   if (penalty != "L0" && !autoLambda) {
     bad_lambda_grid <- FALSE
     if (length(lambdaGrid) != nGamma) {
-      warning("'nGamma' is ignored and replaced with length(lambdaGrid).....")
+      log_message(
+        "'nGamma' is ignored and replaced with length(lambdaGrid).",
+        message_type = "warning",
+        verbose = verbose
+      )
       nGamma <- length(lambdaGrid)
     }
     for (i in seq_along(lambdaGrid)) {
@@ -475,13 +488,16 @@ fit_sparse_regression <- function(
   settings[[1]] <- intercept
   names(settings) <- c("intercept")
 
-  # Remove potential support sizes exceeding regulators_num
   for (i in seq_along(m$SuppSize)) {
     last <- length(m$SuppSize[[i]])
     if (m$SuppSize[[i]][last] > regulators_num) {
       if (last == 1) {
-        warning("Only 1 element in path with support size > regulators_num.
-                Try increasing regulators_num to resolve the issue.")
+        log_message(
+          "only 1 element in path with support size > regulators_num.
+                Try increasing 'regulators_num' to resolve the issue.",
+          message_type = "warning",
+          verbose = verbose
+        )
       } else {
         m$SuppSize[[i]] <- m$SuppSize[[i]][-last]
         m$Converged[[i]] <- m$Converged[[i]][-last]
