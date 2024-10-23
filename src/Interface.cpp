@@ -18,7 +18,8 @@ GridParams<T> makeGridParams(
     const std::size_t ScreenSize, const bool LambdaU,
     const std::vector<std::vector<double>> Lambdas,
     const std::size_t ExcludeFirstK, const bool Intercept,
-    const bool withBounds, const arma::vec &Lows, const arma::vec &Highs) {
+    const bool withBounds, const arma::vec &Lows, const arma::vec &Highs)
+{
   GridParams<T> PG;
   PG.NnzStopNum = NnzStopNum;
   PG.G_ncols = G_ncols;
@@ -48,27 +49,40 @@ GridParams<T> makeGridParams(
   PG.P.Lows = Lows;
   PG.P.Highs = Highs;
 
-  if (Loss == "SquaredError") {
+  if (Loss == "SquaredError")
+  {
     PG.P.Specs.SquaredError = true;
-  } else if (Loss == "Logistic") {
+  }
+  else if (Loss == "Logistic")
+  {
     PG.P.Specs.Logistic = true;
     PG.P.Specs.Classification = true;
-  } else if (Loss == "SquaredHinge") {
+  }
+  else if (Loss == "SquaredHinge")
+  {
     PG.P.Specs.SquaredHinge = true;
     PG.P.Specs.Classification = true;
   }
 
-  if (Algorithm == "CD") {
+  if (Algorithm == "CD")
+  {
     PG.P.Specs.CD = true;
-  } else if (Algorithm == "CDPSI") {
+  }
+  else if (Algorithm == "CDPSI")
+  {
     PG.P.Specs.PSI = true;
   }
 
-  if (Penalty == "L0") {
+  if (Penalty == "L0")
+  {
     PG.P.Specs.L0 = true;
-  } else if (Penalty == "L0L2") {
+  }
+  else if (Penalty == "L0L2")
+  {
     PG.P.Specs.L0L2 = true;
-  } else if (Penalty == "L0L1") {
+  }
+  else if (Penalty == "L0L1")
+  {
     PG.P.Specs.L0L1 = true;
   }
   return PG;
@@ -86,7 +100,8 @@ Rcpp::List _srm_model(
     const std::size_t ScreenSize, const bool LambdaU,
     const std::vector<std::vector<double>> Lambdas,
     const std::size_t ExcludeFirstK, const bool Intercept,
-    const bool withBounds, const arma::vec &Lows, const arma::vec &Highs) {
+    const bool withBounds, const arma::vec &Lows, const arma::vec &Highs)
+{
 
   GridParams<T> PG = makeGridParams<T>(
       Loss, Penalty, Algorithm, NnzStopNum, G_ncols, G_nrows, Lambda2Max,
@@ -105,10 +120,12 @@ Rcpp::List _srm_model(
   auto p = X.n_cols;
   arma::field<arma::sp_mat> Bs(G.Lambda12.size());
 
-  for (std::size_t i = 0; i < G.Lambda12.size(); ++i) {
+  for (std::size_t i = 0; i < G.Lambda12.size(); ++i)
+  {
     // create the px(reg path size) sparse sparseMatrix
     arma::sp_mat B(p, G.Solutions[i].size());
-    for (unsigned int j = 0; j < G.Solutions[i].size(); ++j) {
+    for (unsigned int j = 0; j < G.Solutions[i].size(); ++j)
+    {
       B.col(j) = G.Solutions[i][j];
     }
 
@@ -138,7 +155,8 @@ Rcpp::List _srm_model_cv(
     const unsigned int ScreenSize, const bool LambdaU,
     const std::vector<std::vector<double>> Lambdas, const unsigned int nfolds,
     const double seed, const unsigned int ExcludeFirstK, const bool Intercept,
-    const bool withBounds, const arma::vec &Lows, const arma::vec &Highs) {
+    const bool withBounds, const arma::vec &Lows, const arma::vec &Highs)
+{
 
   GridParams<T> PG = makeGridParams<T>(
       Loss, Penalty, Algorithm, NnzStopNum, G_ncols, G_nrows, Lambda2Max,
@@ -158,7 +176,8 @@ Rcpp::List _srm_model_cv(
   auto n = X.n_rows;
   arma::field<arma::sp_mat> Bs(G.Lambda12.size());
 
-  for (std::size_t i = 0; i < G.Lambda12.size(); ++i) {
+  for (std::size_t i = 0; i < G.Lambda12.size(); ++i)
+  {
     // create the px(reg path size) sparse sparseMatrix
     arma::sp_mat B(p, G.Solutions[i].size());
     for (std::size_t j = 0; j < G.Solutions[i].size(); ++j)
@@ -193,7 +212,8 @@ Rcpp::List _srm_model_cv(
   std::vector<std::size_t> fullindices(X.n_rows);
   std::iota(fullindices.begin(), fullindices.end(), 0);
 
-  for (std::size_t j = 0; j < nfolds; ++j) {
+  for (std::size_t j = 0; j < nfolds; ++j)
+  {
     std::vector<std::size_t> validationindices;
     if (j < nfolds - 1)
       validationindices.resize(samplesperfold);
@@ -240,22 +260,28 @@ Rcpp::List _srm_model_cv(
     PG.NnzStopNum =
         p + 1; // remove any constraints on the supp size when fitting over the
                // cv folds // +1 is imp to avoid =p edge case
-    if (PG.P.Specs.L0 == true) {
+    if (PG.P.Specs.L0 == true)
+    {
       PG.Lambdas = PG.LambdasGrid[0];
     }
     Grid<T> Gtraining(Xtraining, ytraining, PG);
     Gtraining.Fit();
 
-    for (std::size_t i = 0; i < Ngamma; ++i) {
+    for (std::size_t i = 0; i < Ngamma; ++i)
+    {
       // i indexes the gamma parameter
-      for (std::size_t k = 0; k < Gtraining.Lambda0[i].size(); ++k) {
+      for (std::size_t k = 0; k < Gtraining.Lambda0[i].size(); ++k)
+      {
         // k indexes the solutions for a specific gamma
 
-        if (PG.P.Specs.SquaredError) {
+        if (PG.P.Specs.SquaredError)
+        {
           arma::vec r = yvalidation - Xvalidation * Gtraining.Solutions[i][k] +
                         Gtraining.Intercepts[i][k];
           CVError[i](k, j) = arma::dot(r, r) / yvalidation.n_rows;
-        } else if (PG.P.Specs.Logistic) {
+        }
+        else if (PG.P.Specs.Logistic)
+        {
           arma::sp_mat B = Gtraining.Solutions[i][k];
           double b0 = Gtraining.Intercepts[i][k];
           arma::vec ExpyXB = arma::exp(yvalidation % (Xvalidation * B + b0));
@@ -263,8 +289,9 @@ Rcpp::List _srm_model_cv(
               arma::sum(arma::log(1 + 1 / ExpyXB)) / yvalidation.n_rows;
           // std::cout<<"i, j, k"<<i<<" "<<j<<" "<<k<<" CVError[i](k,j):
           // "<<CVError[i](k,j)<<std::endl; CVError[i].print();
-
-        } else if (PG.P.Specs.SquaredHinge) {
+        }
+        else if (PG.P.Specs.SquaredHinge)
+        {
           arma::sp_mat B = Gtraining.Solutions[i][k];
           double b0 = Gtraining.Intercepts[i][k];
           arma::vec onemyxb = 1 - yvalidation % (Xvalidation * B + b0);
@@ -280,7 +307,8 @@ Rcpp::List _srm_model_cv(
   arma::field<arma::vec> CVMeans(Ngamma);
   arma::field<arma::vec> CVSDs(Ngamma);
 
-  for (std::size_t i = 0; i < Ngamma; ++i) {
+  for (std::size_t i = 0; i < Ngamma; ++i)
+  {
     CVMeans[i] = arma::mean(CVError[i], 1);
     CVSDs[i] = arma::stddev(CVError[i], 0, 1);
   }
@@ -305,7 +333,8 @@ Rcpp::List srm_model_sparse(
     const std::size_t ScreenSize, const bool LambdaU,
     const std::vector<std::vector<double>> Lambdas,
     const std::size_t ExcludeFirstK, const bool Intercept,
-    const bool withBounds, const arma::vec &Lows, const arma::vec &Highs) {
+    const bool withBounds, const arma::vec &Lows, const arma::vec &Highs)
+{
 
   return _srm_model(X, y, Loss, Penalty, Algorithm, NnzStopNum, G_ncols,
                     G_nrows, Lambda2Max, Lambda2Min, PartialSort, MaxIters,
@@ -326,7 +355,8 @@ Rcpp::List srm_model_dense(
     const std::size_t ScreenSize, const bool LambdaU,
     const std::vector<std::vector<double>> Lambdas,
     const std::size_t ExcludeFirstK, const bool Intercept,
-    const bool withBounds, const arma::vec &Lows, const arma::vec &Highs) {
+    const bool withBounds, const arma::vec &Lows, const arma::vec &Highs)
+{
 
   return _srm_model(X, y, Loss, Penalty, Algorithm, NnzStopNum, G_ncols,
                     G_nrows, Lambda2Max, Lambda2Min, PartialSort, MaxIters,
@@ -347,7 +377,8 @@ Rcpp::List srm_model_cv_sparse(
     const std::size_t ScreenSize, const bool LambdaU,
     const std::vector<std::vector<double>> Lambdas, const std::size_t nfolds,
     const double seed, const std::size_t ExcludeFirstK, const bool Intercept,
-    const bool withBounds, const arma::vec &Lows, const arma::vec &Highs) {
+    const bool withBounds, const arma::vec &Lows, const arma::vec &Highs)
+{
 
   return _srm_model_cv(X, y, Loss, Penalty, Algorithm, NnzStopNum, G_ncols,
                        G_nrows, Lambda2Max, Lambda2Min, PartialSort, MaxIters,
@@ -368,7 +399,8 @@ Rcpp::List srm_model_cv_dense(
     const std::size_t ScreenSize, const bool LambdaU,
     const std::vector<std::vector<double>> Lambdas, const std::size_t nfolds,
     const double seed, const std::size_t ExcludeFirstK, const bool Intercept,
-    const bool withBounds, const arma::vec &Lows, const arma::vec &Highs) {
+    const bool withBounds, const arma::vec &Lows, const arma::vec &Highs)
+{
 
   return _srm_model_cv(X, y, Loss, Penalty, Algorithm, NnzStopNum, G_ncols,
                        G_nrows, Lambda2Max, Lambda2Min, PartialSort, MaxIters,

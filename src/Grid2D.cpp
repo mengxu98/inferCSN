@@ -1,7 +1,8 @@
 #include "Grid2D.h"
 
 template <class T>
-Grid2D<T>::Grid2D(const T &Xi, const arma::vec &yi, const GridParams<T> &PGi) {
+Grid2D<T>::Grid2D(const T &Xi, const arma::vec &yi, const GridParams<T> &PGi)
+{
   // automatically selects lambda_0 (but assumes other lambdas are given in
   // PG.P.ModelParams)
   X = &Xi;
@@ -18,7 +19,9 @@ Grid2D<T>::Grid2D(const T &Xi, const arma::vec &yi, const GridParams<T> &PGi) {
   P = PG.P;
 }
 
-template <class T> Grid2D<T>::~Grid2D() {
+template <class T>
+Grid2D<T>::~Grid2D()
+{
   delete Xtr;
   if (PG.P.Specs.Logistic)
     delete PG.P.Xy;
@@ -27,15 +30,19 @@ template <class T> Grid2D<T>::~Grid2D() {
 }
 
 template <class T>
-std::vector<std::vector<std::unique_ptr<FitResult<T>>>> Grid2D<T>::Fit() {
+std::vector<std::vector<std::unique_ptr<FitResult<T>>>> Grid2D<T>::Fit()
+{
   arma::vec Xtrarma;
 
-  if (PG.P.Specs.Logistic) {
+  if (PG.P.Specs.Logistic)
+  {
     auto n = X->n_rows;
     double b0 = 0;
     arma::vec ExpyXB = arma::ones<arma::vec>(n);
-    if (PG.intercept) {
-      for (std::size_t t = 0; t < 50; ++t) {
+    if (PG.intercept)
+    {
+      for (std::size_t t = 0; t < 50; ++t)
+      {
         double partial_b0 = -arma::sum(*y / (1 + ExpyXB));
         b0 -= partial_b0 / (n * 0.25); // intercept is not regularized
         ExpyXB = arma::exp(b0 * *y);
@@ -53,13 +60,16 @@ std::vector<std::vector<std::unique_ptr<FitResult<T>>>> Grid2D<T>::Fit() {
     *PG.P.Xy = Xy;
   }
 
-  else if (PG.P.Specs.SquaredHinge) {
+  else if (PG.P.Specs.SquaredHinge)
+  {
     auto n = X->n_rows;
     double b0 = 0;
     arma::vec onemyxb = arma::ones<arma::vec>(n);
     arma::uvec indices = arma::find(onemyxb > 0);
-    if (PG.intercept) {
-      for (std::size_t t = 0; t < 50; ++t) {
+    if (PG.intercept)
+    {
+      for (std::size_t t = 0; t < 50; ++t)
+      {
         double partial_b0 =
             arma::sum(2 * onemyxb.elem(indices) % (-y->elem(indices)));
         b0 -= partial_b0 / (n * 2); // intercept is not regularized
@@ -78,21 +88,32 @@ std::vector<std::vector<std::unique_ptr<FitResult<T>>>> Grid2D<T>::Fit() {
     T Xy = matrix_vector_schur_product(*X, y); // X->each_col() % *y;
     PG.P.Xy = new T;
     *PG.P.Xy = Xy;
-  } else {
+  }
+  else
+  {
     Xtrarma = arma::abs(y->t() * *X).t();
   }
 
   double ytXmax = arma::max(Xtrarma);
 
   std::size_t index;
-  if (PG.P.Specs.L0L1) {
+  if (PG.P.Specs.L0L1)
+  {
     index = 1;
-    if (G_nrows != 1) {
+    if (G_nrows != 1)
+    {
       Lambda2Max = ytXmax;
       Lambda2Min = Lambda2Max * LambdaMinFactor;
     }
-  } else if (PG.P.Specs.L0L2) {
+  }
+  else if (PG.P.Specs.L0L2)
+  {
     index = 2;
+  }
+  else
+  {
+    // Add a default case to initialize index
+    index = 0; // or another appropriate default value
   }
 
   arma::vec Lambdas2 =
@@ -106,7 +127,8 @@ std::vector<std::vector<std::unique_ptr<FitResult<T>>>> Grid2D<T>::Fit() {
 
   PG.XtrAvailable = true;
   // Rcpp::Rcout << "Grid2D Start\n";
-  for (std::size_t i = 0; i < Lambdas2.size(); ++i) { // auto &l : Lambdas2
+  for (std::size_t i = 0; i < Lambdas2.size(); ++i)
+  { // auto &l : Lambdas2
     // Rcpp::Rcout << "Grid1D Start: " << i << "\n";
     *Xtr = Xtrvec;
 
