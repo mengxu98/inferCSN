@@ -142,6 +142,18 @@ identical(
   network_table_2
 )
 
+inferCSN(
+  example_matrix,
+  regulators = c("g1", "g2"),
+  targets = c("g3", "g4")
+)
+inferCSN(
+  example_matrix,
+  regulators = c("g1", "g2"),
+  targets = c("g3", "g0")
+)
+
+\dontrun{
 network_table_07 <- inferCSN(
   example_matrix,
   r_threshold = 0.7
@@ -156,17 +168,7 @@ calculate_auc(
   example_ground_truth,
   plot = TRUE
 )
-
-inferCSN(
-  example_matrix,
-  regulators = c("g1", "g2"),
-  targets = c("g3", "g4")
-)
-inferCSN(
-  example_matrix,
-  regulators = c("g1", "g2"),
-  targets = c("g3", "g0")
-)
+}
 \dontrun{
 data("example_matrix")
 network_table <- inferCSN(example_matrix)
