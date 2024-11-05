@@ -68,7 +68,6 @@
 <span>  r_threshold <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  regulators <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  targets <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  regulators_num <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cores <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -87,7 +86,6 @@
 <span>  r_threshold <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  regulators <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  targets <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  regulators_num <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cores <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -106,7 +104,6 @@
 <span>  r_threshold <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  regulators <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  targets <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  regulators_num <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cores <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -125,7 +122,6 @@
 <span>  r_threshold <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  regulators <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  targets <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  regulators_num <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cores <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -181,12 +177,7 @@ The <em><code>CDPSI</code></em> algorithm may yield better results, but it also 
 
 
 <dt id="arg-targets">targets<a class="anchor" aria-label="anchor" href="#arg-targets"></a></dt>
-<dd><p>The target genes for which to infer the regulatory network.</p></dd>
-
-
-<dt id="arg-regulators-num">regulators_num<a class="anchor" aria-label="anchor" href="#arg-regulators-num"></a></dt>
-<dd><p>The number of non-zore coefficients, this value will affect the final performance.
-The maximum support size at which to terminate the regularization path.
+<dd><p>The target genes for which to infer the regulatory network.
 Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.</p></dd>
 
 
