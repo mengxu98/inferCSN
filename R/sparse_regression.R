@@ -3,6 +3,8 @@
 #' @inheritParams inferCSN
 #' @param matrix An expression matrix.
 #' @param target The target gene.
+#' @param regulators_num The number of non-zore coefficients, this value will affect the final performance.
+#' The maximum support size at which to terminate the regularization path.
 #'
 #' @return The weight data table of sub-network
 #' @export
@@ -83,6 +85,7 @@ single_network <- function(
 #' @title Sparse regression model
 #'
 #' @inheritParams inferCSN
+#' @inheritParams single_network
 #' @param x The matrix of regulators.
 #' @param y The vector of target.
 #' @param computation_method The method used to compute `r``.

@@ -20,7 +20,6 @@ inferCSN(
   r_threshold = 0,
   regulators = NULL,
   targets = NULL,
-  regulators_num = NULL,
   cores = 1,
   verbose = TRUE,
   ...
@@ -38,7 +37,6 @@ inferCSN(
   r_threshold = 0,
   regulators = NULL,
   targets = NULL,
-  regulators_num = NULL,
   cores = 1,
   verbose = TRUE,
   ...
@@ -56,7 +54,6 @@ inferCSN(
   r_threshold = 0,
   regulators = NULL,
   targets = NULL,
-  regulators_num = NULL,
   cores = 1,
   verbose = TRUE,
   ...
@@ -74,7 +71,6 @@ inferCSN(
   r_threshold = 0,
   regulators = NULL,
   targets = NULL,
-  regulators_num = NULL,
   cores = 1,
   verbose = TRUE,
   ...
@@ -105,10 +101,7 @@ The \emph{\code{CDPSI}} algorithm may yield better results, but it also increase
 
 \item{regulators}{The regulator genes for which to infer the regulatory network.}
 
-\item{targets}{The target genes for which to infer the regulatory network.}
-
-\item{regulators_num}{The number of non-zore coefficients, this value will affect the final performance.
-The maximum support size at which to terminate the regularization path.
+\item{targets}{The target genes for which to infer the regulatory network.
 Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.}
 
 \item{cores}{The number of cores to use for parallelization with \code{\link[foreach]{foreach}}, default is \emph{\code{1}}.}

@@ -103,7 +103,7 @@ parallelize_fun <- function(
 
     "%dopar%" <- foreach::"%dopar%"
     output_list <- foreach::foreach(
-      i = 1:length(x),
+      i = seq_along(x),
       .export = export_fun
     ) %dopar% {
       fun(x[[i]])
@@ -691,7 +691,7 @@ matrix_to_table <- function(
 
 #' @title Extracts a specific solution in the regularization path
 #'
-#' @inheritParams inferCSN
+#' @inheritParams single_network
 #' @param object The output of \code{\link{fit_sparse_regression}}.
 #' @param lambda The value of lambda at which to extract the solution.
 #' @param gamma The value of gamma at which to extract the solution.
@@ -730,8 +730,8 @@ coef.srm <- function(
 
   indices <- NULL
   if (!is.null(lambda)) {
-    diffLambda <- abs(lambda - object$lambda[[gamma_index]])
-    indices <- which(diffLambda == min(diffLambda))
+    diff_lambda <- abs(lambda - object$lambda[[gamma_index]])
+    indices <- which(diff_lambda == min(diff_lambda))
   } else if (!is.null(regulators_num)) {
     diff_regulators_num <- abs(
       regulators_num - object$suppSize[[gamma_index]]
@@ -819,7 +819,8 @@ print.srm_cv <- function(x, ...) {
 #' @method predict srm
 #'
 #' @details
-#' If both lambda and gamma are not supplied, then a matrix of predictions for all the solutions in the regularization path is returned.
+#' If both lambda and gamma are not supplied,
+#' then a matrix of predictions for all the solutions in the regularization path is returned.
 #' If lambda is supplied but gamma is not, the smallest value of gamma is used.
 #' In case of logistic regression, probability values are returned.
 #'

@@ -38,8 +38,7 @@ Currently \emph{\code{CD}} and \emph{\code{CDPSI}} are supported.
 The \emph{\code{CDPSI}} algorithm may yield better results, but it also increases running time.}
 
 \item{regulators_num}{The number of non-zore coefficients, this value will affect the final performance.
-The maximum support size at which to terminate the regularization path.
-Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.}
+The maximum support size at which to terminate the regularization path.}
 
 \item{n_folds}{The number of folds for cross-validation, default is \emph{\code{10}}.}
 

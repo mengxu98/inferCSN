@@ -17,8 +17,6 @@
 #' @param r_threshold Threshold of \eqn{R^2} or correlation coefficient, default is *`0`*.
 #' @param regulators The regulator genes for which to infer the regulatory network.
 #' @param targets The target genes for which to infer the regulatory network.
-#' @param regulators_num The number of non-zore coefficients, this value will affect the final performance.
-#' The maximum support size at which to terminate the regularization path.
 #' Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.
 #' @param cores The number of cores to use for parallelization with \code{\link[foreach]{foreach}}, default is *`1`*.
 #' @param verbose Logical value, default is *`TRUE`*, whether to print progress messages.
@@ -43,7 +41,6 @@ setGeneric(
                  r_threshold = 0,
                  regulators = NULL,
                  targets = NULL,
-                 regulators_num = NULL,
                  cores = 1,
                  verbose = TRUE,
                  ...) {
@@ -117,7 +114,6 @@ setMethod(
                         r_threshold = 0,
                         regulators = NULL,
                         targets = NULL,
-                        regulators_num = NULL,
                         cores = 1,
                         verbose = TRUE,
                         ...) {
@@ -138,7 +134,6 @@ setMethod(
       r_threshold = r_threshold,
       regulators = regulators,
       targets = targets,
-      regulators_num = regulators_num,
       verbose = verbose,
       cores = cores,
       ...
@@ -161,7 +156,6 @@ setMethod(
       colnames(object),
       targets %s% colnames(object)
     )
-    regulators_num <- regulators_num %s% (ncol(object) - 1)
 
     names(targets) <- targets
     cores <- .cores_detect(cores, length(targets))
@@ -180,7 +174,6 @@ setMethod(
           n_folds = n_folds,
           subsampling_ratio = subsampling_ratio,
           r_threshold = r_threshold,
-          regulators_num = regulators_num,
           verbose = verbose,
           ...
         )
@@ -253,7 +246,6 @@ setMethod(
                         r_threshold = 0,
                         regulators = NULL,
                         targets = NULL,
-                        regulators_num = NULL,
                         cores = 1,
                         verbose = TRUE,
                         ...) {
@@ -274,7 +266,6 @@ setMethod(
       r_threshold = r_threshold,
       regulators = regulators,
       targets = targets,
-      regulators_num = regulators_num,
       verbose = verbose,
       cores = cores,
       ...
@@ -297,7 +288,6 @@ setMethod(
       colnames(object),
       targets %s% colnames(object)
     )
-    regulators_num <- regulators_num %s% (ncol(object) - 1)
 
     names(targets) <- targets
     cores <- .cores_detect(cores, length(targets))
@@ -316,7 +306,6 @@ setMethod(
           n_folds = n_folds,
           subsampling_ratio = subsampling_ratio,
           r_threshold = r_threshold,
-          regulators_num = regulators_num,
           verbose = verbose,
           ...
         )
@@ -349,7 +338,6 @@ setMethod(
                         r_threshold = 0,
                         regulators = NULL,
                         targets = NULL,
-                        regulators_num = NULL,
                         cores = 1,
                         verbose = TRUE,
                         ...) {
@@ -371,7 +359,6 @@ setMethod(
       r_threshold = r_threshold,
       regulators = regulators,
       targets = targets,
-      regulators_num = regulators_num,
       verbose = verbose,
       cores = cores,
       ...
