@@ -578,38 +578,6 @@ check_sparsity <- function(x) {
   return(sparsity)
 }
 
-#' @title Switch matrix to network table
-#'
-#' @inheritParams table_to_matrix
-#' @param network_matrix The matrix of network weight.
-#'
-#' @return Network table
-#' @export
-#'
-#' @examples
-#' data("example_matrix")
-#' network_table <- inferCSN(example_matrix)
-#' network_matrix <- table_to_matrix(network_table)
-#' network_table_new <- matrix_to_table(network_matrix)
-#' head(network_table)
-#' head(network_table_new)
-#' identical(
-#'   network_table,
-#'   network_table_new
-#' )
-matrix_to_table <- function(
-    network_matrix,
-    regulators = NULL,
-    targets = NULL) {
-  filter_sort_matrix(
-    network_matrix,
-    regulators = regulators,
-    targets = targets
-  ) |>
-    matrixToTable() |>
-    network_format(abs_weight = FALSE)
-}
-
 #' @title Extracts a specific solution in the regularization path
 #'
 #' @inheritParams single_network

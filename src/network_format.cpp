@@ -1,18 +1,16 @@
-#include <Rcpp.h>
+#include "network_format.h"
 #include <algorithm>
 #include <cmath>
 
 using namespace Rcpp;
 
-struct AbsGreater
+// AbsGreater结构体实现
+AbsGreater::AbsGreater(const NumericVector &w) : weight(w) {}
+
+bool AbsGreater::operator()(int i, int j) const
 {
-  const NumericVector &weight;
-  AbsGreater(const NumericVector &w) : weight(w) {}
-  bool operator()(int i, int j) const
-  {
-    return std::abs(weight[i]) > std::abs(weight[j]);
-  }
-};
+  return std::abs(weight[i]) > std::abs(weight[j]);
+}
 
 //' @title Format network table
 //'
