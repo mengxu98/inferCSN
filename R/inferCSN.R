@@ -83,7 +83,7 @@ setGeneric(
 #'   regulators = c("g1", "g2"),
 #'   targets = c("g3", "g0")
 #' )
-#' 
+#'
 #' \dontrun{
 #' network_table_07 <- inferCSN(
 #'   example_matrix,
