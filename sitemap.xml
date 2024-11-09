@@ -5,9 +5,8 @@
 <url><loc>https://mengxu98.github.io/inferCSN/authors.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/index.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/reference/as_matrix.html</loc></url>
-<url><loc>https://mengxu98.github.io/inferCSN/reference/calculate_acc.html</loc></url>
-<url><loc>https://mengxu98.github.io/inferCSN/reference/calculate_auc.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/reference/calculate_gene_rank.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/calculate_metrics.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/reference/check_sparsity.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/reference/coef.srm.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/reference/example_ground_truth.html</loc></url>
@@ -44,7 +43,7 @@
 <url><loc>https://mengxu98.github.io/inferCSN/reference/sparse_cor.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/reference/sparse_regression.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/reference/split_indices.html</loc></url>
-<url><loc>https://mengxu98.github.io/inferCSN/reference/subsampling_fun.html</loc></url>
+<url><loc>https://mengxu98.github.io/inferCSN/reference/subsampling.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/reference/table_to_matrix.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/reference/weight_sift.html</loc></url>
 </urlset>
