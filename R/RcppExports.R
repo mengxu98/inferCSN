@@ -144,6 +144,10 @@ matrix_to_table <- function(network_matrix, regulators = NULL, targets = NULL) {
     .Call('_inferCSN_matrix_to_table', PACKAGE = 'inferCSN', network_matrix, regulators, targets)
 }
 
+prepare_calculate_metrics <- function(network_table, ground_truth) {
+    .Call('_inferCSN_prepare_calculate_metrics', PACKAGE = 'inferCSN', network_table, ground_truth)
+}
+
 #' @title Format network table
 #'
 #' @param network_table The weight data table of network.

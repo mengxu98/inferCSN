@@ -433,6 +433,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// prepare_calculate_metrics
+DataFrame prepare_calculate_metrics(DataFrame network_table, DataFrame ground_truth);
+RcppExport SEXP _inferCSN_prepare_calculate_metrics(SEXP network_tableSEXP, SEXP ground_truthSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type network_table(network_tableSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type ground_truth(ground_truthSEXP);
+    rcpp_result_gen = Rcpp::wrap(prepare_calculate_metrics(network_table, ground_truth));
+    return rcpp_result_gen;
+END_RCPP
+}
 // network_format
 DataFrame network_format(DataFrame network_table, Nullable<CharacterVector> regulators, Nullable<CharacterVector> targets, bool abs_weight);
 RcppExport SEXP _inferCSN_network_format(SEXP network_tableSEXP, SEXP regulatorsSEXP, SEXP targetsSEXP, SEXP abs_weightSEXP) {
@@ -523,6 +535,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_inferCSN_asMatrixParallel", (DL_FUNC) &_inferCSN_asMatrixParallel, 5},
     {"_inferCSN_filter_sort_matrix", (DL_FUNC) &_inferCSN_filter_sort_matrix, 3},
     {"_inferCSN_matrix_to_table", (DL_FUNC) &_inferCSN_matrix_to_table, 3},
+    {"_inferCSN_prepare_calculate_metrics", (DL_FUNC) &_inferCSN_prepare_calculate_metrics, 2},
     {"_inferCSN_network_format", (DL_FUNC) &_inferCSN_network_format, 4},
     {"_inferCSN_sparseCovCor", (DL_FUNC) &_inferCSN_sparseCovCor, 2},
     {"_inferCSN_split_indices", (DL_FUNC) &_inferCSN_split_indices, 2},
