@@ -41,8 +41,7 @@ reference:
 
 - subtitle: "Network evaluation"
 - contents:
-  - calculate_auc
-  - calculate_acc
+  - calculate_metrics
 
 - subtitle: "Network visualization"
 - contents:
@@ -92,7 +91,7 @@ reference:
   - sparse_cor
   - split_indices
   - simulate_sparse_matrix
-  - subsampling_fun
+  - subsampling
   - table_to_matrix
 
 - subtitle: "Example data"
