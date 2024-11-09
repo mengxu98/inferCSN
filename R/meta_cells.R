@@ -201,7 +201,7 @@ meta_cells <- function(
   if (do_approx) {
     pca_averaged_sc <- as.matrix(
       Matrix::t(
-        .supercell_ge(
+        .meta_cell_ge(
           Matrix::t(
             pca_results$x[, pc_num]
           ),
@@ -304,7 +304,7 @@ meta_cells <- function(
   )
 }
 
-.supercell_ge <- function(
+.meta_cell_ge <- function(
     ge,
     groups,
     mode = c("average", "sum"),
@@ -374,7 +374,7 @@ meta_cells <- function(
     k = 5,
     from = c("dist", "coordinates"),
     use_nn2 = TRUE,
-    return_neighbors_order = F,
+    return_neighbors_order = FALSE,
     dist_method = "euclidean",
     cor_method = "pearson",
     p = 2,
@@ -383,7 +383,6 @@ meta_cells <- function(
   method <- match.arg(from, c("dist", "coordinates"))
 
   if (method == "coordinates") {
-    # from coordinates
     if (use_nn2) {
       if (dist_method != "euclidean") {
         stop(
@@ -445,7 +444,6 @@ meta_cells <- function(
     )
   }
 
-  # now matrix is distance in any case
   return(
     .build_knnd(
       D = matrix,
@@ -468,7 +466,7 @@ meta_cells <- function(
     D <- stats::as.dist(D)
   }
 
-  cells_num <- (1 + sqrt(1 + 8 * length(D))) / 2 # number of cells
+  cells_num <- (1 + sqrt(1 + 8 * length(D))) / 2
 
   if (k >= cells_num) {
     stop("Not enought neighbors in data set!")
@@ -497,7 +495,7 @@ meta_cells <- function(
     })
   )
 
-  adj.knn <- split(
+  adj_knn <- split(
     neighbors,
     rep(
       1:nrow(neighbors),
@@ -506,7 +504,7 @@ meta_cells <- function(
   )
 
   graph_knn <- igraph::graph_from_adj_list(
-    adj.knn,
+    adj_knn,
     duplicate = FALSE,
     mode = mode
   )
