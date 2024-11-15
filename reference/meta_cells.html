@@ -67,7 +67,7 @@ using dimensionality reduction and clustering techniques.</p>
 <span>  knn_k <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  do_scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  pc_num <span class="op">=</span> <span class="fl">25</span>,</span>
-<span>  fast_pca <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  fast_pca <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  do_approx <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  approx_num <span class="op">=</span> <span class="fl">20000</span>,</span>
 <span>  directed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -86,94 +86,100 @@ using dimensionality reduction and clustering techniques.</p>
 
 
 <dl><dt id="arg-matrix">matrix<a class="anchor" aria-label="anchor" href="#arg-matrix"></a></dt>
-<dd><p>Log-normalized gene expression matrix with rows as genes and columns as cells.</p></dd>
+<dd><p>A gene expression matrix where rows represent genes and columns represent cells.</p></dd>
 
 
 <dt id="arg-genes-use">genes_use<a class="anchor" aria-label="anchor" href="#arg-genes-use"></a></dt>
-<dd><p>A vector of genes used to compute PCA, default is <em><code>NULL</code></em>.</p></dd>
+<dd><p>Default is <em><code>NULL</code></em>.
+A character vector specifying genes to be used for PCA dimensionality reduction.</p></dd>
 
 
 <dt id="arg-genes-exclude">genes_exclude<a class="anchor" aria-label="anchor" href="#arg-genes-exclude"></a></dt>
-<dd><p>A vector of genes to be excluded when computing PCA, default is <em><code>NULL</code></em>.</p></dd>
+<dd><p>Default is <em><code>NULL</code></em>. A character vector specifying genes to be excluded
+from PCA computation.</p></dd>
 
 
 <dt id="arg-var-genes-num">var_genes_num<a class="anchor" aria-label="anchor" href="#arg-var-genes-num"></a></dt>
-<dd><p>If <em><code>genes_use</code></em> is not provided, <em><code>var_genes_num</code></em> genes with the largest
-variation are used. Default is <em><code>min(1000, nrow(matrix))</code></em>.</p></dd>
+<dd><p>Default is <em><code>min(1000, nrow(matrix))</code></em>. Number of most variable genes
+to select when <em><code>genes_use</code></em> is not provided.</p></dd>
 
 
 <dt id="arg-gamma">gamma<a class="anchor" aria-label="anchor" href="#arg-gamma"></a></dt>
-<dd><p>Graining level of data (proportion of number of single cells in the initial dataset
-to the number of metacells in the final dataset), default is <em><code>10</code></em>.</p></dd>
+<dd><p>Default is <em><code>10</code></em>. Coarse-graining parameter defining the target ratio of input
+cells to output metacells (e.g., gamma=10 yields approximately n/10 metacells for n input cells).</p></dd>
 
 
 <dt id="arg-knn-k">knn_k<a class="anchor" aria-label="anchor" href="#arg-knn-k"></a></dt>
-<dd><p>Parameter to compute single-cell kNN network, default is <em><code>5</code></em>.</p></dd>
+<dd><p>Default is <em><code>5</code></em>. Number of nearest neighbors for constructing the cell-cell
+similarity network.</p></dd>
 
 
 <dt id="arg-do-scale">do_scale<a class="anchor" aria-label="anchor" href="#arg-do-scale"></a></dt>
-<dd><p>Logical value, default is <em><code>TRUE</code></em>, whether to scale gene expression matrix
-when computing PCA.</p></dd>
+<dd><p>Default is <em><code>TRUE</code></em>. Whether to standardize (center and scale) gene expression
+values before PCA.</p></dd>
 
 
 <dt id="arg-pc-num">pc_num<a class="anchor" aria-label="anchor" href="#arg-pc-num"></a></dt>
-<dd><p>Number of principal components to use for construction of single-cell kNN network,
-default is <em><code>25</code></em>.</p></dd>
+<dd><p>Default is <em><code>25</code></em>. Number of principal components to retain for downstream analysis.</p></dd>
 
 
 <dt id="arg-fast-pca">fast_pca<a class="anchor" aria-label="anchor" href="#arg-fast-pca"></a></dt>
-<dd><p>Logical value, default is <em><code>TRUE</code></em>, use <a href="https://rdrr.io/pkg/irlba/man/irlba.html" class="external-link">irlba</a> as a faster version
-of prcomp.</p></dd>
+<dd><p>Default is <em><code>TRUE</code></em>. Whether to use the faster <a href="https://rdrr.io/pkg/irlba/man/irlba.html" class="external-link">irlba</a> algorithm
+instead of standard PCA. Recommended for large datasets.</p></dd>
 
 
 <dt id="arg-do-approx">do_approx<a class="anchor" aria-label="anchor" href="#arg-do-approx"></a></dt>
-<dd><p>Logical value, default is <em><code>FALSE</code></em>, compute approximate kNN in case of a large
-dataset (&gt;50'000).</p></dd>
+<dd><p>Default is <em><code>FALSE</code></em>. Whether to use approximate nearest neighbor search for
+datasets with &gt;50000 cells to improve computational efficiency.</p></dd>
 
 
 <dt id="arg-approx-num">approx_num<a class="anchor" aria-label="anchor" href="#arg-approx-num"></a></dt>
-<dd><p>Number of cells to subsample for an approximate approach, default is <em><code>20000</code></em>.</p></dd>
+<dd><p>Default is <em><code>20000</code></em>. Number of cells to randomly sample for approximate
+nearest neighbor computation when <em><code>do_approx = TRUE</code></em>.</p></dd>
 
 
 <dt id="arg-directed">directed<a class="anchor" aria-label="anchor" href="#arg-directed"></a></dt>
-<dd><p>Logical value, default is <em><code>FALSE</code></em>, whether to use directed graph.</p></dd>
+<dd><p>Default is <em><code>FALSE</code></em>. Whether to construct a directed or undirected nearest
+neighbor graph.</p></dd>
 
 
 <dt id="arg-use-nn-">use_nn2<a class="anchor" aria-label="anchor" href="#arg-use-nn-"></a></dt>
-<dd><p>Logical value, default is <em><code>TRUE</code></em>, whether to use nn2 function.</p></dd>
+<dd><p>Default is <em><code>TRUE</code></em>. Whether to use the faster RANN::nn2 algorithm for nearest
+neighbor search (only applicable with Euclidean distance).</p></dd>
 
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
-<dd><p>Seed to use to subsample cells for an approximate approach, default is <em><code>1</code></em>.</p></dd>
+<dd><p>Default is <em><code>1</code></em>. Random seed for reproducibility when subsampling cells in
+approximate mode.</p></dd>
 
 
 <dt id="arg-cluster-method">cluster_method<a class="anchor" aria-label="anchor" href="#arg-cluster-method"></a></dt>
-<dd><p>Clustering method to identify metacells, default is <em><code>walktrap</code></em>.
-Available methods are <em><code>walktrap</code></em> and <em><code>louvain</code></em> (not recommended, gamma is ignored).</p></dd>
+<dd><p>Default is <em><code>walktrap</code></em>. Algorithm for community detection in the cell
+similarity network. Options: <em><code>walktrap</code></em> (recommended) or <em><code>louvain</code></em> (gamma parameter ignored).</p></dd>
 
 
 <dt id="arg-block-size">block_size<a class="anchor" aria-label="anchor" href="#arg-block-size"></a></dt>
-<dd><p>Number of cells to map to the nearest metacell at a time (for approx
-coarse-graining), default is <em><code>10000</code></em>.</p></dd>
+<dd><p>Default is <em><code>10000</code></em>. Number of cells to process in each batch when mapping
+cells to metacells in approximate mode. Adjust based on available memory.</p></dd>
 
 
 <dt id="arg-weights">weights<a class="anchor" aria-label="anchor" href="#arg-weights"></a></dt>
-<dd><p>Vector of cell weights (NULL by default),
-used for computing average gene expression within cluster of metacells.</p></dd>
+<dd><p>Default is <em><code>NULL</code></em>. Numeric vector of cell-specific weights for weighted
+averaging when computing metacell expression profiles. Length must match number of cells.</p></dd>
 
 
 <dt id="arg-do-median-norm">do_median_norm<a class="anchor" aria-label="anchor" href="#arg-do-median-norm"></a></dt>
-<dd><p>Logical value, default is <em><code>FALSE</code></em>,
-whether to normalize by median value.</p></dd>
+<dd><p>Default is <em><code>FALSE</code></em>. Whether to perform median-based normalization of
+the final metacell expression matrix.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Additional parameters passed to other methods.</p></dd>
+<dd><p>Additional arguments passed to internal functions.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A metacell matrix where rows represent metacells and columns represent genes.</p>
+    <p>A matrix where rows represent metacells and columns represent genes.</p>
     </div>
     <div id="references">
     <h2>References</h2>
@@ -185,8 +191,7 @@ https://github.com/kuijjerlab/SCORPION</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">meta_cells_matrix</span> <span class="op">&lt;-</span> <span class="fu">meta_cells</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">example_matrix</span>,</span></span>
-<span class="r-in"><span>  fast_pca <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span>  <span class="va">example_matrix</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Warning: number of PCs of PCA result is less than the desired number, using all PCs.</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">meta_cells_matrix</span><span class="op">)</span></span></span>
