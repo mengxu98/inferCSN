@@ -103,17 +103,17 @@ plot_network_heatmap(
   rect_color = "gray70"
 )
 
-calculate_auc(
+calculate_metrics(
   network_table,
   example_ground_truth,
   plot = TRUE
 )
-calculate_auc(
+calculate_metrics(
   network_table_sifted,
   example_ground_truth,
   plot = TRUE
 )
-calculate_auc(
+calculate_metrics(
   network_table_sifted_entropy,
   example_ground_truth,
   plot = TRUE

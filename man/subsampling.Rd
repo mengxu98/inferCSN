@@ -51,22 +51,22 @@ subsample_matrix_3 <- subsampling(
   subsampling_ratio = 0.5
 )
 
-calculate_auc(
+calculate_metrics(
   inferCSN(example_matrix),
   example_ground_truth,
   plot = TRUE
 )
-calculate_auc(
+calculate_metrics(
   inferCSN(subsample_matrix),
   example_ground_truth,
   plot = TRUE
 )
-calculate_auc(
+calculate_metrics(
   inferCSN(subsample_matrix_2),
   example_ground_truth,
   plot = TRUE
 )
-calculate_auc(
+calculate_metrics(
   inferCSN(subsample_matrix_3),
   example_ground_truth,
   plot = TRUE

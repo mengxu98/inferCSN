@@ -13,7 +13,7 @@ meta_cells(
   knn_k = 5,
   do_scale = TRUE,
   pc_num = 25,
-  fast_pca = TRUE,
+  fast_pca = FALSE,
   do_approx = FALSE,
   approx_num = 20000,
   directed = FALSE,
@@ -27,56 +27,62 @@ meta_cells(
 )
 }
 \arguments{
-\item{matrix}{Log-normalized gene expression matrix with rows as genes and columns as cells.}
+\item{matrix}{A gene expression matrix where rows represent genes and columns represent cells.}
 
-\item{genes_use}{A vector of genes used to compute PCA, default is \emph{\code{NULL}}.}
+\item{genes_use}{Default is \emph{\code{NULL}}.
+A character vector specifying genes to be used for PCA dimensionality reduction.}
 
-\item{genes_exclude}{A vector of genes to be excluded when computing PCA, default is \emph{\code{NULL}}.}
+\item{genes_exclude}{Default is \emph{\code{NULL}}. A character vector specifying genes to be excluded
+from PCA computation.}
 
-\item{var_genes_num}{If \emph{\code{genes_use}} is not provided, \emph{\code{var_genes_num}} genes with the largest
-variation are used. Default is \emph{\code{min(1000, nrow(matrix))}}.}
+\item{var_genes_num}{Default is \emph{\code{min(1000, nrow(matrix))}}. Number of most variable genes
+to select when \emph{\code{genes_use}} is not provided.}
 
-\item{gamma}{Graining level of data (proportion of number of single cells in the initial dataset
-to the number of metacells in the final dataset), default is \emph{\code{10}}.}
+\item{gamma}{Default is \emph{\code{10}}. Coarse-graining parameter defining the target ratio of input
+cells to output metacells (e.g., gamma=10 yields approximately n/10 metacells for n input cells).}
 
-\item{knn_k}{Parameter to compute single-cell kNN network, default is \emph{\code{5}}.}
+\item{knn_k}{Default is \emph{\code{5}}. Number of nearest neighbors for constructing the cell-cell
+similarity network.}
 
-\item{do_scale}{Logical value, default is \emph{\code{TRUE}}, whether to scale gene expression matrix
-when computing PCA.}
+\item{do_scale}{Default is \emph{\code{TRUE}}. Whether to standardize (center and scale) gene expression
+values before PCA.}
 
-\item{pc_num}{Number of principal components to use for construction of single-cell kNN network,
-default is \emph{\code{25}}.}
+\item{pc_num}{Default is \emph{\code{25}}. Number of principal components to retain for downstream analysis.}
 
-\item{fast_pca}{Logical value, default is \emph{\code{TRUE}}, use \link[irlba]{irlba} as a faster version
-of prcomp.}
+\item{fast_pca}{Default is \emph{\code{TRUE}}. Whether to use the faster \link[irlba]{irlba} algorithm
+instead of standard PCA. Recommended for large datasets.}
 
-\item{do_approx}{Logical value, default is \emph{\code{FALSE}}, compute approximate kNN in case of a large
-dataset (>50'000).}
+\item{do_approx}{Default is \emph{\code{FALSE}}. Whether to use approximate nearest neighbor search for
+datasets with >50000 cells to improve computational efficiency.}
 
-\item{approx_num}{Number of cells to subsample for an approximate approach, default is \emph{\code{20000}}.}
+\item{approx_num}{Default is \emph{\code{20000}}. Number of cells to randomly sample for approximate
+nearest neighbor computation when \emph{\code{do_approx = TRUE}}.}
 
-\item{directed}{Logical value, default is \emph{\code{FALSE}}, whether to use directed graph.}
+\item{directed}{Default is \emph{\code{FALSE}}. Whether to construct a directed or undirected nearest
+neighbor graph.}
 
-\item{use_nn2}{Logical value, default is \emph{\code{TRUE}}, whether to use nn2 function.}
+\item{use_nn2}{Default is \emph{\code{TRUE}}. Whether to use the faster RANN::nn2 algorithm for nearest
+neighbor search (only applicable with Euclidean distance).}
 
-\item{seed}{Seed to use to subsample cells for an approximate approach, default is \emph{\code{1}}.}
+\item{seed}{Default is \emph{\code{1}}. Random seed for reproducibility when subsampling cells in
+approximate mode.}
 
-\item{cluster_method}{Clustering method to identify metacells, default is \emph{\code{walktrap}}.
-Available methods are \emph{\code{walktrap}} and \emph{\code{louvain}} (not recommended, gamma is ignored).}
+\item{cluster_method}{Default is \emph{\code{walktrap}}. Algorithm for community detection in the cell
+similarity network. Options: \emph{\code{walktrap}} (recommended) or \emph{\code{louvain}} (gamma parameter ignored).}
 
-\item{block_size}{Number of cells to map to the nearest metacell at a time (for approx
-coarse-graining), default is \emph{\code{10000}}.}
+\item{block_size}{Default is \emph{\code{10000}}. Number of cells to process in each batch when mapping
+cells to metacells in approximate mode. Adjust based on available memory.}
 
-\item{weights}{Vector of cell weights (NULL by default),
-used for computing average gene expression within cluster of metacells.}
+\item{weights}{Default is \emph{\code{NULL}}. Numeric vector of cell-specific weights for weighted
+averaging when computing metacell expression profiles. Length must match number of cells.}
 
-\item{do_median_norm}{Logical value, default is \emph{\code{FALSE}},
-whether to normalize by median value.}
+\item{do_median_norm}{Default is \emph{\code{FALSE}}. Whether to perform median-based normalization of
+the final metacell expression matrix.}
 
-\item{...}{Additional parameters passed to other methods.}
+\item{...}{Additional arguments passed to internal functions.}
 }
 \value{
-A metacell matrix where rows represent metacells and columns represent genes.
+A matrix where rows represent metacells and columns represent genes.
 }
 \description{
 This function detects metacells from a single-cell gene expression matrix
@@ -85,8 +91,7 @@ using dimensionality reduction and clustering techniques.
 \examples{
 data("example_matrix")
 meta_cells_matrix <- meta_cells(
-  example_matrix,
-  fast_pca = FALSE
+  example_matrix
 )
 dim(meta_cells_matrix)
 meta_cells_matrix[1:6, 1:6]

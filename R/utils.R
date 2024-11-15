@@ -165,7 +165,7 @@ parallelize_fun <- function(
 
   match.arg(
     subsampling_method,
-    c("sample", "meta_cells")
+    c("sample", "meta_cells", "pseudobulk")
   )
 
   if (!(is.numeric(subsampling_ratio) && subsampling_ratio > 0 && subsampling_ratio <= 1)) {
@@ -429,11 +429,10 @@ sparse_cor <- function(
 
   if (is.null(y)) {
     colnames(corr_mat) <- colnames(x)
-    rownames(corr_mat) <- colnames(x)
   } else {
     colnames(corr_mat) <- colnames(y)
-    rownames(corr_mat) <- colnames(x)
   }
+  rownames(corr_mat) <- colnames(x)
 
   if (remove_na) {
     corr_mat[is.na(corr_mat)] <- 0

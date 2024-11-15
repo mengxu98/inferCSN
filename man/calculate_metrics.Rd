@@ -2,7 +2,7 @@
 % Please edit documentation in R/network_evaluation.R
 \name{calculate_metrics}
 \alias{calculate_metrics}
-\title{Calculate metrics}
+\title{Calculate Network Prediction Performance Metrics}
 \usage{
 calculate_metrics(
   network_table,
@@ -14,27 +14,57 @@ calculate_metrics(
 )
 }
 \arguments{
-\item{network_table}{The weight data table of network}
+\item{network_table}{A data frame of predicted network structure containing:
+\itemize{
+\item \code{regulator} - Source nodes of the network edges
+\item \code{target} - Target nodes of the network edges
+\item \code{weight} - Edge weights representing prediction confidence
+}}
 
-\item{ground_truth}{Ground truth for calculate AUC}
+\item{ground_truth}{A data frame of ground truth network with the same format as \emph{\code{network_table}}.}
 
-\item{type}{The type of metrics to calculate}
+\item{type}{The type of metric to return, default is \emph{\code{all}}.
+This can take any of the following choices:
+\itemize{
+\item \emph{\code{all}} - Returns all available metrics
+\item \emph{\code{auroc}} - Area Under ROC Curve, evaluating overall classification ability
+\item \emph{\code{auprc}} - Area Under Precision-Recall Curve, focusing on positive class prediction
+\item \emph{\code{precision}} - Proportion of correct predictions among positive predictions
+\item \emph{\code{recall}} - Proportion of actual positives correctly identified
+\item \emph{\code{f1}} - Harmonic mean of precision and recall
+\item \emph{\code{si}} - Set Intersection, counting correctly predicted edges
+\item \emph{\code{ji}} - Jaccard Index, measuring overlap between predicted and true networks
+}}
 
-\item{plot}{If true, draw and print figure of AUC}
+\item{plot}{Logical value, default is \emph{\code{FALSE}}, whether to generate visualization plots.
+If \emph{\code{TRUE}}, generates:
+\itemize{
+\item ROC curve plot for AUROC evaluation
+\item Precision-Recall curve plot for AUPRC evaluation
+\item Confusion matrix heatmap for classification results
+\item Network comparison plot showing edge overlap
+\item Metrics summary bar plot
+}}
 
-\item{line_color}{The color of line in the figure}
+\item{line_color}{The color for plot lines, default is \emph{\verb{#1563cc}}.}
 
-\item{line_width}{The width of line in the figure}
+\item{line_width}{The width for plot lines, default is \emph{\code{1}}.}
 }
 \value{
-AUC values and figure
+\itemize{
+\item If type="all": A data frame with all metrics
+\item If specific type: A single numeric value with the requested metric
+\item If plot=TRUE: Displays relevant visualization plots
+}
 }
 \description{
-Calculate metrics
+Calculates comprehensive performance metrics for evaluating predicted network structures,
+including classification performance, precision-recall metrics, and network topology metrics.
 }
 \examples{
 data("example_matrix")
 data("example_ground_truth")
 inferCSN(example_matrix) |>
   calculate_metrics(example_ground_truth, plot = TRUE)
+
 }
