@@ -46,7 +46,7 @@ The maximum support size at which to terminate the regularization path.}
 
 \item{r_threshold}{Threshold of \eqn{R^2} or correlation coefficient, default is \emph{\code{0}}.}
 
-\item{computation_method}{The method used to compute `r``.}
+\item{computation_method}{The method used to compute \code{r} value.}
 
 \item{verbose}{Logical value, default is \emph{\code{TRUE}}, whether to print progress messages.}
 

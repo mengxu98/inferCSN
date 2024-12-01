@@ -54,7 +54,7 @@ single_network <- function(
   x <- matrix[, regulators]
   y <- matrix[, target]
 
-  coefficients <- sparse_regression(
+  result <- sparse_regression(
     x, y,
     cross_validation = cross_validation,
     seed = seed,
@@ -66,9 +66,11 @@ single_network <- function(
     r_threshold = r_threshold,
     verbose = verbose,
     ...
-  ) |> normalization(
-    method = "sum", ...
   )
+
+  coefficients <- result$coefficients$coefficient |>
+    normalization(method = "sum", ...)
+
   if (length(coefficients) != ncol(x)) {
     coefficients <- rep(0, ncol(x))
   }
@@ -88,7 +90,7 @@ single_network <- function(
 #' @inheritParams single_network
 #' @param x The matrix of regulators.
 #' @param y The vector of target.
-#' @param computation_method The method used to compute `r``.
+#' @param computation_method The method used to compute `r` value.
 #'
 #' @md
 #'
@@ -131,7 +133,7 @@ sparse_regression <- function(
     if (any(class(fit) == "try-error")) {
       log_message(
         "cross validation error,
-          setting `cross_validation` to `FALSE` and re-train model.",
+      setting `cross_validation` to `FALSE` and re-train model.",
         message_type = "warning",
         verbose = verbose
       )
@@ -147,7 +149,13 @@ sparse_regression <- function(
         )
       )
       if (any(class(fit) == "try-error")) {
-        return(rep(0, ncol(x)))
+        return(list(
+          metrics = list(rsq = 0),
+          coefficients = list(
+            variable = colnames(x),
+            coefficient = rep(0, ncol(x))
+          )
+        ))
       }
       fit_inf <- print(fit)
       lambda <- fit_inf$lambda[which.max(fit_inf$suppSize)]
@@ -180,7 +188,13 @@ sparse_regression <- function(
       )
     )
     if (any(class(fit) == "try-error")) {
-      return(rep(0, ncol(x)))
+      return(list(
+        metrics = list(rsq = 0),
+        coefficients = list(
+          variable = colnames(x),
+          coefficient = rep(0, ncol(x))
+        )
+      ))
     }
     fit_inf <- print(fit)
     lambda <- fit_inf$lambda[which.max(fit_inf$suppSize)]
@@ -208,22 +222,34 @@ sparse_regression <- function(
       r <- 0
     }
   } else {
-    return(rep(0, ncol(x)))
+    return(list(
+      metrics = list(rsq = 0),
+      coefficients = list(
+        variable = colnames(x),
+        coefficient = rep(0, ncol(x))
+      )
+    ))
   }
 
   if (r >= r_threshold) {
-    return(
-      as.vector(
-        coef(
-          fit,
-          lambda = lambda,
-          gamma = gamma
-        )
-      )[-1]
-    )
+    coefficients <- as.vector(
+      coef(
+        fit,
+        lambda = lambda,
+        gamma = gamma
+      )
+    )[-1]
   } else {
-    return(rep(0, ncol(x)))
+    coefficients <- rep(0, ncol(x))
   }
+
+  return(list(
+    metrics = list(rsq = r),
+    coefficients = list(
+      variable = colnames(x),
+      coefficient = coefficients
+    )
+  ))
 }
 
 #' @title Fit a sparse regression model
@@ -311,7 +337,6 @@ fit_sparse_regression <- function(
     highs = Inf,
     verbose = TRUE,
     ...) {
-  # Check parameter values
   if ((rtol < 0) || (rtol >= 1)) {
     stop("The specified rtol parameter must exist in [0, 1).")
   }
@@ -335,7 +360,7 @@ fit_sparse_regression <- function(
       if ((length(lambdaGrid) != 0) && (length(lambdaGrid) != 1)) {
         stop(
           "L0 Penalty requires 'lambdaGrid' to be a list of length 1.
-          Where lambdaGrid[[1]] is a list or vector of decreasing positive values."
+      Where lambdaGrid[[1]] is a list or vector of decreasing positive values."
         )
       }
       penalty <- "L0L2"
@@ -378,7 +403,7 @@ fit_sparse_regression <- function(
     }
     if (bad_lambda_grid) {
       stop("L0 Penalty requires 'lambdaGrid' to be a list of length 1.
-           Where 'lambdaGrid[[1]]' is a list or vector of decreasing positive values.")
+       Where 'lambdaGrid[[1]]' is a list or vector of decreasing positive values.")
     }
   }
 
@@ -410,7 +435,7 @@ fit_sparse_regression <- function(
     }
     if (bad_lambda_grid) {
       stop("L0L2 Penalty requires 'lambdaGrid' to be a list of length 'nGamma'.
-           Where 'lambdaGrid[[i]]' is a list or vector of decreasing positive values.")
+       Where 'lambdaGrid[[i]]' is a list or vector of decreasing positive values.")
     }
   }
 
@@ -497,7 +522,7 @@ fit_sparse_regression <- function(
       if (last == 1) {
         log_message(
           "only 1 element in path with support size > regulators_num.
-                Try increasing 'regulators_num' to resolve the issue.",
+            Try increasing 'regulators_num' to resolve the issue.",
           message_type = "warning",
           verbose = verbose
         )

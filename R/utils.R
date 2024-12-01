@@ -83,21 +83,21 @@ parallelize_fun <- function(
     verbose = TRUE) {
   if (cores == 1) {
     log_message(
-      "Using 1 core.",
+      "Using 1 core",
       verbose = verbose
     )
     if (verbose) {
-      return(pbapply::pblapply(X = x, FUN = fun))
+      output_list <- pbapply::pblapply(X = x, FUN = fun)
     }
     if (!verbose) {
-      return(base::lapply(X = x, FUN = fun))
+      output_list <- base::lapply(X = x, FUN = fun)
     }
   }
 
   if (cores > 1) {
     doParallel::registerDoParallel(cores = cores)
     log_message(
-      "Using ", foreach::getDoParWorkers(), " cores.",
+      "Using ", foreach::getDoParWorkers(), " cores",
       verbose = verbose
     )
 
@@ -108,12 +108,11 @@ parallelize_fun <- function(
     ) %dopar% {
       fun(x[[i]])
     }
-    names(output_list) <- names(x)
-
     doParallel::stopImplicitCluster()
-
-    return(output_list)
   }
+  names(output_list) <- x
+
+  return(output_list)
 }
 
 .check_parameters <- function(
