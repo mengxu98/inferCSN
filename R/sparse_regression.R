@@ -69,7 +69,7 @@ single_network <- function(
   )
 
   coefficients <- result$coefficients$coefficient |>
-    normalization(method = "sum", ...)
+    normalization(method = "unit_vector", ...)
 
   if (length(coefficients) != ncol(x)) {
     coefficients <- rep(0, ncol(x))
