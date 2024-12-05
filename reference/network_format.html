@@ -107,23 +107,23 @@ the output of weight table will create a new column named <code>Interaction</cod
 <span class="r-in"><span>  regulators <span class="op">=</span> <span class="st">"g1"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    regulator target      weight Interaction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1         g1     g2 0.338137767  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2         g1    g18 0.290239415  Repression</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3         g1    g17 0.029059626  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4         g1     g5 0.022905010  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5         g1     g9 0.022804262  Repression</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6         g1     g4 0.019752793  Repression</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7         g1     g6 0.015979959  Repression</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8         g1     g7 0.012455804  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9         g1    g16 0.011136553  Repression</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10        g1    g15 0.009534899  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11        g1     g3 0.009268191  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12        g1    g14 0.008791775  Repression</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13        g1    g12 0.006908786  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14        g1    g10 0.005505657  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15        g1    g11 0.005331591  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16        g1     g8 0.004970697  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17        g1    g13 0.001101969  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         g1     g2 0.668444900  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         g1    g18 0.467602224  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         g1    g17 0.047607627  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         g1     g5 0.044895033  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5         g1     g9 0.042442058  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6         g1     g4 0.036589574  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7         g1     g6 0.030280993  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8         g1     g7 0.024014462  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9         g1    g16 0.018303456  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10        g1     g3 0.018087949  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11        g1    g15 0.015156339  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12        g1    g14 0.013970876  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13        g1    g12 0.011942835  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14        g1    g10 0.009393328  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15        g1     g8 0.009042402  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16        g1    g11 0.009009966  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17        g1    g13 0.001787438  Repression</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">network_format</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
@@ -131,56 +131,56 @@ the output of weight table will create a new column named <code>Interaction</cod
 <span class="r-in"><span>  abs_weight <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    regulator target       weight</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1         g1     g2  0.338137767</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2         g1    g18 -0.290239415</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3         g1    g17  0.029059626</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4         g1     g5  0.022905010</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5         g1     g9 -0.022804262</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6         g1     g4 -0.019752793</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7         g1     g6 -0.015979959</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8         g1     g7  0.012455804</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9         g1    g16 -0.011136553</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10        g1    g15  0.009534899</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11        g1     g3  0.009268191</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12        g1    g14 -0.008791775</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13        g1    g12  0.006908786</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14        g1    g10  0.005505657</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15        g1    g11  0.005331591</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16        g1     g8  0.004970697</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17        g1    g13 -0.001101969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         g1     g2  0.668444900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         g1    g18 -0.467602224</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         g1    g17  0.047607627</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         g1     g5  0.044895033</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5         g1     g9 -0.042442058</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6         g1     g4 -0.036589574</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7         g1     g6 -0.030280993</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8         g1     g7  0.024014462</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9         g1    g16 -0.018303456</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10        g1     g3  0.018087949</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11        g1    g15  0.015156339</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12        g1    g14 -0.013970876</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13        g1    g12  0.011942835</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14        g1    g10  0.009393328</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15        g1     g8  0.009042402</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16        g1    g11  0.009009966</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17        g1    g13 -0.001787438</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">network_format</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
 <span class="r-in"><span>  targets <span class="op">=</span> <span class="st">"g3"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    regulator target       weight Interaction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1         g4     g3 0.4151977047  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2         g2     g3 0.2814299337  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3         g5     g3 0.0788459511  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        g12     g3 0.0286531102  Repression</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        g18     g3 0.0286111327  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6        g17     g3 0.0268390173  Repression</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7        g14     g3 0.0258817747  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8         g7     g3 0.0216999516  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9        g15     g3 0.0184939819  Repression</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10       g10     g3 0.0160668278  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11       g16     g3 0.0138763419  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12       g13     g3 0.0131577355  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13       g11     g3 0.0117980066  Repression</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14        g1     g3 0.0092681907  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15        g8     g3 0.0050327240  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16        g9     g3 0.0048879492  Repression</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17        g6     g3 0.0002596662  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         g4     g3 0.8103064829  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         g2     g3 0.5492431610  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         g5     g3 0.1538770195  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        g12     g3 0.0559198683  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        g18     g3 0.0558379444  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        g17     g3 0.0523794555  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7        g14     g3 0.0505112856  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8         g7     g3 0.0423499727  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9        g15     g3 0.0360931509  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10       g10     g3 0.0313562783  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11       g16     g3 0.0270812908  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12       g13     g3 0.0256788471  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13       g11     g3 0.0230251785  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14        g1     g3 0.0180879493  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15        g8     g3 0.0098219446  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16        g9     g3 0.0095393999  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17        g6     g3 0.0005067688  Repression</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">network_format</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
 <span class="r-in"><span>  regulators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span>, <span class="st">"g3"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g3"</span>, <span class="st">"g5"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   regulator target      weight Interaction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        g3     g5 0.062181513  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        g1     g5 0.022905010  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        g1     g3 0.009268191  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   regulator target     weight Interaction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        g3     g5 0.12187906  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        g1     g5 0.04489503  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        g1     g3 0.01808795  Activation</span>
 </code></pre></div>
     </div>
   </div>

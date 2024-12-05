@@ -223,12 +223,12 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">network_table_1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   regulator target     weight</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       g17    g18  0.5443805</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       g18     g1 -0.5390453</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       g16    g15  0.4818454</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4       g17    g16  0.4599054</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5       g15    g14  0.4516497</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6       g14    g13  0.4483912</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       g18     g1 -0.9223177</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       g17    g18  0.8770468</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        g4     g3  0.8103065</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       g16    g15  0.7659245</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       g17    g16  0.7558764</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       g12    g11  0.7444053</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table_1</span>,</span></span>
@@ -249,10 +249,10 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using 1 core</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Run done.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   regulator target     weight</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        g2     g3  0.8504059</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        g2     g4  0.7058242</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        g1     g4 -0.2941758</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        g1     g3 -0.1495941</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        g2     g3  0.9848781</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        g2     g4  0.9230387</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        g1     g4 -0.3847071</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        g1     g3 -0.1732490</span>
 <span class="r-in"><span><span class="fu">inferCSN</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">example_matrix</span>,</span></span>
 <span class="r-in"><span>  regulators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span>, <span class="st">"g2"</span><span class="op">)</span>,</span></span>
@@ -266,8 +266,8 @@ Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Using 1 core</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Run done.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   regulator target     weight</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        g2     g3  0.8504059</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        g1     g3 -0.1495941</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        g2     g3  0.9848781</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        g1     g3 -0.1732490</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="va">network_table_07</span> <span class="op">&lt;-</span> <span class="fu">inferCSN</span><span class="op">(</span></span></span>
