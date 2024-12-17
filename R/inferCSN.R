@@ -150,11 +150,11 @@ setMethod(
 
     regulators <- intersect(
       colnames(object),
-      regulators %s% colnames(object)
+      regulators %ss% colnames(object)
     )
     targets <- intersect(
       colnames(object),
-      targets %s% colnames(object)
+      targets %ss% colnames(object)
     )
 
     names(targets) <- targets
@@ -282,11 +282,11 @@ setMethod(
 
     regulators <- intersect(
       colnames(object),
-      regulators %s% colnames(object)
+      regulators %ss% colnames(object)
     )
     targets <- intersect(
       colnames(object),
-      targets %s% colnames(object)
+      targets %ss% colnames(object)
     )
 
     names(targets) <- targets

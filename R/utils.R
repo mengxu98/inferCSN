@@ -54,9 +54,9 @@ log_message <- function(
 #' @export
 #'
 #' @examples
-#' NULL %s% 10
-#' 5 %s% 10
-`%s%` <- function(a, b) {
+#' NULL %ss% 10
+#' 5 %ss% 10
+`%ss%` <- function(a, b) {
   if (is.null(a)) {
     return(b)
   } else {
