@@ -16,7 +16,7 @@ subsampling(
 \arguments{
 \item{matrix}{The input matrix to be subsampled.}
 
-\item{subsampling_method}{The method to use for subsampling. Options are "sample" or "meta_cells".}
+\item{subsampling_method}{The method to use for subsampling. Options are "sample", "pseudobulk" or "meta_cells".}
 
 \item{subsampling_ratio}{The percent of all samples used for \code{\link{sparse_regression}}, default is \emph{\code{1}}.}
 
