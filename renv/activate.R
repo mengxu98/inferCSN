@@ -353,7 +353,7 @@ local({
       ".zip"
     else
       ".tgz"
-    name <- sprintf("renv_%ss%s", version, ext)
+    name <- sprintf("renv_%s%s", version, ext)
     url <- paste(baseurl, name, sep = "/")
   
     destfile <- file.path(tempdir(), name)
