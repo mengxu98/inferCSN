@@ -4,7 +4,12 @@
 \alias{log_message}
 \title{Print diagnostic message}
 \usage{
-log_message(..., verbose = TRUE, message_type = "info", cli_model = TRUE)
+log_message(
+  ...,
+  verbose = TRUE,
+  message_type = c("info", "success", "warning", "error"),
+  cli_model = TRUE
+)
 }
 \arguments{
 \item{...}{Text to print.}
@@ -13,19 +18,20 @@ log_message(..., verbose = TRUE, message_type = "info", cli_model = TRUE)
 Whether to print the message.}
 
 \item{message_type}{Type of message, default is \emph{\code{info}}.
-Could be choose one of \emph{\code{info}}, \emph{\code{warning}}, and \emph{\code{error}}.}
+Could be choose one of \emph{\code{info}}, \emph{\code{success}}, \emph{\code{warning}}, and \emph{\code{error}}.}
 
 \item{cli_model}{Logical value, default is \emph{\code{TRUE}}.
-Whether to use the \code{cli} package to print the message.
-Add because the message is printed by \code{\link[base]{message}},
-the message could be suppressed by \code{\link[base]{suppressMessages}}.}
+Whether to use the \code{cli} package to print the message.}
 }
 \description{
-Print diagnostic message
+Integrate the message printing function with the \code{cli} package,
+and the \code{\link[base]{message}} function.
+The message could be suppressed by \code{\link[base]{suppressMessages}}.
 }
 \examples{
 log_message("Hello, ", "world!")
+log_message("Hello, ", "world!", message_type = "success")
+log_message("Hello, world!", message_type = "warning")
 suppressMessages(log_message("Hello, ", "world!"))
 log_message("Hello, world!", verbose = FALSE)
-log_message("Hello, world!", verbose = TRUE, message_type = "warning")
 }

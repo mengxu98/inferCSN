@@ -1,45 +1,60 @@
 #' @title Print diagnostic message
 #'
+#' @description
+#' Integrate the message printing function with the `cli` package,
+#' and the \code{\link[base]{message}} function.
+#' The message could be suppressed by \code{\link[base]{suppressMessages}}.
+#'
+#' @md
 #' @param ... Text to print.
 #' @param verbose Logical value, default is *`TRUE`*.
 #' Whether to print the message.
 #' @param message_type Type of message, default is *`info`*.
-#' Could be choose one of *`info`*, *`warning`*, and *`error`*.
+#' Could be choose one of *`info`*, *`success`*, *`warning`*, and *`error`*.
 #' @param cli_model Logical value, default is *`TRUE`*.
 #' Whether to use the `cli` package to print the message.
-#' Add because the message is printed by \code{\link[base]{message}},
-#' the message could be suppressed by \code{\link[base]{suppressMessages}}.
 #'
-#' @md
 #' @export
 #' @examples
 #' log_message("Hello, ", "world!")
+#' log_message("Hello, ", "world!", message_type = "success")
+#' log_message("Hello, world!", message_type = "warning")
 #' suppressMessages(log_message("Hello, ", "world!"))
 #' log_message("Hello, world!", verbose = FALSE)
-#' log_message("Hello, world!", verbose = TRUE, message_type = "warning")
 log_message <- function(
     ...,
     verbose = TRUE,
-    message_type = "info",
+    message_type = c("info", "success", "warning", "error"),
     cli_model = TRUE) {
+  message_type <- match.arg(message_type)
+  msg <- paste0(...)
+
   if (message_type == "error") {
-    stop(...)
+    stop(msg, call. = FALSE)
   }
-  if (verbose) {
-    if (cli_model) {
-      switch(
-        EXPR = message_type,
-        "info" = cli::cli_alert_success(paste0(...)),
-        "warning" = cli::cli_alert_warning(paste0("Warning: ", ...))
-      )
-    } else {
-      switch(
-        EXPR = message_type,
-        "info" = message(paste0(...)),
-        "warning" = message(paste0("Warning: ", ...))
-      )
-    }
+
+  if (!verbose) {
+    return(invisible(NULL))
   }
+
+  if (cli_model) {
+    switch(
+      EXPR = message_type,
+      "info" = cli::cli_alert_info(msg),
+      "success" = cli::cli_alert_success(msg),
+      "warning" = cli::cli_alert_warning(msg)
+    )
+  } else {
+    prefix <- switch(
+      EXPR = message_type,
+      "info" = "",
+      "success" = "",
+      "warning" = "WARNING: "
+    )
+    message(prefix, msg)
+  }
+
+  invisible(NULL)
 }
 
 #' @title Value selection operator
