@@ -61,7 +61,11 @@ DataFrame network_format(DataFrame network_table,
   CharacterVector target = network_table["target"];
   NumericVector weight = network_table["weight"];
 
-  // filter rows with weight not equal to 0
+  LogicalVector not_na = !is_na(weight);
+  regulator = regulator[not_na];
+  target = target[not_na];
+  weight = weight[not_na];
+
   LogicalVector non_zero = weight != 0;
   regulator = regulator[non_zero];
   target = target[non_zero];
