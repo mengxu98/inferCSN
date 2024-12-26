@@ -184,7 +184,11 @@ setMethod(
       purrr::list_rbind() |>
       network_format(abs_weight = FALSE)
 
-    log_message("Run done.", verbose = verbose)
+    log_message(
+      "Run done.",
+      message_type = "success",
+      verbose = verbose
+    )
 
     return(network_table)
   }
@@ -316,7 +320,11 @@ setMethod(
       purrr::list_rbind() |>
       network_format(abs_weight = FALSE)
 
-    log_message("Run done.", verbose = verbose)
+    log_message(
+      "Run done.",
+      message_type = "success",
+      verbose = verbose
+    )
 
     return(network_table)
   }

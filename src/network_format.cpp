@@ -4,7 +4,7 @@
 
 using namespace Rcpp;
 
-// AbsGreater结构体实现
+// AbsGreater struct implementation
 AbsGreater::AbsGreater(const NumericVector &w) : weight(w) {}
 
 bool AbsGreater::operator()(int i, int j) const

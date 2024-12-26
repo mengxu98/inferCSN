@@ -179,6 +179,7 @@ network_sift <- function(
     if (shuffles != 0) {
       log_message(
         "Parameter: 'effective_entropy == FALSE' and 'shuffles != 0', setting 'shuffles == 0'.",
+        message_type = "warning",
         verbose = verbose
       )
       shuffles <- 0
@@ -187,6 +188,7 @@ network_sift <- function(
     if (shuffles <= 10) {
       log_message(
         "Parameter: 'shuffles' is too small, setting 'shuffles == 10'.",
+        message_type = "warning",
         verbose = verbose
       )
       shuffles <- 10
