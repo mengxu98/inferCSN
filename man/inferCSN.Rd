@@ -11,7 +11,6 @@
 inferCSN(
   object,
   penalty = "L0",
-  algorithm = "CD",
   cross_validation = FALSE,
   seed = 1,
   n_folds = 10,
@@ -28,7 +27,6 @@ inferCSN(
 \S4method{inferCSN}{matrix}(
   object,
   penalty = "L0",
-  algorithm = "CD",
   cross_validation = FALSE,
   seed = 1,
   n_folds = 10,
@@ -45,7 +43,6 @@ inferCSN(
 \S4method{inferCSN}{sparseMatrix}(
   object,
   penalty = "L0",
-  algorithm = "CD",
   cross_validation = FALSE,
   seed = 1,
   n_folds = 10,
@@ -62,7 +59,6 @@ inferCSN(
 \S4method{inferCSN}{data.frame}(
   object,
   penalty = "L0",
-  algorithm = "CD",
   cross_validation = FALSE,
   seed = 1,
   n_folds = 10,
@@ -82,10 +78,6 @@ inferCSN(
 \item{penalty}{The type of regularization, default is \emph{\code{L0}}.
 This can take either one of the following choices: \emph{\code{L0}}, \emph{\code{L0L1}}, and \emph{\code{L0L2}}.
 For high-dimensional and sparse data, \emph{\code{L0L2}} is more effective.}
-
-\item{algorithm}{The type of algorithm used to minimize the objective function, default is \emph{\code{CD}}.
-Currently \emph{\code{CD}} and \emph{\code{CDPSI}} are supported.
-The \emph{\code{CDPSI}} algorithm may yield better results, but it also increases running time.}
 
 \item{cross_validation}{Logical value, default is \emph{\code{FALSE}}, whether to use cross-validation.}
 
@@ -118,7 +110,6 @@ A data table of regulator-target regulatory relationships
 }
 \examples{
 data("example_matrix")
-data("example_ground_truth")
 network_table_1 <- inferCSN(
   example_matrix
 )
@@ -147,6 +138,7 @@ inferCSN(
 )
 
 \dontrun{
+data("example_ground_truth")
 network_table_07 <- inferCSN(
   example_matrix,
   r_threshold = 0.7

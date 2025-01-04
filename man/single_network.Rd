@@ -11,7 +11,6 @@ single_network(
   cross_validation = FALSE,
   seed = 1,
   penalty = "L0",
-  algorithm = "CD",
   regulators_num = (ncol(matrix) - 1),
   n_folds = 10,
   subsampling_ratio = 1,
@@ -34,10 +33,6 @@ single_network(
 \item{penalty}{The type of regularization, default is \emph{\code{L0}}.
 This can take either one of the following choices: \emph{\code{L0}}, \emph{\code{L0L1}}, and \emph{\code{L0L2}}.
 For high-dimensional and sparse data, \emph{\code{L0L2}} is more effective.}
-
-\item{algorithm}{The type of algorithm used to minimize the objective function, default is \emph{\code{CD}}.
-Currently \emph{\code{CD}} and \emph{\code{CDPSI}} are supported.
-The \emph{\code{CDPSI}} algorithm may yield better results, but it also increases running time.}
 
 \item{regulators_num}{The number of non-zore coefficients, this value will affect the final performance.
 The maximum support size at which to terminate the regularization path.}

@@ -133,7 +133,6 @@ parallelize_fun <- function(
 .check_parameters <- function(
     matrix,
     penalty,
-    algorithm,
     cross_validation,
     seed,
     n_folds,
@@ -166,7 +165,6 @@ parallelize_fun <- function(
   }
 
   match.arg(penalty, c("L0", "L0L1", "L0L2"))
-  match.arg(algorithm, c("CD", "CDPSI"))
 
   if (!is.numeric(seed)) {
     seed <- 1

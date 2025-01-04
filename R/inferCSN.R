@@ -2,13 +2,11 @@
 #'
 #' @useDynLib inferCSN
 #'
+#' @md
 #' @param object The input data for *`inferCSN`*.
 #' @param penalty The type of regularization, default is *`L0`*.
 #' This can take either one of the following choices: *`L0`*, *`L0L1`*, and *`L0L2`*.
 #' For high-dimensional and sparse data, *`L0L2`* is more effective.
-#' @param algorithm The type of algorithm used to minimize the objective function, default is *`CD`*.
-#' Currently *`CD`* and *`CDPSI`* are supported.
-#' The *`CDPSI`* algorithm may yield better results, but it also increases running time.
 #' @param cross_validation Logical value, default is *`FALSE`*, whether to use cross-validation.
 #' @param n_folds The number of folds for cross-validation, default is *`10`*.
 #' @param seed The random seed for cross-validation, default is *`1`*.
@@ -22,7 +20,6 @@
 #' @param verbose Logical value, default is *`TRUE`*, whether to print progress messages.
 #' @param ... Parameters for other methods.
 #'
-#' @md
 #' @docType methods
 #' @rdname inferCSN
 #' @return A data table of regulator-target regulatory relationships
@@ -32,7 +29,6 @@ setGeneric(
   signature = c("object"),
   def = function(object,
                  penalty = "L0",
-                 algorithm = "CD",
                  cross_validation = FALSE,
                  seed = 1,
                  n_folds = 10,
@@ -56,7 +52,6 @@ setGeneric(
 #'
 #' @examples
 #' data("example_matrix")
-#' data("example_ground_truth")
 #' network_table_1 <- inferCSN(
 #'   example_matrix
 #' )
@@ -85,6 +80,7 @@ setGeneric(
 #' )
 #'
 #' \dontrun{
+#' data("example_ground_truth")
 #' network_table_07 <- inferCSN(
 #'   example_matrix,
 #'   r_threshold = 0.7
@@ -105,7 +101,6 @@ setMethod(
   signature = signature(object = "matrix"),
   definition = function(object,
                         penalty = "L0",
-                        algorithm = "CD",
                         cross_validation = FALSE,
                         seed = 1,
                         n_folds = 10,
@@ -125,7 +120,6 @@ setMethod(
     .check_parameters(
       matrix = object,
       penalty = penalty,
-      algorithm = algorithm,
       cross_validation = cross_validation,
       seed = seed,
       n_folds = n_folds,
@@ -170,7 +164,6 @@ setMethod(
           cross_validation = cross_validation,
           seed = seed,
           penalty = penalty,
-          algorithm = algorithm,
           n_folds = n_folds,
           subsampling_ratio = subsampling_ratio,
           r_threshold = r_threshold,
@@ -241,7 +234,6 @@ setMethod(
   signature = signature(object = "sparseMatrix"),
   definition = function(object,
                         penalty = "L0",
-                        algorithm = "CD",
                         cross_validation = FALSE,
                         seed = 1,
                         n_folds = 10,
@@ -261,7 +253,6 @@ setMethod(
     .check_parameters(
       matrix = object,
       penalty = penalty,
-      algorithm = algorithm,
       cross_validation = cross_validation,
       seed = seed,
       n_folds = n_folds,
@@ -306,7 +297,6 @@ setMethod(
           cross_validation = cross_validation,
           seed = seed,
           penalty = penalty,
-          algorithm = algorithm,
           n_folds = n_folds,
           subsampling_ratio = subsampling_ratio,
           r_threshold = r_threshold,
@@ -337,7 +327,6 @@ setMethod(
   signature = signature(object = "data.frame"),
   definition = function(object,
                         penalty = "L0",
-                        algorithm = "CD",
                         cross_validation = FALSE,
                         seed = 1,
                         n_folds = 10,
@@ -358,7 +347,6 @@ setMethod(
     inferCSN(
       object = as_matrix(object),
       penalty = penalty,
-      algorithm = algorithm,
       cross_validation = cross_validation,
       seed = seed,
       n_folds = n_folds,

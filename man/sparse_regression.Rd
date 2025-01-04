@@ -10,7 +10,7 @@ sparse_regression(
   cross_validation = FALSE,
   seed = 1,
   penalty = "L0",
-  algorithm = "CD",
+  algorithm = c("CD", "CDPSI"),
   regulators_num = ncol(x),
   n_folds = 10,
   subsampling_ratio = 1,
