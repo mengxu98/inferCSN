@@ -592,7 +592,7 @@ check_sparsity <- function(x) {
 #' @title Extracts a specific solution in the regularization path
 #'
 #' @inheritParams single_network
-#' @param object The output of \code{\link{fit_sparse_regression}}.
+#' @param object The output of \code{\link{sparse_regression}}.
 #' @param lambda The value of lambda at which to extract the solution.
 #' @param gamma The value of gamma at which to extract the solution.
 #' @param ... Other parameters
@@ -675,15 +675,15 @@ coef.srm_cv <- function(
   )
 }
 
-#' @title Prints a summary of `fit_sparse_regression`
+#' @title Prints a summary of `sparse_regression`
 #'
-#' @param x The output of \code{\link{fit_sparse_regression}}.
+#' @param x The output of \code{\link{sparse_regression}}.
 #' @param ... Other parameters
 #'
 #' @method print srm
 #'
 #' @md
-#' @return Return information of `fit_sparse_regression`
+#' @return Return information of `sparse_regression`
 #' @export
 print.srm <- function(x, ...) {
   gammas <- rep(x$gamma, times = lapply(x$lambda, length))
@@ -708,7 +708,7 @@ print.srm_cv <- function(x, ...) {
 
 #' @title Predicts response for a given sample
 #'
-#' @param object The output of fit_sparse_regression.
+#' @param object The output of sparse_regression.
 #' @param newx A matrix on which predictions are made. The matrix should have p columns
 #' @param lambda The value of lambda to use for prediction.
 #' A summary of the lambdas in the regularization path can be obtained using \code{\link{print.srm}}.

@@ -3,20 +3,20 @@
 \name{print.srm}
 \alias{print.srm}
 \alias{print.srm_cv}
-\title{Prints a summary of \code{fit_sparse_regression}}
+\title{Prints a summary of \code{sparse_regression}}
 \usage{
 \method{print}{srm}(x, ...)
 
 \method{print}{srm_cv}(x, ...)
 }
 \arguments{
-\item{x}{The output of \code{\link{fit_sparse_regression}}.}
+\item{x}{The output of \code{\link{sparse_regression}}.}
 
 \item{...}{Other parameters}
 }
 \value{
-Return information of \code{fit_sparse_regression}
+Return information of \code{sparse_regression}
 }
 \description{
-Prints a summary of \code{fit_sparse_regression}
+Prints a summary of \code{sparse_regression}
 }

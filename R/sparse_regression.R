@@ -53,7 +53,7 @@ single_network <- function(
   x <- matrix[, regulators]
   y <- matrix[, target]
 
-  result <- sparse_regression(
+  result <- fit_srm(
     x, y,
     cross_validation = cross_validation,
     seed = seed,
@@ -88,9 +88,6 @@ single_network <- function(
 #' @inheritParams single_network
 #' @param x The matrix of regulators.
 #' @param y The vector of target.
-#' @param algorithm The type of algorithm used to minimize the objective function, default is *`CD`*.
-#' Currently *`CD`* and *`CDPSI`* are supported.
-#' The *`CDPSI`* algorithm may yield better results, but it also increases running time.
 #' @param computation_method The method used to compute `r` value.
 #'
 #' @md
@@ -99,16 +96,15 @@ single_network <- function(
 #' @export
 #' @examples
 #' data("example_matrix")
-#' sparse_regression(
+#' fit_srm(
 #'   x = example_matrix[, -1],
 #'   y = example_matrix[, 1]
 #' )
-sparse_regression <- function(
+fit_srm <- function(
     x, y,
     cross_validation = FALSE,
     seed = 1,
     penalty = "L0",
-    algorithm = c("CD", "CDPSI"),
     regulators_num = ncol(x),
     n_folds = 10,
     subsampling_ratio = 1,
@@ -116,15 +112,11 @@ sparse_regression <- function(
     computation_method = "cor",
     verbose = TRUE,
     ...) {
-  algorithm <- match.arg(algorithm)
-  # TODO:
-  # how to handle computation_method in CSNObject and other objects compatible?
   if (cross_validation) {
     fit <- try(
-      fit_sparse_regression(
+      sparse_regression(
         x, y,
         penalty = penalty,
-        algorithm = algorithm,
         regulators_num = regulators_num,
         cross_validation = cross_validation,
         n_folds = n_folds,
@@ -142,10 +134,9 @@ sparse_regression <- function(
         verbose = verbose
       )
       fit <- try(
-        fit_sparse_regression(
+        sparse_regression(
           x, y,
           penalty = penalty,
-          algorithm = algorithm,
           regulators_num = regulators_num,
           cross_validation = FALSE,
           verbose = verbose,
@@ -153,13 +144,16 @@ sparse_regression <- function(
         )
       )
       if (any(class(fit) == "try-error")) {
-        return(list(
-          metrics = list(r_squared = 0),
-          coefficients = list(
-            variable = colnames(x),
-            coefficient = rep(0, ncol(x))
+        return(
+          list(
+            model = fit,
+            metrics = list(r_squared = 0),
+            coefficients = list(
+              variable = colnames(x),
+              coefficient = rep(0, ncol(x))
+            )
           )
-        ))
+        )
       }
       fit_inf <- print(fit)
       lambda <- fit_inf$lambda[which.max(fit_inf$suppSize)]
@@ -181,10 +175,9 @@ sparse_regression <- function(
     }
   } else {
     fit <- try(
-      fit_sparse_regression(
+      sparse_regression(
         x, y,
         penalty = penalty,
-        algorithm = algorithm,
         regulators_num = regulators_num,
         cross_validation = FALSE,
         verbose = verbose,
@@ -192,13 +185,16 @@ sparse_regression <- function(
       )
     )
     if (any(class(fit) == "try-error")) {
-      return(list(
-        metrics = list(r_squared = 0),
-        coefficients = list(
-          variable = colnames(x),
-          coefficient = rep(0, ncol(x))
+      return(
+        list(
+          model = fit,
+          metrics = list(r_squared = 0),
+          coefficients = list(
+            variable = colnames(x),
+            coefficient = rep(0, ncol(x))
+          )
         )
-      ))
+      )
     }
     fit_inf <- print(fit)
     lambda <- fit_inf$lambda[which.max(fit_inf$suppSize)]
@@ -226,13 +222,16 @@ sparse_regression <- function(
       r <- 0
     }
   } else {
-    return(list(
-      metrics = list(r_squared = 0),
-      coefficients = list(
-        variable = colnames(x),
-        coefficient = rep(0, ncol(x))
+    return(
+      list(
+        model = fit,
+        metrics = list(r_squared = 0),
+        coefficients = list(
+          variable = colnames(x),
+          coefficient = rep(0, ncol(x))
+        )
       )
-    ))
+    )
   }
 
   if (r >= r_threshold) {
@@ -249,6 +248,7 @@ sparse_regression <- function(
 
   return(
     list(
+      model = fit,
       metrics = list(r_squared = r),
       coefficients = list(
         variable = colnames(x),
@@ -263,7 +263,11 @@ sparse_regression <- function(
 #' @description
 #'  Computes the regularization path for the specified loss function and penalty function.
 #'
-#' @inheritParams sparse_regression
+#' @md
+#' @inheritParams fit_srm
+#' @param algorithm The type of algorithm used to minimize the objective function, default is *`CD`*.
+#' Currently *`CD`* and *`CDPSI`* are supported.
+#' The *`CDPSI`* algorithm may yield better results, but it also increases running time.
 #' @param loss The loss function.
 #' @param nLambda The number of Lambda values to select.
 #' @param nGamma The number of Gamma values to select.
@@ -291,8 +295,6 @@ sparse_regression <- function(
 #' @param lows Lower bounds for coefficients.
 #' @param highs Upper bounds for coefficients.
 #'
-#' @md
-#'
 #' @references
 #'  Hazimeh, Hussein et al.
 #'  “L0Learn: A Scalable Package for Sparse Learning using L0 Regularization.”
@@ -308,15 +310,15 @@ sparse_regression <- function(
 #' @export
 #' @examples
 #' data("example_matrix")
-#' fit <- fit_sparse_regression(
+#' fit <- sparse_regression(
 #'   example_matrix[, -1],
 #'   example_matrix[, 1]
 #' )
 #' head(coef(fit))
-fit_sparse_regression <- function(
+sparse_regression <- function(
     x, y,
     penalty = "L0",
-    algorithm = "CD",
+    algorithm = c("CD", "CDPSI"),
     regulators_num = ncol(x),
     cross_validation = FALSE,
     n_folds = 10,
@@ -343,7 +345,8 @@ fit_sparse_regression <- function(
     highs = Inf,
     verbose = TRUE,
     ...) {
-  # Check parameter values
+  algorithm <- match.arg(algorithm)
+
   if ((rtol < 0) || (rtol >= 1)) {
     stop("The specified rtol parameter must exist in [0, 1).")
   }
@@ -355,14 +358,13 @@ fit_sparse_regression <- function(
   }
 
   # Check binary classification for logistic and squared hinge loss
-  if (loss == "Logistic" | loss == "SquaredHinge") {
+  if (loss == "Logistic" || loss == "SquaredHinge") {
     if (dim(table(y)) != 2) {
       stop("Only binary classification is supported. Make sure y has only 2 unique values.")
     }
-    y <- factor(y, labels = c(-1, 1)) # Returns a vector of strings
+    y <- factor(y, labels = c(-1, 1))
     y <- as.numeric(levels(y))[y]
 
-    # Adjust parameters for L0 penalty
     if (penalty == "L0") {
       if ((length(lambdaGrid) != 0) && (length(lambdaGrid) != 1)) {
         stop(

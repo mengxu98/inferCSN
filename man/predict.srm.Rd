@@ -10,7 +10,7 @@
 \method{predict}{srm_cv}(object, newx, lambda = NULL, gamma = NULL, ...)
 }
 \arguments{
-\item{object}{The output of fit_sparse_regression.}
+\item{object}{The output of sparse_regression.}
 
 \item{newx}{A matrix on which predictions are made. The matrix should have p columns}
 

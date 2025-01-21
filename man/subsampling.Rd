@@ -18,7 +18,7 @@ subsampling(
 
 \item{subsampling_method}{The method to use for subsampling. Options are "sample", "pseudobulk" or "meta_cells".}
 
-\item{subsampling_ratio}{The percent of all samples used for \code{\link{sparse_regression}}, default is \emph{\code{1}}.}
+\item{subsampling_ratio}{The percent of all samples used for \code{\link{fit_srm}}, default is \emph{\code{1}}.}
 
 \item{seed}{The random seed for cross-validation, default is \emph{\code{1}}.}
 

@@ -11,7 +11,7 @@
 #' @param n_folds The number of folds for cross-validation, default is *`10`*.
 #' @param seed The random seed for cross-validation, default is *`1`*.
 #' @param subsampling_method The method to use for subsampling. Options are "sample", "pseudobulk" or "meta_cells".
-#' @param subsampling_ratio The percent of all samples used for \code{\link{sparse_regression}}, default is *`1`*.
+#' @param subsampling_ratio The percent of all samples used for \code{\link{fit_srm}}, default is *`1`*.
 #' @param r_threshold Threshold of \eqn{R^2} or correlation coefficient, default is *`0`*.
 #' @param regulators The regulator genes for which to infer the regulatory network.
 #' @param targets The target genes for which to infer the regulatory network.

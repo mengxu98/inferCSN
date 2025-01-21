@@ -10,7 +10,7 @@
 \method{coef}{srm_cv}(object, lambda = NULL, gamma = NULL, ...)
 }
 \arguments{
-\item{object}{The output of \code{\link{fit_sparse_regression}}.}
+\item{object}{The output of \code{\link{sparse_regression}}.}
 
 \item{lambda}{The value of lambda at which to extract the solution.}
 

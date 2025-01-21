@@ -2,20 +2,37 @@
 % Please edit documentation in R/sparse_regression.R
 \name{sparse_regression}
 \alias{sparse_regression}
-\title{Sparse regression model}
+\title{Fit a sparse regression model}
 \usage{
 sparse_regression(
   x,
   y,
-  cross_validation = FALSE,
-  seed = 1,
   penalty = "L0",
   algorithm = c("CD", "CDPSI"),
   regulators_num = ncol(x),
+  cross_validation = FALSE,
   n_folds = 10,
-  subsampling_ratio = 1,
-  r_threshold = 0,
-  computation_method = "cor",
+  seed = 1,
+  loss = "SquaredError",
+  nLambda = 100,
+  nGamma = 5,
+  gammaMax = 10,
+  gammaMin = 1e-04,
+  partialSort = TRUE,
+  maxIters = 200,
+  rtol = 1e-06,
+  atol = 1e-09,
+  activeSet = TRUE,
+  activeSetNum = 3,
+  maxSwaps = 100,
+  scaleDownFactor = 0.8,
+  screenSize = 1000,
+  autoLambda = NULL,
+  lambdaGrid = list(),
+  excludeFirstK = 0,
+  intercept = TRUE,
+  lows = -Inf,
+  highs = Inf,
   verbose = TRUE,
   ...
 )
@@ -24,10 +41,6 @@ sparse_regression(
 \item{x}{The matrix of regulators.}
 
 \item{y}{The vector of target.}
-
-\item{cross_validation}{Logical value, default is \emph{\code{FALSE}}, whether to use cross-validation.}
-
-\item{seed}{The random seed for cross-validation, default is \emph{\code{1}}.}
 
 \item{penalty}{The type of regularization, default is \emph{\code{L0}}.
 This can take either one of the following choices: \emph{\code{L0}}, \emph{\code{L0L1}}, and \emph{\code{L0L2}}.
@@ -40,28 +53,84 @@ The \emph{\code{CDPSI}} algorithm may yield better results, but it also increase
 \item{regulators_num}{The number of non-zore coefficients, this value will affect the final performance.
 The maximum support size at which to terminate the regularization path.}
 
+\item{cross_validation}{Logical value, default is \emph{\code{FALSE}}, whether to use cross-validation.}
+
 \item{n_folds}{The number of folds for cross-validation, default is \emph{\code{10}}.}
 
-\item{subsampling_ratio}{The percent of all samples used for \code{\link{sparse_regression}}, default is \emph{\code{1}}.}
+\item{seed}{The random seed for cross-validation, default is \emph{\code{1}}.}
 
-\item{r_threshold}{Threshold of \eqn{R^2} or correlation coefficient, default is \emph{\code{0}}.}
+\item{loss}{The loss function.}
 
-\item{computation_method}{The method used to compute \code{r} value.}
+\item{nLambda}{The number of Lambda values to select.}
+
+\item{nGamma}{The number of Gamma values to select.}
+
+\item{gammaMax}{The maximum value of Gamma when using the \code{L0L2} penalty.
+For the \code{L0L1} penalty this is automatically selected.}
+
+\item{gammaMin}{The minimum value of Gamma when using the \code{L0L2} penalty.
+For the \code{L0L1} penalty, the minimum value of gamma in the grid is set to gammaMin * gammaMax.
+Note that this should be a strictly positive quantity.}
+
+\item{partialSort}{If \code{TRUE}, partial sorting will be used for sorting the coordinates to do greedy cycling.
+Otherwise, full sorting is used.}
+
+\item{maxIters}{The maximum number of iterations (full cycles) for \code{CD} per grid point.}
+
+\item{rtol}{The relative tolerance which decides when to terminate optimization,
+based on the relative change in the objective between iterations.}
+
+\item{atol}{The absolute tolerance which decides when to terminate optimization,
+based on the absolute L2 norm of the residuals.}
+
+\item{activeSet}{If \code{TRUE}, performs active set updates.}
+
+\item{activeSetNum}{The number of consecutive times a support should appear before declaring support stabilization.}
+
+\item{maxSwaps}{The maximum number of swaps used by \code{CDPSI} for each grid point.}
+
+\item{scaleDownFactor}{This parameter decides how close the selected Lambda values are.}
+
+\item{screenSize}{The number of coordinates to cycle over when performing initial correlation screening.}
+
+\item{autoLambda}{Ignored parameter. Kept for backwards compatibility.}
+
+\item{lambdaGrid}{A grid of Lambda values to use in computing the regularization path.}
+
+\item{excludeFirstK}{This parameter takes non-negative integers.}
+
+\item{intercept}{If \code{FALSE}, no intercept term is included in the model.}
+
+\item{lows}{Lower bounds for coefficients.}
+
+\item{highs}{Upper bounds for coefficients.}
 
 \item{verbose}{Logical value, default is \emph{\code{TRUE}}, whether to print progress messages.}
 
 \item{...}{Parameters for other methods.}
 }
 \value{
-Coefficients
+An S3 object describing the regularization path
 }
 \description{
-Sparse regression model
+Computes the regularization path for the specified loss function and penalty function.
 }
 \examples{
 data("example_matrix")
-sparse_regression(
-  x = example_matrix[, -1],
-  y = example_matrix[, 1]
+fit <- sparse_regression(
+  example_matrix[, -1],
+  example_matrix[, 1]
 )
+head(coef(fit))
+}
+\references{
+Hazimeh, Hussein et al.
+“L0Learn: A Scalable Package for Sparse Learning using L0 Regularization.”
+J. Mach. Learn. Res. 24 (2022): 205:1-205:8.
+
+Hazimeh, Hussein and Rahul Mazumder.
+“Fast Best Subset Selection: Coordinate Descent and Local Combinatorial Optimization Algorithms.”
+Oper. Res. 68 (2018): 1517-1537.
+
+https://github.com/hazimehh/L0Learn/blob/master/R/fit.R
 }
