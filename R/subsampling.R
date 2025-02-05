@@ -51,11 +51,21 @@
 #' )
 subsampling <- function(
     matrix,
-    subsampling_method = "sample",
+    subsampling_method = c("sample", "meta_cells", "pseudobulk"),
     subsampling_ratio = 1,
     seed = 1,
     verbose = TRUE,
     ...) {
+  subsampling_method <- match.arg(
+    subsampling_method
+  )
+
+  if (!(is.numeric(subsampling_ratio) && subsampling_ratio > 0 && subsampling_ratio <= 1)) {
+    log_message(
+      "Please set 'subsampling_ratio' value between: (0, 1].",
+      message_type = "error"
+    )
+  }
   if (subsampling_ratio >= 1) {
     return(matrix)
   }
@@ -64,11 +74,6 @@ subsampling <- function(
   } else {
     return_sparse <- FALSE
   }
-
-  subsampling_method <- match.arg(
-    subsampling_method,
-    c("sample", "meta_cells", "pseudobulk")
-  )
 
   set.seed(seed)
   matrix <- switch(

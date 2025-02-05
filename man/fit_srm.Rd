@@ -11,10 +11,7 @@ fit_srm(
   seed = 1,
   penalty = "L0",
   regulators_num = ncol(x),
-  n_folds = 10,
-  subsampling_ratio = 1,
-  r_threshold = 0,
-  computation_method = "cor",
+  n_folds = 5,
   verbose = TRUE,
   ...
 )
@@ -36,12 +33,6 @@ For high-dimensional and sparse data, \emph{\code{L0L2}} is more effective.}
 The maximum support size at which to terminate the regularization path.}
 
 \item{n_folds}{The number of folds for cross-validation, default is \emph{\code{10}}.}
-
-\item{subsampling_ratio}{The percent of all samples used for \code{\link{fit_srm}}, default is \emph{\code{1}}.}
-
-\item{r_threshold}{Threshold of \eqn{R^2} or correlation coefficient, default is \emph{\code{0}}.}
-
-\item{computation_method}{The method used to compute \code{r} value.}
 
 \item{verbose}{Logical value, default is \emph{\code{TRUE}}, whether to print progress messages.}
 

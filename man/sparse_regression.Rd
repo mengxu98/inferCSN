@@ -11,7 +11,7 @@ sparse_regression(
   algorithm = c("CD", "CDPSI"),
   regulators_num = ncol(x),
   cross_validation = FALSE,
-  n_folds = 10,
+  n_folds = 5,
   seed = 1,
   loss = "SquaredError",
   nLambda = 100,

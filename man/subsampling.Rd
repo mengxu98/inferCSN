@@ -6,7 +6,7 @@
 \usage{
 subsampling(
   matrix,
-  subsampling_method = "sample",
+  subsampling_method = c("sample", "meta_cells", "pseudobulk"),
   subsampling_ratio = 1,
   seed = 1,
   verbose = TRUE,

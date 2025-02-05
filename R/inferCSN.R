@@ -12,7 +12,7 @@
 #' @param seed The random seed for cross-validation, default is *`1`*.
 #' @param subsampling_method The method to use for subsampling. Options are "sample", "pseudobulk" or "meta_cells".
 #' @param subsampling_ratio The percent of all samples used for \code{\link{fit_srm}}, default is *`1`*.
-#' @param r_threshold Threshold of \eqn{R^2} or correlation coefficient, default is *`0`*.
+#' @param r_squared_threshold Threshold of \eqn{R^2} coefficient, default is *`0`*.
 #' @param regulators The regulator genes for which to infer the regulatory network.
 #' @param targets The target genes for which to infer the regulatory network.
 #' Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.
@@ -31,10 +31,12 @@ setGeneric(
                  penalty = "L0",
                  cross_validation = FALSE,
                  seed = 1,
-                 n_folds = 10,
-                 subsampling_method = "sample",
+                 n_folds = 5,
+                 subsampling_method = c(
+                   "sample", "meta_cells", "pseudobulk"
+                 ),
                  subsampling_ratio = 1,
-                 r_threshold = 0,
+                 r_squared_threshold = 0,
                  regulators = NULL,
                  targets = NULL,
                  cores = 1,
@@ -83,7 +85,7 @@ setGeneric(
 #' data("example_ground_truth")
 #' network_table_07 <- inferCSN(
 #'   example_matrix,
-#'   r_threshold = 0.7
+#'   r_squared_threshold = 0.7
 #' )
 #' calculate_metrics(
 #'   network_table_1,
@@ -103,10 +105,12 @@ setMethod(
                         penalty = "L0",
                         cross_validation = FALSE,
                         seed = 1,
-                        n_folds = 10,
-                        subsampling_method = "sample",
+                        n_folds = 5,
+                        subsampling_method = c(
+                          "sample", "meta_cells", "pseudobulk"
+                        ),
                         subsampling_ratio = 1,
-                        r_threshold = 0,
+                        r_squared_threshold = 0,
                         regulators = NULL,
                         targets = NULL,
                         cores = 1,
@@ -125,7 +129,7 @@ setMethod(
       n_folds = n_folds,
       subsampling_method = subsampling_method,
       subsampling_ratio = subsampling_ratio,
-      r_threshold = r_threshold,
+      r_squared_threshold = r_squared_threshold,
       regulators = regulators,
       targets = targets,
       verbose = verbose,
@@ -166,7 +170,7 @@ setMethod(
           penalty = penalty,
           n_folds = n_folds,
           subsampling_ratio = subsampling_ratio,
-          r_threshold = r_threshold,
+          r_squared_threshold = r_squared_threshold,
           verbose = verbose,
           ...
         )
@@ -236,10 +240,12 @@ setMethod(
                         penalty = "L0",
                         cross_validation = FALSE,
                         seed = 1,
-                        n_folds = 10,
-                        subsampling_method = "sample",
+                        n_folds = 5,
+                        subsampling_method = c(
+                          "sample", "meta_cells", "pseudobulk"
+                        ),
                         subsampling_ratio = 1,
-                        r_threshold = 0,
+                        r_squared_threshold = 0,
                         regulators = NULL,
                         targets = NULL,
                         cores = 1,
@@ -258,7 +264,7 @@ setMethod(
       n_folds = n_folds,
       subsampling_method = subsampling_method,
       subsampling_ratio = subsampling_ratio,
-      r_threshold = r_threshold,
+      r_squared_threshold = r_squared_threshold,
       regulators = regulators,
       targets = targets,
       verbose = verbose,
@@ -298,8 +304,7 @@ setMethod(
           seed = seed,
           penalty = penalty,
           n_folds = n_folds,
-          subsampling_ratio = subsampling_ratio,
-          r_threshold = r_threshold,
+          r_squared_threshold = r_squared_threshold,
           verbose = verbose,
           ...
         )
@@ -329,10 +334,12 @@ setMethod(
                         penalty = "L0",
                         cross_validation = FALSE,
                         seed = 1,
-                        n_folds = 10,
-                        subsampling_method = "sample",
+                        n_folds = 5,
+                        subsampling_method = c(
+                          "sample", "meta_cells", "pseudobulk"
+                        ),
                         subsampling_ratio = 1,
-                        r_threshold = 0,
+                        r_squared_threshold = 0,
                         regulators = NULL,
                         targets = NULL,
                         cores = 1,
@@ -352,7 +359,7 @@ setMethod(
       n_folds = n_folds,
       subsampling_method = subsampling_method,
       subsampling_ratio = subsampling_ratio,
-      r_threshold = r_threshold,
+      r_squared_threshold = r_squared_threshold,
       regulators = regulators,
       targets = targets,
       verbose = verbose,

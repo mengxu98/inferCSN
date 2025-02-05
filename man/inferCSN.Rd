@@ -13,10 +13,10 @@ inferCSN(
   penalty = "L0",
   cross_validation = FALSE,
   seed = 1,
-  n_folds = 10,
-  subsampling_method = "sample",
+  n_folds = 5,
+  subsampling_method = c("sample", "meta_cells", "pseudobulk"),
   subsampling_ratio = 1,
-  r_threshold = 0,
+  r_squared_threshold = 0,
   regulators = NULL,
   targets = NULL,
   cores = 1,
@@ -29,10 +29,10 @@ inferCSN(
   penalty = "L0",
   cross_validation = FALSE,
   seed = 1,
-  n_folds = 10,
-  subsampling_method = "sample",
+  n_folds = 5,
+  subsampling_method = c("sample", "meta_cells", "pseudobulk"),
   subsampling_ratio = 1,
-  r_threshold = 0,
+  r_squared_threshold = 0,
   regulators = NULL,
   targets = NULL,
   cores = 1,
@@ -45,10 +45,10 @@ inferCSN(
   penalty = "L0",
   cross_validation = FALSE,
   seed = 1,
-  n_folds = 10,
-  subsampling_method = "sample",
+  n_folds = 5,
+  subsampling_method = c("sample", "meta_cells", "pseudobulk"),
   subsampling_ratio = 1,
-  r_threshold = 0,
+  r_squared_threshold = 0,
   regulators = NULL,
   targets = NULL,
   cores = 1,
@@ -61,10 +61,10 @@ inferCSN(
   penalty = "L0",
   cross_validation = FALSE,
   seed = 1,
-  n_folds = 10,
-  subsampling_method = "sample",
+  n_folds = 5,
+  subsampling_method = c("sample", "meta_cells", "pseudobulk"),
   subsampling_ratio = 1,
-  r_threshold = 0,
+  r_squared_threshold = 0,
   regulators = NULL,
   targets = NULL,
   cores = 1,
@@ -89,7 +89,7 @@ For high-dimensional and sparse data, \emph{\code{L0L2}} is more effective.}
 
 \item{subsampling_ratio}{The percent of all samples used for \code{\link{fit_srm}}, default is \emph{\code{1}}.}
 
-\item{r_threshold}{Threshold of \eqn{R^2} or correlation coefficient, default is \emph{\code{0}}.}
+\item{r_squared_threshold}{Threshold of \eqn{R^2} coefficient, default is \emph{\code{0}}.}
 
 \item{regulators}{The regulator genes for which to infer the regulatory network.}
 
@@ -141,7 +141,7 @@ inferCSN(
 data("example_ground_truth")
 network_table_07 <- inferCSN(
   example_matrix,
-  r_threshold = 0.7
+  r_squared_threshold = 0.7
 )
 calculate_metrics(
   network_table_1,

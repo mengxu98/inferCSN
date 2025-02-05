@@ -136,9 +136,7 @@ parallelize_fun <- function(
     cross_validation,
     seed,
     n_folds,
-    subsampling_method,
-    subsampling_ratio,
-    r_threshold,
+    r_squared_threshold,
     regulators,
     targets,
     regulators_num,
@@ -175,14 +173,9 @@ parallelize_fun <- function(
     )
   }
 
-  match.arg(
-    subsampling_method,
-    c("sample", "meta_cells", "pseudobulk")
-  )
-
-  if (!(is.numeric(subsampling_ratio) && subsampling_ratio > 0 && subsampling_ratio <= 1)) {
+  if (r_squared_threshold < 0 || r_squared_threshold > 1) {
     log_message(
-      "Please set 'subsampling_ratio' value between: (0, 1].",
+      "Please set 'r_squared_threshold' value between: [0, 1].",
       message_type = "error"
     )
   }
@@ -793,7 +786,16 @@ normalization <- function(
     ...) {
   method <- match.arg(
     method,
-    c("max_min", "maximum", "sum", "softmax", "z_score", "mad", "unit_vector")
+    c(
+      "max_min",
+      "maximum",
+      "sum",
+      "softmax",
+      "z_score",
+      "mad",
+      "unit_vector",
+      "robust_scale"
+    )
   )
   na_index <- which(is.na(x))
   x[na_index] <- 0
@@ -809,7 +811,9 @@ normalization <- function(
       x / sum(abs(x))
     },
     "softmax" = {
-      exp(x - max(x)) / sum(exp(x - max(x)))
+      # exp(x - max(x)) / sum(exp(x - max(x)))
+      temp <- (x - mean(x)) / stats::sd(x)
+      exp(temp) / sum(exp(temp))
     },
     "z_score" = {
       (x - mean(x)) / stats::sd(x)

@@ -1,96 +1,10 @@
-#' @title Construct network for single target gene
-#'
-#' @inheritParams inferCSN
-#' @param matrix An expression matrix.
-#' @param target The target gene.
-#' @param regulators_num The number of non-zore coefficients, this value will affect the final performance.
-#' The maximum support size at which to terminate the regularization path.
-#'
-#' @return The weight data table of sub-network
-#' @export
-#' @examples
-#' data("example_matrix")
-#' head(
-#'   single_network(
-#'     example_matrix,
-#'     regulators = colnames(example_matrix),
-#'     target = "g1"
-#'   )
-#' )
-#'
-#' single_network(
-#'   example_matrix,
-#'   regulators = c("g1", "g2", "g3"),
-#'   target = "g1"
-#' )
-#' single_network(
-#'   example_matrix,
-#'   regulators = c("g1", "g2"),
-#'   target = "g1"
-#' )
-single_network <- function(
-    matrix,
-    regulators,
-    target,
-    cross_validation = FALSE,
-    seed = 1,
-    penalty = "L0",
-    regulators_num = (ncol(matrix) - 1),
-    n_folds = 10,
-    subsampling_ratio = 1,
-    r_threshold = 0,
-    verbose = TRUE,
-    ...) {
-  regulators <- setdiff(regulators, target)
-  if (length(regulators) < 2) {
-    log_message(
-      "less than 2 regulators found while modeling: ", target,
-      message_type = "warning",
-      verbose = verbose
-    )
-    return()
-  }
-  x <- matrix[, regulators]
-  y <- matrix[, target]
-
-  result <- fit_srm(
-    x, y,
-    cross_validation = cross_validation,
-    seed = seed,
-    penalty = penalty,
-    regulators_num = regulators_num,
-    n_folds = n_folds,
-    subsampling_ratio = subsampling_ratio,
-    r_threshold = r_threshold,
-    verbose = verbose,
-    ...
-  )
-
-  coefficients <- result$coefficients$coefficient |>
-    normalization(method = "unit_vector", ...)
-
-  if (length(coefficients) != ncol(x)) {
-    coefficients <- rep(0, ncol(x))
-  }
-
-  return(
-    data.frame(
-      regulator = colnames(x),
-      target = target,
-      weight = coefficients
-    )
-  )
-}
-
 #' @title Sparse regression model
 #'
+#' @md
 #' @inheritParams inferCSN
 #' @inheritParams single_network
 #' @param x The matrix of regulators.
 #' @param y The vector of target.
-#' @param computation_method The method used to compute `r` value.
-#'
-#' @md
 #'
 #' @return Coefficients
 #' @export
@@ -106,10 +20,7 @@ fit_srm <- function(
     seed = 1,
     penalty = "L0",
     regulators_num = ncol(x),
-    n_folds = 10,
-    subsampling_ratio = 1,
-    r_threshold = 0,
-    computation_method = "cor",
+    n_folds = 5,
     verbose = TRUE,
     ...) {
   if (cross_validation) {
@@ -128,8 +39,7 @@ fit_srm <- function(
 
     if (any(class(fit) == "try-error")) {
       log_message(
-        "cross validation error,
-      setting `cross_validation` to `FALSE` and re-train model.",
+        "cross validation error, setting `cross_validation` to `FALSE` and re-train model.",
         message_type = "warning",
         verbose = verbose
       )
@@ -164,10 +74,13 @@ fit_srm <- function(
           fit$cvMeans, min
         )) == min(unlist(lapply(fit$cvMeans, min)))
       )]
-      lambda_list <- dplyr::filter(print(fit), gamma == gamma)
-      if (regulators_num %in% lambda_list$regulators_num) {
-        lambda <- lambda_list$regulators_num[which(
-          lambda_list$regulators_num == regulators_num
+      lambda_list <- dplyr::filter(
+        print(fit),
+        gamma == gamma
+      )
+      if (regulators_num %in% lambda_list$suppSize) {
+        lambda <- lambda_list$lambda[which(
+          lambda_list$suppSize == regulators_num
         )]
       } else {
         lambda <- min(lambda_list$lambda)
@@ -188,7 +101,9 @@ fit_srm <- function(
       return(
         list(
           model = fit,
-          metrics = list(r_squared = 0),
+          metrics = list(
+            r_squared = 0
+          ),
           coefficients = list(
             variable = colnames(x),
             coefficient = rep(0, ncol(x))
@@ -210,49 +125,21 @@ fit_srm <- function(
     )
   )
 
-  if (length(y) == length(pred_y)) {
-    if (stats::var(y) != 0 && stats::var(pred_y) != 0) {
-      computation_method <- match.arg(computation_method, c("r_square", "cor"))
-      r <- switch(
-        EXPR = computation_method,
-        "cor" = stats::cor(y, pred_y),
-        "r_square" = r_square(y, pred_y)
-      )
-    } else {
-      r <- 0
-    }
-  } else {
-    return(
-      list(
-        model = fit,
-        metrics = list(r_squared = 0),
-        coefficients = list(
-          variable = colnames(x),
-          coefficient = rep(0, ncol(x))
-        )
-      )
-    )
-  }
-
-  if (r >= r_threshold) {
-    coefficients <- as.vector(
-      coef(
-        fit,
-        lambda = lambda,
-        gamma = gamma
-      )
-    )[-1]
-  } else {
-    coefficients <- rep(0, ncol(x))
-  }
-
   return(
     list(
       model = fit,
-      metrics = list(r_squared = r),
+      metrics = list(
+        r_squared = r_square(y, pred_y)
+      ),
       coefficients = list(
         variable = colnames(x),
-        coefficient = coefficients
+        coefficient = as.vector(
+          coef(
+            fit,
+            lambda = lambda,
+            gamma = gamma
+          )
+        )[-1]
       )
     )
   )
@@ -321,7 +208,7 @@ sparse_regression <- function(
     algorithm = c("CD", "CDPSI"),
     regulators_num = ncol(x),
     cross_validation = FALSE,
-    n_folds = 10,
+    n_folds = 5,
     seed = 1,
     loss = "SquaredError",
     nLambda = 100,
