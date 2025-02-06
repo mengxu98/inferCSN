@@ -5,8 +5,15 @@
 #' @inheritParams single_network
 #' @param x The matrix of regulators.
 #' @param y The vector of target.
+#' @param regulators_num The number of non-zore coefficients, this value will affect the final performance.
+#' The maximum support size at which to terminate the regularization path.
 #'
-#' @return Coefficients
+#' @return A list of the sparse regression model.
+#'  The list has the following components:
+#'  \item{model}{The sparse regression model.}
+#'  \item{metrics}{A list of metrics.}
+#'  \item{coefficients}{A list of coefficients.}
+#'
 #' @export
 #' @examples
 #' data("example_matrix")
