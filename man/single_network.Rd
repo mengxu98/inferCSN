@@ -11,7 +11,6 @@ single_network(
   cross_validation = FALSE,
   seed = 1,
   penalty = "L0",
-  regulators_num = (ncol(matrix) - 1),
   r_squared_threshold = 0,
   n_folds = 5,
   verbose = TRUE,
@@ -33,9 +32,6 @@ single_network(
 This can take either one of the following choices: \emph{\code{L0}}, \emph{\code{L0L1}}, and \emph{\code{L0L2}}.
 For high-dimensional and sparse data, \emph{\code{L0L2}} is more effective.}
 
-\item{regulators_num}{The number of non-zore coefficients, this value will affect the final performance.
-The maximum support size at which to terminate the regularization path.}
-
 \item{r_squared_threshold}{Threshold of \eqn{R^2} coefficient, default is \emph{\code{0}}.}
 
 \item{n_folds}{The number of folds for cross-validation, default is \emph{\code{10}}.}
@@ -45,7 +41,11 @@ The maximum support size at which to terminate the regularization path.}
 \item{...}{Parameters for other methods.}
 }
 \value{
-The weight data table of sub-network
+A data frame of the single target gene network.
+ The data frame has three columns:
+ \item{regulator}{The regulator genes.}
+ \item{target}{The target gene.}
+ \item{weight}{The weight of the regulator gene on the target gene.}
 }
 \description{
 Construct network for single target gene

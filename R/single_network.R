@@ -3,10 +3,12 @@
 #' @inheritParams inferCSN
 #' @param matrix An expression matrix.
 #' @param target The target gene.
-#' @param regulators_num The number of non-zore coefficients, this value will affect the final performance.
-#' The maximum support size at which to terminate the regularization path.
 #'
-#' @return The weight data table of sub-network
+#' @return A data frame of the single target gene network.
+#'  The data frame has three columns:
+#'  \item{regulator}{The regulator genes.}
+#'  \item{target}{The target gene.}
+#'  \item{weight}{The weight of the regulator gene on the target gene.}
 #' @export
 #' @examples
 #' data("example_matrix")
@@ -43,7 +45,6 @@ single_network <- function(
     cross_validation = FALSE,
     seed = 1,
     penalty = "L0",
-    regulators_num = (ncol(matrix) - 1),
     r_squared_threshold = 0,
     n_folds = 5,
     verbose = TRUE,
@@ -65,7 +66,6 @@ single_network <- function(
     cross_validation = cross_validation,
     seed = seed,
     penalty = penalty,
-    regulators_num = regulators_num,
     n_folds = n_folds,
     verbose = verbose,
     ...

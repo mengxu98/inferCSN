@@ -16,9 +16,6 @@
 
 \item{gamma}{The value of gamma at which to extract the solution.}
 
-\item{regulators_num}{The number of non-zore coefficients, this value will affect the final performance.
-The maximum support size at which to terminate the regularization path.}
-
 \item{...}{Other parameters}
 }
 \value{

@@ -8,7 +8,7 @@
 #' This can take either one of the following choices: *`L0`*, *`L0L1`*, and *`L0L2`*.
 #' For high-dimensional and sparse data, *`L0L2`* is more effective.
 #' @param cross_validation Logical value, default is *`FALSE`*, whether to use cross-validation.
-#' @param n_folds The number of folds for cross-validation, default is *`10`*.
+#' @param n_folds The number of folds for cross-validation, default is *`5`*.
 #' @param seed The random seed for cross-validation, default is *`1`*.
 #' @param subsampling_method The method to use for subsampling. Options are "sample", "pseudobulk" or "meta_cells".
 #' @param subsampling_ratio The percent of all samples used for \code{\link{fit_srm}}, default is *`1`*.
