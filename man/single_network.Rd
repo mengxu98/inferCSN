@@ -34,7 +34,7 @@ For high-dimensional and sparse data, \emph{\code{L0L2}} is more effective.}
 
 \item{r_squared_threshold}{Threshold of \eqn{R^2} coefficient, default is \emph{\code{0}}.}
 
-\item{n_folds}{The number of folds for cross-validation, default is \emph{\code{10}}.}
+\item{n_folds}{The number of folds for cross-validation, default is \emph{\code{5}}.}
 
 \item{verbose}{Logical value, default is \emph{\code{TRUE}}, whether to print progress messages.}
 

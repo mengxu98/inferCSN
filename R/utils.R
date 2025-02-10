@@ -139,7 +139,6 @@ parallelize_fun <- function(
     r_squared_threshold,
     regulators,
     targets,
-    regulators_num,
     verbose,
     cores,
     ...) {
@@ -584,7 +583,7 @@ check_sparsity <- function(x) {
 
 #' @title Extracts a specific solution in the regularization path
 #'
-#' @inheritParams single_network
+#' @inheritParams fit_srm
 #' @param object The output of \code{\link{sparse_regression}}.
 #' @param lambda The value of lambda at which to extract the solution.
 #' @param gamma The value of gamma at which to extract the solution.
@@ -605,7 +604,6 @@ coef.srm <- function(
   }
 
   if (is.null(lambda) && is.null(gamma) && is.null(regulators_num)) {
-    # If all three are null, return all solutions
     t <- do.call(cbind, object$beta)
     if (object$settings$intercept) {
       intercepts <- unlist(object$a0)

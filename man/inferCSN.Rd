@@ -83,7 +83,7 @@ For high-dimensional and sparse data, \emph{\code{L0L2}} is more effective.}
 
 \item{seed}{The random seed for cross-validation, default is \emph{\code{1}}.}
 
-\item{n_folds}{The number of folds for cross-validation, default is \emph{\code{10}}.}
+\item{n_folds}{The number of folds for cross-validation, default is \emph{\code{5}}.}
 
 \item{subsampling_method}{The method to use for subsampling. Options are "sample", "pseudobulk" or "meta_cells".}
 

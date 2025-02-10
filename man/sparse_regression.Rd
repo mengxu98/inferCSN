@@ -55,7 +55,7 @@ The maximum support size at which to terminate the regularization path.}
 
 \item{cross_validation}{Logical value, default is \emph{\code{FALSE}}, whether to use cross-validation.}
 
-\item{n_folds}{The number of folds for cross-validation, default is \emph{\code{10}}.}
+\item{n_folds}{The number of folds for cross-validation, default is \emph{\code{5}}.}
 
 \item{seed}{The random seed for cross-validation, default is \emph{\code{1}}.}
 

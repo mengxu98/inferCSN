@@ -32,7 +32,7 @@ For high-dimensional and sparse data, \emph{\code{L0L2}} is more effective.}
 \item{regulators_num}{The number of non-zore coefficients, this value will affect the final performance.
 The maximum support size at which to terminate the regularization path.}
 
-\item{n_folds}{The number of folds for cross-validation, default is \emph{\code{10}}.}
+\item{n_folds}{The number of folds for cross-validation, default is \emph{\code{5}}.}
 
 \item{verbose}{Logical value, default is \emph{\code{TRUE}}, whether to print progress messages.}
 
