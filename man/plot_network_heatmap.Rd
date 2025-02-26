@@ -20,8 +20,9 @@ plot_network_heatmap(
   rect_color = NA,
   anno_width = 1,
   anno_height = 1,
-  row_anno_type = NULL,
-  column_anno_type = NULL,
+  row_anno_type = c("boxplot", "barplot", "histogram", "density", "lines", "points",
+    "horizon"),
+  column_anno_type = c("boxplot", "barplot", "histogram", "density", "lines", "points"),
   legend_name = "Weight",
   row_title = "Regulators"
 )
@@ -57,11 +58,11 @@ plot_network_heatmap(
 
 \item{anno_height}{Height of annotation.}
 
-\item{row_anno_type}{Default is \emph{\code{NULL}},
+\item{row_anno_type}{Default is \emph{\code{boxplot}},
 could add a annotation plot to row,
 choose one of \emph{\code{boxplot}}, \emph{\code{barplot}}, \emph{\code{histogram}}, \emph{\code{density}}, \emph{\code{lines}}, \emph{\code{points}}, and \emph{\code{horizon}}.}
 
-\item{column_anno_type}{Default is \emph{\code{NULL}},
+\item{column_anno_type}{Default is \emph{\code{boxplot}},
 could add a annotation plot to column,
 choose one of \emph{\code{boxplot}}, \emph{\code{barplot}}, \emph{\code{histogram}}, \emph{\code{density}}, \emph{\code{lines}}, and \emph{\code{points}}.}
 
@@ -94,13 +95,11 @@ ComplexHeatmap::draw(p1 + p2)
 
 p3 <- plot_network_heatmap(
   network_table,
-  heatmap_title = "inferCSN",
   legend_name = "Weight1",
   heatmap_color = c("#20a485", "#410054", "#fee81f")
 )
 p4 <- plot_network_heatmap(
   network_table,
-  heatmap_title = "inferCSN",
   legend_name = "Weight2",
   heatmap_color = c("#20a485", "white", "#fee81f")
 )
