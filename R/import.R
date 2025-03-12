@@ -27,7 +27,7 @@ utils::globalVariables(
     "P_value_contrary",
     "Predicted",
     "regulator",
-    "regulators_num",
+    "targets_num",
     "target",
     "to",
     "Type",
