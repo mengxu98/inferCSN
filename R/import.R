@@ -30,7 +30,7 @@ utils::globalVariables(
     "targets_num",
     "target",
     "to",
-    "Type",
+    "type",
     "Value",
     "weight",
     "x",
