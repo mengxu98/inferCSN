@@ -13,6 +13,7 @@ pkgdown::build_site()
 
 # Check package as CRAN
 rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"))
+devtools::check_win_release()
 
 # Update NEWS
 # Bump version manually and add list of changes
