@@ -7,8 +7,9 @@
 calculate_metrics(
   network_table,
   ground_truth,
-  type = "all",
-  plot = FALSE,
+  metric_type = c("all", "auc", "auroc", "auprc", "precision", "recall", "f1",
+    "accuracy", "si", "ji"),
+  return_plot = FALSE,
   line_color = "#1563cc",
   line_width = 1
 )
@@ -16,45 +17,39 @@ calculate_metrics(
 \arguments{
 \item{network_table}{A data frame of predicted network structure containing:
 \itemize{
-\item \code{regulator} - Source nodes of the network edges
-\item \code{target} - Target nodes of the network edges
-\item \code{weight} - Edge weights representing prediction confidence
+\item \emph{\code{regulator}} - Source nodes of the network edges
+\item \emph{\code{target}} - Target nodes of the network edges
+\item \emph{\code{weight}} - Edge weights representing prediction confidence
 }}
 
 \item{ground_truth}{A data frame of ground truth network with the same format as \emph{\code{network_table}}.}
 
-\item{type}{The type of metric to return, default is \emph{\code{all}}.
+\item{metric_type}{The type of metric to return, default is \emph{\code{all}}.
 This can take any of the following choices:
 \itemize{
-\item \emph{\code{all}} - Returns all available metrics
-\item \emph{\code{auroc}} - Area Under ROC Curve, evaluating overall classification ability
-\item \emph{\code{auprc}} - Area Under Precision-Recall Curve, focusing on positive class prediction
+\item \emph{\code{all}} - Returns all available metrics with \emph{Performance Metrics} plot
+\item \emph{\code{auc}} - Returns both AUROC and AUPRC with their plots
+\item \emph{\code{auroc}} - Area Under ROC Curve with plot
+\item \emph{\code{auprc}} - Area Under Precision-Recall Curve with plot
 \item \emph{\code{precision}} - Proportion of correct predictions among positive predictions
 \item \emph{\code{recall}} - Proportion of actual positives correctly identified
 \item \emph{\code{f1}} - Harmonic mean of precision and recall
+\item \emph{\code{accuracy}} - Overall classification accuracy
 \item \emph{\code{si}} - Set Intersection, counting correctly predicted edges
 \item \emph{\code{ji}} - Jaccard Index, measuring overlap between predicted and true networks
 }}
 
-\item{plot}{Logical value, default is \emph{\code{FALSE}}, whether to generate visualization plots.
-If \emph{\code{TRUE}}, generates:
-\itemize{
-\item ROC curve plot for AUROC evaluation
-\item Precision-Recall curve plot for AUPRC evaluation
-\item Confusion matrix heatmap for classification results
-\item Network comparison plot showing edge overlap
-\item Metrics summary bar plot
-}}
+\item{return_plot}{Logical value, default is \emph{\code{FALSE}}, whether to generate visualization plots}
 
-\item{line_color}{The color for plot lines, default is \emph{\verb{#1563cc}}.}
+\item{line_color}{Color for plot lines, default is \emph{\verb{#1563cc}}}
 
-\item{line_width}{The width for plot lines, default is \emph{\code{1}}.}
+\item{line_width}{Width for plot lines, default is \emph{\code{1}}}
 }
 \value{
+A list containing:
 \itemize{
-\item If type="all": A data frame with all metrics
-\item If specific type: A single numeric value with the requested metric
-\item If plot=TRUE: Displays relevant visualization plots
+\item \emph{\code{metrics}} - A data frame with requested metrics
+\item \emph{\code{plot}} - A plot object if return_plot = TRUE (optional)
 }
 }
 \description{
@@ -64,7 +59,15 @@ including classification performance, precision-recall metrics, and network topo
 \examples{
 data("example_matrix")
 data("example_ground_truth")
-inferCSN(example_matrix) |>
-  calculate_metrics(example_ground_truth, plot = TRUE)
-
+network_table <- inferCSN(example_matrix)
+calculate_metrics(
+  network_table,
+  example_ground_truth,
+  return_plot = TRUE
+)
+calculate_metrics(
+  network_table,
+  example_ground_truth,
+  metric_type = "auroc"
+)
 }
