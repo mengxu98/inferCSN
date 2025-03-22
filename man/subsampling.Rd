@@ -54,21 +54,21 @@ subsample_matrix_3 <- subsampling(
 calculate_metrics(
   inferCSN(example_matrix),
   example_ground_truth,
-  plot = TRUE
+  return_plot = TRUE
 )
 calculate_metrics(
   inferCSN(subsample_matrix),
   example_ground_truth,
-  plot = TRUE
+  return_plot = TRUE
 )
 calculate_metrics(
   inferCSN(subsample_matrix_2),
   example_ground_truth,
-  plot = TRUE
+  return_plot = TRUE
 )
 calculate_metrics(
   inferCSN(subsample_matrix_3),
   example_ground_truth,
-  plot = TRUE
+  return_plot = TRUE
 )
 }

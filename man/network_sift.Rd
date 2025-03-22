@@ -106,17 +106,17 @@ plot_network_heatmap(
 calculate_metrics(
   network_table,
   example_ground_truth,
-  plot = TRUE
+  return_plot = TRUE
 )
 calculate_metrics(
   network_table_sifted,
   example_ground_truth,
-  plot = TRUE
+  return_plot = TRUE
 )
 calculate_metrics(
   network_table_sifted_entropy,
   example_ground_truth,
-  plot = TRUE
+  return_plot = TRUE
 )
 }
 }
