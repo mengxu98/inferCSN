@@ -42,6 +42,7 @@ reference:
 - subtitle: "Network evaluation"
 - contents:
   - calculate_metrics
+  - calculate_accuracy
   - calculate_auc
   - calculate_auroc
   - calculate_auprc
