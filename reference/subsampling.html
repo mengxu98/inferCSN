@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">inferCSN</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.3</span>
       </span>
     </div>
 
@@ -126,55 +126,99 @@
 <span class="r-in"><span><span class="fu"><a href="calculate_metrics.html">calculate_metrics</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="va">example_ground_truth</span>,</span></span>
-<span class="r-in"><span>  plot <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>  return_plot <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Running for &lt;dense matrix&gt;.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Checking input parameters.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Using L0 sparse regression model.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Using 1 core</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Run done.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $metrics</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Metric  Value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     AUROC  0.952</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     AUPRC  0.437</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Precision  0.529</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    Recall  1.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        F1  0.692</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       ACC  0.948</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7        JI  0.514</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8        SI 18.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $plot</span>
 <span class="r-plt img"><img src="subsampling-1.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   AUROC AUPRC   ACC Precision Recall    F1    JI SI</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.952 0.437 0.948         1  0.529 0.692 0.514 18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="calculate_metrics.html">calculate_metrics</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">subsample_matrix</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="va">example_ground_truth</span>,</span></span>
-<span class="r-in"><span>  plot <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>  return_plot <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Running for &lt;dense matrix&gt;.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Checking input parameters.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Using L0 sparse regression model.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Using 1 core</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Run done.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $metrics</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Metric  Value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     AUROC  0.955</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     AUPRC  0.449</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Precision  0.529</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    Recall  1.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        F1  0.692</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       ACC  0.948</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7        JI  0.514</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8        SI 18.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $plot</span>
 <span class="r-plt img"><img src="subsampling-2.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   AUROC AUPRC   ACC Precision Recall    F1    JI SI</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.955 0.449 0.948         1  0.529 0.692 0.514 18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="calculate_metrics.html">calculate_metrics</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">subsample_matrix_2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="va">example_ground_truth</span>,</span></span>
-<span class="r-in"><span>  plot <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>  return_plot <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Running for &lt;dense matrix&gt;.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Checking input parameters.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Using L0 sparse regression model.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Using 1 core</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Run done.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $metrics</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Metric  Value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     AUROC  0.952</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     AUPRC  0.439</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Precision  0.529</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    Recall  1.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        F1  0.692</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       ACC  0.948</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7        JI  0.514</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8        SI 18.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $plot</span>
 <span class="r-plt img"><img src="subsampling-3.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   AUROC AUPRC   ACC Precision Recall    F1    JI SI</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.952 0.439 0.948         1  0.529 0.692 0.514 18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="calculate_metrics.html">calculate_metrics</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">subsample_matrix_3</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="va">example_ground_truth</span>,</span></span>
-<span class="r-in"><span>  plot <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>  return_plot <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Running for &lt;dense matrix&gt;.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Checking input parameters.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Using L0 sparse regression model.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Using 1 core</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Run done.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $metrics</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Metric  Value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     AUROC  0.955</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     AUPRC  0.449</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Precision  0.529</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    Recall  1.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        F1  0.692</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       ACC  0.948</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7        JI  0.514</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8        SI 18.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $plot</span>
 <span class="r-plt img"><img src="subsampling-4.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   AUROC AUPRC   ACC Precision Recall    F1    JI SI</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.955 0.449 0.948         1  0.529 0.692 0.514 18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </div>
