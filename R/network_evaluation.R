@@ -643,6 +643,15 @@ calculate_f1 <- function(
 #'
 #' @return A list containing the metric
 #' @export
+#'
+#' @examples
+#' data("example_matrix")
+#' data("example_ground_truth")
+#' network_table <- inferCSN(example_matrix)
+#' calculate_accuracy(
+#'   network_table,
+#'   example_ground_truth
+#' )
 calculate_accuracy <- function(
     network_table,
     ground_truth) {
