@@ -4,14 +4,21 @@
 \alias{matrix_to_table}
 \title{Switch matrix to network table}
 \usage{
-matrix_to_table(network_matrix, regulators = NULL, targets = NULL)
+matrix_to_table(
+  network_matrix,
+  regulators = NULL,
+  targets = NULL,
+  threshold = 0
+)
 }
 \arguments{
 \item{network_matrix}{The matrix of network weight.}
 
-\item{regulators}{Regulators list.}
+\item{regulators}{Character vector of regulator names to filter by.}
 
-\item{targets}{Targets list.}
+\item{targets}{Character vector of target names to filter by.}
+
+\item{threshold}{The threshold for filtering weights based on absolute values, defaults to 0.}
 }
 \value{
 Network table
@@ -30,4 +37,16 @@ identical(
   network_table,
   network_table_new
 )
+
+matrix_to_table(
+  network_matrix,
+  threshold = 0.8
+)
+
+matrix_to_table(
+  network_matrix,
+  regulators = c("g1", "g2"),
+  targets = c("g3", "g4")
+)
+
 }

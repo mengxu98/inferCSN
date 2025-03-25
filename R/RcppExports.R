@@ -123,8 +123,10 @@ filter_sort_matrix <- function(network_matrix, regulators = NULL, targets = NULL
 
 #' @title Switch matrix to network table
 #'
-#' @inheritParams table_to_matrix
 #' @param network_matrix The matrix of network weight.
+#' @param regulators Character vector of regulator names to filter by.
+#' @param targets Character vector of target names to filter by.
+#' @param threshold The threshold for filtering weights based on absolute values, defaults to 0.
 #'
 #' @return Network table
 #' @export
@@ -140,8 +142,20 @@ filter_sort_matrix <- function(network_matrix, regulators = NULL, targets = NULL
 #'   network_table,
 #'   network_table_new
 #' )
-matrix_to_table <- function(network_matrix, regulators = NULL, targets = NULL) {
-    .Call('_inferCSN_matrix_to_table', PACKAGE = 'inferCSN', network_matrix, regulators, targets)
+#'
+#' matrix_to_table(
+#'   network_matrix,
+#'   threshold = 0.8
+#' )
+#'
+#' matrix_to_table(
+#'   network_matrix,
+#'   regulators = c("g1", "g2"),
+#'   targets = c("g3", "g4")
+#' )
+#'
+matrix_to_table <- function(network_matrix, regulators = NULL, targets = NULL, threshold = 0.0) {
+    .Call('_inferCSN_matrix_to_table', PACKAGE = 'inferCSN', network_matrix, regulators, targets, threshold)
 }
 
 prepare_calculate_metrics <- function(network_table, ground_truth) {
@@ -221,6 +235,7 @@ split_indices <- function(group, n = 0L) {
 #' @param network_table The weight data table of network.
 #' @param regulators Regulators list.
 #' @param targets Targets list.
+#' @param threshold The threshold for filtering weights based on absolute values, defaults to 0.
 #'
 #' @return Weight matrix
 #' @export
@@ -232,13 +247,15 @@ split_indices <- function(group, n = 0L) {
 #'
 #' table_to_matrix(network_table)[1:6, 1:6]
 #'
+#' table_to_matrix(network_table, threshold = 0.8)
+#'
 #' table_to_matrix(
 #'   network_table,
 #'   regulators = c("g1", "g2"),
 #'   targets = c("g3", "g4")
 #' )
-table_to_matrix <- function(network_table, regulators = NULL, targets = NULL) {
-    .Call('_inferCSN_table_to_matrix', PACKAGE = 'inferCSN', network_table, regulators, targets)
+table_to_matrix <- function(network_table, regulators = NULL, targets = NULL, threshold = 0.0) {
+    .Call('_inferCSN_table_to_matrix', PACKAGE = 'inferCSN', network_table, regulators, targets, threshold)
 }
 
 #' @title Weight sift
