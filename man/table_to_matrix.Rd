@@ -4,12 +4,7 @@
 \alias{table_to_matrix}
 \title{Switch network table to matrix}
 \usage{
-table_to_matrix(
-  network_table,
-  regulators = NULL,
-  targets = NULL,
-  threshold = 0
-)
+table_to_matrix(network_table, regulators = NULL, targets = NULL)
 }
 \arguments{
 \item{network_table}{The weight data table of network.}
@@ -17,8 +12,6 @@ table_to_matrix(
 \item{regulators}{Regulators list.}
 
 \item{targets}{Targets list.}
-
-\item{threshold}{The threshold for filtering weights based on absolute values, defaults to 0.}
 }
 \value{
 Weight matrix
@@ -32,8 +25,6 @@ network_table <- inferCSN(example_matrix)
 head(network_table)
 
 table_to_matrix(network_table)[1:6, 1:6]
-
-table_to_matrix(network_table, threshold = 0.8)
 
 table_to_matrix(
   network_table,

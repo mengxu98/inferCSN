@@ -485,16 +485,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // table_to_matrix
-NumericMatrix table_to_matrix(DataFrame network_table, Nullable<CharacterVector> regulators, Nullable<CharacterVector> targets, double threshold);
-RcppExport SEXP _inferCSN_table_to_matrix(SEXP network_tableSEXP, SEXP regulatorsSEXP, SEXP targetsSEXP, SEXP thresholdSEXP) {
+NumericMatrix table_to_matrix(DataFrame network_table, Nullable<CharacterVector> regulators, Nullable<CharacterVector> targets);
+RcppExport SEXP _inferCSN_table_to_matrix(SEXP network_tableSEXP, SEXP regulatorsSEXP, SEXP targetsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< DataFrame >::type network_table(network_tableSEXP);
     Rcpp::traits::input_parameter< Nullable<CharacterVector> >::type regulators(regulatorsSEXP);
     Rcpp::traits::input_parameter< Nullable<CharacterVector> >::type targets(targetsSEXP);
-    Rcpp::traits::input_parameter< double >::type threshold(thresholdSEXP);
-    rcpp_result_gen = Rcpp::wrap(table_to_matrix(network_table, regulators, targets, threshold));
+    rcpp_result_gen = Rcpp::wrap(table_to_matrix(network_table, regulators, targets));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -541,7 +540,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_inferCSN_network_format", (DL_FUNC) &_inferCSN_network_format, 4},
     {"_inferCSN_sparseCovCor", (DL_FUNC) &_inferCSN_sparseCovCor, 2},
     {"_inferCSN_split_indices", (DL_FUNC) &_inferCSN_split_indices, 2},
-    {"_inferCSN_table_to_matrix", (DL_FUNC) &_inferCSN_table_to_matrix, 4},
+    {"_inferCSN_table_to_matrix", (DL_FUNC) &_inferCSN_table_to_matrix, 3},
     {"_inferCSN_weight_sift", (DL_FUNC) &_inferCSN_weight_sift, 1},
     {NULL, NULL, 0}
 };
