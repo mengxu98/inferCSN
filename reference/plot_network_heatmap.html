@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">inferCSN</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.6</span>
       </span>
     </div>
 
@@ -192,7 +192,7 @@ choose one of <em><code>boxplot</code></em>, <em><code>barplot</code></em>, <em>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html" class="external-link">draw</a></span><span class="op">(</span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_network_heatmap-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu">plot_network_heatmap</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
 <span class="r-in"><span>  legend_name <span class="op">=</span> <span class="st">"Weight1"</span>,</span></span>
@@ -204,7 +204,7 @@ choose one of <em><code>boxplot</code></em>, <em><code>barplot</code></em>, <em>
 <span class="r-in"><span>  heatmap_color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#20a485"</span>, <span class="st">"white"</span>, <span class="st">"#fee81f"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">ComplexHeatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html" class="external-link">draw</a></span><span class="op">(</span><span class="va">p3</span> <span class="op">+</span> <span class="va">p4</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="plot_network_heatmap-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">plot_network_heatmap</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
@@ -213,14 +213,21 @@ choose one of <em><code>boxplot</code></em>, <em><code>barplot</code></em>, <em>
 <span class="r-in"><span>  row_anno_type <span class="op">=</span> <span class="st">"density"</span>,</span></span>
 <span class="r-in"><span>  column_anno_type <span class="op">=</span> <span class="st">"barplot"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="plot_network_heatmap-3.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="plot_network_heatmap-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">plot_network_heatmap</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
+<span class="r-in"><span>  regulators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span>, <span class="st">"g3"</span>, <span class="st">"g5"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g3"</span>, <span class="st">"g6"</span>, <span class="st">"g9"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  show_names <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="plot_network_heatmap-3.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="fu">plot_network_heatmap</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
 <span class="r-in"><span>  regulators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span>, <span class="st">"g2"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  show_names <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="plot_network_heatmap-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">plot_network_heatmap</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
@@ -229,15 +236,7 @@ choose one of <em><code>boxplot</code></em>, <em><code>barplot</code></em>, <em>
 <span class="r-in"><span>  column_anno_type <span class="op">=</span> <span class="st">"histogram"</span>,</span></span>
 <span class="r-in"><span>  show_names <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="plot_network_heatmap-5.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">plot_network_heatmap</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
-<span class="r-in"><span>  regulators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span>, <span class="st">"g3"</span>, <span class="st">"g5"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g3"</span>, <span class="st">"g6"</span>, <span class="st">"g9"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  show_names <span class="op">=</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="plot_network_heatmap-6.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
