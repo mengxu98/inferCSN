@@ -312,12 +312,61 @@ pearson_correlation <- function(x, y = NULL) {
     stop("y should be a sparse matrix.")
   }
 
-  result <- sparseCovCor(x, y)
+  result <- sparse_cov_cor(x, y)
 
   return(
     list(
       cov = result$cov,
       cor = result$cor
+    )
+  )
+}
+
+
+#' @title Fast correlation and covariance calcualtion for sparse matrices
+#'
+#' @inheritParams sparse_cor
+sparse_cov_cor <- function(x, y = NULL) {
+  if (!methods::is(x, "sparseMatrix")) {
+    log_message(
+      "x should be a sparse matrix",
+      message_type = "error"
+    )
+  }
+  n <- nrow(x)
+  mu_x <- Matrix::colMeans(x)
+  if (is.null(y)) {
+    covmat <- (
+      (as.matrix(Matrix::crossprod(x)) - n * Matrix::tcrossprod(mu_x)) / (n - 1)
+    )
+    sdvec <- sqrt(diag(covmat))
+    cormat <- covmat / tcrossprod(sdvec)
+  } else {
+    if (!methods::is(y, "sparseMatrix")) {
+      log_message(
+        "y should be a sparse matrix",
+        message_type = "error"
+      )
+    }
+    if (nrow(x) != nrow(y)) {
+      log_message(
+        "x and y should have the same number of rows",
+        message_type = "error"
+      )
+    }
+
+    mu_y <- Matrix::colMeans(y)
+    covmat <- (
+      (as.matrix(Matrix::crossprod(x, y)) - n * Matrix::tcrossprod(mu_x, mu_y)) / (n - 1)
+    )
+    sdvecX <- sqrt((Matrix::colSums(x^2) - n * mu_x^2) / (n - 1))
+    sdvecY <- sqrt((Matrix::colSums(y^2) - n * mu_y^2) / (n - 1))
+    cormat <- covmat / Matrix::tcrossprod(sdvecX, sdvecY)
+  }
+  return(
+    list(
+      cov = covmat,
+      cor = cormat
     )
   )
 }
@@ -337,22 +386,23 @@ pearson_correlation <- function(x, y = NULL) {
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' m1 <- simulate_sparse_matrix(
-#'   1000, 1000,
+#'   2000, 2000,
 #'   density = 0.01
 #' )
 #' m2 <- simulate_sparse_matrix(
-#'   1000, 500,
-#'   density = 0.01
+#'   2000, 1000,
+#'   density = 0.05
 #' )
 #'
 #' all.equal(
-#'   as.matrix(sparse_cor(m1)),
-#'   cor(as_matrix(m1))
+#'   as_matrix(sparse_cor(m1)),
+#'   as_matrix(cor(as_matrix(m1)))
 #' )
 #' all.equal(
-#'   as.matrix(sparse_cor(m1, m2)),
-#'   cor(as_matrix(m1), as_matrix(m2))
+#'   as_matrix(sparse_cor(m1, m2)),
+#'   as_matrix(cor(as_matrix(m1), as_matrix(m2)))
 #' )
 #'
 #' system.time(
@@ -368,11 +418,11 @@ pearson_correlation <- function(x, y = NULL) {
 #'   cor(as_matrix(m1), as_matrix(m2))
 #' )
 #'
-#' # add missing values
 #' m1[sample(1:500, 10)] <- NA
 #' m2[sample(1:500, 10)] <- NA
 #'
 #' sparse_cor(m1, m2)[1:5, 1:5]
+#' }
 sparse_cor <- function(
     x,
     y = NULL,
