@@ -205,10 +205,6 @@ network_format <- function(network_table, regulators = NULL, targets = NULL, abs
     .Call('_inferCSN_network_format', PACKAGE = 'inferCSN', network_table, regulators, targets, abs_weight)
 }
 
-sparseCovCor <- function(x, y_nullable = NULL) {
-    .Call('_inferCSN_sparseCovCor', PACKAGE = 'inferCSN', x, y_nullable)
-}
-
 #' @title Split indices.
 #'
 #' @description An optimised version of split for the special case of splitting row indices into groups.
