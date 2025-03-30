@@ -99,6 +99,7 @@ reference:
   - predict.srm_cv
   - r_square
   - sparse_cor
+  - sparse_cov_cor
   - split_indices
   - simulate_sparse_matrix
   - subsampling
