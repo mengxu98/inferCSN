@@ -81,12 +81,12 @@ log_message <- function(
 
 #' @title Parallelize a function
 #'
+#' @md
 #' @inheritParams inferCSN
 #' @param x A vector or list to apply over.
 #' @param fun The function to be applied to each element.
 #' @param export_fun The functions to export the function to workers.
 #'
-#' @md
 #' @return A list of computed results
 #'
 #' @export
@@ -110,6 +110,8 @@ parallelize_fun <- function(
   }
 
   if (cores > 1) {
+    cores <- .cores_detect(cores, length(x))
+
     doParallel::registerDoParallel(cores = cores)
     log_message(
       "Using ", foreach::getDoParWorkers(), " cores",
@@ -125,9 +127,24 @@ parallelize_fun <- function(
     }
     doParallel::stopImplicitCluster()
   }
+
   names(output_list) <- x
 
   return(output_list)
+}
+
+.cores_detect <- function(
+    cores = 1,
+    num_session = NULL) {
+  if (is.null(num_session)) {
+    return(1)
+  } else {
+    cores <- min(
+      (parallel::detectCores(logical = FALSE) - 1), cores, num_session
+    )
+
+    return(cores)
+  }
 }
 
 .check_parameters <- function(
@@ -244,20 +261,6 @@ parallelize_fun <- function(
       "Using cross validation, and setting ", n_folds, " folds.",
       verbose = verbose
     )
-  }
-}
-
-.cores_detect <- function(
-    cores = 1,
-    num_session = NULL) {
-  if (is.null(num_session)) {
-    return(1)
-  } else {
-    cores <- min(
-      (parallel::detectCores(logical = FALSE) - 1), cores, num_session
-    )
-
-    return(cores)
   }
 }
 

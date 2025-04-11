@@ -156,8 +156,6 @@ setMethod(
     )
 
     names(targets) <- targets
-    cores <- .cores_detect(cores, length(targets))
-
     network_table <- parallelize_fun(
       x = targets,
       fun = function(x) {
@@ -291,8 +289,6 @@ setMethod(
     )
 
     names(targets) <- targets
-    cores <- .cores_detect(cores, length(targets))
-
     network_table <- parallelize_fun(
       x = targets,
       fun = function(x) {
