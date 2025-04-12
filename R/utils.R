@@ -13,19 +13,32 @@
 #' Could be choose one of *`info`*, *`success`*, *`warning`*, and *`error`*.
 #' @param cli_model Logical value, default is *`TRUE`*.
 #' Whether to use the `cli` package to print the message.
+#' @param timestamp Logical value, default is *`TRUE`*.
+#' Whether to show the current time in the message.
+#' @param level Integer value, default is *`1`*.
+#' The level of the message, which affects the indentation.
+#' Level 1 has no indentation, higher levels add more indentation.
+#' @param level_symbol Character value, default is *`"  "`* (two spaces).
+#' The symbol used for indentation at each level.
 #'
 #' @export
 #' @examples
 #' log_message("Hello, ", "world!")
+#' log_message("Hello, world!", timestamp = FALSE)
 #' log_message("Hello, ", "world!", message_type = "success")
 #' log_message("Hello, world!", message_type = "warning")
 #' suppressMessages(log_message("Hello, ", "world!"))
 #' log_message("Hello, world!", verbose = FALSE)
+#' log_message("Hello, world!", level = 2)
+#' log_message("Hello, world!", level = 3, level_symbol = "->")
 log_message <- function(
     ...,
     verbose = TRUE,
     message_type = c("info", "success", "warning", "error"),
-    cli_model = TRUE) {
+    cli_model = TRUE,
+    timestamp = TRUE,
+    level = 1,
+    level_symbol = "  ") {
   message_type <- match.arg(message_type)
   msg <- paste0(...)
 
@@ -35,6 +48,16 @@ log_message <- function(
 
   if (!verbose) {
     return(invisible(NULL))
+  }
+
+  if (timestamp) {
+    time_str <- format(Sys.time(), "%Y-%m-%d %H:%M:%S")
+    msg <- paste0("[", time_str, "] ", msg)
+  }
+
+  if (level > 1) {
+    indentation <- paste(rep(level_symbol, level - 1), collapse = "")
+    msg <- paste0(indentation, msg)
   }
 
   if (cli_model) {
