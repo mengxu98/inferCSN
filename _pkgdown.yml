@@ -32,6 +32,7 @@ reference:
 - subtitle: "Inferring cell-specific gene regulatory network"
 - contents:
   - inferCSN-package
+  - inferCSN_logo
   - inferCSN
 
 - subtitle: "Network processing"
@@ -93,6 +94,7 @@ reference:
   - normalization
   - parallelize_fun
   - pearson_correlation
+  - print.logo
   - print.srm
   - print.srm_cv
   - predict.srm

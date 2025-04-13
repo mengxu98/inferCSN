@@ -8,7 +8,7 @@
 \url{https://github.com/mengxu98/inferCSN}
 }
 \description{
-An R package for \strong{infer}ring \strong{C}ell-\strong{S}pecific gene regulatory \strong{N}etwork from single-cell RNA data
+An R package for \strong{infer}ring \strong{C}ell-\strong{S}pecific gene regulatory \strong{N}etwork from single-cell RNA-seq data
 }
 \seealso{
 Useful links:
