@@ -36,8 +36,21 @@ pak::pak("mengxu98/inferCSN")
 
 ## **Usage**
 
-How to use [*`inferCSN`*](https://mengxu98.github.io/inferCSN/)? Please reference [*`here`*](https://mengxu98.github.io/inferCSN/reference/index.html).
+### **Examples**
 
-## **Cite**
+#### For a `matrix` object.
+
+``` r
+library(inferCSN)
+data("example_matrix")
+
+network <- inferCSN(
+  example_matrix
+)
+```
+
+More functions and usages about [*`inferCSN`*](https://mengxu98.github.io/inferCSN/)? Please reference [*`here`*](https://mengxu98.github.io/inferCSN/reference/index.html).
+
+## **Citation**
 
 If you use [*`inferCSN`*](https://github.com/mengxu98/inferCSN) in your work, please cite it reference [*`here`*](https://mengxu98.github.io/inferCSN/authors.html#citation).
