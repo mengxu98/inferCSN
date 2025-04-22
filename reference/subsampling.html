@@ -107,32 +107,32 @@
 <span class="r-in"><span>  <span class="va">example_matrix</span>,</span></span>
 <span class="r-in"><span>  subsampling_ratio <span class="op">=</span> <span class="fl">0.5</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-13 14:05:25] Subsample matrix generated, dimensions: 2500 cells by 18 genes.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-22 07:40:32] Subsample matrix generated, dimensions: 2500 cells by 18 genes.</span>
 <span class="r-in"><span><span class="va">subsample_matrix_2</span> <span class="op">&lt;-</span> <span class="fu">subsampling</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">example_matrix</span>,</span></span>
 <span class="r-in"><span>  subsampling_method <span class="op">=</span> <span class="st">"meta_cells"</span>,</span></span>
 <span class="r-in"><span>  subsampling_ratio <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
 <span class="r-in"><span>  fast_pca <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> [2025-04-13 14:05:25] number of PCs of PCA result is less than the desired number, using all PCs.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-13 14:05:25] Subsample matrix generated, dimensions: 2500 cells by 18 genes.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> [2025-04-22 07:40:32] number of PCs of PCA result is less than the desired number, using all PCs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-22 07:40:33] Subsample matrix generated, dimensions: 2500 cells by 18 genes.</span>
 <span class="r-in"><span><span class="va">subsample_matrix_3</span> <span class="op">&lt;-</span> <span class="fu">subsampling</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">example_matrix</span>,</span></span>
 <span class="r-in"><span>  subsampling_method <span class="op">=</span> <span class="st">"pseudobulk"</span>,</span></span>
 <span class="r-in"><span>  subsampling_ratio <span class="op">=</span> <span class="fl">0.5</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-13 14:05:26] Subsample matrix generated, dimensions: 2500 cells by 18 genes.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-22 07:40:33] Subsample matrix generated, dimensions: 2500 cells by 18 genes.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="calculate_metrics.html">calculate_metrics</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="va">example_ground_truth</span>,</span></span>
 <span class="r-in"><span>  return_plot <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-13 14:05:26] Running for &lt;dense matrix&gt;.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-13 14:05:26] Checking input parameters.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-13 14:05:26] Using L0 sparse regression model.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-13 14:05:26] Using 1 core</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-04-13 14:05:26] Run done.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-22 07:40:33] Running for &lt;dense matrix&gt;.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-22 07:40:33] Checking input parameters.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-22 07:40:33] Using L0 sparse regression model.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-22 07:40:33] Using 1 core</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-04-22 07:40:34] Run done.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $metrics</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      Metric  Value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     AUROC  0.952</span>
@@ -152,11 +152,11 @@
 <span class="r-in"><span>  <span class="va">example_ground_truth</span>,</span></span>
 <span class="r-in"><span>  return_plot <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-13 14:05:26] Running for &lt;dense matrix&gt;.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-13 14:05:26] Checking input parameters.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-13 14:05:26] Using L0 sparse regression model.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-13 14:05:26] Using 1 core</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-04-13 14:05:26] Run done.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-22 07:40:34] Running for &lt;dense matrix&gt;.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-22 07:40:34] Checking input parameters.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-22 07:40:34] Using L0 sparse regression model.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-22 07:40:34] Using 1 core</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-04-22 07:40:34] Run done.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $metrics</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      Metric  Value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     AUROC  0.955</span>
@@ -176,11 +176,11 @@
 <span class="r-in"><span>  <span class="va">example_ground_truth</span>,</span></span>
 <span class="r-in"><span>  return_plot <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-13 14:05:27] Running for &lt;dense matrix&gt;.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-13 14:05:27] Checking input parameters.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-13 14:05:27] Using L0 sparse regression model.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-13 14:05:27] Using 1 core</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-04-13 14:05:27] Run done.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-22 07:40:34] Running for &lt;dense matrix&gt;.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-22 07:40:34] Checking input parameters.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-22 07:40:34] Using L0 sparse regression model.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-22 07:40:34] Using 1 core</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-04-22 07:40:34] Run done.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $metrics</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      Metric  Value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     AUROC  0.952</span>
@@ -200,11 +200,11 @@
 <span class="r-in"><span>  <span class="va">example_ground_truth</span>,</span></span>
 <span class="r-in"><span>  return_plot <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-13 14:05:27] Running for &lt;dense matrix&gt;.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-13 14:05:27] Checking input parameters.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-13 14:05:27] Using L0 sparse regression model.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-13 14:05:27] Using 1 core</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-04-13 14:05:27] Run done.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-22 07:40:34] Running for &lt;dense matrix&gt;.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-22 07:40:34] Checking input parameters.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-22 07:40:34] Using L0 sparse regression model.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-04-22 07:40:34] Using 1 core</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-04-22 07:40:34] Run done.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $metrics</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      Metric  Value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     AUROC  0.955</span>
