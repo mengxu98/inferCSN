@@ -62,11 +62,11 @@ NumericMatrix table_to_matrix(DataFrame network_table,
   std::vector<std::string> reg_strings;
   std::vector<std::string> tar_strings;
 
-  for (int i = 0; i < filter_regulators.length(); i++)
+  for (size_t i = 0; i < filter_regulators.length(); i++)
   {
     reg_strings.push_back(Rcpp::as<std::string>(filter_regulators[i]));
   }
-  for (int i = 0; i < filter_targets.length(); i++)
+  for (size_t i = 0; i < filter_targets.length(); i++)
   {
     tar_strings.push_back(Rcpp::as<std::string>(filter_targets[i]));
   }
@@ -97,11 +97,11 @@ NumericMatrix table_to_matrix(DataFrame network_table,
   std::unordered_map<std::string, int> regulator_indices;
   std::unordered_map<std::string, int> target_indices;
 
-  for (int i = 0; i < reg_strings.size(); ++i)
+  for (size_t i = 0; i < reg_strings.size(); ++i)
   {
     regulator_indices[reg_strings[i]] = i;
   }
-  for (int i = 0; i < tar_strings.size(); ++i)
+  for (size_t i = 0; i < tar_strings.size(); ++i)
   {
     target_indices[tar_strings[i]] = i;
   }
@@ -113,11 +113,11 @@ NumericMatrix table_to_matrix(DataFrame network_table,
   // Convert back to CharacterVector for rownames/colnames
   CharacterVector sorted_regulators(reg_strings.size());
   CharacterVector sorted_targets(tar_strings.size());
-  for (int i = 0; i < reg_strings.size(); i++)
+  for (size_t i = 0; i < reg_strings.size(); i++)
   {
     sorted_regulators[i] = reg_strings[i];
   }
-  for (int i = 0; i < tar_strings.size(); i++)
+  for (size_t i = 0; i < tar_strings.size(); i++)
   {
     sorted_targets[i] = tar_strings[i];
   }
@@ -126,7 +126,7 @@ NumericMatrix table_to_matrix(DataFrame network_table,
   colnames(weight_matrix) = sorted_targets;
 
   // Fill matrix only with filtered and valid entries
-  for (int i = 0; i < network_table.nrows(); ++i)
+  for (size_t i = 0; i < network_table.nrows(); ++i)
   {
     std::string reg = Rcpp::as<std::string>(table_regulators[i]);
     std::string tar = Rcpp::as<std::string>(table_targets[i]);
