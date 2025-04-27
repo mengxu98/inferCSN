@@ -7,7 +7,7 @@
 inferCSN_logo(unicode = cli::is_utf8_output())
 }
 \arguments{
-\item{unicode}{Whether to use Unicode symbols. Default is \code{TRUE} on UTF-8 platforms.}
+\item{unicode}{Unicode symbols. Default is \code{TRUE} on UTF-8 platforms.}
 }
 \description{
 The inferCSN logo, using ASCII or Unicode characters

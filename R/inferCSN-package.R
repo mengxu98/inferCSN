@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-#' @title ***inferCSN***: **infer**ring **C**ell-**S**pecific gene regulatory **N**etwork
+#' @title inferCSN: inferring cell-type specific gene regulatory network
 #'
 #' @description
-#' An R package for **infer**ring **C**ell-**S**pecific gene regulatory **N**etwork from single-cell RNA-seq data
+#' An R package for inferring cell-type specific gene regulatory network from single-cell RNA-seq data
 #'
 #' @author Meng xu (Maintainer), \email{mengxu98@qq.com}
 #'
@@ -19,7 +19,7 @@
 #' @description
 #' The inferCSN logo, using ASCII or Unicode characters
 #' Use [cli::ansi_strip()] to get rid of the colors.
-#' @param unicode Whether to use Unicode symbols. Default is `TRUE` on UTF-8 platforms.
+#' @param unicode Unicode symbols. Default is `TRUE` on UTF-8 platforms.
 #'
 #' @references
 #'  \url{https://github.com/tidyverse/tidyverse/blob/main/R/logo.R}
