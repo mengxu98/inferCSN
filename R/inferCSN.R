@@ -1,4 +1,4 @@
-#' @title **infer**ring **C**ell-**S**pecific gene regulatory **N**etwork
+#' @title inferring cell-type specific gene regulatory network
 #'
 #' @useDynLib inferCSN
 #'

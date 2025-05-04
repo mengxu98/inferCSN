@@ -31,13 +31,13 @@
 inferCSN_logo <- function(
     unicode = cli::is_utf8_output()) {
   logo <- c(
-    "           2   1                3
-            ____     4    ___________ _   __
-    0 ___  / __/__  _____/ ____/ ___// | / /
-  / / __ ./ /_/ _ ./ ___/ /    |__ ./  |/ /
- / / / / / __/  __/ /  / /___ ___/ / /|  /
-/_/_/ /_/_/  .___/_/   .____//____/_/ |_/
-    6      5            7      8     9   "
+    "       0        1      2           3    4
+        _       ____          ___________ _   __
+       (_)___  / __/__  _____/ ____/ ___// | / /
+      / / __ ./ /_/ _ ./ ___/ /    .__ ./  |/ / 
+     / / / / / __/  __/ /  / /___ ___/ / /|  /  
+    /_/_/ /_/_/  .___/_/   .____//____/_/ |_/
+    5             6      7      8       9   "
   )
 
   hexa <- c("*", ".", "o", "*", ".", "*", ".", "o", ".", "*")
@@ -79,13 +79,13 @@ print.logo <- function(x, ...) {
   version <- utils::packageDescription(pkgname, fields = "Version")
 
   msg <- paste0(
-    "---------------------------------------------------
+    "-------------------------------------------------------
 ",
-    cli::col_blue(pkgname, " version ", version),
+    cli::col_blue(" ", pkgname, " version ", version),
     "
-This message can be suppressed by:
-  suppressPackageStartupMessages(library(inferCSN))
----------------------------------------------------"
+   This message can be suppressed by:
+     suppressPackageStartupMessages(library(inferCSN))
+-------------------------------------------------------"
   )
 
   packageStartupMessage(inferCSN_logo())
