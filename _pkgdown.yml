@@ -6,22 +6,27 @@ toc:
 url: https://mengxu98.github.io/inferCSN/
 
 template:
+  bootstrap: 5
+  light-switch: true
   package: mxtemplate
 
 navbar:
   structure:
     left:  [articles, reference, tutorials, news]
-    right: [github, mengxu]
+    right: [github, mengxu, lightswitch]
 
   components:
     github:
       icon: fab fa-github fa-lg
       href: https://github.com/mengxu98/inferCSN
+      title: GitHub
+      aria-label: GitHub repository
 
     mengxu:
       icon: fas fa-home fa-lg
       href: https://github.com/mengxu98
       title: MengXu
+      aria-label: MengXu's GitHub profile
 
     reference:
       text: Reference
