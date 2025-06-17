@@ -1,8 +1,8 @@
 Type: Package
 Package: inferCSN
 Title: Inferring Cell-Specific Gene Regulatory Network
-Version: 1.1.7
-Date: 2025-03-30
+Version: 1.1.8
+Date: 2025-06-17
 Authors@R:
     person("Meng", "Xu", email = "mengxu98@qq.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-8300-1054"))
 Maintainer: Meng Xu <mengxu98@qq.com>
@@ -15,20 +15,16 @@ Depends:
 Imports:
     cli,
     dplyr,
-    doParallel,
-    foreach,
     ggnetwork,
     ggplot2,
     ggraph,
     Matrix,
     methods,
-    parallel,
-    pbapply,
     purrr,
     Rcpp,
     RcppArmadillo,
-    RcppParallel,
-    stats
+    stats,
+    thisutils
 Suggests:
     ComplexHeatmap,
     circlize,
@@ -54,8 +50,7 @@ Suggests:
     viridis
 LinkingTo:
     Rcpp,
-    RcppArmadillo,
-    RcppParallel
+    RcppArmadillo
 Config/Needs/website: mengxu98/mxtemplate
 Config/testthat/edition: 3
 Encoding: UTF-8
