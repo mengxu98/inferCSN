@@ -89,14 +89,6 @@ R_matrix_center_sparse <- function(mat, X_normalized, intercept) {
     .Call('_inferCSN_R_matrix_center_sparse', PACKAGE = 'inferCSN', mat, X_normalized, intercept)
 }
 
-asMatrix <- function(rp, cp, z, nrows, ncols) {
-    .Call('_inferCSN_asMatrix', PACKAGE = 'inferCSN', rp, cp, z, nrows, ncols)
-}
-
-asMatrixParallel <- function(rp, cp, z, nrows, ncols) {
-    .Call('_inferCSN_asMatrixParallel', PACKAGE = 'inferCSN', rp, cp, z, nrows, ncols)
-}
-
 #' @title Filter and sort matrix
 #'
 #' @param network_matrix The matrix of network weight.
@@ -203,27 +195,6 @@ prepare_calculate_metrics <- function(network_table, ground_truth) {
 #' )
 network_format <- function(network_table, regulators = NULL, targets = NULL, abs_weight = TRUE) {
     .Call('_inferCSN_network_format', PACKAGE = 'inferCSN', network_table, regulators, targets, abs_weight)
-}
-
-#' @title Split indices.
-#'
-#' @description An optimised version of split for the special case of splitting row indices into groups.
-#'
-#' @param group Integer indices
-#' @param n The largest integer (may not appear in index).
-#' This is hint: if the largest value of \code{group} is bigger than \code{n},
-#' the output will silently expand.
-#' @useDynLib inferCSN
-#' @return A list of vectors of indices.
-#'
-#' @references
-#' https://github.com/hadley/plyr/blob/d57f9377eb5d56107ba3136775f2f0f005f33aa3/src/split-numeric.cpp#L20
-#' @export
-#' @examples
-#' split_indices(sample(10, 100, rep = TRUE))
-#' split_indices(sample(10, 100, rep = TRUE), 10)
-split_indices <- function(group, n = 0L) {
-    .Call('_inferCSN_split_indices', PACKAGE = 'inferCSN', group, n)
 }
 
 #' @title Switch network table to matrix

@@ -51,7 +51,7 @@ single_network <- function(
     ...) {
   regulators <- setdiff(regulators, target)
   if (length(regulators) < 2) {
-    log_message(
+    thisutils::log_message(
       "less than 2 regulators found while modeling: ", target,
       message_type = "warning",
       verbose = verbose
@@ -74,7 +74,7 @@ single_network <- function(
   r_squared <- result$metrics$r_squared
   if (r_squared > r_squared_threshold) {
     coefficients <- result$coefficients$coefficient |>
-      normalization(
+      thisutils::normalization(
         method = "unit_vector",
         ...
       )

@@ -1,9 +1,10 @@
 #' @import ggplot2 ggraph ggnetwork
 #'
+#' @importClassesFrom Matrix sparseMatrix
 #' @importFrom Rcpp evalCpp sourceCpp
 #' @importFrom RcppArmadillo armadillo_version
-#' @importFrom RcppParallel RcppParallelLibs
 #' @importFrom stats coef predict
+#' @importFrom thisutils `%ss%`
 NULL
 
 utils::globalVariables(

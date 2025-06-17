@@ -86,29 +86,17 @@ reference:
 
 - subtitle: "Utils functions"
 - contents:
-  - '%ss%'
-  - as_matrix
-  - check_sparsity
   - coef.srm
   - coef.srm_cv
   - filter_sort_matrix
-  - log_message
   - matrix_to_table
   - meta_cells
   - network_format
-  - normalization
-  - parallelize_fun
-  - pearson_correlation
   - print.logo
   - print.srm
   - print.srm_cv
   - predict.srm
   - predict.srm_cv
-  - r_square
-  - sparse_cor
-  - sparse_cov_cor
-  - split_indices
-  - simulate_sparse_matrix
   - subsampling
   - table_to_matrix
 

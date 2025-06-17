@@ -1,7 +1,5 @@
 #' @title inferring cell-type specific gene regulatory network
 #'
-#' @useDynLib inferCSN
-#'
 #' @md
 #' @param object The input data for *`inferCSN`*.
 #' @param penalty The type of regularization, default is *`L0`*.
@@ -116,7 +114,7 @@ setMethod(
                         cores = 1,
                         verbose = TRUE,
                         ...) {
-    log_message(
+    thisutils::log_message(
       "Running for <dense matrix>.",
       verbose = verbose
     )
@@ -156,7 +154,7 @@ setMethod(
     )
 
     names(targets) <- targets
-    network_table <- parallelize_fun(
+    network_table <- thisutils::parallelize_fun(
       x = targets,
       fun = function(x) {
         single_network(
@@ -179,7 +177,7 @@ setMethod(
       purrr::list_rbind() |>
       network_format(abs_weight = FALSE)
 
-    log_message(
+    thisutils::log_message(
       "Run done.",
       message_type = "success",
       verbose = verbose
@@ -249,7 +247,7 @@ setMethod(
                         cores = 1,
                         verbose = TRUE,
                         ...) {
-    log_message(
+    thisutils::log_message(
       "Running for <", class(object), ">.",
       verbose = verbose
     )
@@ -289,7 +287,7 @@ setMethod(
     )
 
     names(targets) <- targets
-    network_table <- parallelize_fun(
+    network_table <- thisutils::parallelize_fun(
       x = targets,
       fun = function(x) {
         single_network(
@@ -311,7 +309,7 @@ setMethod(
       purrr::list_rbind() |>
       network_format(abs_weight = FALSE)
 
-    log_message(
+    thisutils::log_message(
       "Run done.",
       message_type = "success",
       verbose = verbose
@@ -341,14 +339,14 @@ setMethod(
                         cores = 1,
                         verbose = TRUE,
                         ...) {
-    log_message(
+    thisutils::log_message(
       "convert the class type of the input data from <data.frame> to <matrix>.",
       message_type = "warning",
       verbose = verbose
     )
 
     inferCSN(
-      object = as_matrix(object),
+      object = thisutils::as_matrix(object),
       penalty = penalty,
       cross_validation = cross_validation,
       seed = seed,

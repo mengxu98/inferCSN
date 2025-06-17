@@ -168,7 +168,7 @@ meta_cells <- function(
   }
 
   if (ncol(pca_results$x) < max(pc_num)) {
-    log_message(
+    thisutils::log_message(
       "number of PCs of PCA result is less than the desired number, using all PCs.",
       message_type = "warning"
     )
@@ -192,7 +192,7 @@ meta_cells <- function(
     ) |>
       igraph::cut_at(k)
   } else if (cluster_method[1] == "louvain") {
-    log_message(
+    thisutils::log_message(
       "using ", cluster_method, " method to cluster, gamma is ignored.",
       message_type = "warning"
     )
@@ -332,7 +332,7 @@ meta_cells <- function(
   supercell_size <- as.vector(table(groups))
   j <- rep(1:max(groups), supercell_size)
 
-  goups_idx <- split_indices(groups)
+  goups_idx <- thisutils::split_indices(groups)
   i <- unlist(goups_idx)
 
   if (is.null(weights)) {

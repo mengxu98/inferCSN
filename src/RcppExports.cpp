@@ -377,36 +377,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// asMatrix
-NumericMatrix asMatrix(NumericVector rp, NumericVector cp, NumericVector z, int nrows, int ncols);
-RcppExport SEXP _inferCSN_asMatrix(SEXP rpSEXP, SEXP cpSEXP, SEXP zSEXP, SEXP nrowsSEXP, SEXP ncolsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type rp(rpSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type cp(cpSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type z(zSEXP);
-    Rcpp::traits::input_parameter< int >::type nrows(nrowsSEXP);
-    Rcpp::traits::input_parameter< int >::type ncols(ncolsSEXP);
-    rcpp_result_gen = Rcpp::wrap(asMatrix(rp, cp, z, nrows, ncols));
-    return rcpp_result_gen;
-END_RCPP
-}
-// asMatrixParallel
-NumericMatrix asMatrixParallel(NumericVector rp, NumericVector cp, NumericVector z, int nrows, int ncols);
-RcppExport SEXP _inferCSN_asMatrixParallel(SEXP rpSEXP, SEXP cpSEXP, SEXP zSEXP, SEXP nrowsSEXP, SEXP ncolsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type rp(rpSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type cp(cpSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type z(zSEXP);
-    Rcpp::traits::input_parameter< int >::type nrows(nrowsSEXP);
-    Rcpp::traits::input_parameter< int >::type ncols(ncolsSEXP);
-    rcpp_result_gen = Rcpp::wrap(asMatrixParallel(rp, cp, z, nrows, ncols));
-    return rcpp_result_gen;
-END_RCPP
-}
 // filter_sort_matrix
 NumericMatrix filter_sort_matrix(NumericMatrix network_matrix, Nullable<CharacterVector> regulators, Nullable<CharacterVector> targets);
 RcppExport SEXP _inferCSN_filter_sort_matrix(SEXP network_matrixSEXP, SEXP regulatorsSEXP, SEXP targetsSEXP) {
@@ -460,18 +430,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// split_indices
-std::vector<std::vector<int>> split_indices(IntegerVector group, int n);
-RcppExport SEXP _inferCSN_split_indices(SEXP groupSEXP, SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< IntegerVector >::type group(groupSEXP);
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(split_indices(group, n));
-    return rcpp_result_gen;
-END_RCPP
-}
 // table_to_matrix
 NumericMatrix table_to_matrix(DataFrame network_table, Nullable<CharacterVector> regulators, Nullable<CharacterVector> targets);
 RcppExport SEXP _inferCSN_table_to_matrix(SEXP network_tableSEXP, SEXP regulatorsSEXP, SEXP targetsSEXP) {
@@ -520,13 +478,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_inferCSN_R_matrix_normalize_sparse", (DL_FUNC) &_inferCSN_R_matrix_normalize_sparse, 1},
     {"_inferCSN_R_matrix_center_dense", (DL_FUNC) &_inferCSN_R_matrix_center_dense, 3},
     {"_inferCSN_R_matrix_center_sparse", (DL_FUNC) &_inferCSN_R_matrix_center_sparse, 3},
-    {"_inferCSN_asMatrix", (DL_FUNC) &_inferCSN_asMatrix, 5},
-    {"_inferCSN_asMatrixParallel", (DL_FUNC) &_inferCSN_asMatrixParallel, 5},
     {"_inferCSN_filter_sort_matrix", (DL_FUNC) &_inferCSN_filter_sort_matrix, 3},
     {"_inferCSN_matrix_to_table", (DL_FUNC) &_inferCSN_matrix_to_table, 4},
     {"_inferCSN_prepare_calculate_metrics", (DL_FUNC) &_inferCSN_prepare_calculate_metrics, 2},
     {"_inferCSN_network_format", (DL_FUNC) &_inferCSN_network_format, 4},
-    {"_inferCSN_split_indices", (DL_FUNC) &_inferCSN_split_indices, 2},
     {"_inferCSN_table_to_matrix", (DL_FUNC) &_inferCSN_table_to_matrix, 3},
     {"_inferCSN_weight_sift", (DL_FUNC) &_inferCSN_weight_sift, 1},
     {NULL, NULL, 0}

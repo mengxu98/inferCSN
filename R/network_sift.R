@@ -100,7 +100,7 @@ network_sift <- function(
   if (method != "max") {
     entropy_method <- match.arg(entropy_method)
     if (is.null(matrix) | is.null(meta_data) | is.null(pseudotime_column)) {
-      log_message(
+      thisutils::log_message(
         "Parameters: 'matrix', 'meta_data' and 'pseudotime_column' not all provide, setting 'method' to 'max'.",
         message_type = "warning",
         verbose = verbose
@@ -109,7 +109,7 @@ network_sift <- function(
       return(weight_sift(network_table))
     }
     if (!(pseudotime_column %in% colnames(meta_data))) {
-      log_message(
+      thisutils::log_message(
         "Parameters: 'pseudotime_column' not in meta data provided, setting 'method' to 'max'.",
         message_type = "warning",
         verbose = verbose
@@ -120,7 +120,7 @@ network_sift <- function(
 
     samples <- intersect(rownames(meta_data), rownames(matrix))
     if (is.null(samples)) {
-      log_message(
+      thisutils::log_message(
         "No intersect samples in matrix and meta data, setting 'method' to 'max'.",
         message_type = "warning",
         verbose = verbose
@@ -177,7 +177,7 @@ network_sift <- function(
 
   if (!effective_entropy) {
     if (shuffles != 0) {
-      log_message(
+      thisutils::log_message(
         "Parameter: 'effective_entropy == FALSE' and 'shuffles != 0', setting 'shuffles == 0'.",
         message_type = "warning",
         verbose = verbose
@@ -186,7 +186,7 @@ network_sift <- function(
     }
   } else {
     if (shuffles <= 10) {
-      log_message(
+      thisutils::log_message(
         "Parameter: 'shuffles' is too small, setting 'shuffles == 10'.",
         message_type = "warning",
         verbose = verbose
@@ -195,7 +195,7 @@ network_sift <- function(
     }
   }
 
-  transfer_entropy_table <- parallelize_fun(
+  transfer_entropy_table <- thisutils::parallelize_fun(
     unique_pairs,
     cores = cores,
     verbose = verbose,

@@ -2,6 +2,8 @@
 
 #' @title inferCSN: inferring cell-type specific gene regulatory network
 #'
+#' @useDynLib inferCSN
+#'
 #' @description
 #' An R package for inferring cell-type specific gene regulatory network from single-cell RNA-seq data
 #'
@@ -32,11 +34,11 @@ inferCSN_logo <- function(
     unicode = cli::is_utf8_output()) {
   logo <- c(
     "       0        1      2           3    4
-        _       ____          ___________ _   __
-       (_)___  / __/__  _____/ ____/ ___// | / /
-      / / __ ./ /_/ _ ./ ___/ /    .__ ./  |/ / 
-     / / / / / __/  __/ /  / /___ ___/ / /|  /  
-    /_/_/ /_/_/  .___/_/   .____//____/_/ |_/
+    _        ____           ___________ _   __
+   (_)____  / __/___  _____/ ____/ ___// | / /
+  / // __ ./ /_ / _ ./ ___/ /    .__ ./  |/ /
+ / // / / / __//  __/ /  / /___ ___/ / /|  /
+/_//_/ /_/_/   .___/_/   .____//____/_/ |_/
     5             6      7      8       9   "
   )
 
