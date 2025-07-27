@@ -92,7 +92,7 @@ reference:
   - matrix_to_table
   - meta_cells
   - network_format
-  - print.logo
+  - print.inferCSN_logo
   - print.srm
   - print.srm_cv
   - predict.srm
