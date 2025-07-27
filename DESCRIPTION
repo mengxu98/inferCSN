@@ -1,12 +1,12 @@
 Type: Package
 Package: inferCSN
 Title: Inferring Cell-Specific Gene Regulatory Network
-Version: 1.1.8
-Date: 2025-06-17
+Version: 1.1.9
+Date: 2025-07-27
 Authors@R:
     person("Meng", "Xu", email = "mengxu98@qq.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-8300-1054"))
 Maintainer: Meng Xu <mengxu98@qq.com>
-Description: An R package for inferring cell-type specific gene regulatory network from single-cell RNA data.
+Description: An R package for inferring cell-type specific gene regulatory network from single-cell RNA-seq data.
 License: MIT + file LICENSE
 URL: https://mengxu98.github.io/inferCSN/
 BugReports: https://github.com/mengxu98/inferCSN/issues
@@ -51,7 +51,7 @@ Suggests:
 LinkingTo:
     Rcpp,
     RcppArmadillo
-Config/Needs/website: mengxu98/mxtemplate
+Config/Needs/website: mengxu98/thistemplate
 Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
