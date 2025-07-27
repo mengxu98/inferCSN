@@ -3,12 +3,12 @@
 \docType{package}
 \name{inferCSN-package}
 \alias{inferCSN-package}
-\title{inferCSN: inferring cell-type specific gene regulatory network}
+\title{Inferring Cell-Specific Gene Regulatory Network}
 \source{
-\url{https://github.com/mengxu98/inferCSN}
+\url{https://mengxu98.github.io/inferCSN/}
 }
 \description{
-An R package for inferring cell-type specific gene regulatory network from single-cell RNA-seq data
+An R package for inferring cell-type specific gene regulatory network from single-cell RNA-seq data.
 }
 \seealso{
 Useful links:
@@ -19,5 +19,5 @@ Useful links:
 
 }
 \author{
-Meng xu (Maintainer), \email{mengxu98@qq.com}
+Meng Xu (Maintainer), \email{mengxu98@qq.com}
 }

@@ -1,48 +1,50 @@
 # -*- coding: utf-8 -*-
 
-#' @title inferCSN: inferring cell-type specific gene regulatory network
+#' @title Inferring Cell-Specific Gene Regulatory Network
 #'
 #' @useDynLib inferCSN
 #'
 #' @description
-#' An R package for inferring cell-type specific gene regulatory network from single-cell RNA-seq data
+#' An R package for inferring cell-type specific gene regulatory network from single-cell RNA-seq data.
 #'
-#' @author Meng xu (Maintainer), \email{mengxu98@qq.com}
+#' @author Meng Xu (Maintainer), \email{mengxu98@qq.com}
 #'
-#' @source \url{https://github.com/mengxu98/inferCSN}
+#' @source \url{https://mengxu98.github.io/inferCSN/}
 #'
 #' @md
 #' @docType package
 #' @name inferCSN-package
 "_PACKAGE"
 
-#' @title inferCSN logo
+#' @title The logo of inferCSN
 #'
 #' @description
 #' The inferCSN logo, using ASCII or Unicode characters
-#' Use [cli::ansi_strip()] to get rid of the colors.
-#' @param unicode Unicode symbols. Default is `TRUE` on UTF-8 platforms.
-#'
-#' @references
-#'  \url{https://github.com/tidyverse/tidyverse/blob/main/R/logo.R}
+#' Use [cli::ansi_strip] to get rid of the colors.
 #'
 #' @md
+#' @param unicode Unicode symbols on UTF-8 platforms.
+#' Default is [cli::is_utf8_output].
+#'
+#' @references
+#' \url{https://github.com/tidyverse/tidyverse/blob/main/R/logo.R}
+#'
 #' @export
 #' @examples
 #' inferCSN_logo()
 inferCSN_logo <- function(
     unicode = cli::is_utf8_output()) {
   logo <- c(
-    "       0        1      2           3    4
+    "    0        1      2           3    4
     _        ____           ___________ _   __
    (_)____  / __/___  _____/ ____/ ___// | / /
   / // __ ./ /_ / _ ./ ___/ /    .__ ./  |/ /
  / // / / / __//  __/ /  / /___ ___/ / /|  /
 /_//_/ /_/_/   .___/_/   .____//____/_/ |_/
-    5             6      7      8       9   "
+  5             6      7      8       9"
   )
 
-  hexa <- c("*", ".", "o", "*", ".", "*", ".", "o", ".", "*")
+  hexa <- c("*", ".", "o", "*", ".", "o", "*", ".", "o", "*")
   if (unicode) {
     hexa <- c("*" = "\u2b22", "o" = "\u2b21", "." = ".")[hexa]
   }
@@ -61,18 +63,24 @@ inferCSN_logo <- function(
     logo <- sub(pat, col_hexa[[i + 1]], logo)
   }
 
-  structure(cli::col_blue(logo), class = "logo")
+  structure(
+    cli::col_blue(logo),
+    class = "inferCSN_logo"
+  )
 }
 
-#' @title print logo
+#' @title Print logo
 #'
-#' @param x Input infromation.
+#' @param x Input information.
 #' @param ... Other parameters.
 #'
-#' @method print logo
+#' @return Print the ASCII logo
+#'
+#' @method print inferCSN_logo
 #'
 #' @export
-print.logo <- function(x, ...) {
+#'
+print.inferCSN_logo <- function(x, ...) {
   cat(x, ..., sep = "\n")
   invisible(x)
 }
@@ -81,13 +89,15 @@ print.logo <- function(x, ...) {
   version <- utils::packageDescription(pkgname, fields = "Version")
 
   msg <- paste0(
-    "-------------------------------------------------------
-",
-    cli::col_blue(" ", pkgname, " version ", version),
-    "
-   This message can be suppressed by:
-     suppressPackageStartupMessages(library(inferCSN))
--------------------------------------------------------"
+    strrep("-", 60),
+    "\n",
+    cli::col_blue(pkgname, " version ", version),
+    "\n\n",
+    cli::col_grey("This message can be suppressed by:"),
+    "\n",
+    cli::col_grey("  suppressPackageStartupMessages(library(inferCSN))"),
+    "\n",
+    strrep("-", 60)
   )
 
   packageStartupMessage(inferCSN_logo())
