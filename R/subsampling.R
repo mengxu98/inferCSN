@@ -100,7 +100,7 @@ subsampling <- function(
   )
 
   if (return_sparse) {
-    matrix <- thisutils::as_matrix(matrix, sparse = TRUE)
+    matrix <- thisutils::as_matrix(matrix, return_sparse = TRUE)
   } else {
     matrix <- thisutils::as_matrix(matrix)
   }

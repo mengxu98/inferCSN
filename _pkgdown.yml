@@ -89,7 +89,6 @@ reference:
   - coef.srm
   - coef.srm_cv
   - filter_sort_matrix
-  - matrix_to_table
   - meta_cells
   - network_format
   - print.inferCSN_logo
@@ -98,7 +97,6 @@ reference:
   - predict.srm
   - predict.srm_cv
   - subsampling
-  - table_to_matrix
 
 - subtitle: "Example data"
 - contents:

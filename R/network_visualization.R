@@ -125,10 +125,11 @@ plot_network_heatmap <- function(
     legend_name = "Weight",
     row_title = "Regulators") {
   if (switch_matrix) {
-    weight_matrix <- table_to_matrix(
+    colnames(network_table) <- c("row", "col", "value")
+    weight_matrix <- thisutils::table_to_matrix(
       network_table,
-      regulators = regulators,
-      targets = targets
+      regulators,
+      targets
     )
   } else {
     weight_matrix <- network_table

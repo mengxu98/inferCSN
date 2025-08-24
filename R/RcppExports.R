@@ -101,7 +101,8 @@ R_matrix_center_sparse <- function(mat, X_normalized, intercept) {
 #' @examples
 #' data("example_matrix")
 #' network_table <- inferCSN(example_matrix)
-#' network_matrix <- table_to_matrix(network_table)
+#' colnames(network_table) <- c("row", "col", "value")
+#' network_matrix <- thisutils::table_to_matrix(network_table)
 #' filter_sort_matrix(network_matrix)[1:6, 1:6]
 #'
 #' filter_sort_matrix(
@@ -111,43 +112,6 @@ R_matrix_center_sparse <- function(mat, X_normalized, intercept) {
 #' )
 filter_sort_matrix <- function(network_matrix, regulators = NULL, targets = NULL) {
     .Call('_inferCSN_filter_sort_matrix', PACKAGE = 'inferCSN', network_matrix, regulators, targets)
-}
-
-#' @title Switch matrix to network table
-#'
-#' @param network_matrix The matrix of network weight.
-#' @param regulators Character vector of regulator names to filter by.
-#' @param targets Character vector of target names to filter by.
-#' @param threshold The threshold for filtering weights based on absolute values, defaults to 0.
-#'
-#' @return Network table
-#' @export
-#'
-#' @examples
-#' data("example_matrix")
-#' network_table <- inferCSN(example_matrix)
-#' network_matrix <- table_to_matrix(network_table)
-#' network_table_new <- matrix_to_table(network_matrix)
-#' head(network_table)
-#' head(network_table_new)
-#' identical(
-#'   network_table,
-#'   network_table_new
-#' )
-#'
-#' matrix_to_table(
-#'   network_matrix,
-#'   threshold = 0.8
-#' )
-#'
-#' matrix_to_table(
-#'   network_matrix,
-#'   regulators = c("g1", "g2"),
-#'   targets = c("g3", "g4")
-#' )
-#'
-matrix_to_table <- function(network_matrix, regulators = NULL, targets = NULL, threshold = 0.0) {
-    .Call('_inferCSN_matrix_to_table', PACKAGE = 'inferCSN', network_matrix, regulators, targets, threshold)
 }
 
 prepare_calculate_metrics <- function(network_table, ground_truth) {
@@ -195,31 +159,6 @@ prepare_calculate_metrics <- function(network_table, ground_truth) {
 #' )
 network_format <- function(network_table, regulators = NULL, targets = NULL, abs_weight = TRUE) {
     .Call('_inferCSN_network_format', PACKAGE = 'inferCSN', network_table, regulators, targets, abs_weight)
-}
-
-#' @title Switch network table to matrix
-#'
-#' @param network_table The weight data table of network.
-#' @param regulators Regulators list.
-#' @param targets Targets list.
-#'
-#' @return Weight matrix
-#' @export
-#'
-#' @examples
-#' data("example_matrix")
-#' network_table <- inferCSN(example_matrix)
-#' head(network_table)
-#'
-#' table_to_matrix(network_table)[1:6, 1:6]
-#'
-#' table_to_matrix(
-#'   network_table,
-#'   regulators = c("g1", "g2"),
-#'   targets = c("g3", "g4")
-#' )
-table_to_matrix <- function(network_table, regulators = NULL, targets = NULL) {
-    .Call('_inferCSN_table_to_matrix', PACKAGE = 'inferCSN', network_table, regulators, targets)
 }
 
 #' @title Weight sift
