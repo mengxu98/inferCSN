@@ -1,8 +1,8 @@
 Type: Package
 Package: inferCSN
 Title: Inferring Cell-Specific Gene Regulatory Network
-Version: 1.1.9
-Date: 2025-07-27
+Version: 1.2.0
+Date: 2025-10-15
 Authors@R:
     person("Meng", "Xu", email = "mengxu98@qq.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-8300-1054"))
 Maintainer: Meng Xu <mengxu98@qq.com>
@@ -18,11 +18,11 @@ Imports:
     ggnetwork,
     ggplot2,
     ggraph,
+    L0Learn,
     Matrix,
     methods,
     purrr,
     Rcpp,
-    RcppArmadillo,
     stats,
     thisutils
 Suggests:
@@ -49,8 +49,7 @@ Suggests:
     uwot,
     viridis
 LinkingTo:
-    Rcpp,
-    RcppArmadillo
+    Rcpp
 Config/Needs/website: mengxu98/thistemplate
 Config/testthat/edition: 3
 Encoding: UTF-8

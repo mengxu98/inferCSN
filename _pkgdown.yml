@@ -37,7 +37,7 @@ reference:
 - subtitle: "Inferring cell-specific gene regulatory network"
 - contents:
   - inferCSN-package
-  - inferCSN_logo
+  - infercsn_logo
   - inferCSN
 
 - subtitle: "Network processing"
@@ -82,20 +82,13 @@ reference:
 - contents:
   - single_network
   - fit_srm
-  - sparse_regression
 
 - subtitle: "Utils functions"
 - contents:
-  - coef.srm
-  - coef.srm_cv
   - filter_sort_matrix
   - meta_cells
   - network_format
-  - print.inferCSN_logo
-  - print.srm
-  - print.srm_cv
-  - predict.srm
-  - predict.srm_cv
+  - print.infercsn_logo
   - subsampling
 
 - subtitle: "Example data"
