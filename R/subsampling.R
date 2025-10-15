@@ -106,9 +106,7 @@ subsampling <- function(
   }
 
   thisutils::log_message(
-    "Subsample matrix generated, dimensions: ",
-    nrow(matrix), " cells by ",
-    ncol(matrix), " genes.",
+    "Subsample matrix generated, dimensions: {.val {nrow(matrix)}} cells by {.val {ncol(matrix)}} genes",
     verbose = verbose
   )
 

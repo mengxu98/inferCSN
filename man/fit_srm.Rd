@@ -29,8 +29,7 @@ fit_srm(
 This can take either one of the following choices: \emph{\code{L0}}, \emph{\code{L0L1}}, and \emph{\code{L0L2}}.
 For high-dimensional and sparse data, \emph{\code{L0L2}} is more effective.}
 
-\item{regulators_num}{The number of non-zore coefficients, this value will affect the final performance.
-The maximum support size at which to terminate the regularization path.}
+\item{regulators_num}{The number of regulators for target.}
 
 \item{n_folds}{The number of folds for cross-validation, default is \emph{\code{5}}.}
 

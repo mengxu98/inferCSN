@@ -164,9 +164,8 @@ setMethod(
           cross_validation = cross_validation,
           seed = seed,
           penalty = penalty,
-          n_folds = n_folds,
-          subsampling_ratio = subsampling_ratio,
           r_squared_threshold = r_squared_threshold,
+          n_folds = n_folds,
           verbose = verbose,
           ...
         )

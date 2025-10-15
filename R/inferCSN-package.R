@@ -31,17 +31,16 @@
 #'
 #' @export
 #' @examples
-#' inferCSN_logo()
-inferCSN_logo <- function(
-    unicode = cli::is_utf8_output()) {
+#' infercsn_logo()
+infercsn_logo <- function(unicode = cli::is_utf8_output()) {
   logo <- c(
-    "    0        1      2           3    4
-    _        ____           ___________ _   __
-   (_)____  / __/___  _____/ ____/ ___// | / /
-  / // __ ./ /_ / _ ./ ___/ /    .__ ./  |/ /
- / // / / / __//  __/ /  / /___ ___/ / /|  /
-/_//_/ /_/_/   .___/_/   .____//____/_/ |_/
-  5             6      7      8       9"
+    "          0          1        2             3     4
+           _        ____           ___________ _   __
+          (_)____  / __/___  _____/ ____/ ___// | / /
+         / // __ ./ /_ / _ ./ ___/ /    .__ ./  |/ /
+        / // / / / __//  __/ /  / /___ ___/ / /|  /
+       /_//_/ /_/_/   .___/_/   .____//____/_/ |_/
+      5               6      7        8          9"
   )
 
   hexa <- c("*", ".", "o", "*", ".", "o", "*", ".", "o", "*")
@@ -54,8 +53,10 @@ inferCSN_logo <- function(
     "yellow", "green", "white", "magenta", "cyan"
   )
 
-  col_hexa <- purrr::map2(
-    hexa, cols, ~ cli::make_ansi_style(.y)(.x)
+  col_hexa <- mapply(
+    function(x, y) cli::make_ansi_style(y)(x),
+    hexa, cols,
+    SIMPLIFY = FALSE
   )
 
   for (i in 0:9) {
@@ -65,7 +66,7 @@ inferCSN_logo <- function(
 
   structure(
     cli::col_blue(logo),
-    class = "inferCSN_logo"
+    class = "infercsn_logo"
   )
 }
 
@@ -76,30 +77,38 @@ inferCSN_logo <- function(
 #'
 #' @return Print the ASCII logo
 #'
-#' @method print inferCSN_logo
+#' @method print infercsn_logo
 #'
 #' @export
 #'
-print.inferCSN_logo <- function(x, ...) {
+print.infercsn_logo <- function(x, ...) {
   cat(x, ..., sep = "\n")
   invisible(x)
 }
 
 .onAttach <- function(libname, pkgname) {
-  version <- utils::packageDescription(pkgname, fields = "Version")
+  verbose <- thisutils::get_verbose()
+  if (isTRUE(verbose)) {
+    version <- utils::packageDescription(
+      pkgname,
+      fields = "Version"
+    )
 
-  msg <- paste0(
-    strrep("-", 60),
-    "\n",
-    cli::col_blue(pkgname, " version ", version),
-    "\n\n",
-    cli::col_grey("This message can be suppressed by:"),
-    "\n",
-    cli::col_grey("  suppressPackageStartupMessages(library(inferCSN))"),
-    "\n",
-    strrep("-", 60)
-  )
+    msg <- paste0(
+      strrep("-", 60),
+      "\n",
+      cli::col_blue(pkgname, " version ", version),
+      "\n",
+      cli::col_grey("This message can be suppressed by:"),
+      "\n",
+      cli::col_grey("  suppressPackageStartupMessages(library(inferCSN))"),
+      "\n",
+      cli::col_grey("  or options(log_message.verbose = FALSE)"),
+      "\n",
+      strrep("-", 60)
+    )
 
-  packageStartupMessage(inferCSN_logo())
-  packageStartupMessage(msg)
+    packageStartupMessage(infercsn_logo())
+    packageStartupMessage(msg)
+  }
 }
