@@ -31,7 +31,7 @@ bool geneCompare(const std::string &a, const std::string &b)
 //' @export
 //'
 //' @examples
-//' data("example_matrix")
+//' data(example_matrix)
 //' network_table <- inferCSN(example_matrix)
 //' colnames(network_table) <- c("row", "col", "value")
 //' network_matrix <- thisutils::table_to_matrix(network_table)

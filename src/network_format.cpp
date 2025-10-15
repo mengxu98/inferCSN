@@ -27,7 +27,7 @@ bool AbsGreater::operator()(int i, int j) const
 //' @export
 //'
 //' @examples
-//' data("example_matrix")
+//' data(example_matrix)
 //' network_table <- inferCSN(example_matrix)
 //'
 //' network_format(
@@ -175,7 +175,7 @@ DataFrame network_format(DataFrame network_table,
 #' @export
 #'
 #' @examples
-#' data("example_matrix")
+#' data(example_matrix)
 #' network_table <- inferCSN(example_matrix)
 #'
 #' network_format(
