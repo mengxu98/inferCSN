@@ -47,10 +47,7 @@ Default is \code{TRUE}.}
 }
 \value{
 A data frame of the single target gene network.
- The data frame has three columns:
- \item{regulator}{The regulator genes.}
- \item{target}{The target gene.}
- \item{weight}{The weight of the regulator gene on the target gene.}
+The data frame has three columns: regulator, target, and weight.
 }
 \description{
 Construct network for single target gene

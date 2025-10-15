@@ -5,10 +5,8 @@
 #' @param target The target gene.
 #'
 #' @return A data frame of the single target gene network.
-#'  The data frame has three columns:
-#'  \item{regulator}{The regulator genes.}
-#'  \item{target}{The target gene.}
-#'  \item{weight}{The weight of the regulator gene on the target gene.}
+#' The data frame has three columns: regulator, target, and weight.
+#'
 #' @export
 #' @examples
 #' data(example_matrix)

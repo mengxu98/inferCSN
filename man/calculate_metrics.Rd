@@ -15,12 +15,7 @@ calculate_metrics(
 )
 }
 \arguments{
-\item{network_table}{A data frame of predicted network structure containing:
-\itemize{
-\item{regulator}{The regulator genes.}
-\item{target}{The target gene.}
-\item{weight}{The weight of the regulator on the target.}
-}}
+\item{network_table}{A data frame.}
 
 \item{ground_truth}{A data frame of ground truth network with the same format as network_table.}
 
@@ -28,16 +23,16 @@ calculate_metrics(
 Default is \code{"all"}.
 This can take any of the following choices:
 \itemize{
-\item{all}{Returns all available metrics with \emph{Performance Metrics} plot}
-\item{auc}{Returns both AUROC and AUPRC with their plots}
-\item{auroc}{Area Under ROC Curve with plot}
-\item{auprc}{Area Under Precision-Recall Curve with plot}
-\item{precision}{Proportion of correct predictions among positive predictions}
-\item{recall}{Proportion of actual positives correctly identified}
-\item{f1}{Harmonic mean of precision and recall}
-\item{accuracy}{Overall classification accuracy}
-\item{si}{Set Intersection, counting correctly predicted edges}
-\item{ji}{Jaccard Index, measuring overlap between predicted and true networks}
+\item all Returns all available metrics with \emph{Performance Metrics} plot.
+\item auc Returns both AUROC and AUPRC with their plots.
+\item auroc Area Under ROC Curve with plot.
+\item auprc Area Under Precision-Recall Curve with plot.
+\item precision Proportion of correct predictions among positive predictions.
+\item recall Proportion of actual positives correctly identified.
+\item f1 Harmonic mean of precision and recall.
+\item accuracy Overall classification accuracy.
+\item si Set Intersection, counting correctly predicted edges.
+\item ji Jaccard Index, measuring overlap between predicted and true networks.
 }}
 
 \item{return_plot}{Whether to generate visualization plots.
@@ -52,8 +47,8 @@ Default is \code{1}.}
 \value{
 A list containing:
 \itemize{
-\item{metrics}{A data frame with requested metrics}
-\item{plot}{A plot object if return_plot = TRUE (optional)}
+\item metrics A data frame with requested metrics.
+\item plot A plot object if return_plot = TRUE (optional).
 }
 }
 \description{

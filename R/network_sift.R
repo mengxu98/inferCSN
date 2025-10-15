@@ -24,12 +24,8 @@
 #'
 #' @return
 #' A data table of regulator-target regulatory relationships.
-#' The data table has the following columns:
-#' \itemize{
-#'   \item{regulator}{The regulator genes.}
-#'   \item{target}{The target gene.}
-#'   \item{weight}{The weight of the regulator on the target.}
-#' }
+#' The data table has the three columns: regulator, target, and weight.
+#'
 #' @export
 #'
 #' @examples

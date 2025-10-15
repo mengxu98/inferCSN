@@ -43,10 +43,7 @@ Default is \code{TRUE}.}
 }
 \value{
 A list of the sparse regression model.
-The list has the following components:
-\item{model}{The sparse regression model.}
-\item{metrics}{A list of metrics.}
-\item{coefficients}{A list of coefficients.}
+The list has the three components: model, metrics, and coefficients.
 }
 \description{
 Sparse regression model

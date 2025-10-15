@@ -8,10 +8,7 @@
 #' @param regulators_num The number of regulators for target.
 #'
 #' @return A list of the sparse regression model.
-#'  The list has the following components:
-#'  \item{model}{The sparse regression model.}
-#'  \item{metrics}{A list of metrics.}
-#'  \item{coefficients}{A list of coefficients.}
+#' The list has the three components: model, metrics, and coefficients.
 #'
 #' @export
 #' @examples
