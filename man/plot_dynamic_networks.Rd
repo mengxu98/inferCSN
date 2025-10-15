@@ -25,40 +25,50 @@ plot_dynamic_networks(
 
 \item{celltypes_order}{The order of cell types.}
 
-\item{ntop}{The number of top genes to plot.}
+\item{ntop}{The number of top genes to plot.
+Default is \code{10}.}
 
-\item{title}{The title of figure.}
+\item{title}{The title of figure.
+Default is \code{NULL}.}
 
-\item{theme_type}{Default is \code{theme_void}, the theme of figure,
-could be \code{theme_void}, \code{theme_blank} or \code{theme_facet}.}
+\item{theme_type}{The theme of figure.
+Could be \code{"theme_void"}, \code{"theme_blank"}, or \code{"theme_facet"}.
+Default is \code{"theme_void"}.}
 
-\item{plot_type}{Default is \code{"ggplot"}, the type of figure,
-could be \code{ggplot}, \code{animate} or \code{ggplotly}.}
+\item{plot_type}{The type of figure.
+Could be \code{"ggplot"}, \code{"animate"}, or \code{"ggplotly"}.
+Default is \code{"ggplot"}.}
 
-\item{layout}{Default is \code{"fruchtermanreingold"}, the layout of figure,
-could be \code{fruchtermanreingold} or \code{kamadakawai}.}
+\item{layout}{The layout of figure.
+Could be \code{"fruchtermanreingold"} or \code{"kamadakawai"}.
+Default is \code{"fruchtermanreingold"}.}
 
-\item{nrow}{The number of rows of figure.}
+\item{nrow}{The number of rows of figure.
+Default is \code{2}.}
 
-\item{figure_save}{Default is \code{FALSE},
-Logical value, whether to save the figure file.}
+\item{figure_save}{Whether to save the figure file.
+Default is \code{FALSE}.}
 
-\item{figure_name}{The name of figure file.}
+\item{figure_name}{The name of figure file.
+Default is \code{NULL}.}
 
-\item{figure_width}{The width of figure.}
+\item{figure_width}{The width of figure.
+Default is \code{6}.}
 
-\item{figure_height}{The height of figure.}
+\item{figure_height}{The height of figure.
+Default is \code{6}.}
 
-\item{seed}{Default is \code{1}, the seed random use to plot network.}
+\item{seed}{The seed random use to plot network.
+Default is \code{1}.}
 }
 \value{
-A dynamic figure object
+A dynamic figure object.
 }
 \description{
 Plot dynamic networks
 }
 \examples{
-data("example_matrix")
+data(example_matrix)
 network <- inferCSN(example_matrix)[1:100, ]
 network$celltype <- c(
   rep("cluster1", 20),

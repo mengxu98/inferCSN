@@ -11,7 +11,7 @@
 //' @export
 //'
 //' @examples
-//' data("example_matrix")
+//' data(example_matrix)
 //' network_table <- inferCSN(example_matrix)
 //' weight_sift(network_table) |> head()
 // [[Rcpp::export]]

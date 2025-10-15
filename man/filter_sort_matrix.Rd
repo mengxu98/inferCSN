@@ -20,7 +20,7 @@ Filtered and sorted matrix
 Filter and sort matrix
 }
 \examples{
-data("example_matrix")
+data(example_matrix)
 network_table <- inferCSN(example_matrix)
 colnames(network_table) <- c("row", "col", "value")
 network_matrix <- thisutils::table_to_matrix(network_table)

@@ -1,24 +1,27 @@
 #' @title Plot network heatmap
 #'
 #' @inheritParams network_format
-#' @param switch_matrix Logical value, default is *`TRUE`*, whether to weight data table to matrix.
-#' @param show_names Logical value, default is *`FALSE`*, whether to show names of row and column.
+#' @param switch_matrix Whether to weight data table to matrix.
+#' Default is `TRUE`.
+#' @param show_names Whether to show names of row and column.
+#' Default is `FALSE`.
 #' @param heatmap_size_lock Lock the size of heatmap.
-#' @param heatmap_size Default is *`5`*. The size of heatmap.
+#' @param heatmap_size The size of heatmap.
+#' Default is `5`.
 #' @param heatmap_height The height of heatmap.
 #' @param heatmap_width The width of heatmap.
 #' @param heatmap_title The title of heatmap.
 #' @param heatmap_color Colors of heatmap.
-#' @param border_color Default is *`gray`*. Color of heatmap border.
-#' @param rect_color Default is *`NA`*. Color of heatmap rect.
+#' @param border_color Default is `"gray"`. Color of heatmap border.
+#' @param rect_color Default is `NA`. Color of heatmap rect.
 #' @param anno_width Width of annotation.
 #' @param anno_height Height of annotation.
-#' @param row_anno_type Default is *`boxplot`*,
-#' could add a annotation plot to row,
-#' choose one of *`boxplot`*, *`barplot`*, *`histogram`*, *`density`*, *`lines`*, *`points`*, and *`horizon`*.
-#' @param column_anno_type Default is *`boxplot`*,
-#' could add a annotation plot to column,
-#' choose one of *`boxplot`*, *`barplot`*, *`histogram`*, *`density`*, *`lines`*, and *`points`*.
+#' @param row_anno_type Default is `"boxplot"`,
+#' could add a annotation plot to row.
+#' choose one of `"boxplot"`, `"barplot"`, `"histogram"`, `"density"`, `"lines"`, `"points"`, and `"horizon"`.
+#' @param column_anno_type Default is `"boxplot"`,
+#' could add a annotation plot to column.
+#' choose one of `"boxplot"`, `"barplot"`, `"histogram"`, `"density"`, `"lines"`, and `"points"`.
 #' @param legend_name The name of legend.
 #' @param row_title The title of row.
 #'
@@ -27,7 +30,7 @@
 #' @export
 #'
 #' @examples
-#' data("example_matrix")
+#' data(example_matrix)
 #' data("example_ground_truth")
 #' network_table <- inferCSN(example_matrix)
 #'
@@ -320,7 +323,7 @@ plot_network_heatmap <- function(
 #' @export
 #'
 #' @examples
-#' data("example_matrix")
+#' data(example_matrix)
 #' network_table <- inferCSN(example_matrix)
 #' plot_static_networks(
 #'   network_table,
@@ -413,15 +416,21 @@ plot_static_networks <- function(
 
 #' @title Plot contrast networks
 #'
+#' @md
 #' @inheritParams plot_static_networks
 #' @param degree_value Degree value to filter nodes.
+#' Default is `0`.
 #' @param weight_value Weight value to filter edges.
+#' Default is `0`.
+#' @param legend_position The position of legend.
+#' Default is `"bottom"`.
 #'
-#' @return A ggplot2 object
+#' @return
+#' A ggplot2 object.
 #' @export
 #'
 #' @examples
-#' data("example_matrix")
+#' data(example_matrix)
 #' network_table <- inferCSN(example_matrix)
 #' plot_contrast_networks(network_table[1:50, ])
 plot_contrast_networks <- function(
@@ -465,29 +474,41 @@ plot_contrast_networks <- function(
 
 #' @title Plot dynamic networks
 #'
+#' @md
 #' @inheritParams network_format
 #' @param celltypes_order The order of cell types.
 #' @param ntop The number of top genes to plot.
+#' Default is `10`.
 #' @param title The title of figure.
-#' @param theme_type Default is \code{theme_void}, the theme of figure,
-#' could be \code{theme_void}, \code{theme_blank} or \code{theme_facet}.
-#' @param plot_type Default is \code{"ggplot"}, the type of figure,
-#' could be \code{ggplot}, \code{animate} or \code{ggplotly}.
-#' @param layout Default is \code{"fruchtermanreingold"}, the layout of figure,
-#' could be \code{fruchtermanreingold} or \code{kamadakawai}.
+#' Default is `NULL`.
+#' @param theme_type The theme of figure.
+#' Could be `"theme_void"`, `"theme_blank"`, or `"theme_facet"`.
+#' Default is `"theme_void"`.
+#' @param plot_type The type of figure.
+#' Could be `"ggplot"`, `"animate"`, or `"ggplotly"`.
+#' Default is `"ggplot"`.
+#' @param layout The layout of figure.
+#' Could be `"fruchtermanreingold"` or `"kamadakawai"`.
+#' Default is `"fruchtermanreingold"`.
 #' @param nrow The number of rows of figure.
-#' @param figure_save Default is \code{FALSE},
-#' Logical value, whether to save the figure file.
+#' Default is `2`.
+#' @param figure_save Whether to save the figure file.
+#' Default is `FALSE`.
 #' @param figure_name The name of figure file.
+#' Default is `NULL`.
 #' @param figure_width The width of figure.
+#' Default is `6`.
 #' @param figure_height The height of figure.
-#' @param seed Default is \code{1}, the seed random use to plot network.
+#' Default is `6`.
+#' @param seed The seed random use to plot network.
+#' Default is `1`.
 #'
-#' @return A dynamic figure object
+#' @return
+#' A dynamic figure object.
 #' @export
 #'
 #' @examples
-#' data("example_matrix")
+#' data(example_matrix)
 #' network <- inferCSN(example_matrix)[1:100, ]
 #' network$celltype <- c(
 #'   rep("cluster1", 20),

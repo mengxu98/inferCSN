@@ -14,20 +14,23 @@ plot_contrast_networks(
 \arguments{
 \item{network_table}{The weight data table of network.}
 
-\item{degree_value}{Degree value to filter nodes.}
+\item{degree_value}{Degree value to filter nodes.
+Default is \code{0}.}
 
-\item{weight_value}{Weight value to filter edges.}
+\item{weight_value}{Weight value to filter edges.
+Default is \code{0}.}
 
-\item{legend_position}{The position of legend.}
+\item{legend_position}{The position of legend.
+Default is \code{"bottom"}.}
 }
 \value{
-A ggplot2 object
+A ggplot2 object.
 }
 \description{
 Plot contrast networks
 }
 \examples{
-data("example_matrix")
+data(example_matrix)
 network_table <- inferCSN(example_matrix)
 plot_contrast_networks(network_table[1:50, ])
 }

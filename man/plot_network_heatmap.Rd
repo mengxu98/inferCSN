@@ -34,13 +34,16 @@ plot_network_heatmap(
 
 \item{targets}{Targets list.}
 
-\item{switch_matrix}{Logical value, default is \emph{\code{TRUE}}, whether to weight data table to matrix.}
+\item{switch_matrix}{Whether to weight data table to matrix.
+Default is \code{TRUE}.}
 
-\item{show_names}{Logical value, default is \emph{\code{FALSE}}, whether to show names of row and column.}
+\item{show_names}{Whether to show names of row and column.
+Default is \code{FALSE}.}
 
 \item{heatmap_size_lock}{Lock the size of heatmap.}
 
-\item{heatmap_size}{Default is \emph{\code{5}}. The size of heatmap.}
+\item{heatmap_size}{The size of heatmap.
+Default is \code{5}.}
 
 \item{heatmap_height}{The height of heatmap.}
 
@@ -50,21 +53,21 @@ plot_network_heatmap(
 
 \item{heatmap_color}{Colors of heatmap.}
 
-\item{border_color}{Default is \emph{\code{gray}}. Color of heatmap border.}
+\item{border_color}{Default is \code{"gray"}. Color of heatmap border.}
 
-\item{rect_color}{Default is \emph{\code{NA}}. Color of heatmap rect.}
+\item{rect_color}{Default is \code{NA}. Color of heatmap rect.}
 
 \item{anno_width}{Width of annotation.}
 
 \item{anno_height}{Height of annotation.}
 
-\item{row_anno_type}{Default is \emph{\code{boxplot}},
-could add a annotation plot to row,
-choose one of \emph{\code{boxplot}}, \emph{\code{barplot}}, \emph{\code{histogram}}, \emph{\code{density}}, \emph{\code{lines}}, \emph{\code{points}}, and \emph{\code{horizon}}.}
+\item{row_anno_type}{Default is \code{"boxplot"},
+could add a annotation plot to row.
+choose one of \code{"boxplot"}, \code{"barplot"}, \code{"histogram"}, \code{"density"}, \code{"lines"}, \code{"points"}, and \code{"horizon"}.}
 
-\item{column_anno_type}{Default is \emph{\code{boxplot}},
-could add a annotation plot to column,
-choose one of \emph{\code{boxplot}}, \emph{\code{barplot}}, \emph{\code{histogram}}, \emph{\code{density}}, \emph{\code{lines}}, and \emph{\code{points}}.}
+\item{column_anno_type}{Default is \code{"boxplot"},
+could add a annotation plot to column.
+choose one of \code{"boxplot"}, \code{"barplot"}, \code{"histogram"}, \code{"density"}, \code{"lines"}, and \code{"points"}.}
 
 \item{legend_name}{The name of legend.}
 
@@ -77,7 +80,7 @@ A heatmap
 Plot network heatmap
 }
 \examples{
-data("example_matrix")
+data(example_matrix)
 data("example_ground_truth")
 network_table <- inferCSN(example_matrix)
 

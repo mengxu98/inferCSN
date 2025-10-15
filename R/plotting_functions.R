@@ -23,7 +23,7 @@
 #' @return ggplot object
 #' @export
 #' @examples
-#' data("example_matrix")
+#' data(example_matrix)
 #' test_data <- data.frame(
 #'   example_matrix[1:200, c(1, 7)],
 #'   c = c(
@@ -189,7 +189,7 @@ plot_scatter <- function(
 #' @export
 #'
 #' @examples
-#' data("example_matrix")
+#' data(example_matrix)
 #' network_table <- inferCSN(example_matrix)
 #' plot_histogram(network_table[, 3])
 plot_histogram <- function(
@@ -233,20 +233,20 @@ plot_histogram <- function(
 
 #' @title Plot embedding
 #'
+#' @md
 #' @param matrix Input matrix.
 #' @param labels Input labels.
 #' @param method Method to use for dimensionality reduction.
 #' @param colors Colors to use for the plot.
 #' @param point_size Size of the points.
 #' @param seed Seed for the random number generator.
-#' @param cores Set the number of threads when setting *`method`* to \code{\link[uwot]{umap}} and \code{\link[Rtsne]{Rtsne}}.
+#' @param cores Set the number of threads when setting for [uwot::umap] and [Rtsne::Rtsne].
 #'
-#' @md
 #' @return An embedding plot
 #' @export
 #'
 #' @examples
-#' data("example_matrix")
+#' data(example_matrix)
 #' samples_use <- 1:200
 #' plot_data <- example_matrix[samples_use, ]
 #' labels <- sample(
@@ -345,20 +345,27 @@ plot_embedding <- function(
 
 #' @title Plot coefficients
 #'
+#' @md
 #' @param data Input data.
-#' @param style Plotting style: "binary", "gradient", or "continuous".
+#' @param style Plotting style: `"binary"`, `"gradient"`, or `"continuous"`.
 #' @param positive_color Color for positive weights.
+#' Default is `"#3d67a2"`.
 #' @param negative_color Color for negative weights.
-#' @param neutral_color Color for weights near zero (used in "continuous" style).
+#' Default is `"#c82926"`.
+#' @param neutral_color Color for weights near zero (used in `"continuous"` style).
+#' Default is `"#cccccc"`.
 #' @param bar_width Width of the bars.
+#' Default is `0.7`.
 #' @param text_size Size of the text for weight values.
-#' @param show_values Logical, whether to show weight values on bars.
+#' Default is `3`.
+#' @param show_values Whether to show weight values on bars.
+#' Default is `TRUE`.
 #'
 #' @return A ggplot object
 #' @export
 #'
 #' @examples
-#' data("example_matrix")
+#' data(example_matrix)
 #' network_table <- inferCSN(example_matrix, targets = "g1")
 #' plot_coefficient(network_table)
 #' plot_coefficient(network_table, style = "binary")
@@ -428,14 +435,16 @@ plot_coefficient <- function(
 #'
 #' @param data Input data.
 #' @param targets Targets to plot.
+#' Default is `NULL`.
 #' @param nrow Number of rows for the plot.
-#' @param ... Other arguments passed to \code{\link{plot_coefficient}}.
+#' Default is `NULL`.
+#' @param ... Other arguments passed to [plot_coefficient].
 #'
 #' @return A list of ggplot objects
 #' @export
 #'
 #' @examples
-#' data("example_matrix")
+#' data(example_matrix)
 #' network_table <- inferCSN(
 #'   example_matrix,
 #'   targets = c("g1", "g2", "g3")

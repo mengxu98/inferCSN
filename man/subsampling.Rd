@@ -16,13 +16,17 @@ subsampling(
 \arguments{
 \item{matrix}{The input matrix to be subsampled.}
 
-\item{subsampling_method}{The method to use for subsampling. Options are "sample", "pseudobulk" or "meta_cells".}
+\item{subsampling_method}{The method to use for subsampling.
+Options are \code{"sample"}, \code{"pseudobulk"} or \code{"meta_cells"}.}
 
-\item{subsampling_ratio}{The percent of all samples used for \code{\link{fit_srm}}, default is \emph{\code{1}}.}
+\item{subsampling_ratio}{The percent of all samples used for \link{fit_srm}.
+Default is \code{1}.}
 
-\item{seed}{The random seed for cross-validation, default is \emph{\code{1}}.}
+\item{seed}{The random seed for cross-validation.
+Default is \code{1}.}
 
-\item{verbose}{Logical value, default is \emph{\code{TRUE}}, whether to print progress messages.}
+\item{verbose}{Whether to print progress messages.
+Default is \code{TRUE}.}
 
 \item{...}{Parameters for other methods.}
 }
@@ -33,7 +37,7 @@ The subsampled matrix.
 This function subsamples a matrix using either random sampling or meta cells method.
 }
 \examples{
-data("example_matrix")
+data(example_matrix)
 data("example_ground_truth")
 subsample_matrix <- subsampling(
   example_matrix,

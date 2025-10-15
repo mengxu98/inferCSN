@@ -4,38 +4,38 @@
 #' using dimensionality reduction and clustering techniques.
 #'
 #' @param matrix A gene expression matrix where rows represent genes and columns represent cells.
-#' @param genes_use Default is *`NULL`*.
-#'  A character vector specifying genes to be used for PCA dimensionality reduction.
-#' @param genes_exclude Default is *`NULL`*. A character vector specifying genes to be excluded
-#'  from PCA computation.
-#' @param var_genes_num Default is *`min(1000, nrow(matrix))`*. Number of most variable genes
-#'  to select when *`genes_use`* is not provided.
-#' @param gamma Default is *`10`*. Coarse-graining parameter defining the target ratio of input
+#' @param genes_use A character vector specifying genes to be used for PCA dimensionality reduction.
+#' Default is `NULL`.
+#' @param genes_exclude A character vector specifying genes to be excluded from PCA computation.
+#' Default is `NULL`.
+#' @param var_genes_num Number of most variable genes to select when `genes_use` is not provided.
+#' Default is `min(1000, nrow(matrix))`.
+#' @param gamma Default is `10`. Coarse-graining parameter defining the target ratio of input
 #'  cells to output metacells (e.g., gamma=10 yields approximately n/10 metacells for n input cells).
-#' @param knn_k Default is *`5`*. Number of nearest neighbors for constructing the cell-cell
+#' @param knn_k Default is `5`. Number of nearest neighbors for constructing the cell-cell
 #'  similarity network.
-#' @param do_scale Default is *`TRUE`*. Whether to standardize (center and scale) gene expression
-#'  values before PCA.
-#' @param pc_num Default is *`25`*. Number of principal components to retain for downstream analysis.
-#' @param fast_pca Default is *`TRUE`*. Whether to use the faster \link[irlba]{irlba} algorithm
+#' @param do_scale Whether to standardize (center and scale) gene expression values before PCA.
+#' Default is `TRUE`.
+#' @param pc_num Default is `25`. Number of principal components to retain for downstream analysis.
+#' @param fast_pca Default is `TRUE`. Whether to use the faster \link[irlba]{irlba} algorithm
 #'  instead of standard PCA. Recommended for large datasets.
-#' @param do_approx Default is *`FALSE`*. Whether to use approximate nearest neighbor search for
+#' @param do_approx Default is `FALSE`. Whether to use approximate nearest neighbor search for
 #'  datasets with >50000 cells to improve computational efficiency.
-#' @param approx_num Default is *`20000`*. Number of cells to randomly sample for approximate
-#'  nearest neighbor computation when *`do_approx = TRUE`*.
-#' @param directed Default is *`FALSE`*. Whether to construct a directed or undirected nearest
+#' @param approx_num Default is `20000`. Number of cells to randomly sample for approximate
+#'  nearest neighbor computation when `do_approx = TRUE`.
+#' @param directed Default is `FALSE`. Whether to construct a directed or undirected nearest
 #'  neighbor graph.
-#' @param use_nn2 Default is *`TRUE`*. Whether to use the faster RANN::nn2 algorithm for nearest
+#' @param use_nn2 Default is `TRUE`. Whether to use the faster RANN::nn2 algorithm for nearest
 #'  neighbor search (only applicable with Euclidean distance).
-#' @param seed Default is *`1`*. Random seed for reproducibility when subsampling cells in
+#' @param seed Default is `1`. Random seed for reproducibility when subsampling cells in
 #'  approximate mode.
-#' @param cluster_method Default is *`walktrap`*. Algorithm for community detection in the cell
-#'  similarity network. Options: *`walktrap`* (recommended) or *`louvain`* (gamma parameter ignored).
-#' @param block_size Default is *`10000`*. Number of cells to process in each batch when mapping
+#' @param cluster_method Default is `walktrap`. Algorithm for community detection in the cell
+#'  similarity network. Options: `walktrap` (recommended) or `louvain` (gamma parameter ignored).
+#' @param block_size Default is `10000`. Number of cells to process in each batch when mapping
 #'  cells to metacells in approximate mode. Adjust based on available memory.
-#' @param weights Default is *`NULL`*. Numeric vector of cell-specific weights for weighted
+#' @param weights Default is `NULL`. Numeric vector of cell-specific weights for weighted
 #'  averaging when computing metacell expression profiles. Length must match number of cells.
-#' @param do_median_norm Default is *`FALSE`*. Whether to perform median-based normalization of
+#' @param do_median_norm Default is `FALSE`. Whether to perform median-based normalization of
 #'  the final metacell expression matrix.
 #' @param ... Additional arguments passed to internal functions.
 #'
@@ -49,7 +49,7 @@
 #' https://github.com/kuijjerlab/SCORPION
 #'
 #' @examples
-#' data("example_matrix")
+#' data(example_matrix)
 #' meta_cells_matrix <- meta_cells(
 #'   example_matrix
 #' )

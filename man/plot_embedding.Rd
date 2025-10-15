@@ -27,7 +27,7 @@ plot_embedding(
 
 \item{point_size}{Size of the points.}
 
-\item{cores}{Set the number of threads when setting \emph{\code{method}} to \code{\link[uwot]{umap}} and \code{\link[Rtsne]{Rtsne}}.}
+\item{cores}{Set the number of threads when setting for \link[uwot:umap]{uwot::umap} and \link[Rtsne:Rtsne]{Rtsne::Rtsne}.}
 }
 \value{
 An embedding plot
@@ -36,7 +36,7 @@ An embedding plot
 Plot embedding
 }
 \examples{
-data("example_matrix")
+data(example_matrix)
 samples_use <- 1:200
 plot_data <- example_matrix[samples_use, ]
 labels <- sample(

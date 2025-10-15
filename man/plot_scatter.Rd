@@ -69,7 +69,7 @@ ggplot object
 Plot expression data in a scatter plot
 }
 \examples{
-data("example_matrix")
+data(example_matrix)
 test_data <- data.frame(
   example_matrix[1:200, c(1, 7)],
   c = c(

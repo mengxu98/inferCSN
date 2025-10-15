@@ -30,13 +30,13 @@ network_sift(
 \item{pseudotime_column}{The column of pseudotime.}
 
 \item{method}{The method used for filter edges.
-Could be choose \code{entropy} or \code{max}.}
+Could be choose \code{"entropy"} or \code{"max"}.}
 
-\item{entropy_method}{If setting \code{method} to \code{entropy},
-could be choose \code{Shannon} or \code{Renyi} to compute entropy.}
+\item{entropy_method}{If setting \code{method} to \code{"entropy"},
+could be choose \code{"Shannon"} or \code{"Renyi"} to compute entropy.}
 
 \item{effective_entropy}{Default is \code{FALSE}.
-Logical value, using effective entropy to filter weights or not.}
+Whether to use effective entropy to filter weights.}
 
 \item{shuffles}{Default is \code{100}.
 The number of shuffles used to calculate the effective transfer entropy.}
@@ -48,23 +48,32 @@ The number of bootstrap replications for each direction of the estimated transfe
 Markov order of gene expression values,
 i.e. the number of lagged values affecting the current value of gene expression values.}
 
-\item{entropy_p_value}{P value used to filter edges by entropy.}
+\item{entropy_p_value}{P value used to filter edges by entropy.
+Default is \code{0.05}.}
 
-\item{cores}{The number of cores to use for parallelization with \code{\link[foreach]{foreach}}, default is \emph{\code{1}}.}
+\item{cores}{The number of cores to use for parallelization with \link[foreach:foreach]{foreach::foreach}.
+Default is \code{1}.}
 
-\item{verbose}{Logical value, default is \emph{\code{TRUE}}, whether to print progress messages.}
+\item{verbose}{Whether to print progress messages.
+Default is \code{TRUE}.}
 }
 \value{
-Sifted network table
+A data table of regulator-target regulatory relationships.
+The data table has the following columns:
+\itemize{
+\item{regulator}{The regulator genes.}
+\item{target}{The target gene.}
+\item{weight}{The weight of the regulator on the target.}
+}
 }
 \description{
 Sifting network
 }
 \examples{
 \dontrun{
-data("example_matrix")
-data("example_meta_data")
-data("example_ground_truth")
+data(example_matrix)
+data(example_meta_data)
+data(example_ground_truth)
 
 network_table <- inferCSN(example_matrix)
 network_table_sifted <- network_sift(network_table)

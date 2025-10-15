@@ -18,10 +18,10 @@ plot_edges_comparison(
 
 \item{color_pattern}{A list of colors for different categories, with default values:
 \itemize{
-  \item *`predicted`* - Color for predicted edges (*`gray`*)
-  \item *`ground_truth`* - Color for ground truth edges (*`#bb141a`*)
-  \item *`overlap`* - Color for overlapping edges (*`#1966ad`*)
-  \item *`total`* - Color for total counts (*`#6C757D`*)
+  \item predicted - Color for predicted edges (gray)
+  \item ground_truth - Color for ground truth edges (#bb141a)
+  \item overlap - Color for overlapping edges (#1966ad)
+  \item total - Color for total counts (#6C757D)
 }}
 }
 \value{
@@ -31,7 +31,7 @@ A patchwork plot object containing network edge comparison and distribution plot
 Generates visualizations comparing edges of two networks.
 }
 \examples{
-data("example_matrix")
+data(example_matrix)
 data("example_ground_truth")
 network_table <- inferCSN(example_matrix)
 plot_edges_comparison(

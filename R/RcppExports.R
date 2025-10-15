@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-#' data("example_matrix")
+#' data(example_matrix)
 #' network_table <- inferCSN(example_matrix)
 #' colnames(network_table) <- c("row", "col", "value")
 #' network_matrix <- thisutils::table_to_matrix(network_table)
@@ -45,7 +45,7 @@ prepare_calculate_metrics <- function(network_table, ground_truth) {
 #' @export
 #'
 #' @examples
-#' data("example_matrix")
+#' data(example_matrix)
 #' network_table <- inferCSN(example_matrix)
 #'
 #' network_format(
@@ -81,7 +81,7 @@ network_format <- function(network_table, regulators = NULL, targets = NULL, abs
 #' @export
 #'
 #' @examples
-#' data("example_matrix")
+#' data(example_matrix)
 #' network_table <- inferCSN(example_matrix)
 #' weight_sift(network_table) |> head()
 weight_sift <- function(table) {

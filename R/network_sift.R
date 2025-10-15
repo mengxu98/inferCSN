@@ -1,33 +1,42 @@
 #' @title Sifting network
 #'
+#' @md
 #' @inheritParams inferCSN
 #' @inheritParams network_format
 #' @param matrix The expression matrix.
 #' @param meta_data The meta data for cells or samples.
 #' @param pseudotime_column The column of pseudotime.
 #' @param method The method used for filter edges.
-#' Could be choose \code{entropy} or \code{max}.
-#' @param entropy_method If setting \code{method} to \code{entropy},
-#'  could be choose \code{Shannon} or \code{Renyi} to compute entropy.
-#' @param effective_entropy Default is \code{FALSE}.
-#' Logical value, using effective entropy to filter weights or not.
-#' @param shuffles Default is \code{100}.
+#' Could be choose `"entropy"` or `"max"`.
+#' @param entropy_method If setting `method` to `"entropy"`,
+#'  could be choose `"Shannon"` or `"Renyi"` to compute entropy.
+#' @param effective_entropy Default is `FALSE`.
+#' Whether to use effective entropy to filter weights.
+#' @param shuffles Default is `100`.
 #' The number of shuffles used to calculate the effective transfer entropy.
-#' @param entropy_nboot Default is \code{300}.
+#' @param entropy_nboot Default is `300`.
 #' The number of bootstrap replications for each direction of the estimated transfer entropy.
-#' @param lag_value Default is \code{1}.
+#' @param lag_value Default is `1`.
 #' Markov order of gene expression values,
 #' i.e. the number of lagged values affecting the current value of gene expression values.
 #' @param entropy_p_value P value used to filter edges by entropy.
+#' Default is `0.05`.
 #'
-#' @return Sifted network table
+#' @return
+#' A data table of regulator-target regulatory relationships.
+#' The data table has the following columns:
+#' \itemize{
+#'   \item{regulator}{The regulator genes.}
+#'   \item{target}{The target gene.}
+#'   \item{weight}{The weight of the regulator on the target.}
+#' }
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' data("example_matrix")
-#' data("example_meta_data")
-#' data("example_ground_truth")
+#' data(example_matrix)
+#' data(example_meta_data)
+#' data(example_ground_truth)
 #'
 #' network_table <- inferCSN(example_matrix)
 #' network_table_sifted <- network_sift(network_table)

@@ -1,26 +1,40 @@
 #' @title inferring cell-type specific gene regulatory network
 #'
 #' @md
-#' @param object The input data for *`inferCSN`*.
-#' @param penalty The type of regularization, default is *`L0`*.
-#' This can take either one of the following choices: *`L0`*, *`L0L1`*, and *`L0L2`*.
-#' For high-dimensional and sparse data, *`L0L2`* is more effective.
-#' @param cross_validation Logical value, default is *`FALSE`*, whether to use cross-validation.
-#' @param n_folds The number of folds for cross-validation, default is *`5`*.
-#' @param seed The random seed for cross-validation, default is *`1`*.
-#' @param subsampling_method The method to use for subsampling. Options are "sample", "pseudobulk" or "meta_cells".
-#' @param subsampling_ratio The percent of all samples used for \code{\link{fit_srm}}, default is *`1`*.
-#' @param r_squared_threshold Threshold of \eqn{R^2} coefficient, default is *`0`*.
+#' @param object The input data for `inferCSN`.
+#' @param penalty The type of regularization, default is `"L0"`.
+#' This can take either one of the following choices: `"L0"`, `"L0L1"`, and `"L0L2"`.
+#' For high-dimensional and sparse data, `"L0L2"` is more effective.
+#' @param cross_validation Whether to use cross-validation.
+#' Default is `FALSE`.
+#' @param n_folds The number of folds for cross-validation.
+#' Default is `5`.
+#' @param seed The random seed for cross-validation.
+#' Default is `1`.
+#' @param subsampling_method The method to use for subsampling.
+#' Options are `"sample"`, `"pseudobulk"` or `"meta_cells"`.
+#' @param subsampling_ratio The percent of all samples used for [fit_srm].
+#' Default is `1`.
+#' @param r_squared_threshold Threshold of \eqn{R^2} coefficient.
+#' Default is `0`.
 #' @param regulators The regulator genes for which to infer the regulatory network.
 #' @param targets The target genes for which to infer the regulatory network.
-#' Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.
-#' @param cores The number of cores to use for parallelization with \code{\link[foreach]{foreach}}, default is *`1`*.
-#' @param verbose Logical value, default is *`TRUE`*, whether to print progress messages.
+#' @param cores The number of cores to use for parallelization with [foreach::foreach].
+#' Default is `1`.
+#' @param verbose Whether to print progress messages.
+#' Default is `TRUE`.
 #' @param ... Parameters for other methods.
 #'
 #' @docType methods
 #' @rdname inferCSN
-#' @return A data table of regulator-target regulatory relationships
+#' @return
+#' A data table of regulator-target regulatory relationships.
+#' The data table has the following columns:
+#' \itemize{
+#'   \item{regulator}{The regulator genes.}
+#'   \item{target}{The target gene.}
+#'   \item{weight}{The weight of the regulator on the target.}
+#' }
 #' @export
 setGeneric(
   name = "inferCSN",
@@ -51,7 +65,7 @@ setGeneric(
 #' @export
 #'
 #' @examples
-#' data("example_matrix")
+#' data(example_matrix)
 #' network_table_1 <- inferCSN(
 #'   example_matrix
 #' )
@@ -191,7 +205,7 @@ setMethod(
 #'
 #' @examples
 #' \dontrun{
-#' data("example_matrix")
+#' data(example_matrix)
 #' network_table <- inferCSN(example_matrix)
 #' head(network_table)
 #'

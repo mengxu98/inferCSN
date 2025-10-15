@@ -30,7 +30,7 @@ Formated network table
 Format network table
 }
 \examples{
-data("example_matrix")
+data(example_matrix)
 network_table <- inferCSN(example_matrix)
 
 network_format(

@@ -45,7 +45,7 @@ A ggplot object
 Plot histogram
 }
 \examples{
-data("example_matrix")
+data(example_matrix)
 network_table <- inferCSN(example_matrix)
 plot_histogram(network_table[, 3])
 }

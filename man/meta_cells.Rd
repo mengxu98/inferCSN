@@ -29,54 +29,54 @@ meta_cells(
 \arguments{
 \item{matrix}{A gene expression matrix where rows represent genes and columns represent cells.}
 
-\item{genes_use}{Default is \emph{\code{NULL}}.
-A character vector specifying genes to be used for PCA dimensionality reduction.}
+\item{genes_use}{A character vector specifying genes to be used for PCA dimensionality reduction.
+Default is \code{NULL}.}
 
-\item{genes_exclude}{Default is \emph{\code{NULL}}. A character vector specifying genes to be excluded
-from PCA computation.}
+\item{genes_exclude}{A character vector specifying genes to be excluded from PCA computation.
+Default is \code{NULL}.}
 
-\item{var_genes_num}{Default is \emph{\code{min(1000, nrow(matrix))}}. Number of most variable genes
-to select when \emph{\code{genes_use}} is not provided.}
+\item{var_genes_num}{Number of most variable genes to select when \code{genes_use} is not provided.
+Default is \code{min(1000, nrow(matrix))}.}
 
-\item{gamma}{Default is \emph{\code{10}}. Coarse-graining parameter defining the target ratio of input
+\item{gamma}{Default is \code{10}. Coarse-graining parameter defining the target ratio of input
 cells to output metacells (e.g., gamma=10 yields approximately n/10 metacells for n input cells).}
 
-\item{knn_k}{Default is \emph{\code{5}}. Number of nearest neighbors for constructing the cell-cell
+\item{knn_k}{Default is \code{5}. Number of nearest neighbors for constructing the cell-cell
 similarity network.}
 
-\item{do_scale}{Default is \emph{\code{TRUE}}. Whether to standardize (center and scale) gene expression
-values before PCA.}
+\item{do_scale}{Whether to standardize (center and scale) gene expression values before PCA.
+Default is \code{TRUE}.}
 
-\item{pc_num}{Default is \emph{\code{25}}. Number of principal components to retain for downstream analysis.}
+\item{pc_num}{Default is \code{25}. Number of principal components to retain for downstream analysis.}
 
-\item{fast_pca}{Default is \emph{\code{TRUE}}. Whether to use the faster \link[irlba]{irlba} algorithm
+\item{fast_pca}{Default is \code{TRUE}. Whether to use the faster \link[irlba]{irlba} algorithm
 instead of standard PCA. Recommended for large datasets.}
 
-\item{do_approx}{Default is \emph{\code{FALSE}}. Whether to use approximate nearest neighbor search for
+\item{do_approx}{Default is \code{FALSE}. Whether to use approximate nearest neighbor search for
 datasets with >50000 cells to improve computational efficiency.}
 
-\item{approx_num}{Default is \emph{\code{20000}}. Number of cells to randomly sample for approximate
-nearest neighbor computation when \emph{\code{do_approx = TRUE}}.}
+\item{approx_num}{Default is \code{20000}. Number of cells to randomly sample for approximate
+nearest neighbor computation when \code{do_approx = TRUE}.}
 
-\item{directed}{Default is \emph{\code{FALSE}}. Whether to construct a directed or undirected nearest
+\item{directed}{Default is \code{FALSE}. Whether to construct a directed or undirected nearest
 neighbor graph.}
 
-\item{use_nn2}{Default is \emph{\code{TRUE}}. Whether to use the faster RANN::nn2 algorithm for nearest
+\item{use_nn2}{Default is \code{TRUE}. Whether to use the faster RANN::nn2 algorithm for nearest
 neighbor search (only applicable with Euclidean distance).}
 
-\item{seed}{Default is \emph{\code{1}}. Random seed for reproducibility when subsampling cells in
+\item{seed}{Default is \code{1}. Random seed for reproducibility when subsampling cells in
 approximate mode.}
 
-\item{cluster_method}{Default is \emph{\code{walktrap}}. Algorithm for community detection in the cell
-similarity network. Options: \emph{\code{walktrap}} (recommended) or \emph{\code{louvain}} (gamma parameter ignored).}
+\item{cluster_method}{Default is \code{walktrap}. Algorithm for community detection in the cell
+similarity network. Options: \code{walktrap} (recommended) or \code{louvain} (gamma parameter ignored).}
 
-\item{block_size}{Default is \emph{\code{10000}}. Number of cells to process in each batch when mapping
+\item{block_size}{Default is \code{10000}. Number of cells to process in each batch when mapping
 cells to metacells in approximate mode. Adjust based on available memory.}
 
-\item{weights}{Default is \emph{\code{NULL}}. Numeric vector of cell-specific weights for weighted
+\item{weights}{Default is \code{NULL}. Numeric vector of cell-specific weights for weighted
 averaging when computing metacell expression profiles. Length must match number of cells.}
 
-\item{do_median_norm}{Default is \emph{\code{FALSE}}. Whether to perform median-based normalization of
+\item{do_median_norm}{Default is \code{FALSE}. Whether to perform median-based normalization of
 the final metacell expression matrix.}
 
 \item{...}{Additional arguments passed to internal functions.}
@@ -89,7 +89,7 @@ This function detects metacells from a single-cell gene expression matrix
 using dimensionality reduction and clustering techniques.
 }
 \examples{
-data("example_matrix")
+data(example_matrix)
 meta_cells_matrix <- meta_cells(
   example_matrix
 )

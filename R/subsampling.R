@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-#' data("example_matrix")
+#' data(example_matrix)
 #' data("example_ground_truth")
 #' subsample_matrix <- subsampling(
 #'   example_matrix,

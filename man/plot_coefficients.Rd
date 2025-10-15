@@ -9,11 +9,13 @@ plot_coefficients(data, targets = NULL, nrow = NULL, ...)
 \arguments{
 \item{data}{Input data.}
 
-\item{targets}{Targets to plot.}
+\item{targets}{Targets to plot.
+Default is `NULL`.}
 
-\item{nrow}{Number of rows for the plot.}
+\item{nrow}{Number of rows for the plot.
+Default is `NULL`.}
 
-\item{...}{Other arguments passed to \code{\link{plot_coefficient}}.}
+\item{...}{Other arguments passed to [plot_coefficient].}
 }
 \value{
 A list of ggplot objects
@@ -22,7 +24,7 @@ A list of ggplot objects
 Plot coefficients for multiple targets
 }
 \examples{
-data("example_matrix")
+data(example_matrix)
 network_table <- inferCSN(
   example_matrix,
   targets = c("g1", "g2", "g3")

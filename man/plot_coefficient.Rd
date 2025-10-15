@@ -18,19 +18,25 @@ plot_coefficient(
 \arguments{
 \item{data}{Input data.}
 
-\item{style}{Plotting style: "binary", "gradient", or "continuous".}
+\item{style}{Plotting style: \code{"binary"}, \code{"gradient"}, or \code{"continuous"}.}
 
-\item{positive_color}{Color for positive weights.}
+\item{positive_color}{Color for positive weights.
+Default is \code{"#3d67a2"}.}
 
-\item{negative_color}{Color for negative weights.}
+\item{negative_color}{Color for negative weights.
+Default is \code{"#c82926"}.}
 
-\item{neutral_color}{Color for weights near zero (used in "continuous" style).}
+\item{neutral_color}{Color for weights near zero (used in \code{"continuous"} style).
+Default is \code{"#cccccc"}.}
 
-\item{bar_width}{Width of the bars.}
+\item{bar_width}{Width of the bars.
+Default is \code{0.7}.}
 
-\item{text_size}{Size of the text for weight values.}
+\item{text_size}{Size of the text for weight values.
+Default is \code{3}.}
 
-\item{show_values}{Logical, whether to show weight values on bars.}
+\item{show_values}{Whether to show weight values on bars.
+Default is \code{TRUE}.}
 }
 \value{
 A ggplot object
@@ -39,7 +45,7 @@ A ggplot object
 Plot coefficients
 }
 \examples{
-data("example_matrix")
+data(example_matrix)
 network_table <- inferCSN(example_matrix, targets = "g1")
 plot_coefficient(network_table)
 plot_coefficient(network_table, style = "binary")

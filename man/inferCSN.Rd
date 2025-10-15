@@ -73,43 +73,56 @@ inferCSN(
 )
 }
 \arguments{
-\item{object}{The input data for \emph{\code{inferCSN}}.}
+\item{object}{The input data for \code{inferCSN}.}
 
-\item{penalty}{The type of regularization, default is \emph{\code{L0}}.
-This can take either one of the following choices: \emph{\code{L0}}, \emph{\code{L0L1}}, and \emph{\code{L0L2}}.
-For high-dimensional and sparse data, \emph{\code{L0L2}} is more effective.}
+\item{penalty}{The type of regularization, default is \code{"L0"}.
+This can take either one of the following choices: \code{"L0"}, \code{"L0L1"}, and \code{"L0L2"}.
+For high-dimensional and sparse data, \code{"L0L2"} is more effective.}
 
-\item{cross_validation}{Logical value, default is \emph{\code{FALSE}}, whether to use cross-validation.}
+\item{cross_validation}{Whether to use cross-validation.
+Default is \code{FALSE}.}
 
-\item{seed}{The random seed for cross-validation, default is \emph{\code{1}}.}
+\item{seed}{The random seed for cross-validation.
+Default is \code{1}.}
 
-\item{n_folds}{The number of folds for cross-validation, default is \emph{\code{5}}.}
+\item{n_folds}{The number of folds for cross-validation.
+Default is \code{5}.}
 
-\item{subsampling_method}{The method to use for subsampling. Options are "sample", "pseudobulk" or "meta_cells".}
+\item{subsampling_method}{The method to use for subsampling.
+Options are \code{"sample"}, \code{"pseudobulk"} or \code{"meta_cells"}.}
 
-\item{subsampling_ratio}{The percent of all samples used for \code{\link{fit_srm}}, default is \emph{\code{1}}.}
+\item{subsampling_ratio}{The percent of all samples used for \link{fit_srm}.
+Default is \code{1}.}
 
-\item{r_squared_threshold}{Threshold of \eqn{R^2} coefficient, default is \emph{\code{0}}.}
+\item{r_squared_threshold}{Threshold of \eqn{R^2} coefficient.
+Default is \code{0}.}
 
 \item{regulators}{The regulator genes for which to infer the regulatory network.}
 
-\item{targets}{The target genes for which to infer the regulatory network.
-Recommend setting this to a small fraction of min(n,p) (e.g. 0.05 * min(n,p)) as L0 regularization typically selects a small portion of non-zeros.}
+\item{targets}{The target genes for which to infer the regulatory network.}
 
-\item{cores}{The number of cores to use for parallelization with \code{\link[foreach]{foreach}}, default is \emph{\code{1}}.}
+\item{cores}{The number of cores to use for parallelization with \link[foreach:foreach]{foreach::foreach}.
+Default is \code{1}.}
 
-\item{verbose}{Logical value, default is \emph{\code{TRUE}}, whether to print progress messages.}
+\item{verbose}{Whether to print progress messages.
+Default is \code{TRUE}.}
 
 \item{...}{Parameters for other methods.}
 }
 \value{
-A data table of regulator-target regulatory relationships
+A data table of regulator-target regulatory relationships.
+The data table has the following columns:
+\itemize{
+\item{regulator}{The regulator genes.}
+\item{target}{The target gene.}
+\item{weight}{The weight of the regulator on the target.}
+}
 }
 \description{
 inferring cell-type specific gene regulatory network
 }
 \examples{
-data("example_matrix")
+data(example_matrix)
 network_table_1 <- inferCSN(
   example_matrix
 )
@@ -155,7 +168,7 @@ calculate_metrics(
 )
 }
 \dontrun{
-data("example_matrix")
+data(example_matrix)
 network_table <- inferCSN(example_matrix)
 head(network_table)
 

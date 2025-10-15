@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-#' data("example_matrix")
+#' data(example_matrix)
 #' network_table <- inferCSN(example_matrix)
 #' head(calculate_gene_rank(network_table))
 #' head(calculate_gene_rank(network_table, regulators = "g1"))

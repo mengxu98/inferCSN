@@ -21,19 +21,23 @@ fit_srm(
 
 \item{y}{The vector of target.}
 
-\item{cross_validation}{Logical value, default is \emph{\code{FALSE}}, whether to use cross-validation.}
+\item{cross_validation}{Whether to use cross-validation.
+Default is \code{FALSE}.}
 
-\item{seed}{The random seed for cross-validation, default is \emph{\code{1}}.}
+\item{seed}{The random seed for cross-validation.
+Default is \code{1}.}
 
-\item{penalty}{The type of regularization, default is \emph{\code{L0}}.
-This can take either one of the following choices: \emph{\code{L0}}, \emph{\code{L0L1}}, and \emph{\code{L0L2}}.
-For high-dimensional and sparse data, \emph{\code{L0L2}} is more effective.}
+\item{penalty}{The type of regularization, default is \code{"L0"}.
+This can take either one of the following choices: \code{"L0"}, \code{"L0L1"}, and \code{"L0L2"}.
+For high-dimensional and sparse data, \code{"L0L2"} is more effective.}
 
 \item{regulators_num}{The number of regulators for target.}
 
-\item{n_folds}{The number of folds for cross-validation, default is \emph{\code{5}}.}
+\item{n_folds}{The number of folds for cross-validation.
+Default is \code{5}.}
 
-\item{verbose}{Logical value, default is \emph{\code{TRUE}}, whether to print progress messages.}
+\item{verbose}{Whether to print progress messages.
+Default is \code{TRUE}.}
 
 \item{...}{Parameters for other methods.}
 }
@@ -48,7 +52,7 @@ The list has the following components:
 Sparse regression model
 }
 \examples{
-data("example_matrix")
+data(example_matrix)
 fit_srm(
   x = example_matrix[, -1],
   y = example_matrix[, 1]

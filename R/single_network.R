@@ -11,7 +11,7 @@
 #'  \item{weight}{The weight of the regulator gene on the target gene.}
 #' @export
 #' @examples
-#' data("example_matrix")
+#' data(example_matrix)
 #' head(
 #'   single_network(
 #'     example_matrix,

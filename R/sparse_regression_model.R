@@ -15,7 +15,7 @@
 #'
 #' @export
 #' @examples
-#' data("example_matrix")
+#' data(example_matrix)
 #' fit_srm(
 #'   x = example_matrix[, -1],
 #'   y = example_matrix[, 1]

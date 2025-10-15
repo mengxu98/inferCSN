@@ -18,7 +18,7 @@ A list containing the metric
 Calculates Set Intersection (SI) metric
 }
 \examples{
-data("example_matrix")
+data(example_matrix)
 data("example_ground_truth")
 network_table <- inferCSN(example_matrix)
 calculate_si(

@@ -13,7 +13,7 @@ weight_sift(table)
 Remove edges with smaller weights in the reverse direction.
 }
 \examples{
-data("example_matrix")
+data(example_matrix)
 network_table <- inferCSN(example_matrix)
 weight_sift(network_table) |> head()
 }

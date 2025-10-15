@@ -27,7 +27,7 @@ A ggplot2 object
 Plot dynamic networks
 }
 \examples{
-data("example_matrix")
+data(example_matrix)
 network_table <- inferCSN(example_matrix)
 plot_static_networks(
   network_table,
