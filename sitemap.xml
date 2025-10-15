@@ -15,7 +15,6 @@
 <url><loc>https://mengxu98.github.io/inferCSN/reference/calculate_precision.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/reference/calculate_recall.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/reference/calculate_si.html</loc></url>
-<url><loc>https://mengxu98.github.io/inferCSN/reference/coef.srm.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/reference/example_ground_truth.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/reference/example_matrix.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/reference/example_meta_data.html</loc></url>
@@ -39,12 +38,9 @@
 <url><loc>https://mengxu98.github.io/inferCSN/reference/plot_network_heatmap.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/reference/plot_scatter.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/reference/plot_static_networks.html</loc></url>
-<url><loc>https://mengxu98.github.io/inferCSN/reference/predict.srm.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/reference/prepare_binary_predictions.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/reference/print.inferCSN_logo.html</loc></url>
-<url><loc>https://mengxu98.github.io/inferCSN/reference/print.srm.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/reference/single_network.html</loc></url>
-<url><loc>https://mengxu98.github.io/inferCSN/reference/sparse_regression.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/reference/subsampling.html</loc></url>
 <url><loc>https://mengxu98.github.io/inferCSN/reference/weight_sift.html</loc></url>
 </urlset>

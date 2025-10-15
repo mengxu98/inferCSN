@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">inferCSN</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,17 +81,17 @@
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
 <dd><p>The method used for filter edges.
-Could be choose <code>entropy</code> or <code>max</code>.</p></dd>
+Could be choose <code>"entropy"</code> or <code>"max"</code>.</p></dd>
 
 
 <dt id="arg-entropy-method">entropy_method<a class="anchor" aria-label="anchor" href="#arg-entropy-method"></a></dt>
-<dd><p>If setting <code>method</code> to <code>entropy</code>,
-could be choose <code>Shannon</code> or <code>Renyi</code> to compute entropy.</p></dd>
+<dd><p>If setting <code>method</code> to <code>"entropy"</code>,
+could be choose <code>"Shannon"</code> or <code>"Renyi"</code> to compute entropy.</p></dd>
 
 
 <dt id="arg-effective-entropy">effective_entropy<a class="anchor" aria-label="anchor" href="#arg-effective-entropy"></a></dt>
 <dd><p>Default is <code>FALSE</code>.
-Logical value, using effective entropy to filter weights or not.</p></dd>
+Whether to use effective entropy to filter weights.</p></dd>
 
 
 <dt id="arg-shuffles">shuffles<a class="anchor" aria-label="anchor" href="#arg-shuffles"></a></dt>
@@ -111,28 +111,34 @@ i.e. the number of lagged values affecting the current value of gene expression 
 
 
 <dt id="arg-entropy-p-value">entropy_p_value<a class="anchor" aria-label="anchor" href="#arg-entropy-p-value"></a></dt>
-<dd><p>P value used to filter edges by entropy.</p></dd>
+<dd><p>P value used to filter edges by entropy.
+Default is <code>0.05</code>.</p></dd>
 
 
 <dt id="arg-cores">cores<a class="anchor" aria-label="anchor" href="#arg-cores"></a></dt>
-<dd><p>The number of cores to use for parallelization with <code><a href="https://rdrr.io/pkg/foreach/man/foreach.html" class="external-link">foreach</a></code>, default is <em><code>1</code></em>.</p></dd>
+<dd><p>The number of cores to use for parallelization with <a href="https://rdrr.io/pkg/foreach/man/foreach.html" class="external-link">foreach::foreach</a>.
+Default is <code>1</code>.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>Logical value, default is <em><code>TRUE</code></em>, whether to print progress messages.</p></dd>
+<dd><p>Whether to print progress messages.
+Default is <code>TRUE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Sifted network table</p>
-    </div>
+    <p>A data table of regulator-target regulatory relationships.
+The data table has the following columns:</p><ul><li><p>regulatorThe regulator genes.</p></li>
+<li><p>targetThe target gene.</p></li>
+<li><p>weightThe weight of the regulator on the target.</p></li>
+</ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_meta_data"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_ground_truth"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_meta_data</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_ground_truth</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">network_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">network_table_sifted</span> <span class="op">&lt;-</span> <span class="fu">network_sift</span><span class="op">(</span><span class="va">network_table</span><span class="op">)</span></span></span>

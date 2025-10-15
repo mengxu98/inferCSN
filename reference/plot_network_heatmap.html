@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">inferCSN</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,11 +83,13 @@
 
 
 <dt id="arg-switch-matrix">switch_matrix<a class="anchor" aria-label="anchor" href="#arg-switch-matrix"></a></dt>
-<dd><p>Logical value, default is <em><code>TRUE</code></em>, whether to weight data table to matrix.</p></dd>
+<dd><p>Whether to weight data table to matrix.
+Default is <code>TRUE</code>.</p></dd>
 
 
 <dt id="arg-show-names">show_names<a class="anchor" aria-label="anchor" href="#arg-show-names"></a></dt>
-<dd><p>Logical value, default is <em><code>FALSE</code></em>, whether to show names of row and column.</p></dd>
+<dd><p>Whether to show names of row and column.
+Default is <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-heatmap-size-lock">heatmap_size_lock<a class="anchor" aria-label="anchor" href="#arg-heatmap-size-lock"></a></dt>
@@ -95,7 +97,8 @@
 
 
 <dt id="arg-heatmap-size">heatmap_size<a class="anchor" aria-label="anchor" href="#arg-heatmap-size"></a></dt>
-<dd><p>Default is <em><code>5</code></em>. The size of heatmap.</p></dd>
+<dd><p>The size of heatmap.
+Default is <code>5</code>.</p></dd>
 
 
 <dt id="arg-heatmap-height">heatmap_height<a class="anchor" aria-label="anchor" href="#arg-heatmap-height"></a></dt>
@@ -115,11 +118,11 @@
 
 
 <dt id="arg-border-color">border_color<a class="anchor" aria-label="anchor" href="#arg-border-color"></a></dt>
-<dd><p>Default is <em><code>gray</code></em>. Color of heatmap border.</p></dd>
+<dd><p>Default is <code>"gray"</code>. Color of heatmap border.</p></dd>
 
 
 <dt id="arg-rect-color">rect_color<a class="anchor" aria-label="anchor" href="#arg-rect-color"></a></dt>
-<dd><p>Default is <em><code>NA</code></em>. Color of heatmap rect.</p></dd>
+<dd><p>Default is <code>NA</code>. Color of heatmap rect.</p></dd>
 
 
 <dt id="arg-anno-width">anno_width<a class="anchor" aria-label="anchor" href="#arg-anno-width"></a></dt>
@@ -131,15 +134,15 @@
 
 
 <dt id="arg-row-anno-type">row_anno_type<a class="anchor" aria-label="anchor" href="#arg-row-anno-type"></a></dt>
-<dd><p>Default is <em><code>boxplot</code></em>,
-could add a annotation plot to row,
-choose one of <em><code>boxplot</code></em>, <em><code>barplot</code></em>, <em><code>histogram</code></em>, <em><code>density</code></em>, <em><code>lines</code></em>, <em><code>points</code></em>, and <em><code>horizon</code></em>.</p></dd>
+<dd><p>Default is <code>"boxplot"</code>,
+could add a annotation plot to row.
+choose one of <code>"boxplot"</code>, <code>"barplot"</code>, <code>"histogram"</code>, <code>"density"</code>, <code>"lines"</code>, <code>"points"</code>, and <code>"horizon"</code>.</p></dd>
 
 
 <dt id="arg-column-anno-type">column_anno_type<a class="anchor" aria-label="anchor" href="#arg-column-anno-type"></a></dt>
-<dd><p>Default is <em><code>boxplot</code></em>,
-could add a annotation plot to column,
-choose one of <em><code>boxplot</code></em>, <em><code>barplot</code></em>, <em><code>histogram</code></em>, <em><code>density</code></em>, <em><code>lines</code></em>, and <em><code>points</code></em>.</p></dd>
+<dd><p>Default is <code>"boxplot"</code>,
+could add a annotation plot to column.
+choose one of <code>"boxplot"</code>, <code>"barplot"</code>, <code>"histogram"</code>, <code>"density"</code>, <code>"lines"</code>, and <code>"points"</code>.</p></dd>
 
 
 <dt id="arg-legend-name">legend_name<a class="anchor" aria-label="anchor" href="#arg-legend-name"></a></dt>
@@ -157,15 +160,15 @@ choose one of <em><code>boxplot</code></em>, <em><code>barplot</code></em>, <em>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_ground_truth"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">network_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-09-07 13:59:35] Running for &lt;dense matrix&gt;.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-09-07 13:59:35] Checking input parameters.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-09-07 13:59:35] Using L0 sparse regression model.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-09-07 13:59:35] Using <span style="color: #0000BB;">1</span> core</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-09-07 13:59:35] Building results</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-09-07 13:59:35] Run done.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-15 08:57:55] Running for &lt;dense matrix&gt;.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2025-10-15 08:57:55] Checking input parameters...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-15 08:57:55] Using `L0` sparse regression model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-15 08:57:55] Using <span style="color: #0000BB;">1</span> core</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-15 08:57:55] Building results</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-10-15 08:57:55] Run done.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">plot_network_heatmap</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">example_ground_truth</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>,</span></span>

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">inferCSN</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,14 +80,17 @@ the output of weight table will create a new column named <code>Interaction</cod
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">network_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-09-07 13:59:27] Running for &lt;dense matrix&gt;.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-09-07 13:59:27] Checking input parameters.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-09-07 13:59:27] Using L0 sparse regression model.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-09-07 13:59:27] Using <span style="color: #0000BB;">1</span> core</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-09-07 13:59:28] Building results</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-09-07 13:59:28] Run done.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-15 08:57:45] Running for &lt;dense matrix&gt;.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2025-10-15 08:57:45] Checking input parameters...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-15 08:57:45] Using `L0` sparse regression model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-15 08:57:45] Using <span style="color: #0000BB;">1</span> core</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">⠙</span> [2025-10-15 08:57:45] Running [<span style="color: #0000BB;">1</span>/<span style="color: #0000BB;">18</span>] ETA:  0s</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-10-15 08:57:45] Completed <span style="color: #0000BB;">18</span> tasks in 211ms</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-15 08:57:45] Building results</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-10-15 08:57:45] Run done.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">network_format</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
@@ -103,7 +106,7 @@ the output of weight table will create a new column named <code>Interaction</cod
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7         g1     g6 0.030280993  Repression</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8         g1     g7 0.024014462  Activation</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9         g1    g16 0.018303456  Repression</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10        g1     g3 0.018087949  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10        g1     g3 0.018050156  Activation</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11        g1    g15 0.015156339  Activation</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12        g1    g14 0.013970876  Repression</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 13        g1    g12 0.011942835  Activation</span>
@@ -127,7 +130,7 @@ the output of weight table will create a new column named <code>Interaction</cod
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7         g1     g6 -0.030280993</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8         g1     g7  0.024014462</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9         g1    g16 -0.018303456</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10        g1     g3  0.018087949</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10        g1     g3  0.018050156</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11        g1    g15  0.015156339</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12        g1    g14 -0.013970876</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 13        g1    g12  0.011942835</span>
@@ -141,23 +144,23 @@ the output of weight table will create a new column named <code>Interaction</cod
 <span class="r-in"><span>  targets <span class="op">=</span> <span class="st">"g3"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    regulator target       weight Interaction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1         g4     g3 0.8103064829  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2         g2     g3 0.5492431610  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3         g5     g3 0.1538770195  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        g12     g3 0.0559198683  Repression</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        g18     g3 0.0558379444  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6        g17     g3 0.0523794555  Repression</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7        g14     g3 0.0505112856  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8         g7     g3 0.0423499727  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9        g15     g3 0.0360931509  Repression</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10       g10     g3 0.0313562783  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11       g16     g3 0.0270812908  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12       g13     g3 0.0256788471  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13       g11     g3 0.0230251785  Repression</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14        g1     g3 0.0180879493  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15        g8     g3 0.0098219446  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16        g9     g3 0.0095393999  Repression</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17        g6     g3 0.0005067688  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         g4     g3 0.8103229841  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         g2     g3 0.5491722960  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         g5     g3 0.1539425396  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        g12     g3 0.0560346972  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        g18     g3 0.0558371348  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        g17     g3 0.0523816646  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7        g14     g3 0.0504639514  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8         g7     g3 0.0425107240  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9        g15     g3 0.0361683897  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10       g10     g3 0.0313224187  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11       g16     g3 0.0270465616  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12       g13     g3 0.0258582091  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13       g11     g3 0.0229433379  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14        g1     g3 0.0180501564  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15        g8     g3 0.0099732575  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16        g9     g3 0.0095382542  Repression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17        g6     g3 0.0008958639  Repression</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">network_format</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_table</span>,</span></span>
@@ -167,7 +170,7 @@ the output of weight table will create a new column named <code>Interaction</cod
 <span class="r-out co"><span class="r-pr">#&gt;</span>   regulator target     weight Interaction</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1        g3     g5 0.12187906  Activation</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2        g1     g5 0.04489503  Activation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        g1     g3 0.01808795  Activation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        g1     g3 0.01805016  Activation</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

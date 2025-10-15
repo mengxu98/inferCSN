@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">inferCSN</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,31 +63,37 @@
 
 
 <dt id="arg-style">style<a class="anchor" aria-label="anchor" href="#arg-style"></a></dt>
-<dd><p>Plotting style: "binary", "gradient", or "continuous".</p></dd>
+<dd><p>Plotting style: <code>"binary"</code>, <code>"gradient"</code>, or <code>"continuous"</code>.</p></dd>
 
 
 <dt id="arg-positive-color">positive_color<a class="anchor" aria-label="anchor" href="#arg-positive-color"></a></dt>
-<dd><p>Color for positive weights.</p></dd>
+<dd><p>Color for positive weights.
+Default is <code>"#3d67a2"</code>.</p></dd>
 
 
 <dt id="arg-negative-color">negative_color<a class="anchor" aria-label="anchor" href="#arg-negative-color"></a></dt>
-<dd><p>Color for negative weights.</p></dd>
+<dd><p>Color for negative weights.
+Default is <code>"#c82926"</code>.</p></dd>
 
 
 <dt id="arg-neutral-color">neutral_color<a class="anchor" aria-label="anchor" href="#arg-neutral-color"></a></dt>
-<dd><p>Color for weights near zero (used in "continuous" style).</p></dd>
+<dd><p>Color for weights near zero (used in <code>"continuous"</code> style).
+Default is <code>"#cccccc"</code>.</p></dd>
 
 
 <dt id="arg-bar-width">bar_width<a class="anchor" aria-label="anchor" href="#arg-bar-width"></a></dt>
-<dd><p>Width of the bars.</p></dd>
+<dd><p>Width of the bars.
+Default is <code>0.7</code>.</p></dd>
 
 
 <dt id="arg-text-size">text_size<a class="anchor" aria-label="anchor" href="#arg-text-size"></a></dt>
-<dd><p>Size of the text for weight values.</p></dd>
+<dd><p>Size of the text for weight values.
+Default is <code>3</code>.</p></dd>
 
 
 <dt id="arg-show-values">show_values<a class="anchor" aria-label="anchor" href="#arg-show-values"></a></dt>
-<dd><p>Logical, whether to show weight values on bars.</p></dd>
+<dd><p>Whether to show weight values on bars.
+Default is <code>TRUE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -97,15 +103,15 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">network_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span>, targets <span class="op">=</span> <span class="st">"g1"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-09-07 13:59:28] Running for &lt;dense matrix&gt;.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-09-07 13:59:28] Checking input parameters.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-09-07 13:59:28] Using 1 target(s).</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-09-07 13:59:28] Using L0 sparse regression model.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-09-07 13:59:28] Using <span style="color: #0000BB;">1</span> core</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-09-07 13:59:28] Building results</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-09-07 13:59:28] Run done.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-15 08:57:45] Running for &lt;dense matrix&gt;.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2025-10-15 08:57:45] Checking input parameters...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-15 08:57:45] Using <span style="color: #0000BB;">1</span> target</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-15 08:57:45] Using `L0` sparse regression model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-15 08:57:45] Using <span style="color: #0000BB;">1</span> core</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-15 08:57:45] Building results</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-10-15 08:57:45] Run done.</span>
 <span class="r-in"><span><span class="fu">plot_coefficient</span><span class="op">(</span><span class="va">network_table</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_coefficient-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">plot_coefficient</span><span class="op">(</span><span class="va">network_table</span>, style <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span></span>

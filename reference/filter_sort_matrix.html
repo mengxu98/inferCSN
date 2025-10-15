@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">inferCSN</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,24 +68,27 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">network_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-09-07 13:59:24] Running for &lt;dense matrix&gt;.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-09-07 13:59:24] Checking input parameters.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-09-07 13:59:24] Using L0 sparse regression model.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-09-07 13:59:24] Using <span style="color: #0000BB;">1</span> core</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-09-07 13:59:24] Building results</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-09-07 13:59:24] Run done.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-15 08:57:41] Running for &lt;dense matrix&gt;.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2025-10-15 08:57:41] Checking input parameters...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-15 08:57:41] Using `L0` sparse regression model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-15 08:57:41] Using <span style="color: #0000BB;">1</span> core</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">⠙</span> [2025-10-15 08:57:41] Running [<span style="color: #0000BB;">1</span>/<span style="color: #0000BB;">18</span>] ETA:  0s</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-10-15 08:57:41] Completed <span style="color: #0000BB;">18</span> tasks in 196ms</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-15 08:57:41] Building results</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-10-15 08:57:41] Run done.</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">network_table</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"row"</span>, <span class="st">"col"</span>, <span class="st">"value"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">network_matrix</span> <span class="op">&lt;-</span> <span class="fu">thisutils</span><span class="fu">::</span><span class="fu"><a href="https://mengxu98.github.io/thisutils/reference/table_to_matrix.html" class="external-link">table_to_matrix</a></span><span class="op">(</span><span class="va">network_table</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">filter_sort_matrix</span><span class="op">(</span><span class="va">network_matrix</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             g1          g2            g3          g4         g5           g6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g1  0.00000000  0.66844490  0.0180879493 -0.03658957 0.04489503 -0.030280993</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g2  0.35630356  0.00000000  0.5492431610  0.02103272 0.01366921 -0.007459899</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g1  0.00000000  0.66844490  0.0180501564 -0.03658957 0.04489503 -0.030280993</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g2  0.35630356  0.00000000  0.5491722960  0.02103272 0.01366921 -0.007459899</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> g3  0.01235281  0.70713027  0.0000000000  0.68526346 0.12187906 -0.001181702</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g4 -0.02896993  0.03201306  0.8103064829  0.00000000 0.65615667  0.124827620</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g5  0.03866820  0.02176632  0.1538770195  0.70453814 0.00000000  0.655663735</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g6 -0.02979658 -0.01242983 -0.0005067688  0.14958079 0.72762920  0.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g4 -0.02896993  0.03201306  0.8103229841  0.00000000 0.65615667  0.124827620</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g5  0.03866820  0.02176632  0.1539425396  0.70453814 0.00000000  0.655663735</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g6 -0.02979658 -0.01242983 -0.0008958639  0.14958079 0.72762920  0.000000000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">filter_sort_matrix</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">network_matrix</span>,</span></span>
@@ -93,8 +96,8 @@
 <span class="r-in"><span>  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g3"</span>, <span class="st">"g4"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            g3          g4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g1 0.01808795 -0.03658957</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> g2 0.54924316  0.02103272</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g1 0.01805016 -0.03658957</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> g2 0.54917230  0.02103272</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

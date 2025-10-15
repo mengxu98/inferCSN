@@ -9,7 +9,7 @@ using dimensionality reduction and clustering techniques."><meta property="og:im
 
     <a class="navbar-brand me-2" href="../index.html">inferCSN</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,86 +77,86 @@ using dimensionality reduction and clustering techniques.</p>
 
 
 <dt id="arg-genes-use">genes_use<a class="anchor" aria-label="anchor" href="#arg-genes-use"></a></dt>
-<dd><p>Default is <em><code>NULL</code></em>.
-A character vector specifying genes to be used for PCA dimensionality reduction.</p></dd>
+<dd><p>A character vector specifying genes to be used for PCA dimensionality reduction.
+Default is <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-genes-exclude">genes_exclude<a class="anchor" aria-label="anchor" href="#arg-genes-exclude"></a></dt>
-<dd><p>Default is <em><code>NULL</code></em>. A character vector specifying genes to be excluded
-from PCA computation.</p></dd>
+<dd><p>A character vector specifying genes to be excluded from PCA computation.
+Default is <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-var-genes-num">var_genes_num<a class="anchor" aria-label="anchor" href="#arg-var-genes-num"></a></dt>
-<dd><p>Default is <em><code>min(1000, nrow(matrix))</code></em>. Number of most variable genes
-to select when <em><code>genes_use</code></em> is not provided.</p></dd>
+<dd><p>Number of most variable genes to select when <code>genes_use</code> is not provided.
+Default is <code>min(1000, nrow(matrix))</code>.</p></dd>
 
 
 <dt id="arg-gamma">gamma<a class="anchor" aria-label="anchor" href="#arg-gamma"></a></dt>
-<dd><p>Default is <em><code>10</code></em>. Coarse-graining parameter defining the target ratio of input
+<dd><p>Default is <code>10</code>. Coarse-graining parameter defining the target ratio of input
 cells to output metacells (e.g., gamma=10 yields approximately n/10 metacells for n input cells).</p></dd>
 
 
 <dt id="arg-knn-k">knn_k<a class="anchor" aria-label="anchor" href="#arg-knn-k"></a></dt>
-<dd><p>Default is <em><code>5</code></em>. Number of nearest neighbors for constructing the cell-cell
+<dd><p>Default is <code>5</code>. Number of nearest neighbors for constructing the cell-cell
 similarity network.</p></dd>
 
 
 <dt id="arg-do-scale">do_scale<a class="anchor" aria-label="anchor" href="#arg-do-scale"></a></dt>
-<dd><p>Default is <em><code>TRUE</code></em>. Whether to standardize (center and scale) gene expression
-values before PCA.</p></dd>
+<dd><p>Whether to standardize (center and scale) gene expression values before PCA.
+Default is <code>TRUE</code>.</p></dd>
 
 
 <dt id="arg-pc-num">pc_num<a class="anchor" aria-label="anchor" href="#arg-pc-num"></a></dt>
-<dd><p>Default is <em><code>25</code></em>. Number of principal components to retain for downstream analysis.</p></dd>
+<dd><p>Default is <code>25</code>. Number of principal components to retain for downstream analysis.</p></dd>
 
 
 <dt id="arg-fast-pca">fast_pca<a class="anchor" aria-label="anchor" href="#arg-fast-pca"></a></dt>
-<dd><p>Default is <em><code>TRUE</code></em>. Whether to use the faster <a href="https://rdrr.io/pkg/irlba/man/irlba.html" class="external-link">irlba</a> algorithm
+<dd><p>Default is <code>TRUE</code>. Whether to use the faster <a href="https://rdrr.io/pkg/irlba/man/irlba.html" class="external-link">irlba</a> algorithm
 instead of standard PCA. Recommended for large datasets.</p></dd>
 
 
 <dt id="arg-do-approx">do_approx<a class="anchor" aria-label="anchor" href="#arg-do-approx"></a></dt>
-<dd><p>Default is <em><code>FALSE</code></em>. Whether to use approximate nearest neighbor search for
+<dd><p>Default is <code>FALSE</code>. Whether to use approximate nearest neighbor search for
 datasets with &gt;50000 cells to improve computational efficiency.</p></dd>
 
 
 <dt id="arg-approx-num">approx_num<a class="anchor" aria-label="anchor" href="#arg-approx-num"></a></dt>
-<dd><p>Default is <em><code>20000</code></em>. Number of cells to randomly sample for approximate
-nearest neighbor computation when <em><code>do_approx = TRUE</code></em>.</p></dd>
+<dd><p>Default is <code>20000</code>. Number of cells to randomly sample for approximate
+nearest neighbor computation when <code>do_approx = TRUE</code>.</p></dd>
 
 
 <dt id="arg-directed">directed<a class="anchor" aria-label="anchor" href="#arg-directed"></a></dt>
-<dd><p>Default is <em><code>FALSE</code></em>. Whether to construct a directed or undirected nearest
+<dd><p>Default is <code>FALSE</code>. Whether to construct a directed or undirected nearest
 neighbor graph.</p></dd>
 
 
 <dt id="arg-use-nn-">use_nn2<a class="anchor" aria-label="anchor" href="#arg-use-nn-"></a></dt>
-<dd><p>Default is <em><code>TRUE</code></em>. Whether to use the faster RANN::nn2 algorithm for nearest
+<dd><p>Default is <code>TRUE</code>. Whether to use the faster RANN::nn2 algorithm for nearest
 neighbor search (only applicable with Euclidean distance).</p></dd>
 
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
-<dd><p>Default is <em><code>1</code></em>. Random seed for reproducibility when subsampling cells in
+<dd><p>Default is <code>1</code>. Random seed for reproducibility when subsampling cells in
 approximate mode.</p></dd>
 
 
 <dt id="arg-cluster-method">cluster_method<a class="anchor" aria-label="anchor" href="#arg-cluster-method"></a></dt>
-<dd><p>Default is <em><code>walktrap</code></em>. Algorithm for community detection in the cell
-similarity network. Options: <em><code>walktrap</code></em> (recommended) or <em><code>louvain</code></em> (gamma parameter ignored).</p></dd>
+<dd><p>Default is <code>walktrap</code>. Algorithm for community detection in the cell
+similarity network. Options: <code>walktrap</code> (recommended) or <code>louvain</code> (gamma parameter ignored).</p></dd>
 
 
 <dt id="arg-block-size">block_size<a class="anchor" aria-label="anchor" href="#arg-block-size"></a></dt>
-<dd><p>Default is <em><code>10000</code></em>. Number of cells to process in each batch when mapping
+<dd><p>Default is <code>10000</code>. Number of cells to process in each batch when mapping
 cells to metacells in approximate mode. Adjust based on available memory.</p></dd>
 
 
 <dt id="arg-weights">weights<a class="anchor" aria-label="anchor" href="#arg-weights"></a></dt>
-<dd><p>Default is <em><code>NULL</code></em>. Numeric vector of cell-specific weights for weighted
+<dd><p>Default is <code>NULL</code>. Numeric vector of cell-specific weights for weighted
 averaging when computing metacell expression profiles. Length must match number of cells.</p></dd>
 
 
 <dt id="arg-do-median-norm">do_median_norm<a class="anchor" aria-label="anchor" href="#arg-do-median-norm"></a></dt>
-<dd><p>Default is <em><code>FALSE</code></em>. Whether to perform median-based normalization of
+<dd><p>Default is <code>FALSE</code>. Whether to perform median-based normalization of
 the final metacell expression matrix.</p></dd>
 
 
@@ -176,11 +176,11 @@ https://github.com/kuijjerlab/SCORPION</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"example_matrix"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">meta_cells_matrix</span> <span class="op">&lt;-</span> <span class="fu">meta_cells</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">example_matrix</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> [2025-09-07 13:59:27] Number of PCs of PCA result is less than the desired number, using all PCs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> [2025-10-15 08:57:44] Number of PCs of PCA result is less than the desired number, using all PCs.</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">meta_cells_matrix</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 500  18</span>
 <span class="r-in"><span><span class="va">meta_cells_matrix</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span></span></span>
