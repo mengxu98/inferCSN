@@ -49,7 +49,7 @@ filter_sort_matrix(NumericMatrix network_matrix,
                    Nullable<CharacterVector> targets = R_NilValue)
 {
   // Replace NA with 0
-  for (size_t i = 0; i < network_matrix.length(); i++)
+  for (R_xlen_t i = 0; i < network_matrix.length(); i++)
   {
     if (R_IsNA(network_matrix[i]))
     {
@@ -67,10 +67,10 @@ filter_sort_matrix(NumericMatrix network_matrix,
   {
     CharacterVector reg(regulators);
     // Get intersection
-    for (size_t i = 0; i < curr_regulators.length(); i++)
+    for (R_xlen_t i = 0; i < curr_regulators.length(); i++)
     {
       std::string curr_reg = as<std::string>(curr_regulators[i]);
-      for (size_t j = 0; j < reg.length(); j++)
+      for (R_xlen_t j = 0; j < reg.length(); j++)
       {
         if (curr_reg == as<std::string>(reg[j]))
         {
@@ -82,7 +82,7 @@ filter_sort_matrix(NumericMatrix network_matrix,
   }
   else
   {
-    for (size_t i = 0; i < curr_regulators.length(); i++)
+    for (R_xlen_t i = 0; i < curr_regulators.length(); i++)
     {
       filtered_regulators.push_back(as<std::string>(curr_regulators[i]));
     }
@@ -94,10 +94,10 @@ filter_sort_matrix(NumericMatrix network_matrix,
   {
     CharacterVector tar(targets);
     // Get intersection
-    for (size_t i = 0; i < curr_targets.length(); i++)
+    for (R_xlen_t i = 0; i < curr_targets.length(); i++)
     {
       std::string curr_tar = as<std::string>(curr_targets[i]);
-      for (size_t j = 0; j < tar.length(); j++)
+      for (R_xlen_t j = 0; j < tar.length(); j++)
       {
         if (curr_tar == as<std::string>(tar[j]))
         {
@@ -109,7 +109,7 @@ filter_sort_matrix(NumericMatrix network_matrix,
   }
   else
   {
-    for (size_t i = 0; i < curr_targets.length(); i++)
+    for (R_xlen_t i = 0; i < curr_targets.length(); i++)
     {
       filtered_targets.push_back(as<std::string>(curr_targets[i]));
     }
@@ -127,11 +127,11 @@ filter_sort_matrix(NumericMatrix network_matrix,
   std::unordered_map<std::string, int> old_reg_indices;
   std::unordered_map<std::string, int> old_tar_indices;
 
-  for (size_t i = 0; i < curr_regulators.length(); i++)
+  for (R_xlen_t i = 0; i < curr_regulators.length(); i++)
   {
     old_reg_indices[as<std::string>(curr_regulators[i])] = i;
   }
-  for (size_t i = 0; i < curr_targets.length(); i++)
+  for (R_xlen_t i = 0; i < curr_targets.length(); i++)
   {
     old_tar_indices[as<std::string>(curr_targets[i])] = i;
   }
