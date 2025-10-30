@@ -97,36 +97,36 @@ Default is <code>TRUE</code>.</p></dd>
 <span class="r-in"><span>  <span class="va">example_matrix</span>,</span></span>
 <span class="r-in"><span>  subsampling_ratio <span class="op">=</span> <span class="fl">0.5</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-16 02:37:04] Subsample matrix generated, dimensions: <span style="color: #0000BB;">2500</span> cells by <span style="color: #0000BB;">18</span> genes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:28] Subsample matrix generated, dimensions: <span style="color: #0000BB;">2500</span> cells by <span style="color: #0000BB;">18</span> genes</span>
 <span class="r-in"><span><span class="va">subsample_matrix_2</span> <span class="op">&lt;-</span> <span class="fu">subsampling</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">example_matrix</span>,</span></span>
 <span class="r-in"><span>  subsampling_method <span class="op">=</span> <span class="st">"meta_cells"</span>,</span></span>
 <span class="r-in"><span>  subsampling_ratio <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
 <span class="r-in"><span>  fast_pca <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> [2025-10-16 02:37:04] Number of PCs of PCA result is less than the desired number, using all PCs.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-16 02:37:05] Subsample matrix generated, dimensions: <span style="color: #0000BB;">2500</span> cells by <span style="color: #0000BB;">18</span> genes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> [2025-10-30 09:49:28] Number of PCs of PCA result is less than the desired number, using all PCs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:29] Subsample matrix generated, dimensions: <span style="color: #0000BB;">2500</span> cells by <span style="color: #0000BB;">18</span> genes</span>
 <span class="r-in"><span><span class="va">subsample_matrix_3</span> <span class="op">&lt;-</span> <span class="fu">subsampling</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">example_matrix</span>,</span></span>
 <span class="r-in"><span>  subsampling_method <span class="op">=</span> <span class="st">"pseudobulk"</span>,</span></span>
 <span class="r-in"><span>  subsampling_ratio <span class="op">=</span> <span class="fl">0.5</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-16 02:37:05] Subsample matrix generated, dimensions: <span style="color: #0000BB;">2500</span> cells by <span style="color: #0000BB;">18</span> genes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:29] Subsample matrix generated, dimensions: <span style="color: #0000BB;">2500</span> cells by <span style="color: #0000BB;">18</span> genes</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="calculate_metrics.html">calculate_metrics</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="inferCSN.html">inferCSN</a></span><span class="op">(</span><span class="va">example_matrix</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="va">example_ground_truth</span>,</span></span>
 <span class="r-in"><span>  return_plot <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-16 02:37:05] Running for &lt;dense matrix&gt;.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2025-10-16 02:37:05] Checking input parameters...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-16 02:37:05] Using `L0` sparse regression model</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-16 02:37:05] Using <span style="color: #0000BB;">1</span> core</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">⠙</span> [2025-10-16 02:37:05] Running [<span style="color: #0000BB;">1</span>/<span style="color: #0000BB;">18</span>] ETA:  0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-10-16 02:37:05] Completed <span style="color: #0000BB;">18</span> tasks in 572ms</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:29] Running for &lt;dense matrix&gt;.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2025-10-30 09:49:29] Checking input parameters...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:29] Using `L0` sparse regression model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:29] Using <span style="color: #0000BB;">1</span> core</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">⠙</span> [2025-10-30 09:49:29] Running [<span style="color: #0000BB;">1</span>/<span style="color: #0000BB;">18</span>] ETA:  0s</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-10-30 09:49:29] Completed <span style="color: #0000BB;">18</span> tasks in 217ms</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-16 02:37:05] Building results</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-10-16 02:37:06] Run done.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:29] Building results</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-10-30 09:49:30] Run done.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $metrics</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      Metric  Value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     AUROC  0.952</span>
@@ -146,12 +146,12 @@ Default is <code>TRUE</code>.</p></dd>
 <span class="r-in"><span>  <span class="va">example_ground_truth</span>,</span></span>
 <span class="r-in"><span>  return_plot <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-16 02:37:06] Running for &lt;dense matrix&gt;.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2025-10-16 02:37:06] Checking input parameters...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-16 02:37:06] Using `L0` sparse regression model</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-16 02:37:06] Using <span style="color: #0000BB;">1</span> core</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-16 02:37:06] Building results</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-10-16 02:37:06] Run done.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:30] Running for &lt;dense matrix&gt;.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2025-10-30 09:49:30] Checking input parameters...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:30] Using `L0` sparse regression model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:30] Using <span style="color: #0000BB;">1</span> core</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:30] Building results</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-10-30 09:49:30] Run done.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $metrics</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      Metric  Value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     AUROC  0.955</span>
@@ -171,12 +171,12 @@ Default is <code>TRUE</code>.</p></dd>
 <span class="r-in"><span>  <span class="va">example_ground_truth</span>,</span></span>
 <span class="r-in"><span>  return_plot <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-16 02:37:06] Running for &lt;dense matrix&gt;.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2025-10-16 02:37:06] Checking input parameters...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-16 02:37:06] Using `L0` sparse regression model</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-16 02:37:06] Using <span style="color: #0000BB;">1</span> core</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-16 02:37:06] Building results</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-10-16 02:37:07] Run done.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:30] Running for &lt;dense matrix&gt;.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2025-10-30 09:49:30] Checking input parameters...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:30] Using `L0` sparse regression model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:30] Using <span style="color: #0000BB;">1</span> core</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:30] Building results</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-10-30 09:49:31] Run done.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $metrics</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      Metric  Value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     AUROC  0.952</span>
@@ -196,15 +196,12 @@ Default is <code>TRUE</code>.</p></dd>
 <span class="r-in"><span>  <span class="va">example_ground_truth</span>,</span></span>
 <span class="r-in"><span>  return_plot <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-16 02:37:07] Running for &lt;dense matrix&gt;.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2025-10-16 02:37:07] Checking input parameters...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-16 02:37:07] Using `L0` sparse regression model</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-16 02:37:07] Using <span style="color: #0000BB;">1</span> core</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">⠙</span> [2025-10-16 02:37:07] Running [<span style="color: #0000BB;">1</span>/<span style="color: #0000BB;">18</span>] ETA:  0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-10-16 02:37:07] Completed <span style="color: #0000BB;">18</span> tasks in 131ms</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-16 02:37:07] Building results</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-10-16 02:37:07] Run done.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:31] Running for &lt;dense matrix&gt;.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2025-10-30 09:49:31] Checking input parameters...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:31] Using `L0` sparse regression model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:31] Using <span style="color: #0000BB;">1</span> core</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:31] Building results</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-10-30 09:49:31] Run done.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $metrics</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      Metric  Value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     AUROC  0.955</span>
