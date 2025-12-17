@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">inferCSN</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,6 +16,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/mengxu98/inferCSN" title="GitHub" aria-label="GitHub repository"><span class="fa fab fa-github fa-lg"></span></a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/mengxu98" title="MengXu" aria-label="MengXu's GitHub profile"><span class="fa fas fa-home fa-lg"></span></a></li>
 <li class="nav-item dropdown">
@@ -76,23 +77,6 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'sparseMatrix'</span></span>
-<span><span class="fu">inferCSN</span><span class="op">(</span></span>
-<span>  <span class="va">object</span>,</span>
-<span>  penalty <span class="op">=</span> <span class="st">"L0"</span>,</span>
-<span>  cross_validation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  seed <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  n_folds <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>  subsampling_method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample"</span>, <span class="st">"meta_cells"</span>, <span class="st">"pseudobulk"</span><span class="op">)</span>,</span>
-<span>  subsampling_ratio <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  r_squared_threshold <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  regulators <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  targets <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  cores <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for class 'data.frame'</span></span>
 <span><span class="fu">inferCSN</span><span class="op">(</span></span>
 <span>  <span class="va">object</span>,</span>
 <span>  penalty <span class="op">=</span> <span class="st">"L0"</span>,</span>
@@ -188,23 +172,26 @@ The data table has the three columns: regulator, target, and weight.</p>
 <span class="r-in"><span><span class="va">network_table_1</span> <span class="op">&lt;-</span> <span class="fu">inferCSN</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">example_matrix</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:03] Running for &lt;dense matrix&gt;.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2025-10-30 09:49:03] Checking input parameters...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:03] Using `L0` sparse regression model</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:03] Using <span style="color: #0000BB;">1</span> core</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:03] Building results</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-10-30 09:49:04] Run done.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-12-17 14:37:09] Inferring network for <span style="color: #0000BB;">&lt;dense matrix&gt;</span>...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2025-12-17 14:37:09] Checking parameters...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-12-17 14:37:09] Using <span style="color: #0000BB;">"L0"</span> sparse regression model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-12-17 14:37:09] Using <span style="color: #0000BB;">1</span> core</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">⠙</span> [2025-12-17 14:37:09] Running [<span style="color: #0000BB;">1</span>/<span style="color: #0000BB;">18</span>] Processing: <span style="color: #0000BB;">g1 </span> ETA:  0s</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-12-17 14:37:09] Completed <span style="color: #0000BB;">18</span> tasks in 169ms</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-12-17 14:37:09] Building results</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-12-17 14:37:09] Building network done</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">network_table_2</span> <span class="op">&lt;-</span> <span class="fu">inferCSN</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">example_matrix</span>,</span></span>
 <span class="r-in"><span>  cores <span class="op">=</span> <span class="fl">2</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:04] Running for &lt;dense matrix&gt;.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2025-10-30 09:49:04] Checking input parameters...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:04] Using `L0` sparse regression model</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:04] Using <span style="color: #0000BB;">2</span> cores</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:04] Building results</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-10-30 09:49:04] Run done.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-12-17 14:37:09] Inferring network for <span style="color: #0000BB;">&lt;dense matrix&gt;</span>...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2025-12-17 14:37:09] Checking parameters...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-12-17 14:37:09] Using <span style="color: #0000BB;">"L0"</span> sparse regression model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-12-17 14:37:09] Using <span style="color: #0000BB;">2</span> cores</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-12-17 14:37:09] Building results</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-12-17 14:37:09] Building network done</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">network_table_1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   regulator target     weight</span>
@@ -226,14 +213,14 @@ The data table has the three columns: regulator, target, and weight.</p>
 <span class="r-in"><span>  regulators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span>, <span class="st">"g2"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g3"</span>, <span class="st">"g4"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:04] Running for &lt;dense matrix&gt;.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2025-10-30 09:49:04] Checking input parameters...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:04] Using <span style="color: #0000BB;">2</span> regulators</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:04] Using <span style="color: #0000BB;">2</span> targets</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:04] Using `L0` sparse regression model</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:04] Using <span style="color: #0000BB;">1</span> core</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:04] Building results</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-10-30 09:49:04] Run done.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-12-17 14:37:09] Inferring network for <span style="color: #0000BB;">&lt;dense matrix&gt;</span>...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2025-12-17 14:37:09] Checking parameters...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-12-17 14:37:09] Using <span style="color: #0000BB;">"L0"</span> sparse regression model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-12-17 14:37:09] Using <span style="color: #0000BB;">2</span> regulators</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-12-17 14:37:09] Using <span style="color: #0000BB;">2</span> targets</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-12-17 14:37:09] Using <span style="color: #0000BB;">1</span> core</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-12-17 14:37:09] Building results</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-12-17 14:37:09] Building network done</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   regulator target     weight</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1        g2     g3  0.9848781</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2        g2     g4  0.9230387</span>
@@ -244,14 +231,14 @@ The data table has the three columns: regulator, target, and weight.</p>
 <span class="r-in"><span>  regulators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span>, <span class="st">"g2"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g3"</span>, <span class="st">"g0"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:04] Running for &lt;dense matrix&gt;.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2025-10-30 09:49:04] Checking input parameters...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:04] Using <span style="color: #0000BB;">2</span> regulators</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> [2025-10-30 09:49:04] <span style="color: #0000BB;">1</span> out of <span style="color: #0000BB;">2</span> candidate targets are in the input matrix</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:04] Using `L0` sparse regression model</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:04] Using <span style="color: #0000BB;">1</span> core</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-10-30 09:49:04] Building results</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-10-30 09:49:04] Run done.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-12-17 14:37:09] Inferring network for <span style="color: #0000BB;">&lt;dense matrix&gt;</span>...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2025-12-17 14:37:09] Checking parameters...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-12-17 14:37:09] Using <span style="color: #0000BB;">"L0"</span> sparse regression model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-12-17 14:37:09] Using <span style="color: #0000BB;">2</span> regulators</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> [2025-12-17 14:37:09] <span style="color: #0000BB;">1</span> out of <span style="color: #0000BB;">2</span> targets are in the input matrix</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-12-17 14:37:09] Using <span style="color: #0000BB;">1</span> core</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2025-12-17 14:37:09] Building results</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2025-12-17 14:37:09] Building network done</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   regulator target     weight</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1        g2     g3  0.9848781</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2        g1     g3 -0.1732490</span>
@@ -322,7 +309,7 @@ The data table has the three columns: regulator, target, and weight.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>
