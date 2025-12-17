@@ -8,10 +8,9 @@
     regulators,
     targets,
     verbose,
-    cores,
     ...) {
   thisutils::log_message(
-    "Checking input parameters...",
+    "Checking parameters...",
     message_type = "running",
     verbose = verbose
   )
@@ -30,8 +29,11 @@
     )
   }
 
-  match.arg(penalty, c("L0", "L0L1", "L0L2"))
-
+  penalty <- match.arg(penalty, c("L0", "L0L1", "L0L2"))
+  thisutils::log_message(
+    "Using {.val {penalty}} sparse regression model",
+    verbose = verbose
+  )
   if (!is.numeric(seed)) {
     seed <- 1
     thisutils::log_message(
@@ -59,7 +61,7 @@
 
     if (length(intersect_regulators) < length(regulators)) {
       thisutils::log_message(
-        "{.val {length(intersect_regulators)}} out of {.val {length(regulators)}} candidate regulator{?s} are in the input matrix",
+        "{.val {length(intersect_regulators)}} out of {.val {length(regulators)}} regulator{?s} are in the input matrix",
         message_type = "warning",
         verbose = verbose
       )
@@ -82,7 +84,7 @@
 
     if (length(intersect_targets) < length(targets)) {
       thisutils::log_message(
-        "{.val {length(intersect_targets)}} out of {.val {length(targets)}} candidate target{?s} are in the input matrix",
+        "{.val {length(intersect_targets)}} out of {.val {length(targets)}} target{?s} are in the input matrix",
         message_type = "warning",
         verbose = verbose
       )
@@ -94,18 +96,6 @@
     }
   }
 
-  if (!is.numeric(cores) || cores < 1) {
-    thisutils::log_message(
-      "{.arg cores} should be a positive integer, initialize it to 1",
-      message_type = "warning",
-      verbose = verbose
-    )
-  }
-
-  thisutils::log_message(
-    "Using {.arg {penalty}} sparse regression model",
-    verbose = verbose
-  )
   if (cross_validation) {
     thisutils::log_message(
       "Using cross validation, and setting {.val {n_folds}} fold{?s}",
