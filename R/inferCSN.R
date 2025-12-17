@@ -125,7 +125,7 @@ setMethod(
                         verbose = TRUE,
                         ...) {
     thisutils::log_message(
-      "Running for <dense matrix>.",
+      "Inferring network for {.cls dense matrix}...",
       verbose = verbose
     )
 
@@ -141,7 +141,6 @@ setMethod(
       regulators = regulators,
       targets = targets,
       verbose = verbose,
-      cores = cores,
       ...
     )
 
@@ -187,7 +186,7 @@ setMethod(
       network_format(abs_weight = FALSE)
 
     thisutils::log_message(
-      "Run done.",
+      "Building network done",
       message_type = "success",
       verbose = verbose
     )
@@ -257,7 +256,7 @@ setMethod(
                         verbose = TRUE,
                         ...) {
     thisutils::log_message(
-      "Running for <", class(object), ">.",
+      "Inferring network for {.cls {class(object)}}...",
       verbose = verbose
     )
 
@@ -273,7 +272,6 @@ setMethod(
       regulators = regulators,
       targets = targets,
       verbose = verbose,
-      cores = cores,
       ...
     )
 
@@ -319,55 +317,11 @@ setMethod(
       network_format(abs_weight = FALSE)
 
     thisutils::log_message(
-      "Run done.",
+      "Building network done",
       message_type = "success",
       verbose = verbose
     )
 
     return(network_table)
-  }
-)
-
-#' @rdname inferCSN
-#' @export
-setMethod(
-  f = "inferCSN",
-  signature = signature(object = "data.frame"),
-  definition = function(object,
-                        penalty = "L0",
-                        cross_validation = FALSE,
-                        seed = 1,
-                        n_folds = 5,
-                        subsampling_method = c(
-                          "sample", "meta_cells", "pseudobulk"
-                        ),
-                        subsampling_ratio = 1,
-                        r_squared_threshold = 0,
-                        regulators = NULL,
-                        targets = NULL,
-                        cores = 1,
-                        verbose = TRUE,
-                        ...) {
-    thisutils::log_message(
-      "convert the class type of the input data from <data.frame> to <matrix>.",
-      message_type = "warning",
-      verbose = verbose
-    )
-
-    inferCSN(
-      object = thisutils::as_matrix(object),
-      penalty = penalty,
-      cross_validation = cross_validation,
-      seed = seed,
-      n_folds = n_folds,
-      subsampling_method = subsampling_method,
-      subsampling_ratio = subsampling_ratio,
-      r_squared_threshold = r_squared_threshold,
-      regulators = regulators,
-      targets = targets,
-      verbose = verbose,
-      cores = cores,
-      ...
-    )
   }
 )

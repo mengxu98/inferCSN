@@ -5,7 +5,6 @@
 \alias{inferCSN}
 \alias{inferCSN,matrix-method}
 \alias{inferCSN,sparseMatrix-method}
-\alias{inferCSN,data.frame-method}
 \title{inferring cell-type specific gene regulatory network}
 \usage{
 inferCSN(
@@ -41,22 +40,6 @@ inferCSN(
 )
 
 \S4method{inferCSN}{sparseMatrix}(
-  object,
-  penalty = "L0",
-  cross_validation = FALSE,
-  seed = 1,
-  n_folds = 5,
-  subsampling_method = c("sample", "meta_cells", "pseudobulk"),
-  subsampling_ratio = 1,
-  r_squared_threshold = 0,
-  regulators = NULL,
-  targets = NULL,
-  cores = 1,
-  verbose = TRUE,
-  ...
-)
-
-\S4method{inferCSN}{data.frame}(
   object,
   penalty = "L0",
   cross_validation = FALSE,
