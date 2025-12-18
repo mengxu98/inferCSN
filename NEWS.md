@@ -3,7 +3,7 @@
 # inferCSN 1.2.2
 
 * **func**:
-  * Removed `network_sift()` function.
+  * Removed `network_sift()` and `weight_sift()` functions.
   * Removed S4 method for `data.frame`.
 
 * **docs**:
