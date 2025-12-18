@@ -97,6 +97,6 @@ dim(meta_cells_matrix)
 meta_cells_matrix[1:6, 1:6]
 }
 \references{
-https://github.com/GfellerLab/SuperCell
-https://github.com/kuijjerlab/SCORPION
+\href{https://github.com/GfellerLab/SuperCell}{SuperCell},
+\href{https://github.com/kuijjerlab/SCORPION}{SCORPION}
 }
