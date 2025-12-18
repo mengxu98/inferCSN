@@ -49,23 +49,11 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// weight_sift
-Rcpp::DataFrame weight_sift(Rcpp::DataFrame table);
-RcppExport SEXP _inferCSN_weight_sift(SEXP tableSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type table(tableSEXP);
-    rcpp_result_gen = Rcpp::wrap(weight_sift(table));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_inferCSN_filter_sort_matrix", (DL_FUNC) &_inferCSN_filter_sort_matrix, 3},
     {"_inferCSN_prepare_calculate_metrics", (DL_FUNC) &_inferCSN_prepare_calculate_metrics, 2},
     {"_inferCSN_network_format", (DL_FUNC) &_inferCSN_network_format, 4},
-    {"_inferCSN_weight_sift", (DL_FUNC) &_inferCSN_weight_sift, 1},
     {NULL, NULL, 0}
 };
 

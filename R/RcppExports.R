@@ -73,18 +73,3 @@ network_format <- function(network_table, regulators = NULL, targets = NULL, abs
     .Call('_inferCSN_network_format', PACKAGE = 'inferCSN', network_table, regulators, targets, abs_weight)
 }
 
-#' @title Weight sift
-#' @description Remove edges with smaller weights in the reverse direction.
-#'
-#' @param table A data frame with three columns: "regulator", "target", and "weight".
-#'
-#' @export
-#'
-#' @examples
-#' data(example_matrix)
-#' network_table <- inferCSN(example_matrix)
-#' weight_sift(network_table) |> head()
-weight_sift <- function(table) {
-    .Call('_inferCSN_weight_sift', PACKAGE = 'inferCSN', table)
-}
-
