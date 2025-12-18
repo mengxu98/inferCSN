@@ -40,11 +40,6 @@ reference:
   - infercsn_logo
   - inferCSN
 
-- subtitle: "Network processing"
-- contents:
-  - network_sift
-  - weight_sift
-
 - subtitle: "Network evaluation"
 - contents:
   - calculate_metrics
