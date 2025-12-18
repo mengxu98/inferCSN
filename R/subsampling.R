@@ -62,7 +62,7 @@ subsampling <- function(
 
   if (!(is.numeric(subsampling_ratio) && subsampling_ratio > 0 && subsampling_ratio <= 1)) {
     thisutils::log_message(
-      "Please set 'subsampling_ratio' value between: (0, 1].",
+      "Please set {.arg subsampling_ratio} value between: (0, 1]",
       message_type = "error"
     )
   }
@@ -118,6 +118,7 @@ subsampling <- function(
     ratio = 0.5,
     k = 50,
     seed = 1,
+    prefix = "pseudobulk_",
     ...) {
   n_samples <- round(nrow(matrix) * ratio)
 
@@ -150,7 +151,7 @@ subsampling <- function(
   }
 
   colnames(agg_matrix) <- colnames(matrix)
-  rownames(agg_matrix) <- paste0("pseudobulk_", seq_len(n_samples))
+  rownames(agg_matrix) <- paste0(prefix, seq_len(n_samples))
 
   return(agg_matrix)
 }

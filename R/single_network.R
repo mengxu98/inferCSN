@@ -50,7 +50,7 @@ single_network <- function(
   regulators <- setdiff(regulators, target)
   if (length(regulators) < 2) {
     thisutils::log_message(
-      "less than 2 regulators found while modeling: ", target,
+      "Less than 2 regulators found when modeling: {.val {target}}",
       message_type = "warning",
       verbose = verbose
     )

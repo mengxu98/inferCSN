@@ -95,19 +95,6 @@ p2 <- plot_network_heatmap(
   legend_name = "inferCSN"
 )
 ComplexHeatmap::draw(p1 + p2)
-\dontrun{
-p3 <- plot_network_heatmap(
-  network_table,
-  legend_name = "Weight1",
-  heatmap_color = c("#20a485", "#410054", "#fee81f")
-)
-p4 <- plot_network_heatmap(
-  network_table,
-  legend_name = "Weight2",
-  heatmap_color = c("#20a485", "white", "#fee81f")
-)
-ComplexHeatmap::draw(p3 + p4)
-}
 
 plot_network_heatmap(
   network_table,
@@ -123,19 +110,4 @@ plot_network_heatmap(
   targets = c("g3", "g6", "g9"),
   show_names = TRUE
 )
-\dontrun{
-plot_network_heatmap(
-  network_table,
-  regulators = c("g1", "g2"),
-  show_names = TRUE
-)
-
-plot_network_heatmap(
-  network_table,
-  targets = c("g1", "g2"),
-  row_anno_type = "boxplot",
-  column_anno_type = "histogram",
-  show_names = TRUE
-)
-}
 }

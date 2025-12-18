@@ -40,7 +40,7 @@ fit_srm <- function(
 
     if (any(class(fit) == "try-error")) {
       thisutils::log_message(
-        "cross validation error, setting {.arg cross_validation} to {.pkg FALSE} and re-train",
+        "Cross-validation error, setting {.arg cross_validation} to {.pkg FALSE} and re-train",
         message_type = "warning",
         verbose = verbose
       )

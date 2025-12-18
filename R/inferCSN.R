@@ -62,50 +62,23 @@ setGeneric(
 #'
 #' @examples
 #' data(example_matrix)
-#' network_table_1 <- inferCSN(
+#' network_table <- inferCSN(
 #'   example_matrix
 #' )
 #'
-#' network_table_2 <- inferCSN(
-#'   example_matrix,
-#'   cores = 2
-#' )
-#'
-#' head(network_table_1)
-#'
-#' identical(
-#'   network_table_1,
-#'   network_table_2
-#' )
+#' head(network_table)
 #'
 #' inferCSN(
 #'   example_matrix,
 #'   regulators = c("g1", "g2"),
 #'   targets = c("g3", "g4")
 #' )
+#'
 #' inferCSN(
 #'   example_matrix,
 #'   regulators = c("g1", "g2"),
 #'   targets = c("g3", "g0")
 #' )
-#'
-#' \dontrun{
-#' data("example_ground_truth")
-#' network_table_07 <- inferCSN(
-#'   example_matrix,
-#'   r_squared_threshold = 0.7
-#' )
-#' calculate_metrics(
-#'   network_table_1,
-#'   example_ground_truth,
-#'   return_plot = TRUE
-#' )
-#' calculate_metrics(
-#'   network_table_07,
-#'   example_ground_truth,
-#'   return_plot = TRUE
-#' )
-#' }
 setMethod(
   f = "inferCSN",
   signature = signature(object = "matrix"),
@@ -197,46 +170,6 @@ setMethod(
 
 #' @rdname inferCSN
 #' @export
-#'
-#' @examples
-#' \dontrun{
-#' data(example_matrix)
-#' network_table <- inferCSN(example_matrix)
-#' head(network_table)
-#'
-#' network_table_sparse_1 <- inferCSN(
-#'   as(example_matrix, "sparseMatrix")
-#' )
-#' head(network_table_sparse_1)
-#'
-#' network_table_sparse_2 <- inferCSN(
-#'   as(example_matrix, "sparseMatrix"),
-#'   cores = 2
-#' )
-#' identical(
-#'   network_table,
-#'   network_table_sparse_1
-#' )
-#'
-#' identical(
-#'   network_table_sparse_1,
-#'   network_table_sparse_2
-#' )
-#'
-#' plot_scatter(
-#'   data.frame(
-#'     network_table$weight,
-#'     network_table_sparse_1$weight
-#'   ),
-#'   legend_position = "none"
-#' )
-#'
-#' plot_weight_distribution(
-#'   network_table
-#' ) + plot_weight_distribution(
-#'   network_table_sparse_1
-#' )
-#' }
 setMethod(
   f = "inferCSN",
   signature = signature(object = "sparseMatrix"),

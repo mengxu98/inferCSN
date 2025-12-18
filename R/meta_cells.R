@@ -45,8 +45,8 @@
 #' @md
 #'
 #' @references
-#' https://github.com/GfellerLab/SuperCell
-#' https://github.com/kuijjerlab/SCORPION
+#' \href{https://github.com/GfellerLab/SuperCell}{SuperCell},
+#' \href{https://github.com/kuijjerlab/SCORPION}{SCORPION}
 #'
 #' @examples
 #' data(example_matrix)
@@ -193,7 +193,7 @@ meta_cells <- function(
       igraph::cut_at(k)
   } else if (cluster_method[1] == "louvain") {
     thisutils::log_message(
-      "using ", cluster_method, " method to cluster, gamma is ignored.",
+      "using {.pkg {cluster_method}} method to cluster, gamma is ignored",
       message_type = "warning"
     )
     membership_results <- igraph::cluster_louvain(
@@ -325,7 +325,7 @@ meta_cells <- function(
   mode <- mode[1]
   if (!(mode %in% c("average", "sum"))) {
     stop(
-      "mode ", mode, " is unknown. Available values are 'average' and 'sum'."
+      "mode {.pkg {mode}} is unknown. Available values are {.pkg average} and {.pkg sum}"
     )
   }
 
@@ -344,7 +344,7 @@ meta_cells <- function(
   } else {
     if (length(weights) != length(groups)) {
       stop(
-        "weights must be the same length as groups or NULL in case of unweighted averaging."
+        "weights must be the same length as groups or NULL in case of unweighted averaging"
       )
     }
 

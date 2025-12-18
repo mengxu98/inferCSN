@@ -8,7 +8,7 @@
 \url{https://mengxu98.github.io/inferCSN/}
 }
 \description{
-An R package for inferring cell-type specific gene regulatory network from single-cell RNA-seq data.
+Inferring cell-type specific gene regulatory network using sparse regression model from single-cell transcriptomic data.
 }
 \seealso{
 Useful links:

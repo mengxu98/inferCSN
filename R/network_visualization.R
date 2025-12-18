@@ -45,19 +45,6 @@
 #'   legend_name = "inferCSN"
 #' )
 #' ComplexHeatmap::draw(p1 + p2)
-#' \dontrun{
-#' p3 <- plot_network_heatmap(
-#'   network_table,
-#'   legend_name = "Weight1",
-#'   heatmap_color = c("#20a485", "#410054", "#fee81f")
-#' )
-#' p4 <- plot_network_heatmap(
-#'   network_table,
-#'   legend_name = "Weight2",
-#'   heatmap_color = c("#20a485", "white", "#fee81f")
-#' )
-#' ComplexHeatmap::draw(p3 + p4)
-#' }
 #'
 #' plot_network_heatmap(
 #'   network_table,
@@ -73,21 +60,6 @@
 #'   targets = c("g3", "g6", "g9"),
 #'   show_names = TRUE
 #' )
-#' \dontrun{
-#' plot_network_heatmap(
-#'   network_table,
-#'   regulators = c("g1", "g2"),
-#'   show_names = TRUE
-#' )
-#'
-#' plot_network_heatmap(
-#'   network_table,
-#'   targets = c("g1", "g2"),
-#'   row_anno_type = "boxplot",
-#'   column_anno_type = "histogram",
-#'   show_names = TRUE
-#' )
-#' }
 plot_network_heatmap <- function(
     network_table,
     regulators = NULL,
@@ -539,16 +511,6 @@ plot_contrast_networks <- function(
 #'   celltypes_order = celltypes_order,
 #'   plot_type = "ggplotly"
 #' )
-#'
-#' \dontrun{
-#' # If setting `plot_type = "animate"` to plot and save `gif` figure,
-#' # please install `gifski` package first.
-#' plot_dynamic_networks(
-#'   network,
-#'   celltypes_order = celltypes_order,
-#'   plot_type = "animate"
-#' )
-#' }
 plot_dynamic_networks <- function(
     network_table,
     celltypes_order,

@@ -99,14 +99,4 @@ plot_dynamic_networks(
   celltypes_order = celltypes_order,
   plot_type = "ggplotly"
 )
-
-\dontrun{
-# If setting `plot_type = "animate"` to plot and save `gif` figure,
-# please install `gifski` package first.
-plot_dynamic_networks(
-  network,
-  celltypes_order = celltypes_order,
-  plot_type = "animate"
-)
-}
 }
