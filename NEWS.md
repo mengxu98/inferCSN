@@ -1,5 +1,14 @@
 # inferCSN
 
+# inferCSN 1.2.2
+
+* **func**:
+  * Removed `network_sift()` function.
+  * Removed S4 method for `data.frame`.
+
+* **docs**:
+  * Updated documentation across multiple functions.
+
 # inferCSN 1.2.1
 
 * **func**:
