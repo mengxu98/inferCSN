@@ -68,22 +68,11 @@ fit_srm <- function(
       lambda <- fit_inf$lambda[which.max(fit_inf$suppSize)]
       gamma <- fit_inf$gamma[which.max(fit_inf$suppSize)]
     } else {
-      gamma <- fit$fit$gamma[which(
-        unlist(lapply(
-          fit$cvMeans, min
-        )) == min(unlist(lapply(fit$cvMeans, min)))
-      )]
-      lambda_list <- subset(
-        print(fit),
-        gamma == gamma
-      )
-      if (regulators_num %in% lambda_list$suppSize) {
-        lambda <- lambda_list$lambda[which(
-          lambda_list$suppSize == regulators_num
-        )]
-      } else {
-        lambda <- min(lambda_list$lambda)
-      }
+      best_gamma_idx <- which.min(sapply(fit$cvMeans, min))
+      gamma <- fit$fit$gamma[best_gamma_idx]
+      cv_means <- fit$cvMeans[[best_gamma_idx]]
+      best_lambda_idx <- which.min(cv_means)
+      lambda <- fit$fit$lambda[[best_gamma_idx]][best_lambda_idx]
     }
   } else {
     fit <- try(
