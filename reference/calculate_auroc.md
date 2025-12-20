@@ -46,12 +46,12 @@ A list containing metric and optional plot
 data(example_matrix)
 data("example_ground_truth")
 network_table <- inferCSN(example_matrix)
-#> ℹ [2025-12-17 14:37:04] Inferring network for <dense matrix>...
-#> ◌ [2025-12-17 14:37:04] Checking parameters...
-#> ℹ [2025-12-17 14:37:04] Using "L0" sparse regression model
-#> ℹ [2025-12-17 14:37:04] Using 1 core
-#> ℹ [2025-12-17 14:37:04] Building results
-#> ✔ [2025-12-17 14:37:04] Building network done
+#> ℹ [2025-12-20 13:39:28] Inferring network for <dense matrix>...
+#> ◌ [2025-12-20 13:39:28] Checking parameters...
+#> ℹ [2025-12-20 13:39:28] Using "L0" sparse regression model
+#> ℹ [2025-12-20 13:39:28] Using 1 core
+#> ℹ [2025-12-20 13:39:28] Building results
+#> ✔ [2025-12-20 13:39:28] Building network done
 calculate_auroc(
   network_table,
   example_ground_truth,

@@ -136,8 +136,8 @@ A matrix where rows represent metacells and columns represent genes.
 
 ## References
 
-https://github.com/GfellerLab/SuperCell
-https://github.com/kuijjerlab/SCORPION
+[SuperCell](https://github.com/GfellerLab/SuperCell),
+[SCORPION](https://github.com/kuijjerlab/SCORPION)
 
 ## Examples
 
@@ -146,7 +146,7 @@ data(example_matrix)
 meta_cells_matrix <- meta_cells(
   example_matrix
 )
-#> ! [2025-12-17 14:37:10] Number of PCs of PCA result is less than the desired number, using all PCs.
+#> ! [2025-12-20 13:39:33] Number of PCs of PCA result is less than the desired number, using all PCs.
 dim(meta_cells_matrix)
 #> [1] 500  18
 meta_cells_matrix[1:6, 1:6]

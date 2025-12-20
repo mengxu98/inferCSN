@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">inferCSN</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,18 @@
       <small>Source: <a href="https://github.com/mengxu98/inferCSN/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.2" id="infercsn-122">inferCSN 1.2.2<a class="anchor" aria-label="anchor" href="#infercsn-122"></a></h2>
+<ul><li>
+<strong>func</strong>:
+<ul><li>Removed <code>network_sift()</code> and <code>weight_sift()</code> functions.</li>
+<li>Removed S4 method for <code>data.frame</code>.</li>
+</ul></li>
+<li>
+<strong>docs</strong>:
+<ul><li>Updated documentation across multiple functions.</li>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.1" id="infercsn-121">inferCSN 1.2.1<a class="anchor" aria-label="anchor" href="#infercsn-121"></a></h2>
 <ul><li>
@@ -180,7 +192,7 @@
 <h2 class="pkg-version" data-toc-text="1.0.9" id="infercsn-109">inferCSN 1.0.9<a class="anchor" aria-label="anchor" href="#infercsn-109"></a></h2>
 <ul><li>
 <strong>func</strong>:
-<ul><li>Added new utility functions including <code>%s%</code>, <code>matrix_to_table()</code>, <code>pearson_correlation()</code>, <code>simulate_sparse_matrix()</code>, <code><a href="../reference/plot_coefficients.html">plot_coefficients()</a></code>, <code>split_indices()</code>, <code>subsampling_fun()</code>, and <code><a href="../reference/weight_sift.html">weight_sift()</a></code>.</li>
+<ul><li>Added new utility functions including <code>%s%</code>, <code>matrix_to_table()</code>, <code>pearson_correlation()</code>, <code>simulate_sparse_matrix()</code>, <code><a href="../reference/plot_coefficients.html">plot_coefficients()</a></code>, <code>split_indices()</code>, <code>subsampling_fun()</code>, and <code>weight_sift()</code>.</li>
 <li>Added new C++ functions including <code><a href="../reference/network_format.html">network_format()</a></code>, <code>prepare_calculate_metrics()</code> for improved performance.</li>
 <li>Added <code>CITATION</code> file for proper citation.</li>
 <li>Renamed function from <code>percent_samples</code> to <code>subsampling</code>.</li>
@@ -296,7 +308,7 @@
 <li>Added new function <code>as_matrix()</code> for matrix conversion.</li>
 <li>Added new function <code><a href="../reference/plot_scatter.html">plot_scatter()</a></code> for scatter plot visualization.</li>
 <li>Added new parameter for <code><a href="../reference/plot_scatter.html">plot_scatter()</a></code>.</li>
-<li>Added new function <code><a href="../reference/network_sift.html">network_sift()</a></code> for network filtering (renamed from previous version).</li>
+<li>Added new function <code>network_sift()</code> for network filtering (renamed from previous version).</li>
 <li>Added new functions: <code>r_square()</code>, <code><a href="../reference/plot_contrast_networks.html">plot_contrast_networks()</a></code>, <code><a href="../reference/plot_dynamic_networks.html">plot_dynamic_networks()</a></code>.</li>
 <li>Added new function <code>map_parallel()</code> and <code>parallelize_fun()</code> for parallel processing.</li>
 <li>Added <code>.softmax()</code> function.</li>
@@ -305,7 +317,7 @@
 <li>Removed <code>dynamic.networks</code>, <code>contrast.networks</code> functions (renamed/replaced).</li>
 <li>Renamed <code>net.format</code> to <code><a href="../reference/network_format.html">network_format()</a></code>.</li>
 <li>Renamed <code>dynamic.networks</code> to <code><a href="../reference/plot_static_networks.html">plot_static_networks()</a></code>.</li>
-<li>Fixed errors and added new parameters for <code><a href="../reference/network_sift.html">network_sift()</a></code>.</li>
+<li>Fixed errors and added new parameters for <code>network_sift()</code>.</li>
 <li>Deleted unnecessary functions.</li>
 <li>Modified import functions and packages.</li>
 <li>Using <code>as_matrix()</code> instead of <code><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix()</a></code> for better performance.</li>

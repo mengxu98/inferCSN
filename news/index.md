@@ -1,5 +1,13 @@
 # Changelog
 
+## inferCSN 1.2.2
+
+- **func**:
+  - Removed `network_sift()` and `weight_sift()` functions.
+  - Removed S4 method for `data.frame`.
+- **docs**:
+  - Updated documentation across multiple functions.
+
 ## inferCSN 1.2.1
 
 - **func**:
@@ -121,8 +129,7 @@ CRAN release: 2025-03-27
   - Added new utility functions including `%s%`, `matrix_to_table()`,
     `pearson_correlation()`, `simulate_sparse_matrix()`,
     [`plot_coefficients()`](https://mengxu98.github.io/inferCSN/reference/plot_coefficients.md),
-    `split_indices()`, `subsampling_fun()`, and
-    [`weight_sift()`](https://mengxu98.github.io/inferCSN/reference/weight_sift.md).
+    `split_indices()`, `subsampling_fun()`, and `weight_sift()`.
   - Added new C++ functions including
     [`network_format()`](https://mengxu98.github.io/inferCSN/reference/network_format.md),
     `prepare_calculate_metrics()` for improved performance.
@@ -224,9 +231,8 @@ CRAN release: 2024-06-26
     for scatter plot visualization.
   - Added new parameter for
     [`plot_scatter()`](https://mengxu98.github.io/inferCSN/reference/plot_scatter.md).
-  - Added new function
-    [`network_sift()`](https://mengxu98.github.io/inferCSN/reference/network_sift.md)
-    for network filtering (renamed from previous version).
+  - Added new function `network_sift()` for network filtering (renamed
+    from previous version).
   - Added new functions: `r_square()`,
     [`plot_contrast_networks()`](https://mengxu98.github.io/inferCSN/reference/plot_contrast_networks.md),
     [`plot_dynamic_networks()`](https://mengxu98.github.io/inferCSN/reference/plot_dynamic_networks.md).
@@ -241,8 +247,7 @@ CRAN release: 2024-06-26
     [`network_format()`](https://mengxu98.github.io/inferCSN/reference/network_format.md).
   - Renamed `dynamic.networks` to
     [`plot_static_networks()`](https://mengxu98.github.io/inferCSN/reference/plot_static_networks.md).
-  - Fixed errors and added new parameters for
-    [`network_sift()`](https://mengxu98.github.io/inferCSN/reference/network_sift.md).
+  - Fixed errors and added new parameters for `network_sift()`.
   - Deleted unnecessary functions.
   - Modified import functions and packages.
   - Using `as_matrix()` instead of

@@ -126,31 +126,20 @@ table has the three columns: regulator, target, and weight.
 
 ``` r
 data(example_matrix)
-network_table_1 <- inferCSN(
+network_table <- inferCSN(
   example_matrix
 )
-#> ℹ [2025-12-17 14:37:09] Inferring network for <dense matrix>...
-#> ◌ [2025-12-17 14:37:09] Checking parameters...
-#> ℹ [2025-12-17 14:37:09] Using "L0" sparse regression model
-#> ℹ [2025-12-17 14:37:09] Using 1 core
-#> ⠙ [2025-12-17 14:37:09] Running [1/18] Processing: g1  ETA:  0s
-#> ✔ [2025-12-17 14:37:09] Completed 18 tasks in 169ms
+#> ℹ [2025-12-20 13:39:32] Inferring network for <dense matrix>...
+#> ◌ [2025-12-20 13:39:32] Checking parameters...
+#> ℹ [2025-12-20 13:39:32] Using "L0" sparse regression model
+#> ℹ [2025-12-20 13:39:32] Using 1 core
+#> ⠙ [2025-12-20 13:39:32] Running [1/18] Processing: g1  ETA:  0s
+#> ✔ [2025-12-20 13:39:32] Completed 18 tasks in 159ms
 #> 
-#> ℹ [2025-12-17 14:37:09] Building results
-#> ✔ [2025-12-17 14:37:09] Building network done
+#> ℹ [2025-12-20 13:39:32] Building results
+#> ✔ [2025-12-20 13:39:32] Building network done
 
-network_table_2 <- inferCSN(
-  example_matrix,
-  cores = 2
-)
-#> ℹ [2025-12-17 14:37:09] Inferring network for <dense matrix>...
-#> ◌ [2025-12-17 14:37:09] Checking parameters...
-#> ℹ [2025-12-17 14:37:09] Using "L0" sparse regression model
-#> ℹ [2025-12-17 14:37:09] Using 2 cores
-#> ℹ [2025-12-17 14:37:09] Building results
-#> ✔ [2025-12-17 14:37:09] Building network done
-
-head(network_table_1)
+head(network_table)
 #>   regulator target     weight
 #> 1       g18     g1 -0.9223177
 #> 2       g17    g18  0.8770468
@@ -159,100 +148,39 @@ head(network_table_1)
 #> 5       g17    g16  0.7558764
 #> 6       g12    g11  0.7444053
 
-identical(
-  network_table_1,
-  network_table_2
-)
-#> [1] TRUE
-
 inferCSN(
   example_matrix,
   regulators = c("g1", "g2"),
   targets = c("g3", "g4")
 )
-#> ℹ [2025-12-17 14:37:09] Inferring network for <dense matrix>...
-#> ◌ [2025-12-17 14:37:09] Checking parameters...
-#> ℹ [2025-12-17 14:37:09] Using "L0" sparse regression model
-#> ℹ [2025-12-17 14:37:09] Using 2 regulators
-#> ℹ [2025-12-17 14:37:09] Using 2 targets
-#> ℹ [2025-12-17 14:37:09] Using 1 core
-#> ℹ [2025-12-17 14:37:09] Building results
-#> ✔ [2025-12-17 14:37:09] Building network done
+#> ℹ [2025-12-20 13:39:32] Inferring network for <dense matrix>...
+#> ◌ [2025-12-20 13:39:32] Checking parameters...
+#> ℹ [2025-12-20 13:39:32] Using "L0" sparse regression model
+#> ℹ [2025-12-20 13:39:32] Using 2 regulators
+#> ℹ [2025-12-20 13:39:32] Using 2 targets
+#> ℹ [2025-12-20 13:39:32] Using 1 core
+#> ℹ [2025-12-20 13:39:32] Building results
+#> ✔ [2025-12-20 13:39:32] Building network done
 #>   regulator target     weight
 #> 1        g2     g3  0.9848781
 #> 2        g2     g4  0.9230387
 #> 3        g1     g4 -0.3847071
 #> 4        g1     g3 -0.1732490
+
 inferCSN(
   example_matrix,
   regulators = c("g1", "g2"),
   targets = c("g3", "g0")
 )
-#> ℹ [2025-12-17 14:37:09] Inferring network for <dense matrix>...
-#> ◌ [2025-12-17 14:37:09] Checking parameters...
-#> ℹ [2025-12-17 14:37:09] Using "L0" sparse regression model
-#> ℹ [2025-12-17 14:37:09] Using 2 regulators
-#> ! [2025-12-17 14:37:09] 1 out of 2 targets are in the input matrix
-#> ℹ [2025-12-17 14:37:09] Using 1 core
-#> ℹ [2025-12-17 14:37:09] Building results
-#> ✔ [2025-12-17 14:37:09] Building network done
+#> ℹ [2025-12-20 13:39:32] Inferring network for <dense matrix>...
+#> ◌ [2025-12-20 13:39:32] Checking parameters...
+#> ℹ [2025-12-20 13:39:32] Using "L0" sparse regression model
+#> ℹ [2025-12-20 13:39:32] Using 2 regulators
+#> ! [2025-12-20 13:39:32] 1 out of 2 targets are in the input matrix
+#> ℹ [2025-12-20 13:39:32] Using 1 core
+#> ℹ [2025-12-20 13:39:32] Building results
+#> ✔ [2025-12-20 13:39:32] Building network done
 #>   regulator target     weight
 #> 1        g2     g3  0.9848781
 #> 2        g1     g3 -0.1732490
-
-if (FALSE) { # \dontrun{
-data("example_ground_truth")
-network_table_07 <- inferCSN(
-  example_matrix,
-  r_squared_threshold = 0.7
-)
-calculate_metrics(
-  network_table_1,
-  example_ground_truth,
-  return_plot = TRUE
-)
-calculate_metrics(
-  network_table_07,
-  example_ground_truth,
-  return_plot = TRUE
-)
-} # }
-if (FALSE) { # \dontrun{
-data(example_matrix)
-network_table <- inferCSN(example_matrix)
-head(network_table)
-
-network_table_sparse_1 <- inferCSN(
-  as(example_matrix, "sparseMatrix")
-)
-head(network_table_sparse_1)
-
-network_table_sparse_2 <- inferCSN(
-  as(example_matrix, "sparseMatrix"),
-  cores = 2
-)
-identical(
-  network_table,
-  network_table_sparse_1
-)
-
-identical(
-  network_table_sparse_1,
-  network_table_sparse_2
-)
-
-plot_scatter(
-  data.frame(
-    network_table$weight,
-    network_table_sparse_1$weight
-  ),
-  legend_position = "none"
-)
-
-plot_weight_distribution(
-  network_table
-) + plot_weight_distribution(
-  network_table_sparse_1
-)
-} # }
 ```

@@ -31,12 +31,12 @@ Filtered and sorted matrix
 ``` r
 data(example_matrix)
 network_table <- inferCSN(example_matrix)
-#> ℹ [2025-12-17 14:37:08] Inferring network for <dense matrix>...
-#> ◌ [2025-12-17 14:37:08] Checking parameters...
-#> ℹ [2025-12-17 14:37:08] Using "L0" sparse regression model
-#> ℹ [2025-12-17 14:37:08] Using 1 core
-#> ℹ [2025-12-17 14:37:08] Building results
-#> ✔ [2025-12-17 14:37:08] Building network done
+#> ℹ [2025-12-20 13:39:31] Inferring network for <dense matrix>...
+#> ◌ [2025-12-20 13:39:31] Checking parameters...
+#> ℹ [2025-12-20 13:39:31] Using "L0" sparse regression model
+#> ℹ [2025-12-20 13:39:31] Using 1 core
+#> ℹ [2025-12-20 13:39:31] Building results
+#> ✔ [2025-12-20 13:39:32] Building network done
 colnames(network_table) <- c("row", "col", "value")
 network_matrix <- thisutils::table_to_matrix(network_table)
 filter_sort_matrix(network_matrix)[1:6, 1:6]

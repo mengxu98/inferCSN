@@ -121,12 +121,12 @@ A heatmap
 data(example_matrix)
 data("example_ground_truth")
 network_table <- inferCSN(example_matrix)
-#> ℹ [2025-12-17 14:37:21] Inferring network for <dense matrix>...
-#> ◌ [2025-12-17 14:37:21] Checking parameters...
-#> ℹ [2025-12-17 14:37:21] Using "L0" sparse regression model
-#> ℹ [2025-12-17 14:37:21] Using 1 core
-#> ℹ [2025-12-17 14:37:21] Building results
-#> ✔ [2025-12-17 14:37:21] Building network done
+#> ℹ [2025-12-20 13:39:43] Inferring network for <dense matrix>...
+#> ◌ [2025-12-20 13:39:43] Checking parameters...
+#> ℹ [2025-12-20 13:39:43] Using "L0" sparse regression model
+#> ℹ [2025-12-20 13:39:43] Using 1 core
+#> ℹ [2025-12-20 13:39:43] Building results
+#> ✔ [2025-12-20 13:39:43] Building network done
 
 p1 <- plot_network_heatmap(
   example_ground_truth[, 1:3],
@@ -140,19 +140,6 @@ p2 <- plot_network_heatmap(
 )
 ComplexHeatmap::draw(p1 + p2)
 
-if (FALSE) { # \dontrun{
-p3 <- plot_network_heatmap(
-  network_table,
-  legend_name = "Weight1",
-  heatmap_color = c("#20a485", "#410054", "#fee81f")
-)
-p4 <- plot_network_heatmap(
-  network_table,
-  legend_name = "Weight2",
-  heatmap_color = c("#20a485", "white", "#fee81f")
-)
-ComplexHeatmap::draw(p3 + p4)
-} # }
 
 plot_network_heatmap(
   network_table,
@@ -169,20 +156,4 @@ plot_network_heatmap(
   targets = c("g3", "g6", "g9"),
   show_names = TRUE
 )
-
-if (FALSE) { # \dontrun{
-plot_network_heatmap(
-  network_table,
-  regulators = c("g1", "g2"),
-  show_names = TRUE
-)
-
-plot_network_heatmap(
-  network_table,
-  targets = c("g1", "g2"),
-  row_anno_type = "boxplot",
-  column_anno_type = "histogram",
-  show_names = TRUE
-)
-} # }
 ```

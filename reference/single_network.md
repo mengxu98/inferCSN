@@ -94,13 +94,13 @@ head(
     cross_validation = TRUE
   )
 )
-#>   regulator target       weight
-#> 1       g10     g1  0.009932787
-#> 2       g11     g1  0.010286958
-#> 3       g12     g1  0.017584462
-#> 4       g13     g1 -0.002483363
-#> 5       g14     g1 -0.021346832
-#> 6       g15     g1  0.027390264
+#>   regulator target    weight
+#> 1       g10     g1 0.0000000
+#> 2       g11     g1 0.0000000
+#> 3       g12     g1 0.0220384
+#> 4       g13     g1 0.0000000
+#> 5       g14     g1 0.0000000
+#> 6       g15     g1 0.0000000
 
 single_network(
   example_matrix,
@@ -115,6 +115,6 @@ single_network(
   regulators = c("g1", "g2"),
   target = "g1"
 )
-#> ! [2025-12-17 14:37:32] Less than 2 regulators found while modeling: g1
+#> ! [2025-12-20 13:39:53] Less than 2 regulators found when modeling: "g1"
 #> NULL
 ```

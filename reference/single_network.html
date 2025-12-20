@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">inferCSN</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -139,13 +139,13 @@ The data frame has three columns: regulator, target, and weight.</p>
 <span class="r-in"><span>    cross_validation <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   regulator target       weight</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       g10     g1  0.009932787</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       g11     g1  0.010286958</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       g12     g1  0.017584462</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4       g13     g1 -0.002483363</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5       g14     g1 -0.021346832</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6       g15     g1  0.027390264</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   regulator target    weight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       g10     g1 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       g11     g1 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       g12     g1 0.0220384</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       g13     g1 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       g14     g1 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       g15     g1 0.0000000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">single_network</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">example_matrix</span>,</span></span>
@@ -160,7 +160,7 @@ The data frame has three columns: regulator, target, and weight.</p>
 <span class="r-in"><span>  regulators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span>, <span class="st">"g2"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  target <span class="op">=</span> <span class="st">"g1"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> [2025-12-17 14:37:32] Less than 2 regulators found while modeling: g1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> [2025-12-20 13:39:53] Less than 2 regulators found when modeling: <span style="color: #0000BB;">"g1"</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 </code></pre></div>
     </div>

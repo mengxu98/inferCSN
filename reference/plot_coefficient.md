@@ -61,13 +61,13 @@ A ggplot object
 ``` r
 data(example_matrix)
 network_table <- inferCSN(example_matrix, targets = "g1")
-#> ℹ [2025-12-17 14:37:12] Inferring network for <dense matrix>...
-#> ◌ [2025-12-17 14:37:12] Checking parameters...
-#> ℹ [2025-12-17 14:37:12] Using "L0" sparse regression model
-#> ℹ [2025-12-17 14:37:12] Using 1 target
-#> ℹ [2025-12-17 14:37:12] Using 1 core
-#> ℹ [2025-12-17 14:37:12] Building results
-#> ✔ [2025-12-17 14:37:12] Building network done
+#> ℹ [2025-12-20 13:39:34] Inferring network for <dense matrix>...
+#> ◌ [2025-12-20 13:39:34] Checking parameters...
+#> ℹ [2025-12-20 13:39:34] Using "L0" sparse regression model
+#> ℹ [2025-12-20 13:39:34] Using 1 target
+#> ℹ [2025-12-20 13:39:34] Using 1 core
+#> ℹ [2025-12-20 13:39:34] Building results
+#> ✔ [2025-12-20 13:39:34] Building network done
 plot_coefficient(network_table)
 
 plot_coefficient(network_table, style = "binary")

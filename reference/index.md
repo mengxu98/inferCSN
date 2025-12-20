@@ -9,13 +9,6 @@
 - [`inferCSN()`](https://mengxu98.github.io/inferCSN/reference/inferCSN.md)
   : inferring cell-type specific gene regulatory network
 
-### Network processing
-
-- [`network_sift()`](https://mengxu98.github.io/inferCSN/reference/network_sift.md)
-  : Sifting network
-- [`weight_sift()`](https://mengxu98.github.io/inferCSN/reference/weight_sift.md)
-  : Weight sift
-
 ### Network evaluation
 
 - [`calculate_metrics()`](https://mengxu98.github.io/inferCSN/reference/calculate_metrics.md)

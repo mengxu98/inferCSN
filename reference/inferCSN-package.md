@@ -1,7 +1,7 @@
 # Inferring Cell-Specific Gene Regulatory Network
 
-An R package for inferring cell-type specific gene regulatory network
-from single-cell RNA-seq data.
+Inferring cell-type specific gene regulatory network using sparse
+regression model from single-cell transcriptomic data.
 
 ## Source
 
