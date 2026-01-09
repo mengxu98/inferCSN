@@ -159,8 +159,20 @@ setMethod(
       network_format(abs_weight = FALSE)
 
     thisutils::log_message(
-      "Building network done",
+      "Inferring network done",
       message_type = "success",
+      verbose = verbose
+    )
+    network_info <- data.frame(
+      Edges = nrow(network_table),
+      Regulators = length(unique(network_table$regulator)),
+      Targets = length(unique(network_table$target))
+    )
+    thisutils::log_message(
+      "Network information:\n",
+      network_info,
+      text_color = "grey",
+      timestamp_style = FALSE,
       verbose = verbose
     )
 
@@ -250,8 +262,20 @@ setMethod(
       network_format(abs_weight = FALSE)
 
     thisutils::log_message(
-      "Building network done",
+      "Inferring network done",
       message_type = "success",
+      verbose = verbose
+    )
+    network_info <- data.frame(
+      Edges = nrow(network_table),
+      Regulators = length(unique(network_table$regulator)),
+      Targets = length(unique(network_table$target))
+    )
+    thisutils::log_message(
+      "Network information:\n",
+      network_info,
+      text_color = "grey",
+      timestamp_style = FALSE,
       verbose = verbose
     )
 

@@ -31,13 +31,13 @@
 
   penalty <- match.arg(penalty, c("L0", "L0L1", "L0L2"))
   thisutils::log_message(
-    "Using {.val {penalty}} sparse regression model",
+    "Using {.pkg {penalty}} sparse regression model",
     verbose = verbose
   )
   if (!is.numeric(seed)) {
     seed <- 1
     thisutils::log_message(
-      "initialize random seed to 1",
+      "Initialize random seed to 1",
       message_type = "warning",
       verbose = verbose
     )
@@ -98,7 +98,7 @@
 
   if (cross_validation) {
     thisutils::log_message(
-      "Using cross validation, and setting {.val {n_folds}} fold{?s}",
+      "Using {.val {n_folds}} fold{?s} cross validation",
       verbose = verbose
     )
   }
