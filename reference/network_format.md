@@ -42,12 +42,15 @@ Formated network table
 ``` r
 data(example_matrix)
 network_table <- inferCSN(example_matrix)
-#> ℹ [2025-12-20 13:39:34] Inferring network for <dense matrix>...
-#> ◌ [2025-12-20 13:39:34] Checking parameters...
-#> ℹ [2025-12-20 13:39:34] Using "L0" sparse regression model
-#> ℹ [2025-12-20 13:39:34] Using 1 core
-#> ℹ [2025-12-20 13:39:34] Building results
-#> ✔ [2025-12-20 13:39:34] Building network done
+#> ℹ [2026-01-09 07:09:33] Inferring network for <dense matrix>...
+#> ◌ [2026-01-09 07:09:33] Checking parameters...
+#> ℹ [2026-01-09 07:09:33] Using L0 sparse regression model
+#> ℹ [2026-01-09 07:09:33] Using 1 core
+#> ℹ [2026-01-09 07:09:33] Building results
+#> ✔ [2026-01-09 07:09:34] Inferring network done
+#> ℹ [2026-01-09 07:09:34] Network information:
+#> ℹ                         Edges Regulators Targets
+#> ℹ                       1   306         18      18
 
 network_format(
   network_table,

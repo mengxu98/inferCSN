@@ -40,15 +40,18 @@ A ggplot2 object
 ``` r
 data(example_matrix)
 network_table <- inferCSN(example_matrix)
-#> ℹ [2025-12-20 13:39:51] Inferring network for <dense matrix>...
-#> ◌ [2025-12-20 13:39:51] Checking parameters...
-#> ℹ [2025-12-20 13:39:51] Using "L0" sparse regression model
-#> ℹ [2025-12-20 13:39:51] Using 1 core
-#> ⠙ [2025-12-20 13:39:51] Running [1/18] Processing: g1  ETA:  0s
-#> ✔ [2025-12-20 13:39:51] Completed 18 tasks in 191ms
+#> ℹ [2026-01-09 07:09:52] Inferring network for <dense matrix>...
+#> ◌ [2026-01-09 07:09:52] Checking parameters...
+#> ℹ [2026-01-09 07:09:52] Using L0 sparse regression model
+#> ℹ [2026-01-09 07:09:52] Using 1 core
+#> ⠙ [2026-01-09 07:09:52] Running for g1 [1/18] ■■■                              …
+#> ✔ [2026-01-09 07:09:52] Completed 18 tasks in 191ms
 #> 
-#> ℹ [2025-12-20 13:39:51] Building results
-#> ✔ [2025-12-20 13:39:51] Building network done
+#> ℹ [2026-01-09 07:09:52] Building results
+#> ✔ [2026-01-09 07:09:52] Inferring network done
+#> ℹ [2026-01-09 07:09:52] Network information:
+#> ℹ                         Edges Regulators Targets
+#> ℹ                       1   306         18      18
 plot_static_networks(
   network_table,
   regulators = "g1"

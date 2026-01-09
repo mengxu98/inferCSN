@@ -70,15 +70,18 @@ A ggplot object
 ``` r
 data(example_matrix)
 network_table <- inferCSN(example_matrix)
-#> ℹ [2025-12-20 13:39:42] Inferring network for <dense matrix>...
-#> ◌ [2025-12-20 13:39:42] Checking parameters...
-#> ℹ [2025-12-20 13:39:42] Using "L0" sparse regression model
-#> ℹ [2025-12-20 13:39:42] Using 1 core
-#> ⠙ [2025-12-20 13:39:42] Running [1/18] Processing: g1  ETA:  0s
-#> ✔ [2025-12-20 13:39:42] Completed 18 tasks in 159ms
+#> ℹ [2026-01-09 07:09:43] Inferring network for <dense matrix>...
+#> ◌ [2026-01-09 07:09:43] Checking parameters...
+#> ℹ [2026-01-09 07:09:43] Using L0 sparse regression model
+#> ℹ [2026-01-09 07:09:43] Using 1 core
+#> ⠙ [2026-01-09 07:09:43] Running for g16 [8/18] ■■■■■■■■■■■■■■                  …
+#> ✔ [2026-01-09 07:09:43] Completed 18 tasks in 174ms
 #> 
-#> ℹ [2025-12-20 13:39:42] Building results
-#> ✔ [2025-12-20 13:39:42] Building network done
+#> ℹ [2026-01-09 07:09:43] Building results
+#> ✔ [2026-01-09 07:09:43] Inferring network done
+#> ℹ [2026-01-09 07:09:43] Network information:
+#> ℹ                         Edges Regulators Targets
+#> ℹ                       1   306         18      18
 plot_histogram(network_table[, 3])
 #> Warning: The `size` argument of `element_line()` is deprecated as of ggplot2 3.4.0.
 #> ℹ Please use the `linewidth` argument instead.

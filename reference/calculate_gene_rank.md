@@ -40,12 +40,15 @@ A table of gene rank.
 ``` r
 data(example_matrix)
 network_table <- inferCSN(example_matrix)
-#> ℹ [2025-12-20 13:39:29] Inferring network for <dense matrix>...
-#> ◌ [2025-12-20 13:39:29] Checking parameters...
-#> ℹ [2025-12-20 13:39:29] Using "L0" sparse regression model
-#> ℹ [2025-12-20 13:39:29] Using 1 core
-#> ℹ [2025-12-20 13:39:29] Building results
-#> ✔ [2025-12-20 13:39:29] Building network done
+#> ℹ [2026-01-09 07:09:28] Inferring network for <dense matrix>...
+#> ◌ [2026-01-09 07:09:28] Checking parameters...
+#> ℹ [2026-01-09 07:09:28] Using L0 sparse regression model
+#> ℹ [2026-01-09 07:09:28] Using 1 core
+#> ℹ [2026-01-09 07:09:28] Building results
+#> ✔ [2026-01-09 07:09:28] Inferring network done
+#> ℹ [2026-01-09 07:09:28] Network information:
+#> ℹ                         Edges Regulators Targets
+#> ℹ                       1   306         18      18
 head(calculate_gene_rank(network_table))
 #>   gene rank_value regulator
 #> 1  g18 0.05883983      TRUE

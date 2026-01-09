@@ -58,36 +58,39 @@ subsample_matrix <- subsampling(
   example_matrix,
   subsampling_ratio = 0.5
 )
-#> ℹ [2025-12-20 13:39:53] Subsample matrix generated, dimensions: 2500 cells by 18 genes
+#> ℹ [2026-01-09 07:09:54] Subsample matrix generated, dimensions: 2500 cells by 18 genes
 subsample_matrix_2 <- subsampling(
   example_matrix,
   subsampling_method = "meta_cells",
   subsampling_ratio = 0.5,
   fast_pca = FALSE
 )
-#> ! [2025-12-20 13:39:53] Number of PCs of PCA result is less than the desired number, using all PCs.
-#> ℹ [2025-12-20 13:39:54] Subsample matrix generated, dimensions: 2500 cells by 18 genes
+#> ! [2026-01-09 07:09:55] Number of PCs of PCA result is less than the desired number, using all PCs.
+#> ℹ [2026-01-09 07:09:55] Subsample matrix generated, dimensions: 2500 cells by 18 genes
 subsample_matrix_3 <- subsampling(
   example_matrix,
   subsampling_method = "pseudobulk",
   subsampling_ratio = 0.5
 )
-#> ℹ [2025-12-20 13:39:55] Subsample matrix generated, dimensions: 2500 cells by 18 genes
+#> ℹ [2026-01-09 07:09:56] Subsample matrix generated, dimensions: 2500 cells by 18 genes
 
 calculate_metrics(
   inferCSN(example_matrix),
   example_ground_truth,
   return_plot = TRUE
 )
-#> ℹ [2025-12-20 13:39:55] Inferring network for <dense matrix>...
-#> ◌ [2025-12-20 13:39:55] Checking parameters...
-#> ℹ [2025-12-20 13:39:55] Using "L0" sparse regression model
-#> ℹ [2025-12-20 13:39:55] Using 1 core
-#> ⠙ [2025-12-20 13:39:55] Running [1/18] Processing: g1  ETA:  0s
-#> ✔ [2025-12-20 13:39:55] Completed 18 tasks in 178ms
+#> ℹ [2026-01-09 07:09:56] Inferring network for <dense matrix>...
+#> ◌ [2026-01-09 07:09:56] Checking parameters...
+#> ℹ [2026-01-09 07:09:56] Using L0 sparse regression model
+#> ℹ [2026-01-09 07:09:56] Using 1 core
+#> ⠙ [2026-01-09 07:09:56] Running for g1 [1/18] ■■■                              …
+#> ✔ [2026-01-09 07:09:56] Completed 18 tasks in 172ms
 #> 
-#> ℹ [2025-12-20 13:39:55] Building results
-#> ✔ [2025-12-20 13:39:55] Building network done
+#> ℹ [2026-01-09 07:09:56] Building results
+#> ✔ [2026-01-09 07:09:56] Inferring network done
+#> ℹ [2026-01-09 07:09:56] Network information:
+#> ℹ                         Edges Regulators Targets
+#> ℹ                       1   306         18      18
 #> $metrics
 #>      Metric  Value
 #> 1     AUROC  0.952
@@ -107,12 +110,15 @@ calculate_metrics(
   example_ground_truth,
   return_plot = TRUE
 )
-#> ℹ [2025-12-20 13:39:55] Inferring network for <dense matrix>...
-#> ◌ [2025-12-20 13:39:55] Checking parameters...
-#> ℹ [2025-12-20 13:39:55] Using "L0" sparse regression model
-#> ℹ [2025-12-20 13:39:55] Using 1 core
-#> ℹ [2025-12-20 13:39:55] Building results
-#> ✔ [2025-12-20 13:39:55] Building network done
+#> ℹ [2026-01-09 07:09:56] Inferring network for <dense matrix>...
+#> ◌ [2026-01-09 07:09:56] Checking parameters...
+#> ℹ [2026-01-09 07:09:56] Using L0 sparse regression model
+#> ℹ [2026-01-09 07:09:56] Using 1 core
+#> ℹ [2026-01-09 07:09:56] Building results
+#> ✔ [2026-01-09 07:09:57] Inferring network done
+#> ℹ [2026-01-09 07:09:57] Network information:
+#> ℹ                         Edges Regulators Targets
+#> ℹ                       1   306         18      18
 #> $metrics
 #>      Metric  Value
 #> 1     AUROC  0.955
@@ -132,12 +138,15 @@ calculate_metrics(
   example_ground_truth,
   return_plot = TRUE
 )
-#> ℹ [2025-12-20 13:39:56] Inferring network for <dense matrix>...
-#> ◌ [2025-12-20 13:39:56] Checking parameters...
-#> ℹ [2025-12-20 13:39:56] Using "L0" sparse regression model
-#> ℹ [2025-12-20 13:39:56] Using 1 core
-#> ℹ [2025-12-20 13:39:56] Building results
-#> ✔ [2025-12-20 13:39:56] Building network done
+#> ℹ [2026-01-09 07:09:57] Inferring network for <dense matrix>...
+#> ◌ [2026-01-09 07:09:57] Checking parameters...
+#> ℹ [2026-01-09 07:09:57] Using L0 sparse regression model
+#> ℹ [2026-01-09 07:09:57] Using 1 core
+#> ℹ [2026-01-09 07:09:57] Building results
+#> ✔ [2026-01-09 07:09:57] Inferring network done
+#> ℹ [2026-01-09 07:09:57] Network information:
+#> ℹ                         Edges Regulators Targets
+#> ℹ                       1   306         18      18
 #> $metrics
 #>      Metric  Value
 #> 1     AUROC  0.952
@@ -157,15 +166,15 @@ calculate_metrics(
   example_ground_truth,
   return_plot = TRUE
 )
-#> ℹ [2025-12-20 13:39:56] Inferring network for <dense matrix>...
-#> ◌ [2025-12-20 13:39:56] Checking parameters...
-#> ℹ [2025-12-20 13:39:56] Using "L0" sparse regression model
-#> ℹ [2025-12-20 13:39:56] Using 1 core
-#> ⠙ [2025-12-20 13:39:56] Running [1/18] Processing: g1  ETA:  0s
-#> ✔ [2025-12-20 13:39:56] Completed 18 tasks in 116ms
-#> 
-#> ℹ [2025-12-20 13:39:56] Building results
-#> ✔ [2025-12-20 13:39:56] Building network done
+#> ℹ [2026-01-09 07:09:57] Inferring network for <dense matrix>...
+#> ◌ [2026-01-09 07:09:57] Checking parameters...
+#> ℹ [2026-01-09 07:09:57] Using L0 sparse regression model
+#> ℹ [2026-01-09 07:09:57] Using 1 core
+#> ℹ [2026-01-09 07:09:57] Building results
+#> ✔ [2026-01-09 07:09:57] Inferring network done
+#> ℹ [2026-01-09 07:09:57] Network information:
+#> ℹ                         Edges Regulators Targets
+#> ℹ                       1   306         18      18
 #> $metrics
 #>      Metric  Value
 #> 1     AUROC  0.955

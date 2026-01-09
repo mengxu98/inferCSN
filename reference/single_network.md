@@ -115,6 +115,6 @@ single_network(
   regulators = c("g1", "g2"),
   target = "g1"
 )
-#> ! [2025-12-20 13:39:53] Less than 2 regulators found when modeling: "g1"
+#> ! [2026-01-09 07:09:54] Less than 2 regulators found when modeling: "g1"
 #> NULL
 ```

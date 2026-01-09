@@ -40,11 +40,14 @@ A ggplot2 object.
 ``` r
 data(example_matrix)
 network_table <- inferCSN(example_matrix)
-#> ℹ [2025-12-20 13:39:36] Inferring network for <dense matrix>...
-#> ◌ [2025-12-20 13:39:36] Checking parameters...
-#> ℹ [2025-12-20 13:39:36] Using "L0" sparse regression model
-#> ℹ [2025-12-20 13:39:36] Using 1 core
-#> ℹ [2025-12-20 13:39:36] Building results
-#> ✔ [2025-12-20 13:39:36] Building network done
+#> ℹ [2026-01-09 07:09:36] Inferring network for <dense matrix>...
+#> ◌ [2026-01-09 07:09:36] Checking parameters...
+#> ℹ [2026-01-09 07:09:36] Using L0 sparse regression model
+#> ℹ [2026-01-09 07:09:36] Using 1 core
+#> ℹ [2026-01-09 07:09:36] Building results
+#> ✔ [2026-01-09 07:09:36] Inferring network done
+#> ℹ [2026-01-09 07:09:36] Network information:
+#> ℹ                         Edges Regulators Targets
+#> ℹ                       1   306         18      18
 plot_contrast_networks(network_table[1:50, ])
 ```
