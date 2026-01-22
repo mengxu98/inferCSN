@@ -28,13 +28,13 @@ A list containing the metric
 data(example_matrix)
 data("example_ground_truth")
 network_table <- inferCSN(example_matrix)
-#> ℹ [2026-01-09 07:09:29] Inferring network for <dense matrix>...
-#> ◌ [2026-01-09 07:09:29] Checking parameters...
-#> ℹ [2026-01-09 07:09:29] Using L0 sparse regression model
-#> ℹ [2026-01-09 07:09:29] Using 1 core
-#> ℹ [2026-01-09 07:09:29] Building results
-#> ✔ [2026-01-09 07:09:30] Inferring network done
-#> ℹ [2026-01-09 07:09:30] Network information:
+#> ℹ [2026-01-22 03:01:00] Inferring network for <dense matrix>...
+#> ◌ [2026-01-22 03:01:00] Checking parameters...
+#> ℹ [2026-01-22 03:01:00] Using L0 sparse regression model
+#> ℹ [2026-01-22 03:01:00] Using 1 core
+#> ℹ [2026-01-22 03:01:00] Building results
+#> ✔ [2026-01-22 03:01:00] Inferring network done
+#> ℹ [2026-01-22 03:01:00] Network information:
 #> ℹ                         Edges Regulators Targets
 #> ℹ                       1   306         18      18
 calculate_precision(

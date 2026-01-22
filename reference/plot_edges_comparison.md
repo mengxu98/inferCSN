@@ -38,16 +38,16 @@ distribution plots
 data(example_matrix)
 data("example_ground_truth")
 network_table <- inferCSN(example_matrix)
-#> ℹ [2026-01-09 07:09:40] Inferring network for <dense matrix>...
-#> ◌ [2026-01-09 07:09:40] Checking parameters...
-#> ℹ [2026-01-09 07:09:40] Using L0 sparse regression model
-#> ℹ [2026-01-09 07:09:40] Using 1 core
-#> ⠙ [2026-01-09 07:09:40] Running for g1 [1/18] ■■■                              …
-#> ✔ [2026-01-09 07:09:40] Completed 18 tasks in 440ms
+#> ℹ [2026-01-22 03:01:11] Inferring network for <dense matrix>...
+#> ◌ [2026-01-22 03:01:11] Checking parameters...
+#> ℹ [2026-01-22 03:01:11] Using L0 sparse regression model
+#> ℹ [2026-01-22 03:01:11] Using 1 core
+#> ⠙ [2026-01-22 03:01:11] Running for g1 [1/18] ■■■                              …
+#> ✔ [2026-01-22 03:01:11] Completed 18 tasks in 199ms
 #> 
-#> ℹ [2026-01-09 07:09:40] Building results
-#> ✔ [2026-01-09 07:09:40] Inferring network done
-#> ℹ [2026-01-09 07:09:40] Network information:
+#> ℹ [2026-01-22 03:01:11] Building results
+#> ✔ [2026-01-22 03:01:11] Inferring network done
+#> ℹ [2026-01-22 03:01:11] Network information:
 #> ℹ                         Edges Regulators Targets
 #> ℹ                       1   306         18      18
 plot_edges_comparison(

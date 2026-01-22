@@ -121,13 +121,13 @@ A heatmap
 data(example_matrix)
 data("example_ground_truth")
 network_table <- inferCSN(example_matrix)
-#> ℹ [2026-01-09 07:09:43] Inferring network for <dense matrix>...
-#> ◌ [2026-01-09 07:09:43] Checking parameters...
-#> ℹ [2026-01-09 07:09:43] Using L0 sparse regression model
-#> ℹ [2026-01-09 07:09:43] Using 1 core
-#> ℹ [2026-01-09 07:09:43] Building results
-#> ✔ [2026-01-09 07:09:43] Inferring network done
-#> ℹ [2026-01-09 07:09:43] Network information:
+#> ℹ [2026-01-22 03:01:14] Inferring network for <dense matrix>...
+#> ◌ [2026-01-22 03:01:14] Checking parameters...
+#> ℹ [2026-01-22 03:01:14] Using L0 sparse regression model
+#> ℹ [2026-01-22 03:01:14] Using 1 core
+#> ℹ [2026-01-22 03:01:14] Building results
+#> ✔ [2026-01-22 03:01:14] Inferring network done
+#> ℹ [2026-01-22 03:01:14] Network information:
 #> ℹ                         Edges Regulators Targets
 #> ℹ                       1   306         18      18
 
