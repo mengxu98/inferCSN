@@ -1,10 +1,11 @@
 #' @title inferring cell-type specific gene regulatory network
 #'
 #' @md
-#' @param object The input data for `inferCSN`.
-#' @param penalty The type of regularization, default is `"L0"`.
+#' @param object The input data for inferring network.
+#' @param penalty The type of regularization.
 #' This can take either one of the following choices: `"L0"`, `"L0L1"`, and `"L0L2"`.
 #' For high-dimensional and sparse data, `"L0L2"` is more effective.
+#' Default is `"L0"`.
 #' @param cross_validation Whether to use cross-validation.
 #' Default is `FALSE`.
 #' @param n_folds The number of folds for cross-validation.
@@ -15,7 +16,7 @@
 #' Options are `"sample"`, `"pseudobulk"` or `"meta_cells"`.
 #' @param subsampling_ratio The percent of all samples used for [fit_srm].
 #' Default is `1`.
-#' @param r_squared_threshold Threshold of \eqn{R^2} coefficient.
+#' @param r_squared_threshold Threshold of R² coefficient.
 #' Default is `0`.
 #' @param regulators The regulator genes for which to infer the regulatory network.
 #' @param targets The target genes for which to infer the regulatory network.
@@ -28,15 +29,15 @@
 #' @docType methods
 #' @rdname inferCSN
 #' @return
-#' A data table of regulator-target regulatory relationships.
-#' The data table has the three columns: regulator, target, and weight.
+#' A data table of regulator-target regulatory relationships,
+#' which has three columns: `regulator`, `target`, and `weight`.
 #'
 #' @export
 setGeneric(
   name = "inferCSN",
   signature = c("object"),
   def = function(object,
-                 penalty = "L0",
+                 penalty = c("L0", "L0L1", "L0L2"),
                  cross_validation = FALSE,
                  seed = 1,
                  n_folds = 5,
@@ -62,9 +63,7 @@ setGeneric(
 #'
 #' @examples
 #' data(example_matrix)
-#' network_table <- inferCSN(
-#'   example_matrix
-#' )
+#' network_table <- inferCSN(example_matrix)
 #'
 #' head(network_table)
 #'
@@ -83,7 +82,7 @@ setMethod(
   f = "inferCSN",
   signature = signature(object = "matrix"),
   definition = function(object,
-                        penalty = "L0",
+                        penalty = c("L0", "L0L1", "L0L2"),
                         cross_validation = FALSE,
                         seed = 1,
                         n_folds = 5,
@@ -98,61 +97,69 @@ setMethod(
                         verbose = TRUE,
                         ...) {
     thisutils::log_message(
-      "Inferring network for {.cls dense matrix}...",
+      "Inferring network for {.cls {class(object)}}...",
       verbose = verbose
     )
 
-    .check_parameters(
-      matrix = object,
-      penalty = penalty,
-      cross_validation = cross_validation,
-      seed = seed,
-      n_folds = n_folds,
-      subsampling_method = subsampling_method,
-      subsampling_ratio = subsampling_ratio,
-      r_squared_threshold = r_squared_threshold,
-      regulators = regulators,
-      targets = targets,
-      verbose = verbose,
-      ...
+    validated_params <- do.call(
+      check_parameters,
+      c(
+        list(matrix = object),
+        mget(names(formals())[-1], environment())
+      )
     )
 
     object <- subsampling(
       matrix = object,
-      subsampling_method = subsampling_method,
-      subsampling_ratio = subsampling_ratio,
-      seed = seed,
+      subsampling_method = validated_params$subsampling_method,
+      subsampling_ratio = validated_params$subsampling_ratio,
+      seed = validated_params$seed,
       verbose = verbose,
       ...
     )
 
-    regulators <- intersect(
-      colnames(object),
-      regulators %ss% colnames(object)
-    )
-    targets <- intersect(
-      colnames(object),
-      targets %ss% colnames(object)
-    )
+    if (!is.null(validated_params$regulators)) {
+      regulators <- validated_params$regulators
+    } else {
+      regulators <- regulators %ss% colnames(object)
+    }
+
+    if (!is.null(validated_params$targets)) {
+      targets <- validated_params$targets
+    } else {
+      targets <- targets %ss% colnames(object)
+    }
 
     names(targets) <- targets
+    param_names <- c(
+      "cross_validation", "seed", "penalty",
+      "n_folds", "r_squared_threshold", "verbose"
+    )
+    network_params <- validated_params[param_names]
+    param_index <- !vapply(network_params, is.null, logical(1))
+    network_params <- network_params[param_index]
+
+    dots_list <- list(...)
+    dots_list <- dots_list[!vapply(dots_list, is.null, logical(1))]
+
+    single_network_args <- c(network_params, dots_list)
+
     network_table <- thisutils::parallelize_fun(
       x = targets,
       fun = function(x) {
-        single_network(
-          matrix = object,
-          regulators = regulators,
-          target = x,
-          cross_validation = cross_validation,
-          seed = seed,
-          penalty = penalty,
-          r_squared_threshold = r_squared_threshold,
-          n_folds = n_folds,
-          verbose = verbose,
-          ...
+        thisutils::invoke_fun(
+          single_network,
+          c(
+            list(
+              matrix = object,
+              regulators = regulators,
+              target = x
+            ),
+            single_network_args
+          )
         )
       },
-      cores = cores,
+      cores = validated_params$cores,
       verbose = verbose
     ) |>
       purrr::list_rbind() |>
@@ -186,7 +193,7 @@ setMethod(
   f = "inferCSN",
   signature = signature(object = "sparseMatrix"),
   definition = function(object,
-                        penalty = "L0",
+                        penalty = c("L0", "L0L1", "L0L2"),
                         cross_validation = FALSE,
                         seed = 1,
                         n_folds = 5,
@@ -205,57 +212,66 @@ setMethod(
       verbose = verbose
     )
 
-    .check_parameters(
-      matrix = object,
-      penalty = penalty,
-      cross_validation = cross_validation,
-      seed = seed,
-      n_folds = n_folds,
-      subsampling_method = subsampling_method,
-      subsampling_ratio = subsampling_ratio,
-      r_squared_threshold = r_squared_threshold,
-      regulators = regulators,
-      targets = targets,
-      verbose = verbose,
-      ...
+    validated_params <- do.call(
+      check_parameters,
+      c(
+        list(matrix = object),
+        mget(names(formals())[-1], environment())
+      )
     )
 
     object <- subsampling(
       matrix = object,
-      subsampling_method = subsampling_method,
-      subsampling_ratio = subsampling_ratio,
-      seed = seed,
+      subsampling_method = validated_params$subsampling_method,
+      subsampling_ratio = validated_params$subsampling_ratio,
+      seed = validated_params$seed,
       verbose = verbose,
       ...
     )
 
-    regulators <- intersect(
-      colnames(object),
-      regulators %ss% colnames(object)
-    )
-    targets <- intersect(
-      colnames(object),
-      targets %ss% colnames(object)
-    )
+    if (!is.null(validated_params$regulators)) {
+      regulators <- validated_params$regulators
+    } else {
+      regulators <- regulators %ss% colnames(object)
+    }
+
+    if (!is.null(validated_params$targets)) {
+      targets <- validated_params$targets
+    } else {
+      targets <- targets %ss% colnames(object)
+    }
 
     names(targets) <- targets
+
+    param_names <- c(
+      "cross_validation", "seed", "penalty",
+      "n_folds", "r_squared_threshold", "verbose"
+    )
+    network_params <- validated_params[param_names]
+    param_index <- !vapply(network_params, is.null, logical(1))
+    network_params <- network_params[param_index]
+
+    dots_list <- list(...)
+    dots_list <- dots_list[!vapply(dots_list, is.null, logical(1))]
+
+    single_network_args <- c(network_params, dots_list)
+
     network_table <- thisutils::parallelize_fun(
       x = targets,
       fun = function(x) {
-        single_network(
-          matrix = object,
-          regulators = regulators,
-          target = x,
-          cross_validation = cross_validation,
-          seed = seed,
-          penalty = penalty,
-          n_folds = n_folds,
-          r_squared_threshold = r_squared_threshold,
-          verbose = verbose,
-          ...
+        thisutils::invoke_fun(
+          single_network,
+          c(
+            list(
+              matrix = object,
+              regulators = regulators,
+              target = x
+            ),
+            single_network_args
+          )
         )
       },
-      cores = cores,
+      cores = validated_params$cores,
       verbose = verbose
     ) |>
       purrr::list_rbind() |>
