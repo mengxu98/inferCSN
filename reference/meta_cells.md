@@ -146,7 +146,7 @@ data(example_matrix)
 meta_cells_matrix <- meta_cells(
   example_matrix
 )
-#> ! [2026-01-22 03:01:04] Number of PCs of PCA result is less than the desired number, using all PCs.
+#> ! [2026-01-23 02:15:57] Number of PCs of PCA result is less than the desired number, using all PCs.
 dim(meta_cells_matrix)
 #> [1] 500  18
 meta_cells_matrix[1:6, 1:6]

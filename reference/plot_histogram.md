@@ -70,16 +70,16 @@ A ggplot object
 ``` r
 data(example_matrix)
 network_table <- inferCSN(example_matrix)
-#> ℹ [2026-01-22 03:01:13] Inferring network for <dense matrix>...
-#> ◌ [2026-01-22 03:01:13] Checking parameters...
-#> ℹ [2026-01-22 03:01:13] Using L0 sparse regression model
-#> ℹ [2026-01-22 03:01:13] Using 1 core
-#> ⠙ [2026-01-22 03:01:13] Running for g1 [1/18] ■■■                              …
-#> ✔ [2026-01-22 03:01:13] Completed 18 tasks in 234ms
+#> ℹ [2026-01-23 02:16:06] Inferring network for <matrix/array>...
+#> ◌ [2026-01-23 02:16:06] Checking parameters...
+#> ℹ [2026-01-23 02:16:06] Using L0 sparse regression model
+#> ℹ [2026-01-23 02:16:06] Using 1 core
+#> ⠙ [2026-01-23 02:16:06] Running for g1 [1/18] ■■■                              …
+#> ✔ [2026-01-23 02:16:06] Completed 18 tasks in 182ms
 #> 
-#> ℹ [2026-01-22 03:01:13] Building results
-#> ✔ [2026-01-22 03:01:13] Inferring network done
-#> ℹ [2026-01-22 03:01:13] Network information:
+#> ℹ [2026-01-23 02:16:06] Building results
+#> ✔ [2026-01-23 02:16:07] Inferring network done
+#> ℹ [2026-01-23 02:16:07] Network information:
 #> ℹ                         Edges Regulators Targets
 #> ℹ                       1   306         18      18
 plot_histogram(network_table[, 3])

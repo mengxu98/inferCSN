@@ -43,13 +43,13 @@ single_network(
 
 - penalty:
 
-  The type of regularization, default is `"L0"`. This can take either
-  one of the following choices: `"L0"`, `"L0L1"`, and `"L0L2"`. For
-  high-dimensional and sparse data, `"L0L2"` is more effective.
+  The type of regularization. This can take either one of the following
+  choices: `"L0"`, `"L0L1"`, and `"L0L2"`. For high-dimensional and
+  sparse data, `"L0L2"` is more effective. Default is `"L0"`.
 
 - r_squared_threshold:
 
-  Threshold of \\R^2\\ coefficient. Default is `0`.
+  Threshold of R² coefficient. Default is `0`.
 
 - n_folds:
 
@@ -115,6 +115,6 @@ single_network(
   regulators = c("g1", "g2"),
   target = "g1"
 )
-#> ! [2026-01-22 03:01:26] Less than 2 regulators found when modeling: "g1"
+#> ! [2026-01-23 02:16:18] Less than 2 regulators found when modeling: "g1"
 #> NULL
 ```

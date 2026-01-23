@@ -7,7 +7,7 @@ inferring cell-type specific gene regulatory network
 ``` r
 inferCSN(
   object,
-  penalty = "L0",
+  penalty = c("L0", "L0L1", "L0L2"),
   cross_validation = FALSE,
   seed = 1,
   n_folds = 5,
@@ -24,7 +24,7 @@ inferCSN(
 # S4 method for class 'matrix'
 inferCSN(
   object,
-  penalty = "L0",
+  penalty = c("L0", "L0L1", "L0L2"),
   cross_validation = FALSE,
   seed = 1,
   n_folds = 5,
@@ -41,7 +41,7 @@ inferCSN(
 # S4 method for class 'sparseMatrix'
 inferCSN(
   object,
-  penalty = "L0",
+  penalty = c("L0", "L0L1", "L0L2"),
   cross_validation = FALSE,
   seed = 1,
   n_folds = 5,
@@ -60,13 +60,13 @@ inferCSN(
 
 - object:
 
-  The input data for `inferCSN`.
+  The input data for inferring network.
 
 - penalty:
 
-  The type of regularization, default is `"L0"`. This can take either
-  one of the following choices: `"L0"`, `"L0L1"`, and `"L0L2"`. For
-  high-dimensional and sparse data, `"L0L2"` is more effective.
+  The type of regularization. This can take either one of the following
+  choices: `"L0"`, `"L0L1"`, and `"L0L2"`. For high-dimensional and
+  sparse data, `"L0L2"` is more effective. Default is `"L0"`.
 
 - cross_validation:
 
@@ -93,7 +93,7 @@ inferCSN(
 
 - r_squared_threshold:
 
-  Threshold of \\R^2\\ coefficient. Default is `0`.
+  Threshold of R² coefficient. Default is `0`.
 
 - regulators:
 
@@ -119,8 +119,8 @@ inferCSN(
 
 ## Value
 
-A data table of regulator-target regulatory relationships. The data
-table has the three columns: regulator, target, and weight.
+A data table of regulator-target regulatory relationships, which has
+three columns: `regulator`, `target`, and `weight`.
 
 ## Examples
 
@@ -129,13 +129,16 @@ data(example_matrix)
 network_table <- inferCSN(
   example_matrix
 )
-#> ℹ [2026-01-22 03:01:03] Inferring network for <dense matrix>...
-#> ◌ [2026-01-22 03:01:03] Checking parameters...
-#> ℹ [2026-01-22 03:01:03] Using L0 sparse regression model
-#> ℹ [2026-01-22 03:01:03] Using 1 core
-#> ℹ [2026-01-22 03:01:03] Building results
-#> ✔ [2026-01-22 03:01:03] Inferring network done
-#> ℹ [2026-01-22 03:01:03] Network information:
+#> ℹ [2026-01-23 02:15:56] Inferring network for <matrix/array>...
+#> ◌ [2026-01-23 02:15:56] Checking parameters...
+#> ℹ [2026-01-23 02:15:56] Using L0 sparse regression model
+#> ℹ [2026-01-23 02:15:56] Using 1 core
+#> ⠙ [2026-01-23 02:15:56] Running for g1 [1/18] ■■■                              …
+#> ✔ [2026-01-23 02:15:56] Completed 18 tasks in 174ms
+#> 
+#> ℹ [2026-01-23 02:15:56] Building results
+#> ✔ [2026-01-23 02:15:56] Inferring network done
+#> ℹ [2026-01-23 02:15:56] Network information:
 #> ℹ                         Edges Regulators Targets
 #> ℹ                       1   306         18      18
 
@@ -153,15 +156,15 @@ inferCSN(
   regulators = c("g1", "g2"),
   targets = c("g3", "g4")
 )
-#> ℹ [2026-01-22 03:01:03] Inferring network for <dense matrix>...
-#> ◌ [2026-01-22 03:01:03] Checking parameters...
-#> ℹ [2026-01-22 03:01:03] Using L0 sparse regression model
-#> ℹ [2026-01-22 03:01:03] Using 2 regulators
-#> ℹ [2026-01-22 03:01:03] Using 2 targets
-#> ℹ [2026-01-22 03:01:03] Using 1 core
-#> ℹ [2026-01-22 03:01:03] Building results
-#> ✔ [2026-01-22 03:01:03] Inferring network done
-#> ℹ [2026-01-22 03:01:03] Network information:
+#> ℹ [2026-01-23 02:15:56] Inferring network for <matrix/array>...
+#> ◌ [2026-01-23 02:15:56] Checking parameters...
+#> ℹ [2026-01-23 02:15:56] Using L0 sparse regression model
+#> ℹ [2026-01-23 02:15:56] Using 2 regulators
+#> ℹ [2026-01-23 02:15:56] Using 2 targets
+#> ℹ [2026-01-23 02:15:56] Using 1 core
+#> ℹ [2026-01-23 02:15:56] Building results
+#> ✔ [2026-01-23 02:15:56] Inferring network done
+#> ℹ [2026-01-23 02:15:56] Network information:
 #> ℹ                         Edges Regulators Targets
 #> ℹ                       1     4          2       2
 #>   regulator target     weight
@@ -175,15 +178,16 @@ inferCSN(
   regulators = c("g1", "g2"),
   targets = c("g3", "g0")
 )
-#> ℹ [2026-01-22 03:01:03] Inferring network for <dense matrix>...
-#> ◌ [2026-01-22 03:01:03] Checking parameters...
-#> ℹ [2026-01-22 03:01:03] Using L0 sparse regression model
-#> ℹ [2026-01-22 03:01:03] Using 2 regulators
-#> ! [2026-01-22 03:01:03] 1 out of 2 targets are in the input matrix
-#> ℹ [2026-01-22 03:01:03] Using 1 core
-#> ℹ [2026-01-22 03:01:03] Building results
-#> ✔ [2026-01-22 03:01:03] Inferring network done
-#> ℹ [2026-01-22 03:01:03] Network information:
+#> ℹ [2026-01-23 02:15:56] Inferring network for <matrix/array>...
+#> ◌ [2026-01-23 02:15:56] Checking parameters...
+#> ℹ [2026-01-23 02:15:56] Using L0 sparse regression model
+#> ℹ [2026-01-23 02:15:56] Using 2 regulators
+#> ! [2026-01-23 02:15:56] The following target is not in the matrix: "g0"
+#> ! [2026-01-23 02:15:57] 1 out of 2 targets are in the input matrix
+#> ℹ [2026-01-23 02:15:57] Using 1 core
+#> ℹ [2026-01-23 02:15:57] Building results
+#> ✔ [2026-01-23 02:15:57] Inferring network done
+#> ℹ [2026-01-23 02:15:57] Network information:
 #> ℹ                         Edges Regulators Targets
 #> ℹ                       1     2          2       1
 #>   regulator target     weight

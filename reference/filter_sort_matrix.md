@@ -31,16 +31,13 @@ Filtered and sorted matrix
 ``` r
 data(example_matrix)
 network_table <- inferCSN(example_matrix)
-#> ℹ [2026-01-22 03:01:01] Inferring network for <dense matrix>...
-#> ◌ [2026-01-22 03:01:02] Checking parameters...
-#> ℹ [2026-01-22 03:01:02] Using L0 sparse regression model
-#> ℹ [2026-01-22 03:01:02] Using 1 core
-#> ⠙ [2026-01-22 03:01:02] Running for g1 [1/18] ■■■                              …
-#> ✔ [2026-01-22 03:01:02] Completed 18 tasks in 201ms
-#> 
-#> ℹ [2026-01-22 03:01:02] Building results
-#> ✔ [2026-01-22 03:01:02] Inferring network done
-#> ℹ [2026-01-22 03:01:02] Network information:
+#> ℹ [2026-01-23 02:15:55] Inferring network for <matrix/array>...
+#> ◌ [2026-01-23 02:15:55] Checking parameters...
+#> ℹ [2026-01-23 02:15:55] Using L0 sparse regression model
+#> ℹ [2026-01-23 02:15:55] Using 1 core
+#> ℹ [2026-01-23 02:15:55] Building results
+#> ✔ [2026-01-23 02:15:56] Inferring network done
+#> ℹ [2026-01-23 02:15:56] Network information:
 #> ℹ                         Edges Regulators Targets
 #> ℹ                       1   306         18      18
 colnames(network_table) <- c("row", "col", "value")

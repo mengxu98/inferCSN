@@ -1,5 +1,12 @@
 # Changelog
 
+## inferCSN 1.2.3
+
+- **func**:
+  - Optimize `check_parameters()` for check input parameters.
+- **docs**:
+  - Updated documentation across multiple functions.
+
 ## inferCSN 1.2.2
 
 - **func**:

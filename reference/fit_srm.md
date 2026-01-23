@@ -38,9 +38,9 @@ fit_srm(
 
 - penalty:
 
-  The type of regularization, default is `"L0"`. This can take either
-  one of the following choices: `"L0"`, `"L0L1"`, and `"L0L2"`. For
-  high-dimensional and sparse data, `"L0L2"` is more effective.
+  The type of regularization. This can take either one of the following
+  choices: `"L0"`, `"L0L1"`, and `"L0L2"`. For high-dimensional and
+  sparse data, `"L0L2"` is more effective. Default is `"L0"`.
 
 - regulators_num:
 
