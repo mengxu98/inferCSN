@@ -1,18 +1,30 @@
-^renv$
-^renv\.lock$
-^.*\.Rproj$
-^\.Rproj\.user$
-^LICENSE\.md$
-^_pkgdown\.yml$
-^\.github$
-^dev$
-^libs
+# Build artifacts
+^.*\.dll$
 ^.*\.o$
 ^.*\.so$
-^.*\.dll$
+^libs
+
+# CRAN submission files
 ^CRAN-SUBMISSION$
 ^cran-comments\.md$
-^\.vscode$
+
+# Development directories
+^\.github$
+^dev$
+^renv$
+^renv\.lock$
 ^scripts$
+^test$
+
+# Documentation
+^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+
+# IDE and project files
+^\.Rproj\.user$
+^\.vscode$
+^.*\.Rproj$
+
+# License
+^LICENSE\.md$
