@@ -9,7 +9,7 @@
 \usage{
 inferCSN(
   object,
-  penalty = "L0",
+  penalty = c("L0", "L0L1", "L0L2"),
   cross_validation = FALSE,
   seed = 1,
   n_folds = 5,
@@ -25,7 +25,7 @@ inferCSN(
 
 \S4method{inferCSN}{matrix}(
   object,
-  penalty = "L0",
+  penalty = c("L0", "L0L1", "L0L2"),
   cross_validation = FALSE,
   seed = 1,
   n_folds = 5,
@@ -41,7 +41,7 @@ inferCSN(
 
 \S4method{inferCSN}{sparseMatrix}(
   object,
-  penalty = "L0",
+  penalty = c("L0", "L0L1", "L0L2"),
   cross_validation = FALSE,
   seed = 1,
   n_folds = 5,
@@ -56,11 +56,12 @@ inferCSN(
 )
 }
 \arguments{
-\item{object}{The input data for \code{inferCSN}.}
+\item{object}{The input data for inferring network.}
 
-\item{penalty}{The type of regularization, default is \code{"L0"}.
+\item{penalty}{The type of regularization.
 This can take either one of the following choices: \code{"L0"}, \code{"L0L1"}, and \code{"L0L2"}.
-For high-dimensional and sparse data, \code{"L0L2"} is more effective.}
+For high-dimensional and sparse data, \code{"L0L2"} is more effective.
+Default is \code{"L0"}.}
 
 \item{cross_validation}{Whether to use cross-validation.
 Default is \code{FALSE}.}
@@ -77,7 +78,7 @@ Options are \code{"sample"}, \code{"pseudobulk"} or \code{"meta_cells"}.}
 \item{subsampling_ratio}{The percent of all samples used for \link{fit_srm}.
 Default is \code{1}.}
 
-\item{r_squared_threshold}{Threshold of \eqn{R^2} coefficient.
+\item{r_squared_threshold}{Threshold of R² coefficient.
 Default is \code{0}.}
 
 \item{regulators}{The regulator genes for which to infer the regulatory network.}
@@ -93,8 +94,8 @@ Default is \code{TRUE}.}
 \item{...}{Parameters for other methods.}
 }
 \value{
-A data table of regulator-target regulatory relationships.
-The data table has the three columns: regulator, target, and weight.
+A data table of regulator-target regulatory relationships,
+which has three columns: \code{regulator}, \code{target}, and \code{weight}.
 }
 \description{
 inferring cell-type specific gene regulatory network

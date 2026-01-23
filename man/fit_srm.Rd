@@ -27,9 +27,10 @@ Default is \code{FALSE}.}
 \item{seed}{The random seed for cross-validation.
 Default is \code{1}.}
 
-\item{penalty}{The type of regularization, default is \code{"L0"}.
+\item{penalty}{The type of regularization.
 This can take either one of the following choices: \code{"L0"}, \code{"L0L1"}, and \code{"L0L2"}.
-For high-dimensional and sparse data, \code{"L0L2"} is more effective.}
+For high-dimensional and sparse data, \code{"L0L2"} is more effective.
+Default is \code{"L0"}.}
 
 \item{regulators_num}{The number of regulators for target.}
 

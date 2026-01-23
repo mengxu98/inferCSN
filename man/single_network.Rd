@@ -30,11 +30,12 @@ Default is \code{FALSE}.}
 \item{seed}{The random seed for cross-validation.
 Default is \code{1}.}
 
-\item{penalty}{The type of regularization, default is \code{"L0"}.
+\item{penalty}{The type of regularization.
 This can take either one of the following choices: \code{"L0"}, \code{"L0L1"}, and \code{"L0L2"}.
-For high-dimensional and sparse data, \code{"L0L2"} is more effective.}
+For high-dimensional and sparse data, \code{"L0L2"} is more effective.
+Default is \code{"L0"}.}
 
-\item{r_squared_threshold}{Threshold of \eqn{R^2} coefficient.
+\item{r_squared_threshold}{Threshold of R² coefficient.
 Default is \code{0}.}
 
 \item{n_folds}{The number of folds for cross-validation.
