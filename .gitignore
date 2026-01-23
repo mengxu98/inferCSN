@@ -11,11 +11,10 @@ src-i386
 src-x64
 test
 
-# macOS file
+# macOS files
 .DS_Store
 
 # R files
 .Rhistory
 .Rproj.user
 .Ruserdata
-.RData
