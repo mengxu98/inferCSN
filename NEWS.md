@@ -1,5 +1,25 @@
 # inferCSN
 
+# inferCSN 1.2.4
+
+* **breaking**:
+  * Replaced `fit_srm()` with the greedy-L0 interfaces `fit_greedy_l0()` and `fit_greedy_l0_batch()`.
+  * Replaced the legacy regularization, cross-validation, and subsampling arguments of `inferCSN()` with `pseudotime`, `max_support_size`, `lag_fraction`, and `lag_steps`.
+
+* **func**:
+  * Added static and pseudotime-ordered network inference for dense and sparse matrices, including multi-branch pseudotime and deterministic parallel output.
+  * Added early-precision, signed-edge, motif, path, and cross-run stability metrics.
+  * Extended `plot_network_heatmap()` with aligned multi-network layouts, performance labels, and ground-truth cell borders.
+
+* **deps**:
+  * Removed `L0Learn` and added `thisplot` for plotting support.
+
+* **ci**:
+  * Added R-hub platform checks and manual CRAN release checks, and updated checkout actions to v5.
+
+* **docs**:
+  * Updated generated documentation, examples, example datasets, and the pkgdown reference index.
+
 # inferCSN 1.2.3
 
 * **func**:

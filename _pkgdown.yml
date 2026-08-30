@@ -76,7 +76,7 @@ reference:
 - subtitle: "Sparse regression model"
 - contents:
   - single_network
-  - fit_srm
+  - fit_greedy_l0
 
 - subtitle: "Utils functions"
 - contents:
