@@ -10,6 +10,37 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// infer_network
+DataFrame infer_network(NumericMatrix expression, CharacterVector gene_names, NumericMatrix pseudotime, List params);
+RcppExport SEXP _inferCSN_infer_network(SEXP expressionSEXP, SEXP gene_namesSEXP, SEXP pseudotimeSEXP, SEXP paramsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type expression(expressionSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type gene_names(gene_namesSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type pseudotime(pseudotimeSEXP);
+    Rcpp::traits::input_parameter< List >::type params(paramsSEXP);
+    rcpp_result_gen = Rcpp::wrap(infer_network(expression, gene_names, pseudotime, params));
+    return rcpp_result_gen;
+END_RCPP
+}
+// solve_greedy_l0_batch
+List solve_greedy_l0_batch(NumericMatrix gram_matrix, NumericMatrix xty_matrix, NumericVector y_ss, List candidate_predictors, int n_obs, int max_support_size, double min_improvement);
+RcppExport SEXP _inferCSN_solve_greedy_l0_batch(SEXP gram_matrixSEXP, SEXP xty_matrixSEXP, SEXP y_ssSEXP, SEXP candidate_predictorsSEXP, SEXP n_obsSEXP, SEXP max_support_sizeSEXP, SEXP min_improvementSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type gram_matrix(gram_matrixSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type xty_matrix(xty_matrixSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y_ss(y_ssSEXP);
+    Rcpp::traits::input_parameter< List >::type candidate_predictors(candidate_predictorsSEXP);
+    Rcpp::traits::input_parameter< int >::type n_obs(n_obsSEXP);
+    Rcpp::traits::input_parameter< int >::type max_support_size(max_support_sizeSEXP);
+    Rcpp::traits::input_parameter< double >::type min_improvement(min_improvementSEXP);
+    rcpp_result_gen = Rcpp::wrap(solve_greedy_l0_batch(gram_matrix, xty_matrix, y_ss, candidate_predictors, n_obs, max_support_size, min_improvement));
+    return rcpp_result_gen;
+END_RCPP
+}
 // filter_sort_matrix
 NumericMatrix filter_sort_matrix(NumericMatrix network_matrix, Nullable<CharacterVector> regulators, Nullable<CharacterVector> targets);
 RcppExport SEXP _inferCSN_filter_sort_matrix(SEXP network_matrixSEXP, SEXP regulatorsSEXP, SEXP targetsSEXP) {
@@ -23,6 +54,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// solve_greedy_l0
+List solve_greedy_l0(NumericMatrix x, NumericVector y, int max_support_size, double min_improvement);
+RcppExport SEXP _inferCSN_solve_greedy_l0(SEXP xSEXP, SEXP ySEXP, SEXP max_support_sizeSEXP, SEXP min_improvementSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    Rcpp::traits::input_parameter< int >::type max_support_size(max_support_sizeSEXP);
+    Rcpp::traits::input_parameter< double >::type min_improvement(min_improvementSEXP);
+    rcpp_result_gen = Rcpp::wrap(solve_greedy_l0(x, y, max_support_size, min_improvement));
+    return rcpp_result_gen;
+END_RCPP
+}
 // prepare_calculate_metrics
 DataFrame prepare_calculate_metrics(DataFrame network_table, DataFrame ground_truth);
 RcppExport SEXP _inferCSN_prepare_calculate_metrics(SEXP network_tableSEXP, SEXP ground_truthSEXP) {
@@ -32,6 +77,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< DataFrame >::type network_table(network_tableSEXP);
     Rcpp::traits::input_parameter< DataFrame >::type ground_truth(ground_truthSEXP);
     rcpp_result_gen = Rcpp::wrap(prepare_calculate_metrics(network_table, ground_truth));
+    return rcpp_result_gen;
+END_RCPP
+}
+// prepare_metric_vectors
+List prepare_metric_vectors(DataFrame network_table, DataFrame ground_truth);
+RcppExport SEXP _inferCSN_prepare_metric_vectors(SEXP network_tableSEXP, SEXP ground_truthSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type network_table(network_tableSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type ground_truth(ground_truthSEXP);
+    rcpp_result_gen = Rcpp::wrap(prepare_metric_vectors(network_table, ground_truth));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -51,8 +108,12 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_inferCSN_infer_network", (DL_FUNC) &_inferCSN_infer_network, 4},
+    {"_inferCSN_solve_greedy_l0_batch", (DL_FUNC) &_inferCSN_solve_greedy_l0_batch, 7},
     {"_inferCSN_filter_sort_matrix", (DL_FUNC) &_inferCSN_filter_sort_matrix, 3},
+    {"_inferCSN_solve_greedy_l0", (DL_FUNC) &_inferCSN_solve_greedy_l0, 4},
     {"_inferCSN_prepare_calculate_metrics", (DL_FUNC) &_inferCSN_prepare_calculate_metrics, 2},
+    {"_inferCSN_prepare_metric_vectors", (DL_FUNC) &_inferCSN_prepare_metric_vectors, 2},
     {"_inferCSN_network_format", (DL_FUNC) &_inferCSN_network_format, 4},
     {NULL, NULL, 0}
 };

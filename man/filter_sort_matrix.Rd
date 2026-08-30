@@ -2,33 +2,18 @@
 % Please edit documentation in R/RcppExports.R
 \name{filter_sort_matrix}
 \alias{filter_sort_matrix}
-\title{Filter and sort matrix}
+\title{Filter and sort a network matrix}
 \usage{
 filter_sort_matrix(network_matrix, regulators = NULL, targets = NULL)
 }
 \arguments{
-\item{network_matrix}{The matrix of network weight.}
+\item{network_matrix}{Network weight matrix.}
 
-\item{regulators}{Regulators list.}
-
-\item{targets}{Targets list.}
+\item{regulators, targets}{Nodes to include.}
 }
 \value{
-Filtered and sorted matrix
+A filtered and sorted matrix.
 }
 \description{
-Filter and sort matrix
-}
-\examples{
-data(example_matrix)
-network_table <- inferCSN(example_matrix)
-colnames(network_table) <- c("row", "col", "value")
-network_matrix <- thisutils::table_to_matrix(network_table)
-filter_sort_matrix(network_matrix)[1:6, 1:6]
-
-filter_sort_matrix(
-  network_matrix,
-  regulators = c("g1", "g2"),
-  targets = c("g3", "g4")
-)
+Filter and sort a network matrix
 }

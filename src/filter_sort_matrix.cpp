@@ -3,7 +3,6 @@
 #include <string>
 using namespace Rcpp;
 
-// Custom comparison function for gene names (e.g., g1, g2, g10)
 bool geneCompare(const std::string &a, const std::string &b)
 {
   size_t na = a.find_first_of("0123456789");
@@ -21,34 +20,18 @@ bool geneCompare(const std::string &a, const std::string &b)
   return a < b;
 }
 
-//' @title Filter and sort matrix
+//' @title Filter and sort a network matrix
 //'
-//' @param network_matrix The matrix of network weight.
-//' @param regulators Regulators list.
-//' @param targets Targets list.
-//'
-//' @return Filtered and sorted matrix
+//' @param network_matrix Network weight matrix.
+//' @param regulators,targets Nodes to include.
+//' @return A filtered and sorted matrix.
 //' @export
-//'
-//' @examples
-//' data(example_matrix)
-//' network_table <- inferCSN(example_matrix)
-//' colnames(network_table) <- c("row", "col", "value")
-//' network_matrix <- thisutils::table_to_matrix(network_table)
-//' filter_sort_matrix(network_matrix)[1:6, 1:6]
-//'
-//' filter_sort_matrix(
-//'   network_matrix,
-//'   regulators = c("g1", "g2"),
-//'   targets = c("g3", "g4")
-//' )
 // [[Rcpp::export]]
 NumericMatrix
 filter_sort_matrix(NumericMatrix network_matrix,
                    Nullable<CharacterVector> regulators = R_NilValue,
                    Nullable<CharacterVector> targets = R_NilValue)
 {
-  // Replace NA with 0
   for (R_xlen_t i = 0; i < network_matrix.length(); i++)
   {
     if (R_IsNA(network_matrix[i]))
@@ -57,16 +40,13 @@ filter_sort_matrix(NumericMatrix network_matrix,
     }
   }
 
-  // Get current row and column names
   CharacterVector curr_regulators = rownames(network_matrix);
   CharacterVector curr_targets = colnames(network_matrix);
 
-  // Handle regulators filtering
   std::vector<std::string> filtered_regulators;
   if (regulators.isNotNull())
   {
     CharacterVector reg(regulators);
-    // Get intersection
     for (R_xlen_t i = 0; i < curr_regulators.length(); i++)
     {
       std::string curr_reg = as<std::string>(curr_regulators[i]);
@@ -88,12 +68,10 @@ filter_sort_matrix(NumericMatrix network_matrix,
     }
   }
 
-  // Handle targets filtering
   std::vector<std::string> filtered_targets;
   if (targets.isNotNull())
   {
     CharacterVector tar(targets);
-    // Get intersection
     for (R_xlen_t i = 0; i < curr_targets.length(); i++)
     {
       std::string curr_tar = as<std::string>(curr_targets[i]);
@@ -115,15 +93,12 @@ filter_sort_matrix(NumericMatrix network_matrix,
     }
   }
 
-  // Sort gene names
   std::sort(filtered_regulators.begin(), filtered_regulators.end(),
             geneCompare);
   std::sort(filtered_targets.begin(), filtered_targets.end(), geneCompare);
 
-  // Create new matrix with filtered dimensions
   NumericMatrix result(filtered_regulators.size(), filtered_targets.size());
 
-  // Create maps for quick lookups
   std::unordered_map<std::string, int> old_reg_indices;
   std::unordered_map<std::string, int> old_tar_indices;
 
@@ -136,7 +111,6 @@ filter_sort_matrix(NumericMatrix network_matrix,
     old_tar_indices[as<std::string>(curr_targets[i])] = i;
   }
 
-  // Fill new matrix
   for (size_t i = 0; i < filtered_regulators.size(); i++)
   {
     for (size_t j = 0; j < filtered_targets.size(); j++)
@@ -147,7 +121,6 @@ filter_sort_matrix(NumericMatrix network_matrix,
     }
   }
 
-  // Set row and column names
   CharacterVector new_regulators(filtered_regulators.size());
   CharacterVector new_targets(filtered_targets.size());
 
@@ -165,28 +138,3 @@ filter_sort_matrix(NumericMatrix network_matrix,
 
   return result;
 }
-
-/*
-filter_sort_matrix <- function(
-    network_matrix,
-    regulators = NULL,
-    targets = NULL) {
-  network_matrix[is.na(network_matrix)] <- 0
-  if (!is.null(regulators)) {
-    regulators <- intersect(rownames(network_matrix), regulators)
-  } else {
-    regulators <- rownames(network_matrix)
-  }
-  if (!is.null(targets)) {
-    targets <- intersect(colnames(network_matrix), targets)
-  } else {
-    targets <- colnames(network_matrix)
-  }
-
-  unique_regulators <- gtools::mixedsort(unique(regulators))
-  unique_targets <- gtools::mixedsort(unique(targets))
-  network_matrix <- network_matrix[unique_regulators, unique_targets]
-
-  return(network_matrix)
-}
-*/

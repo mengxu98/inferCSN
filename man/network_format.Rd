@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{network_format}
 \alias{network_format}
-\title{Format network table}
+\title{Format a network table}
 \usage{
 network_format(
   network_table,
@@ -12,46 +12,15 @@ network_format(
 )
 }
 \arguments{
-\item{network_table}{The weight data table of network.}
+\item{network_table}{Network edge table.}
 
-\item{regulators}{Regulators list.}
+\item{regulators, targets}{Nodes to include.}
 
-\item{targets}{Targets list.}
-
-\item{abs_weight}{Logical value, default is \emph{\code{TRUE}},
-whether to perform absolute value on weights,
-and when set \code{abs_weight} to \emph{\code{TRUE}},
-the output of weight table will create a new column named \code{Interaction}.}
+\item{abs_weight}{Whether to use absolute weights and add interaction signs.}
 }
 \value{
-Formated network table
+A formatted network edge table.
 }
 \description{
-Format network table
-}
-\examples{
-data(example_matrix)
-network_table <- inferCSN(example_matrix)
-
-network_format(
-  network_table,
-  regulators = "g1"
-)
-
-network_format(
-  network_table,
-  regulators = "g1",
-  abs_weight = FALSE
-)
-
-network_format(
-  network_table,
-  targets = "g3"
-)
-
-network_format(
-  network_table,
-  regulators = c("g1", "g3"),
-  targets = c("g3", "g5")
-)
+Format a network table
 }

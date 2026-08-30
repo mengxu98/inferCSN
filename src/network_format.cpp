@@ -4,7 +4,6 @@
 
 using namespace Rcpp;
 
-// AbsGreater struct implementation
 AbsGreater::AbsGreater(const NumericVector &w) : weight(w) {}
 
 bool AbsGreater::operator()(int i, int j) const
@@ -12,45 +11,13 @@ bool AbsGreater::operator()(int i, int j) const
   return std::abs(weight[i]) > std::abs(weight[j]);
 }
 
-//' @title Format network table
+//' @title Format a network table
 //'
-//' @param network_table The weight data table of network.
-//' @param regulators Regulators list.
-//' @param targets Targets list.
-//' @param abs_weight Logical value, default is *`TRUE`*,
-//' whether to perform absolute value on weights,
-//' and when set `abs_weight` to *`TRUE`*,
-//' the output of weight table will create a new column named `Interaction`.
-//'
-//' @md
-//' @return Formated network table
+//' @param network_table Network edge table.
+//' @param regulators,targets Nodes to include.
+//' @param abs_weight Whether to use absolute weights and add interaction signs.
+//' @return A formatted network edge table.
 //' @export
-//'
-//' @examples
-//' data(example_matrix)
-//' network_table <- inferCSN(example_matrix)
-//'
-//' network_format(
-//'   network_table,
-//'   regulators = "g1"
-//' )
-//'
-//' network_format(
-//'   network_table,
-//'   regulators = "g1",
-//'   abs_weight = FALSE
-//' )
-//'
-//' network_format(
-//'   network_table,
-//'   targets = "g3"
-//' )
-//'
-//' network_format(
-//'   network_table,
-//'   regulators = c("g1", "g3"),
-//'   targets = c("g3", "g5")
-//' )
 // [[Rcpp::export]]
 DataFrame network_format(DataFrame network_table,
                          Nullable<CharacterVector> regulators = R_NilValue,
@@ -71,7 +38,6 @@ DataFrame network_format(DataFrame network_table,
   target = target[non_zero];
   weight = weight[non_zero];
 
-  // process regulators
   if (regulators.isNotNull())
   {
     CharacterVector reg(regulators);
@@ -88,7 +54,6 @@ DataFrame network_format(DataFrame network_table,
     weight = weight[keep];
   }
 
-  // process targets
   if (targets.isNotNull())
   {
     CharacterVector targ(targets);
@@ -105,7 +70,6 @@ DataFrame network_format(DataFrame network_table,
     weight = weight[keep];
   }
 
-  // process abs_weight
   CharacterVector interaction;
   if (abs_weight)
   {
@@ -124,7 +88,6 @@ DataFrame network_format(DataFrame network_table,
     }
   }
 
-  // sort
   IntegerVector order(weight.size());
   for (int i = 0; i < order.size(); i++)
     order[i] = i;
@@ -138,7 +101,6 @@ DataFrame network_format(DataFrame network_table,
     interaction = interaction[order];
   }
 
-  // create result DataFrame
   DataFrame result;
   if (abs_weight)
   {
@@ -158,83 +120,3 @@ DataFrame network_format(DataFrame network_table,
 
   return result;
 }
-
-/*
-#' @title Format network table
-#'
-#' @param network_table The weight data table of network.
-#' @param regulators Regulators list.
-#' @param targets Targets list.
-#' @param abs_weight Logical value, default is *`TRUE`*,
-#' whether to perform absolute value on weights,
-#' and when set `abs_weight` to *`TRUE`*,
-#' the output of weight table will create a new column named `Interaction`.
-#'
-#' @md
-#' @return Formated network table
-#' @export
-#'
-#' @examples
-#' data(example_matrix)
-#' network_table <- inferCSN(example_matrix)
-#'
-#' network_format(
-#'   network_table,
-#'   regulators = "g1"
-#' )
-#'
-#' network_format(
-#'   network_table,
-#'   regulators = "g1",
-#'   abs_weight = FALSE
-#' )
-#'
-#' network_format(
-#'   network_table,
-#'   targets = "g3"
-#' )
-#'
-#' network_format(
-#'   network_table,
-#'   regulators = c("g1", "g3"),
-#'   targets = c("g3", "g5")
-#' )
-network_format <- function(
-    network_table,
-    regulators = NULL,
-    targets = NULL,
-    abs_weight = TRUE) {
-  colnames(network_table) <- c("regulator", "target", "weight")
-  network_table$weight <- as.numeric(network_table$weight)
-  network_table <- dplyr::filter(network_table, weight != 0)
-  if (!is.null(regulators)) {
-    network_table <- purrr::map_dfr(
-      unique(regulators), function(x) {
-        dplyr::filter(network_table, regulator == x)
-      }
-    )
-  }
-  if (!is.null(targets)) {
-    network_table <- purrr::map_dfr(
-      unique(targets), function(x) {
-        dplyr::filter(network_table, target == x)
-      }
-    )
-  }
-
-  if (abs_weight) {
-    network_table$Interaction <- ifelse(
-      network_table$weight < 0, "Repression", "Activation"
-    )
-    network_table$weight <- abs(network_table$weight)
-  }
-
-  network_table <- network_table[order(
-    abs(as.numeric(network_table$weight)),
-    decreasing = TRUE
-  ), ]
-  rownames(network_table) <- NULL
-
-  return(network_table)
-}
-*/

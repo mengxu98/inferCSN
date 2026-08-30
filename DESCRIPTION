@@ -18,7 +18,6 @@ Imports:
     ggnetwork,
     ggplot2,
     ggraph,
-    L0Learn,
     Matrix,
     methods,
     purrr,
@@ -46,6 +45,7 @@ Suggests:
     RColorBrewer,
     Rtsne,
     RTransferEntropy,
+    testthat,
     uwot,
     viridis
 LinkingTo:
@@ -54,5 +54,5 @@ Config/Needs/website: mengxu98/thistemplate
 Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.2
 Language: en-US
+Config/roxygen2/version: 8.1.0

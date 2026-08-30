@@ -1,70 +1,156 @@
 #' @title inferring cell-type specific gene regulatory network
 #'
 #' @md
-#' @param object The input data for inferring network.
-#' @param penalty The type of regularization.
-#' This can take either one of the following choices: `"L0"`, `"L0L1"`, and `"L0L2"`.
-#' For high-dimensional and sparse data, `"L0L2"` is more effective.
-#' Default is `"L0"`.
-#' @param cross_validation Whether to use cross-validation.
-#' Default is `FALSE`.
-#' @param n_folds The number of folds for cross-validation.
-#' Default is `5`.
-#' @param seed The random seed for cross-validation.
-#' Default is `1`.
-#' @param subsampling_method The method to use for subsampling.
-#' Options are `"sample"`, `"pseudobulk"` or `"meta_cells"`.
-#' @param subsampling_ratio The percent of all samples used for [fit_srm].
-#' Default is `1`.
-#' @param r_squared_threshold Threshold of R² coefficient.
-#' Default is `0`.
-#' @param regulators The regulator genes for which to infer the regulatory network.
-#' @param targets The target genes for which to infer the regulatory network.
-#' @param cores The number of cores to use for parallelization with [foreach::foreach].
-#' Default is `1`.
-#' @param verbose Whether to print progress messages.
-#' Default is `TRUE`.
-#' @param ... Parameters for other methods.
+#' @description Fits greedy-L0 models for static or pseudotime-ordered expression data.
+#'
+#' @param object Numeric expression matrix with cells in rows and genes in
+#' columns.
+#' @param pseudotime Optional pseudotime vector or branch matrix.
+#' @param regulators,targets Optional gene subsets.
+#' @param max_support_size Optional support-size limit.
+#' @param lag_fraction Fractional lag used when `lag_steps` is `NULL`.
+#' @param lag_steps Optional integer lag.
+#' @param cores Number of inference workers.
+#' @param verbose Whether to report progress.
+#' @param ... Additional method arguments.
+#'
+#' @return A data frame containing exactly `regulator`, `target`, and `weight`.
 #'
 #' @docType methods
 #' @rdname inferCSN
-#' @return
-#' A data table of regulator-target regulatory relationships,
-#' which has three columns: `regulator`, `target`, and `weight`.
-#'
 #' @export
-setGeneric(
+methods::setGeneric(
   name = "inferCSN",
-  signature = c("object"),
-  def = function(object,
-                 penalty = c("L0", "L0L1", "L0L2"),
-                 cross_validation = FALSE,
-                 seed = 1,
-                 n_folds = 5,
-                 subsampling_method = c(
-                   "sample", "meta_cells", "pseudobulk"
-                 ),
-                 subsampling_ratio = 1,
-                 r_squared_threshold = 0,
-                 regulators = NULL,
-                 targets = NULL,
-                 cores = 1,
-                 verbose = TRUE,
-                 ...) {
-    UseMethod(
-      generic = "inferCSN",
-      object = object
-    )
+  signature = "object",
+  def = function(
+    object,
+    pseudotime = NULL,
+    regulators = NULL,
+    targets = NULL,
+    max_support_size = NULL,
+    lag_fraction = 0.05,
+    lag_steps = NULL,
+    cores = 1,
+    verbose = TRUE,
+    ...
+  ) {
+    standardGeneric("inferCSN")
   }
 )
 
+infercsn_method <- function(
+  object,
+  pseudotime = NULL,
+  regulators = NULL,
+  targets = NULL,
+  max_support_size = NULL,
+  lag_fraction = 0.05,
+  lag_steps = NULL,
+  cores = 1,
+  verbose = TRUE,
+  ...
+) {
+  dots <- list(...)
+  if (length(dots)) {
+    stop(
+      sprintf(
+        "Unused matrix-inference argument%s: %s",
+        if (length(dots) == 1L) "" else "s",
+        paste(names(dots) %||% rep("<unnamed>", length(dots)), collapse = ", ")
+      ),
+      call. = FALSE
+    )
+  }
+  thisutils::log_message(
+    "Inferring network for {.cls {class(object)}}...",
+    verbose = verbose
+  )
+  infercsn_impl(
+    object = object,
+    pseudotime = pseudotime,
+    regulators = regulators,
+    targets = targets,
+    max_support_size = max_support_size,
+    lag_fraction = lag_fraction,
+    lag_steps = lag_steps,
+    cores = cores,
+    verbose = verbose
+  )
+}
+
+infercsn_impl <- function(
+  object,
+  pseudotime,
+  regulators,
+  targets,
+  max_support_size,
+  lag_fraction,
+  lag_steps,
+  cores,
+  verbose
+) {
+  validated <- validate_infercsn_parameters(
+    matrix = object,
+    pseudotime = pseudotime,
+    regulators = regulators,
+    targets = targets,
+    max_support_size = max_support_size,
+    lag_fraction = lag_fraction,
+    lag_steps = lag_steps,
+    cores = cores,
+    verbose = verbose
+  )
+
+  gene_names <- colnames(object)
+  expression <- if (inherits(object, "sparseMatrix")) object else t(object)
+  network_table <- run_network_inference(
+    expression = expression,
+    pseudotime = validated$pseudotime,
+    gene_names = gene_names,
+    params = list(
+      min_improvement = 1e-10,
+      pseudotime_lag_fraction = validated$lag_fraction,
+      pseudotime_lag_steps = validated$lag_steps,
+      regulators = validated$regulators,
+      targets = validated$targets,
+      max_support_size = validated$max_support_size,
+      cores = validated$cores
+    )
+  )
+  network_table <- network_table[
+    is.finite(network_table$weight) & network_table$weight != 0,
+    c("regulator", "target", "weight"),
+    drop = FALSE
+  ]
+
+  thisutils::log_message(
+    "Inferring network done",
+    message_type = "success",
+    verbose = verbose
+  )
+  thisutils::log_message(
+    "Network information:\n",
+    data.frame(
+      Edges = nrow(network_table),
+      Regulators = length(unique(network_table$regulator)),
+      Targets = length(unique(network_table$target))
+    ),
+    text_color = "grey",
+    timestamp_style = FALSE,
+    verbose = verbose
+  )
+  network_table
+}
+
 #' @rdname inferCSN
 #' @export
-#'
 #' @examples
 #' data(example_matrix)
-#' network_table <- inferCSN(example_matrix)
-#'
+#' data(example_meta_data)
+#' network_table <- inferCSN(
+#'   example_matrix,
+#'   pseudotime = example_meta_data$pseudotime
+#' )
 #' head(network_table)
 #'
 #' inferCSN(
@@ -72,229 +158,16 @@ setGeneric(
 #'   regulators = c("g1", "g2"),
 #'   targets = c("g3", "g4")
 #' )
-#'
-#' inferCSN(
-#'   example_matrix,
-#'   regulators = c("g1", "g2"),
-#'   targets = c("g3", "g0")
-#' )
-setMethod(
+methods::setMethod(
   f = "inferCSN",
-  signature = signature(object = "matrix"),
-  definition = function(object,
-                        penalty = c("L0", "L0L1", "L0L2"),
-                        cross_validation = FALSE,
-                        seed = 1,
-                        n_folds = 5,
-                        subsampling_method = c(
-                          "sample", "meta_cells", "pseudobulk"
-                        ),
-                        subsampling_ratio = 1,
-                        r_squared_threshold = 0,
-                        regulators = NULL,
-                        targets = NULL,
-                        cores = 1,
-                        verbose = TRUE,
-                        ...) {
-    thisutils::log_message(
-      "Inferring network for {.cls {class(object)}}...",
-      verbose = verbose
-    )
-
-    validated_params <- do.call(
-      check_parameters,
-      c(
-        list(matrix = object),
-        mget(names(formals())[-1], environment())
-      )
-    )
-
-    object <- subsampling(
-      matrix = object,
-      subsampling_method = validated_params$subsampling_method,
-      subsampling_ratio = validated_params$subsampling_ratio,
-      seed = validated_params$seed,
-      verbose = verbose,
-      ...
-    )
-
-    if (!is.null(validated_params$regulators)) {
-      regulators <- validated_params$regulators
-    } else {
-      regulators <- regulators %ss% colnames(object)
-    }
-
-    if (!is.null(validated_params$targets)) {
-      targets <- validated_params$targets
-    } else {
-      targets <- targets %ss% colnames(object)
-    }
-
-    names(targets) <- targets
-    param_names <- c(
-      "cross_validation", "seed", "penalty",
-      "n_folds", "r_squared_threshold", "verbose"
-    )
-    network_params <- validated_params[param_names]
-    param_index <- !vapply(network_params, is.null, logical(1))
-    network_params <- network_params[param_index]
-
-    dots_list <- list(...)
-    dots_list <- dots_list[!vapply(dots_list, is.null, logical(1))]
-
-    single_network_args <- c(network_params, dots_list)
-
-    network_table <- thisutils::parallelize_fun(
-      x = targets,
-      fun = function(x) {
-        thisutils::invoke_fun(
-          single_network,
-          c(
-            list(
-              matrix = object,
-              regulators = regulators,
-              target = x
-            ),
-            single_network_args
-          )
-        )
-      },
-      cores = validated_params$cores,
-      verbose = verbose
-    ) |>
-      purrr::list_rbind() |>
-      network_format(abs_weight = FALSE)
-
-    thisutils::log_message(
-      "Inferring network done",
-      message_type = "success",
-      verbose = verbose
-    )
-    network_info <- data.frame(
-      Edges = nrow(network_table),
-      Regulators = length(unique(network_table$regulator)),
-      Targets = length(unique(network_table$target))
-    )
-    thisutils::log_message(
-      "Network information:\n",
-      network_info,
-      text_color = "grey",
-      timestamp_style = FALSE,
-      verbose = verbose
-    )
-
-    return(network_table)
-  }
+  signature = methods::signature(object = "matrix"),
+  definition = infercsn_method
 )
 
 #' @rdname inferCSN
 #' @export
-setMethod(
+methods::setMethod(
   f = "inferCSN",
-  signature = signature(object = "sparseMatrix"),
-  definition = function(object,
-                        penalty = c("L0", "L0L1", "L0L2"),
-                        cross_validation = FALSE,
-                        seed = 1,
-                        n_folds = 5,
-                        subsampling_method = c(
-                          "sample", "meta_cells", "pseudobulk"
-                        ),
-                        subsampling_ratio = 1,
-                        r_squared_threshold = 0,
-                        regulators = NULL,
-                        targets = NULL,
-                        cores = 1,
-                        verbose = TRUE,
-                        ...) {
-    thisutils::log_message(
-      "Inferring network for {.cls {class(object)}}...",
-      verbose = verbose
-    )
-
-    validated_params <- do.call(
-      check_parameters,
-      c(
-        list(matrix = object),
-        mget(names(formals())[-1], environment())
-      )
-    )
-
-    object <- subsampling(
-      matrix = object,
-      subsampling_method = validated_params$subsampling_method,
-      subsampling_ratio = validated_params$subsampling_ratio,
-      seed = validated_params$seed,
-      verbose = verbose,
-      ...
-    )
-
-    if (!is.null(validated_params$regulators)) {
-      regulators <- validated_params$regulators
-    } else {
-      regulators <- regulators %ss% colnames(object)
-    }
-
-    if (!is.null(validated_params$targets)) {
-      targets <- validated_params$targets
-    } else {
-      targets <- targets %ss% colnames(object)
-    }
-
-    names(targets) <- targets
-
-    param_names <- c(
-      "cross_validation", "seed", "penalty",
-      "n_folds", "r_squared_threshold", "verbose"
-    )
-    network_params <- validated_params[param_names]
-    param_index <- !vapply(network_params, is.null, logical(1))
-    network_params <- network_params[param_index]
-
-    dots_list <- list(...)
-    dots_list <- dots_list[!vapply(dots_list, is.null, logical(1))]
-
-    single_network_args <- c(network_params, dots_list)
-
-    network_table <- thisutils::parallelize_fun(
-      x = targets,
-      fun = function(x) {
-        thisutils::invoke_fun(
-          single_network,
-          c(
-            list(
-              matrix = object,
-              regulators = regulators,
-              target = x
-            ),
-            single_network_args
-          )
-        )
-      },
-      cores = validated_params$cores,
-      verbose = verbose
-    ) |>
-      purrr::list_rbind() |>
-      network_format(abs_weight = FALSE)
-
-    thisutils::log_message(
-      "Inferring network done",
-      message_type = "success",
-      verbose = verbose
-    )
-    network_info <- data.frame(
-      Edges = nrow(network_table),
-      Regulators = length(unique(network_table$regulator)),
-      Targets = length(unique(network_table$target))
-    )
-    thisutils::log_message(
-      "Network information:\n",
-      network_info,
-      text_color = "grey",
-      timestamp_style = FALSE,
-      verbose = verbose
-    )
-
-    return(network_table)
-  }
+  signature = methods::signature(object = "sparseMatrix"),
+  definition = infercsn_method
 )

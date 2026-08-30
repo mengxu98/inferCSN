@@ -13,7 +13,8 @@ export(calculate_precision)
 export(calculate_recall)
 export(calculate_si)
 export(filter_sort_matrix)
-export(fit_srm)
+export(fit_greedy_l0)
+export(fit_greedy_l0_batch)
 export(inferCSN)
 export(infercsn_logo)
 export(meta_cells)
@@ -34,10 +35,19 @@ exportMethods(inferCSN)
 import(ggnetwork)
 import(ggplot2)
 import(ggraph)
+import(methods)
 importClassesFrom(Matrix,sparseMatrix)
-importFrom(Rcpp,evalCpp)
-importFrom(Rcpp,sourceCpp)
-importFrom(stats,coef)
-importFrom(stats,predict)
+importFrom(Rcpp,
+  evalCpp,
+  sourceCpp
+)
+importFrom(stats,
+  coef,
+  predict
+)
 importFrom(thisutils,`%ss%`)
+importFrom(utils,
+  head,
+  tail
+)
 useDynLib(inferCSN)

@@ -1,8 +1,9 @@
-#' @import ggplot2 ggraph ggnetwork
+#' @import ggplot2 ggraph ggnetwork methods
 #'
 #' @importClassesFrom Matrix sparseMatrix
 #' @importFrom Rcpp evalCpp sourceCpp
 #' @importFrom stats coef predict
+#' @importFrom utils head tail
 #' @importFrom thisutils `%ss%`
 NULL
 

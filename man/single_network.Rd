@@ -8,46 +8,34 @@ single_network(
   matrix,
   regulators,
   target,
-  cross_validation = FALSE,
-  seed = 1,
-  penalty = "L0",
-  r_squared_threshold = 0,
-  n_folds = 5,
-  verbose = TRUE,
-  ...
+  pseudotime = NULL,
+  max_support_size = NULL,
+  lag_fraction = 0.05,
+  lag_steps = NULL,
+  cores = 1,
+  verbose = TRUE
 )
 }
 \arguments{
 \item{matrix}{An expression matrix.}
 
-\item{regulators}{The regulator genes for which to infer the regulatory network.}
-
 \item{target}{The target gene.}
 
-\item{cross_validation}{Whether to use cross-validation.
-Default is \code{FALSE}.}
+\item{pseudotime}{Optional pseudotime vector or branch matrix passed to
+[inferCSN()].}
 
-\item{seed}{The random seed for cross-validation.
-Default is \code{1}.}
+\item{max_support_size}{Optional support-size cap passed to [inferCSN()].}
 
-\item{penalty}{The type of regularization.
-This can take either one of the following choices: \code{"L0"}, \code{"L0L1"}, and \code{"L0L2"}.
-For high-dimensional and sparse data, \code{"L0L2"} is more effective.
-Default is \code{"L0"}.}
+\item{lag_fraction}{Fractional state lag passed to [inferCSN()].}
 
-\item{r_squared_threshold}{Threshold of R² coefficient.
-Default is \code{0}.}
+\item{lag_steps}{Optional integer state lag passed to [inferCSN()].}
 
-\item{n_folds}{The number of folds for cross-validation.
-Default is \code{5}.}
+\item{cores}{Number of inference workers.}
 
-\item{verbose}{Whether to print progress messages.
-Default is \code{TRUE}.}
-
-\item{...}{Parameters for other methods.}
+\item{verbose}{Whether to report progress.}
 }
 \value{
-A data frame of the single target gene network.
+A data frame containing only selected edges for the requested target.
 The data frame has three columns: regulator, target, and weight.
 }
 \description{
@@ -62,23 +50,9 @@ head(
     target = "g1"
   )
 )
-head(
-  single_network(
-    example_matrix,
-    regulators = colnames(example_matrix),
-    target = "g1",
-    cross_validation = TRUE
-  )
-)
-
 single_network(
   example_matrix,
   regulators = c("g1", "g2", "g3"),
-  target = "g1"
-)
-single_network(
-  example_matrix,
-  regulators = c("g1", "g2"),
   target = "g1"
 )
 }

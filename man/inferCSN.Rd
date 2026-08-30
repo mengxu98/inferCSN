@@ -9,15 +9,12 @@
 \usage{
 inferCSN(
   object,
-  penalty = c("L0", "L0L1", "L0L2"),
-  cross_validation = FALSE,
-  seed = 1,
-  n_folds = 5,
-  subsampling_method = c("sample", "meta_cells", "pseudobulk"),
-  subsampling_ratio = 1,
-  r_squared_threshold = 0,
+  pseudotime = NULL,
   regulators = NULL,
   targets = NULL,
+  max_support_size = NULL,
+  lag_fraction = 0.05,
+  lag_steps = NULL,
   cores = 1,
   verbose = TRUE,
   ...
@@ -25,15 +22,12 @@ inferCSN(
 
 \S4method{inferCSN}{matrix}(
   object,
-  penalty = c("L0", "L0L1", "L0L2"),
-  cross_validation = FALSE,
-  seed = 1,
-  n_folds = 5,
-  subsampling_method = c("sample", "meta_cells", "pseudobulk"),
-  subsampling_ratio = 1,
-  r_squared_threshold = 0,
+  pseudotime = NULL,
   regulators = NULL,
   targets = NULL,
+  max_support_size = NULL,
+  lag_fraction = 0.05,
+  lag_steps = NULL,
   cores = 1,
   verbose = TRUE,
   ...
@@ -41,82 +35,55 @@ inferCSN(
 
 \S4method{inferCSN}{sparseMatrix}(
   object,
-  penalty = c("L0", "L0L1", "L0L2"),
-  cross_validation = FALSE,
-  seed = 1,
-  n_folds = 5,
-  subsampling_method = c("sample", "meta_cells", "pseudobulk"),
-  subsampling_ratio = 1,
-  r_squared_threshold = 0,
+  pseudotime = NULL,
   regulators = NULL,
   targets = NULL,
+  max_support_size = NULL,
+  lag_fraction = 0.05,
+  lag_steps = NULL,
   cores = 1,
   verbose = TRUE,
   ...
 )
 }
 \arguments{
-\item{object}{The input data for inferring network.}
+\item{object}{Numeric expression matrix with cells in rows and genes in
+columns.}
 
-\item{penalty}{The type of regularization.
-This can take either one of the following choices: \code{"L0"}, \code{"L0L1"}, and \code{"L0L2"}.
-For high-dimensional and sparse data, \code{"L0L2"} is more effective.
-Default is \code{"L0"}.}
+\item{pseudotime}{Optional pseudotime vector or branch matrix.}
 
-\item{cross_validation}{Whether to use cross-validation.
-Default is \code{FALSE}.}
+\item{regulators, targets}{Optional gene subsets.}
 
-\item{seed}{The random seed for cross-validation.
-Default is \code{1}.}
+\item{max_support_size}{Optional support-size limit.}
 
-\item{n_folds}{The number of folds for cross-validation.
-Default is \code{5}.}
+\item{lag_fraction}{Fractional lag used when \code{lag_steps} is \code{NULL}.}
 
-\item{subsampling_method}{The method to use for subsampling.
-Options are \code{"sample"}, \code{"pseudobulk"} or \code{"meta_cells"}.}
+\item{lag_steps}{Optional integer lag.}
 
-\item{subsampling_ratio}{The percent of all samples used for \link{fit_srm}.
-Default is \code{1}.}
+\item{cores}{Number of inference workers.}
 
-\item{r_squared_threshold}{Threshold of R² coefficient.
-Default is \code{0}.}
+\item{verbose}{Whether to report progress.}
 
-\item{regulators}{The regulator genes for which to infer the regulatory network.}
-
-\item{targets}{The target genes for which to infer the regulatory network.}
-
-\item{cores}{The number of cores to use for parallelization with \link[foreach:foreach]{foreach::foreach}.
-Default is \code{1}.}
-
-\item{verbose}{Whether to print progress messages.
-Default is \code{TRUE}.}
-
-\item{...}{Parameters for other methods.}
+\item{...}{Additional method arguments.}
 }
 \value{
-A data table of regulator-target regulatory relationships,
-which has three columns: \code{regulator}, \code{target}, and \code{weight}.
+A data frame containing exactly \code{regulator}, \code{target}, and \code{weight}.
 }
 \description{
-inferring cell-type specific gene regulatory network
+Fits greedy-L0 models for static or pseudotime-ordered expression data.
 }
 \examples{
 data(example_matrix)
+data(example_meta_data)
 network_table <- inferCSN(
-  example_matrix
+  example_matrix,
+  pseudotime = example_meta_data$pseudotime
 )
-
-head(network_table)
+thisplot::print_colored_table(network_table)
 
 inferCSN(
   example_matrix,
   regulators = c("g1", "g2"),
   targets = c("g3", "g4")
-)
-
-inferCSN(
-  example_matrix,
-  regulators = c("g1", "g2"),
-  targets = c("g3", "g0")
 )
 }

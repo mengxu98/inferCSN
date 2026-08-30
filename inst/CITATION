@@ -26,21 +26,6 @@ bibentry(bibtype = "article",
   author = c(
   as.person("Hazimeh Hussein"),
   as.person("Mazumder Rahul"),
-  as.person("Nonet Tim")
-  ),
-  title = "L0learn: A scalable package for sparse learning using l0 regularization",
-  journal = "Journal of Machine Learning Research",
-  year = "2023",
-  volume = "24",
-  number = "205",
-  pages = "1-8",
-  textVersion = "Hazimeh, Hussein et al. “L0Learn: A Scalable Package for Sparse Learning using L0 Regularization.” J. Mach. Learn. Res. 24 (2022): 205:1-205:8."
-)
-
-bibentry(bibtype = "article",
-  author = c(
-  as.person("Hazimeh Hussein"),
-  as.person("Mazumder Rahul"),
   as.person("Peter Smibert"),
   as.person("Efthymia Papalexi"),
   as.person("Rahul Satija")
