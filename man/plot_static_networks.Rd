@@ -12,11 +12,9 @@ plot_static_networks(
 )
 }
 \arguments{
-\item{network_table}{The weight data table of network.}
+\item{network_table}{Network edge table.}
 
-\item{regulators}{Regulators list.}
-
-\item{targets}{Targets list.}
+\item{regulators, targets}{Nodes to include.}
 
 \item{legend_position}{The position of legend.}
 }
@@ -29,17 +27,18 @@ Plot dynamic networks
 \examples{
 data(example_matrix)
 network_table <- inferCSN(example_matrix)
+example_edge <- network_table[1, ]
 plot_static_networks(
   network_table,
-  regulators = "g1"
+  regulators = example_edge$regulator
 )
 plot_static_networks(
   network_table,
-  targets = "g1"
+  targets = example_edge$target
 )
 plot_static_networks(
   network_table,
-  regulators = "g1",
-  targets = "g2"
+  regulators = example_edge$regulator,
+  targets = example_edge$target
 )
 }

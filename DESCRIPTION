@@ -23,7 +23,8 @@ Imports:
     purrr,
     Rcpp,
     stats,
-    thisutils
+    thisutils,
+    thisplot
 Suggests:
     ComplexHeatmap,
     circlize,

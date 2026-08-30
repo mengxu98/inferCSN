@@ -21,82 +21,33 @@ plot_dynamic_networks(
 )
 }
 \arguments{
-\item{network_table}{The weight data table of network.}
+\item{network_table}{Network edge table.}
 
-\item{celltypes_order}{The order of cell types.}
+\item{celltypes_order}{Cell-type order.}
 
-\item{ntop}{The number of top genes to plot.
-Default is \code{10}.}
+\item{ntop}{Number of top genes to plot.}
 
-\item{title}{The title of figure.
-Default is \code{NULL}.}
+\item{title}{Figure title.}
 
-\item{theme_type}{The theme of figure.
-Could be \code{"theme_void"}, \code{"theme_blank"}, or \code{"theme_facet"}.
-Default is \code{"theme_void"}.}
+\item{theme_type}{Plot theme.}
 
-\item{plot_type}{The type of figure.
-Could be \code{"ggplot"}, \code{"animate"}, or \code{"ggplotly"}.
-Default is \code{"ggplot"}.}
+\item{plot_type}{Output type.}
 
-\item{layout}{The layout of figure.
-Could be \code{"fruchtermanreingold"} or \code{"kamadakawai"}.
-Default is \code{"fruchtermanreingold"}.}
+\item{layout}{Network layout.}
 
-\item{nrow}{The number of rows of figure.
-Default is \code{2}.}
+\item{nrow}{Number of rows.}
 
-\item{figure_save}{Whether to save the figure file.
-Default is \code{FALSE}.}
+\item{figure_save}{Whether to save the figure.}
 
-\item{figure_name}{The name of figure file.
-Default is \code{NULL}.}
+\item{figure_name}{Output filename.}
 
-\item{figure_width}{The width of figure.
-Default is \code{6}.}
+\item{figure_width, figure_height}{Figure dimensions.}
 
-\item{figure_height}{The height of figure.
-Default is \code{6}.}
-
-\item{seed}{The seed random use to plot network.
-Default is \code{1}.}
+\item{seed}{Random seed.}
 }
 \value{
-A dynamic figure object.
+A dynamic network plot.
 }
 \description{
 Plot dynamic networks
-}
-\examples{
-data(example_matrix)
-network <- inferCSN(example_matrix)[1:100, ]
-network$celltype <- c(
-  rep("cluster1", 20),
-  rep("cluster2", 20),
-  rep("cluster3", 20),
-  rep("cluster5", 20),
-  rep("cluster6", 20)
-)
-
-celltypes_order <- c(
-  "cluster5", "cluster3",
-  "cluster2", "cluster1",
-  "cluster6"
-)
-
-plot_dynamic_networks(
-  network,
-  celltypes_order = celltypes_order
-)
-
-plot_dynamic_networks(
-  network,
-  celltypes_order = celltypes_order[1:3]
-)
-
-plot_dynamic_networks(
-  network,
-  celltypes_order = celltypes_order,
-  plot_type = "ggplotly"
-)
 }

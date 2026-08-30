@@ -2,7 +2,7 @@
 % Please edit documentation in R/network_visualization.R
 \name{plot_network_heatmap}
 \alias{plot_network_heatmap}
-\title{Plot network heatmap}
+\title{Plot network heatmaps}
 \usage{
 plot_network_heatmap(
   network_table,
@@ -10,104 +10,86 @@ plot_network_heatmap(
   targets = NULL,
   switch_matrix = TRUE,
   show_names = FALSE,
+  show_names_position = c("outer", "all"),
+  rect_color = NA,
   heatmap_size_lock = TRUE,
   heatmap_size = 5,
   heatmap_height = NULL,
   heatmap_width = NULL,
   heatmap_title = NULL,
-  heatmap_color = c("#1966ad", "white", "#bb141a"),
+  ncol = NULL,
+  nrow = NULL,
+  performance_metrics = "none",
+  performance_ground_truth = NULL,
+  truth_cell_border = TRUE,
+  truth_cell_border_legend = TRUE,
+  truth_match_border_color = "#2E7D32",
+  truth_mismatch_border_color = "#F2C94C",
+  truth_cell_border_lwd = 1.2,
   border_color = "gray",
-  rect_color = NA,
+  heatmap_palette = "viridis",
+  heatmap_palcolor = NULL,
+  row_anno_palette = "Set1",
+  row_anno_palcolor = NULL,
+  col_anno_palette = "Set2",
+  col_anno_palcolor = NULL,
+  row_anno = FALSE,
+  column_anno = FALSE,
   anno_width = 1,
   anno_height = 1,
   row_anno_type = c("boxplot", "barplot", "histogram", "density", "lines", "points",
     "horizon"),
   column_anno_type = c("boxplot", "barplot", "histogram", "density", "lines", "points"),
-  legend_name = "Weight",
+  legend_name = NULL,
   row_title = "Regulators"
 )
 }
 \arguments{
-\item{network_table}{The weight data table of network.}
+\item{network_table}{Network edge table.}
 
-\item{regulators}{Regulators list.}
+\item{regulators, targets}{Nodes to include.}
 
-\item{targets}{Targets list.}
+\item{switch_matrix}{Convert edge tables to matrices.}
 
-\item{switch_matrix}{Whether to weight data table to matrix.
-Default is \code{TRUE}.}
+\item{show_names, heatmap_size_lock}{Logical display controls.}
 
-\item{show_names}{Whether to show names of row and column.
-Default is \code{FALSE}.}
+\item{show_names_position}{Name placement for multiple heatmaps.}
 
-\item{heatmap_size_lock}{Lock the size of heatmap.}
+\item{heatmap_size, heatmap_height, heatmap_width}{Heatmap dimensions.}
 
-\item{heatmap_size}{The size of heatmap.
-Default is \code{5}.}
+\item{heatmap_title}{Heatmap title.}
 
-\item{heatmap_height}{The height of heatmap.}
+\item{ncol, nrow}{Layout dimensions for multiple heatmaps.}
 
-\item{heatmap_width}{The width of heatmap.}
+\item{performance_metrics}{Metrics appended to titles.}
 
-\item{heatmap_title}{The title of heatmap.}
+\item{performance_ground_truth}{Ground-truth network for metrics.}
 
-\item{heatmap_color}{Colors of heatmap.}
+\item{truth_cell_border, truth_cell_border_legend}{Ground-truth border controls.}
 
-\item{border_color}{Default is \code{"gray"}. Color of heatmap border.}
+\item{truth_match_border_color, truth_mismatch_border_color}{Border colors.}
 
-\item{rect_color}{Default is \code{NA}. Color of heatmap rect.}
+\item{truth_cell_border_lwd}{Border width.}
 
-\item{anno_width}{Width of annotation.}
+\item{border_color, rect_color}{Border and cell colors.}
 
-\item{anno_height}{Height of annotation.}
+\item{heatmap_palcolor, heatmap_palette}{Heatmap colors.}
 
-\item{row_anno_type}{Default is \code{"boxplot"},
-could add a annotation plot to row.
-choose one of \code{"boxplot"}, \code{"barplot"}, \code{"histogram"}, \code{"density"}, \code{"lines"}, \code{"points"}, and \code{"horizon"}.}
+\item{row_anno_palette, row_anno_palcolor}{Row annotation colors.}
 
-\item{column_anno_type}{Default is \code{"boxplot"},
-could add a annotation plot to column.
-choose one of \code{"boxplot"}, \code{"barplot"}, \code{"histogram"}, \code{"density"}, \code{"lines"}, and \code{"points"}.}
+\item{col_anno_palette, col_anno_palcolor}{Column annotation colors.}
 
-\item{legend_name}{The name of legend.}
+\item{row_anno, column_anno}{Enable annotations.}
 
-\item{row_title}{The title of row.}
+\item{anno_width, anno_height}{Annotation dimensions.}
+
+\item{row_anno_type, column_anno_type}{Annotation plot types.}
+
+\item{legend_name, row_title}{Legend and row titles.}
 }
 \value{
-A heatmap
+A heatmap object.
 }
 \description{
-Plot network heatmap
-}
-\examples{
-data(example_matrix)
-data("example_ground_truth")
-network_table <- inferCSN(example_matrix)
-
-p1 <- plot_network_heatmap(
-  example_ground_truth[, 1:3],
-  heatmap_title = "Ground truth",
-  legend_name = "Ground truth"
-)
-p2 <- plot_network_heatmap(
-  network_table,
-  heatmap_title = "inferCSN",
-  legend_name = "inferCSN"
-)
-ComplexHeatmap::draw(p1 + p2)
-
-plot_network_heatmap(
-  network_table,
-  show_names = TRUE,
-  rect_color = "gray90",
-  row_anno_type = "density",
-  column_anno_type = "barplot"
-)
-
-plot_network_heatmap(
-  network_table,
-  regulators = c("g1", "g3", "g5"),
-  targets = c("g3", "g6", "g9"),
-  show_names = TRUE
-)
+Plot network heatmaps
 }

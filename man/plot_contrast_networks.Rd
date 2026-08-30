@@ -12,7 +12,7 @@ plot_contrast_networks(
 )
 }
 \arguments{
-\item{network_table}{The weight data table of network.}
+\item{network_table}{Network edge table.}
 
 \item{degree_value}{Degree value to filter nodes.
 Default is \code{0}.}
@@ -32,5 +32,5 @@ Plot contrast networks
 \examples{
 data(example_matrix)
 network_table <- inferCSN(example_matrix)
-plot_contrast_networks(network_table[1:50, ])
+plot_contrast_networks(utils::head(network_table, 50))
 }
