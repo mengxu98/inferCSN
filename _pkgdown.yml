@@ -52,6 +52,12 @@ reference:
   - calculate_f1
   - calculate_si
   - calculate_ji
+  - calculate_epr
+  - calculate_signed_epr
+  - calculate_motif_ratios
+  - calculate_path_stats
+  - calculate_stability_jaccard
+  - calculate_stability_spearman
 
 - subtitle: "Network visualization"
 - contents:
@@ -77,6 +83,7 @@ reference:
 - contents:
   - single_network
   - fit_greedy_l0
+  - fit_greedy_l0_batch
 
 - subtitle: "Utils functions"
 - contents:

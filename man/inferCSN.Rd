@@ -79,7 +79,7 @@ network_table <- inferCSN(
   example_matrix,
   pseudotime = example_meta_data$pseudotime
 )
-thisplot::print_colored_table(network_table)
+head(network_table)
 
 inferCSN(
   example_matrix,

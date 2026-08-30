@@ -31,6 +31,9 @@ on:
   pull_request:
     branches: [main, master, dev]
 
+env:
+  RENV_CONFIG_AUTOLOADER_ENABLED: false
+
 jobs:
 
   setup:
