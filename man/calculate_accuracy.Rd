@@ -4,25 +4,20 @@
 \alias{calculate_accuracy}
 \title{Calculate Accuracy}
 \usage{
-calculate_accuracy(network_table, ground_truth)
+calculate_accuracy(network_table, ground_truth, tf_edges = FALSE)
 }
 \arguments{
-\item{network_table}{A data frame of predicted network structure}
+\item{network_table}{A data frame of predicted network structure.}
 
-\item{ground_truth}{A data frame of ground truth network}
+\item{ground_truth}{A data frame of ground truth network.}
+
+\item{tf_edges}{Whether to restrict the candidate edge universe to
+TF-to-gene edges. Default is `FALSE`.}
 }
 \value{
-A list containing the metric
+A list with a `metrics` data frame containing Accuracy.
 }
 \description{
-Calculates accuracy metric
-}
-\examples{
-data(example_matrix)
-data("example_ground_truth")
-network_table <- inferCSN(example_matrix)
-calculate_accuracy(
-  network_table,
-  example_ground_truth
-)
+Calculates overall classification accuracy for predicted edges
+  against a ground truth network after optimal thresholding.
 }

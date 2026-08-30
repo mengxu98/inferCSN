@@ -10,7 +10,8 @@ calculate_auc(
   return_plot = FALSE,
   line_color = "#1563cc",
   line_width = 1,
-  tag_levels = "A"
+  tag_levels = "A",
+  tf_edges = FALSE
 )
 }
 \arguments{
@@ -25,20 +26,13 @@ calculate_auc(
 \item{line_width}{Width for plot lines}
 
 \item{tag_levels}{Tag levels for plot annotations}
+
+\item{tf_edges}{Whether to restrict candidate edges to TF-to-gene.
+Default is `FALSE`.}
 }
 \value{
 A list containing metrics and optional plots
 }
 \description{
 Calculates AUROC and AUPRC metrics with optional visualization
-}
-\examples{
-data(example_matrix)
-data("example_ground_truth")
-network_table <- inferCSN(example_matrix)
-calculate_auc(
-  network_table,
-  example_ground_truth,
-  return_plot = TRUE
-)
 }

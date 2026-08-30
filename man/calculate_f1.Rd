@@ -4,25 +4,20 @@
 \alias{calculate_f1}
 \title{Calculate F1 Score}
 \usage{
-calculate_f1(network_table, ground_truth)
+calculate_f1(network_table, ground_truth, tf_edges = FALSE)
 }
 \arguments{
-\item{network_table}{A data frame of predicted network structure}
+\item{network_table}{A data frame of predicted network structure.}
 
-\item{ground_truth}{A data frame of ground truth network}
+\item{ground_truth}{A data frame of ground truth network.}
+
+\item{tf_edges}{Whether to restrict the candidate edge universe to
+TF-to-gene edges. Default is `FALSE`.}
 }
 \value{
-A list containing the metric
+A list with a `metrics` data frame containing F1.
 }
 \description{
-Calculates F1 score
-}
-\examples{
-data(example_matrix)
-data("example_ground_truth")
-network_table <- inferCSN(example_matrix)
-calculate_f1(
-  network_table,
-  example_ground_truth
-)
+Calculates the F1 score (harmonic mean of precision and recall)
+  for predicted edges against a ground truth network after optimal thresholding.
 }

@@ -2,71 +2,35 @@
 % Please edit documentation in R/network_evaluation.R
 \name{calculate_metrics}
 \alias{calculate_metrics}
-\title{Calculate Network Prediction Performance Metrics}
+\title{Calculate network metrics}
 \usage{
 calculate_metrics(
   network_table,
   ground_truth,
-  metric_type = c("all", "auc", "auroc", "auprc", "precision", "recall", "f1",
-    "accuracy", "si", "ji"),
+  metric_type = c("all", "all_no_epr", "auc", "auroc", "auprc", "epr", "precision",
+    "recall", "f1", "accuracy", "si", "ji"),
   return_plot = FALSE,
+  tf_edges = FALSE,
   line_color = "#1563cc",
   line_width = 1
 )
 }
 \arguments{
-\item{network_table}{A data frame.}
+\item{network_table}{Predicted edge table.}
 
-\item{ground_truth}{A data frame of ground truth network with the same format as network_table.}
+\item{ground_truth}{Ground-truth edge table.}
 
-\item{metric_type}{The type of metric to return.
-Default is \code{"all"}.
-This can take any of the following choices:
-\itemize{
-\item all Returns all available metrics with \emph{Performance Metrics} plot.
-\item auc Returns both AUROC and AUPRC with their plots.
-\item auroc Area Under ROC Curve with plot.
-\item auprc Area Under Precision-Recall Curve with plot.
-\item precision Proportion of correct predictions among positive predictions.
-\item recall Proportion of actual positives correctly identified.
-\item f1 Harmonic mean of precision and recall.
-\item accuracy Overall classification accuracy.
-\item si Set Intersection, counting correctly predicted edges.
-\item ji Jaccard Index, measuring overlap between predicted and true networks.
-}}
+\item{metric_type}{Metrics to compute.}
 
-\item{return_plot}{Whether to generate visualization plots.
-Default is \code{FALSE}.}
+\item{return_plot}{Whether to return a plot.}
 
-\item{line_color}{Color for plot lines.
-Default is \verb{#1563cc}.}
+\item{tf_edges}{Whether to restrict regulators to transcription factors.}
 
-\item{line_width}{Width for plot lines.
-Default is \code{1}.}
+\item{line_color, line_width}{Plot line style.}
 }
 \value{
-A list containing:
-\itemize{
-\item metrics A data frame with requested metrics.
-\item plot A plot object if return_plot = TRUE (optional).
-}
+A list with metrics and an optional plot.
 }
 \description{
-Calculates comprehensive performance metrics for evaluating predicted network structures,
-including classification performance, precision-recall metrics, and network topology metrics.
-}
-\examples{
-data(example_matrix)
-data("example_ground_truth")
-network_table <- inferCSN(example_matrix)
-calculate_metrics(
-  network_table,
-  example_ground_truth,
-  return_plot = TRUE
-)
-calculate_metrics(
-  network_table,
-  example_ground_truth,
-  metric_type = "auroc"
-)
+Calculate network metrics
 }

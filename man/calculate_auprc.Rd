@@ -9,7 +9,8 @@ calculate_auprc(
   ground_truth,
   return_plot = FALSE,
   line_color = "#1563cc",
-  line_width = 1
+  line_width = 1,
+  tf_edges = FALSE
 )
 }
 \arguments{
@@ -22,20 +23,13 @@ calculate_auprc(
 \item{line_color}{Color for plot lines}
 
 \item{line_width}{Width for plot lines}
+
+\item{tf_edges}{Whether to restrict candidate edges to TF-to-gene.
+Default is `FALSE`.}
 }
 \value{
 A list containing metric and optional plot
 }
 \description{
 Calculates AUPRC metric with optional visualization
-}
-\examples{
-data(example_matrix)
-data("example_ground_truth")
-network_table <- inferCSN(example_matrix)
-calculate_auprc(
-  network_table,
-  example_ground_truth,
-  return_plot = TRUE
-)
 }

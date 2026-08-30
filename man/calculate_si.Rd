@@ -4,25 +4,20 @@
 \alias{calculate_si}
 \title{Calculate Set Intersection}
 \usage{
-calculate_si(network_table, ground_truth)
+calculate_si(network_table, ground_truth, tf_edges = FALSE)
 }
 \arguments{
-\item{network_table}{A data frame of predicted network structure}
+\item{network_table}{A data frame of predicted network structure.}
 
-\item{ground_truth}{A data frame of ground truth network}
+\item{ground_truth}{A data frame of ground truth network.}
+
+\item{tf_edges}{Whether to restrict the candidate edge universe to
+TF-to-gene edges. Default is `FALSE`.}
 }
 \value{
-A list containing the metric
+A list with a `metrics` data frame containing SI.
 }
 \description{
-Calculates Set Intersection (SI) metric
-}
-\examples{
-data(example_matrix)
-data("example_ground_truth")
-network_table <- inferCSN(example_matrix)
-calculate_si(
-  network_table,
-  example_ground_truth
-)
+Calculates the Set Intersection (SI) — the number of predicted
+  edges that exactly match true edges in the ground truth network.
 }

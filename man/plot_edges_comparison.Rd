@@ -2,7 +2,7 @@
 % Please edit documentation in R/network_evaluation.R
 \name{plot_edges_comparison}
 \alias{plot_edges_comparison}
-\title{Network Edge Comparison Visualization}
+\title{Plot Edges Comparison}
 \usage{
 plot_edges_comparison(
   network_table,
@@ -12,24 +12,19 @@ plot_edges_comparison(
 )
 }
 \arguments{
-\item{network_table}{A data frame of predicted network structure.}
+\item{network_table}{A data frame of predicted network structure with
+`regulator` and `target` columns.}
 
-\item{ground_truth}{A data frame of ground truth network.}
+\item{ground_truth}{A data frame of ground truth network with `regulator`
+and `target` columns.}
 
-\item{color_pattern}{A list of colors for different categories.}
+\item{color_pattern}{A named list of colors for predicted, ground_truth,
+overlap, and total edges.}
 }
 \value{
-A patchwork plot object containing network edge comparison and distribution plots
+A ggplot object visualizing edge overlap between the two networks.
 }
 \description{
-Generates visualizations comparing edges of two networks.
-}
-\examples{
-data(example_matrix)
-data("example_ground_truth")
-network_table <- inferCSN(example_matrix)
-plot_edges_comparison(
-  network_table,
-  example_ground_truth
-)
+Creates a scatter plot comparing predicted, ground truth, and
+  overlapping edges between two gene regulatory networks.
 }
