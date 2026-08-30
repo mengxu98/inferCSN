@@ -1,0 +1,218 @@
+# Pre-submission checks that are intentionally kept separate from the regular
+# push/PR workflows. Public Win-Builder and macOS Builder submissions should
+# only be made for a real CRAN candidate, not for every commit.
+name: CRAN release checks
+
+on:
+  workflow_dispatch:
+    inputs:
+      reverse_dependencies:
+        description: Check reverse dependencies
+        required: true
+        type: boolean
+        default: true
+      remote_builders:
+        description: Submit to the public CRAN builders
+        required: true
+        type: choice
+        options:
+          - all
+          - windows
+          - macos
+          - none
+        default: all
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cran-release-checks-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  cran-check:
+    name: Local --as-cran check
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: release
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::devtools, any::rcmdcheck
+          needs: check
+
+      - name: Verify generated documentation is current
+        run: devtools::document()
+        shell: Rscript {0}
+
+      - name: Check for documentation changes
+        run: git diff --exit-code -- NAMESPACE man
+        shell: bash
+
+      - name: Run R CMD check --as-cran
+        run: |
+          rcmdcheck::rcmdcheck(
+            args = c("--no-manual", "--as-cran"),
+            error_on = "warning",
+            check_dir = "check"
+          )
+        shell: Rscript {0}
+
+      - name: Upload check results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cran-check-results
+          path: check
+
+  reverse-dependencies:
+    name: Reverse dependency check
+    if: inputs.reverse_dependencies
+    needs: cran-check
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: release
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: github::r-lib/revdepcheck
+
+      - name: Check reverse dependencies
+        run: |
+          revdepcheck::revdep_reset()
+          revdepcheck::revdep_check(
+            num_workers = 2,
+            timeout = as.difftime(60, units = "mins")
+          )
+
+          report <- readLines("revdep/cran.md", warn = FALSE)
+          cat(report, sep = "\n")
+
+          no_new_problems <- any(grepl(
+            "We saw 0 new problems",
+            report,
+            fixed = TRUE
+          ))
+          no_failed_checks <- any(grepl(
+            "We failed to check 0 packages",
+            report,
+            fixed = TRUE
+          ))
+          if (!no_new_problems || !no_failed_checks) {
+            stop("Reverse dependency checks need review; see the artifact.")
+          }
+        shell: Rscript {0}
+
+      - name: Upload reverse dependency results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reverse-dependency-results
+          path: |
+            revdep/*.md
+            revdep/checks
+          retention-days: 14
+
+  remote-builders:
+    name: Submit remote builder checks
+    if: >-
+      always() &&
+      inputs.remote_builders != 'none' &&
+      needs.cran-check.result == 'success' &&
+      (needs.reverse-dependencies.result == 'success' ||
+      needs.reverse-dependencies.result == 'skipped')
+    needs:
+      - cran-check
+      - reverse-dependencies
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: release
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-tinytex@v2
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::devtools
+          needs: check
+
+      # Win-Builder sends the final result to the Maintainer address in
+      # DESCRIPTION. webform = TRUE keeps the upload on HTTPS in CI.
+      - name: Submit Windows release check
+        if: inputs.remote_builders == 'all' || inputs.remote_builders == 'windows'
+        run: devtools::check_win_release(webform = TRUE)
+        shell: Rscript {0}
+
+      - name: Submit Windows devel check
+        if: inputs.remote_builders == 'all' || inputs.remote_builders == 'windows'
+        run: devtools::check_win_devel(webform = TRUE)
+        shell: Rscript {0}
+
+      - name: Submit Windows oldrelease check
+        if: inputs.remote_builders == 'all' || inputs.remote_builders == 'windows'
+        run: devtools::check_win_oldrelease(webform = TRUE)
+        shell: Rscript {0}
+
+      - name: Submit macOS release check
+        if: inputs.remote_builders == 'all' || inputs.remote_builders == 'macos'
+        run: |
+          url <- devtools::check_mac_release()
+          cat(
+            "## macOS Builder\n\n",
+            "- R-release: ", url, "\n",
+            file = Sys.getenv("GITHUB_STEP_SUMMARY"),
+            append = TRUE,
+            sep = ""
+          )
+        shell: Rscript {0}
+
+      - name: Submit macOS devel check
+        if: inputs.remote_builders == 'all' || inputs.remote_builders == 'macos'
+        run: |
+          url <- devtools::check_mac_devel()
+          cat(
+            "- R-devel: ", url, "\n",
+            file = Sys.getenv("GITHUB_STEP_SUMMARY"),
+            append = TRUE,
+            sep = ""
+          )
+        shell: Rscript {0}
+
+      - name: Record Win-Builder notification destination
+        if: inputs.remote_builders == 'all' || inputs.remote_builders == 'windows'
+        run: |
+          cat(
+            "## Win-Builder\n\n",
+            "Submissions were accepted. Final results are sent to the ",
+            "Maintainer email in `DESCRIPTION`.\n",
+            file = Sys.getenv("GITHUB_STEP_SUMMARY"),
+            append = TRUE,
+            sep = ""
+          )
+        shell: Rscript {0}
