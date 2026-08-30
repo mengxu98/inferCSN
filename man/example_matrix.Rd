@@ -5,5 +5,5 @@
 \alias{example_matrix}
 \title{Example matrix data}
 \description{
-The matrix used for reconstruct gene regulatory network.
+Expression matrix for the bundled synthetic example.
 }

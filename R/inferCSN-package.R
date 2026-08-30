@@ -29,6 +29,7 @@
 #' @references
 #' \url{https://github.com/tidyverse/tidyverse/blob/main/R/logo.R}
 #'
+#' @return A character vector.
 #' @export
 #' @examples
 #' infercsn_logo()
@@ -92,7 +93,8 @@ print.infercsn_logo <- function(x, ...) {
     version <- utils::packageVersion(pkgname)
     date <- utils::packageDate(pkgname)
     url <- utils::packageDescription(
-      pkgname, fields = "URL"
+      pkgname,
+      fields = "URL"
     )
 
     msg <- paste0(

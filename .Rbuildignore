@@ -14,7 +14,7 @@
 ^renv$
 ^renv\.lock$
 ^scripts$
-^test$
+^test($|/)
 
 # Documentation
 ^_pkgdown\.yml$

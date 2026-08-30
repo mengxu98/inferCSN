@@ -1,80 +1,46 @@
-#' @title Detection of metacells from single-cell gene expression matrix
+#' @title Build metacells
 #'
-#' @description This function detects metacells from a single-cell gene expression matrix
-#' using dimensionality reduction and clustering techniques.
-#'
-#' @param matrix A gene expression matrix where rows represent genes and columns represent cells.
-#' @param genes_use A character vector specifying genes to be used for PCA dimensionality reduction.
-#' Default is `NULL`.
-#' @param genes_exclude A character vector specifying genes to be excluded from PCA computation.
-#' Default is `NULL`.
-#' @param var_genes_num Number of most variable genes to select when `genes_use` is not provided.
-#' Default is `min(1000, nrow(matrix))`.
-#' @param gamma Default is `10`. Coarse-graining parameter defining the target ratio of input
-#'  cells to output metacells (e.g., gamma=10 yields approximately n/10 metacells for n input cells).
-#' @param knn_k Default is `5`. Number of nearest neighbors for constructing the cell-cell
-#'  similarity network.
-#' @param do_scale Whether to standardize (center and scale) gene expression values before PCA.
-#' Default is `TRUE`.
-#' @param pc_num Default is `25`. Number of principal components to retain for downstream analysis.
-#' @param fast_pca Default is `TRUE`. Whether to use the faster \link[irlba]{irlba} algorithm
-#'  instead of standard PCA. Recommended for large datasets.
-#' @param do_approx Default is `FALSE`. Whether to use approximate nearest neighbor search for
-#'  datasets with >50000 cells to improve computational efficiency.
-#' @param approx_num Default is `20000`. Number of cells to randomly sample for approximate
-#'  nearest neighbor computation when `do_approx = TRUE`.
-#' @param directed Default is `FALSE`. Whether to construct a directed or undirected nearest
-#'  neighbor graph.
-#' @param use_nn2 Default is `TRUE`. Whether to use the faster RANN::nn2 algorithm for nearest
-#'  neighbor search (only applicable with Euclidean distance).
-#' @param seed Default is `1`. Random seed for reproducibility when subsampling cells in
-#'  approximate mode.
-#' @param cluster_method Default is `walktrap`. Algorithm for community detection in the cell
-#'  similarity network. Options: `walktrap` (recommended) or `louvain` (gamma parameter ignored).
-#' @param block_size Default is `10000`. Number of cells to process in each batch when mapping
-#'  cells to metacells in approximate mode. Adjust based on available memory.
-#' @param weights Default is `NULL`. Numeric vector of cell-specific weights for weighted
-#'  averaging when computing metacell expression profiles. Length must match number of cells.
-#' @param do_median_norm Default is `FALSE`. Whether to perform median-based normalization of
-#'  the final metacell expression matrix.
-#' @param ... Additional arguments passed to internal functions.
-#'
-#' @return A matrix where rows represent metacells and columns represent genes.
+#' @param matrix Cell-by-gene expression matrix.
+#' @param genes_use,genes_exclude Genes to include or exclude from PCA.
+#' @param var_genes_num Number of variable genes.
+#' @param gamma Target cells-per-metacell ratio.
+#' @param knn_k Number of nearest neighbors.
+#' @param do_scale Whether to scale expression values.
+#' @param pc_num Number of principal components.
+#' @param fast_pca Whether to use truncated PCA.
+#' @param do_approx Whether to use approximate neighbor search.
+#' @param approx_num Number of cells used in approximate mode.
+#' @param directed Whether to build a directed graph.
+#' @param use_nn2 Whether to use nearest-neighbor search.
+#' @param seed Random seed.
+#' @param cluster_method Community-detection method.
+#' @param block_size Mapping batch size.
+#' @param weights Optional cell weights.
+#' @param do_median_norm Whether to median-normalize the result.
+#' @param ... Additional arguments.
+#' @return A metacell-by-gene matrix.
 #' @export
-#'
-#' @md
-#'
-#' @references
-#' \href{https://github.com/GfellerLab/SuperCell}{SuperCell},
-#' \href{https://github.com/kuijjerlab/SCORPION}{SCORPION}
-#'
-#' @examples
-#' data(example_matrix)
-#' meta_cells_matrix <- meta_cells(
-#'   example_matrix
-#' )
-#' dim(meta_cells_matrix)
-#' meta_cells_matrix[1:6, 1:6]
 meta_cells <- function(
-    matrix,
-    genes_use = NULL,
-    genes_exclude = NULL,
-    var_genes_num = min(1000, nrow(matrix)),
-    gamma = 10,
-    knn_k = 5,
-    do_scale = TRUE,
-    pc_num = 25,
-    fast_pca = FALSE,
-    do_approx = FALSE,
-    approx_num = 20000,
-    directed = FALSE,
-    use_nn2 = TRUE,
-    seed = 1,
-    cluster_method = "walktrap",
-    block_size = 10000,
-    weights = NULL,
-    do_median_norm = FALSE,
-    ...) {
+  matrix,
+  genes_use = NULL,
+  genes_exclude = NULL,
+  var_genes_num = min(1000, nrow(matrix)),
+  gamma = 10,
+  knn_k = 5,
+  do_scale = TRUE,
+  pc_num = 25,
+  fast_pca = FALSE,
+  do_approx = FALSE,
+  approx_num = 20000,
+  directed = FALSE,
+  use_nn2 = TRUE,
+  seed = 1,
+  cluster_method = "walktrap",
+  block_size = 10000,
+  weights = NULL,
+  do_median_norm = FALSE,
+  ...
+) {
   matrix <- Matrix::t(matrix)
   cells_num <- ncol(matrix)
   matrix_raw <- matrix
@@ -174,7 +140,7 @@ meta_cells <- function(
     )
     pc_num <- 1:ncol(pca_results$x)
   }
-  sc_nw <- .build_knn(
+  sc_nw <- build_knn(
     matrix = pca_results$x[, pc_num],
     k = knn_k,
     from = "coordinates",
@@ -206,7 +172,7 @@ meta_cells <- function(
   if (do_approx) {
     pca_averaged_sc <- as.matrix(
       Matrix::t(
-        .meta_cell_ge(
+        meta_cell_ge(
           Matrix::t(
             pca_results$x[, pc_num]
           ),
@@ -233,7 +199,6 @@ meta_cells <- function(
 
     if (blocks_num > 0) {
       for (i in 1:blocks_num) {
-        # compute knn by blocks
         idx_begin <- (i - 1) * block_size + 1
         idx_end <- min(i * block_size, length(rest_cells))
 
@@ -309,13 +274,14 @@ meta_cells <- function(
   )
 }
 
-.meta_cell_ge <- function(
-    ge,
-    groups,
-    mode = c("average", "sum"),
-    weights = NULL,
-    do_median_norm = FALSE,
-    ...) {
+meta_cell_ge <- function(
+  ge,
+  groups,
+  mode = c("average", "sum"),
+  weights = NULL,
+  do_median_norm = FALSE,
+  ...
+) {
   if (ncol(ge) != length(groups)) {
     stop(
       "Length of the vector groups has to be equal to the number of cols in matrix ge."
@@ -374,17 +340,18 @@ meta_cells <- function(
   return(ge_sc)
 }
 
-.build_knn <- function(
-    matrix,
-    k = 5,
-    from = c("dist", "coordinates"),
-    use_nn2 = TRUE,
-    return_neighbors_order = FALSE,
-    dist_method = "euclidean",
-    cor_method = "pearson",
-    p = 2,
-    directed = FALSE,
-    ...) {
+build_knn <- function(
+  matrix,
+  k = 5,
+  from = c("dist", "coordinates"),
+  use_nn2 = TRUE,
+  return_neighbors_order = FALSE,
+  dist_method = "euclidean",
+  cor_method = "pearson",
+  p = 2,
+  directed = FALSE,
+  ...
+) {
   method <- match.arg(from, c("dist", "coordinates"))
 
   if (method == "coordinates") {
@@ -402,7 +369,7 @@ meta_cells <- function(
       }
       mode <- ifelse(directed, "out", "all")
       return(
-        .build_nn2(matrix = matrix, k = k, mode = mode)
+        build_nn2(matrix = matrix, k = k, mode = mode)
       )
     } else {
       dist_method_ <- match.arg(
@@ -441,7 +408,7 @@ meta_cells <- function(
       )
     }
     return(
-      .build_knnd(
+      build_knnd(
         D = matrix,
         k = k,
         return_neighbors_order = return_neighbors_order
@@ -450,7 +417,7 @@ meta_cells <- function(
   }
 
   return(
-    .build_knnd(
+    build_knnd(
       D = matrix,
       k = k,
       return_neighbors_order = return_neighbors_order
@@ -458,11 +425,12 @@ meta_cells <- function(
   )
 }
 
-.build_knnd <- function(
-    D,
-    k = 5,
-    return_neighbors_order = TRUE,
-    mode = "all") {
+build_knnd <- function(
+  D,
+  k = 5,
+  return_neighbors_order = TRUE,
+  mode = "all"
+) {
   if (!methods::is(D, "matrix") || !methods::is(D, "dist")) {
     stop("D (matrix) must be a matrix or dist!")
   }
@@ -531,11 +499,12 @@ meta_cells <- function(
   return(res)
 }
 
-.build_nn2 <- function(
-    matrix,
-    k = min(5, ncol(matrix)),
-    mode = "all",
-    ...) {
+build_nn2 <- function(
+  matrix,
+  k = min(5, ncol(matrix)),
+  mode = "all",
+  ...
+) {
   nn2_res <- RANN::nn2(data = matrix, k = k, ...)
   nn2_res <- nn2_res$nn.idx
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotting_functions.R
 \name{plot_embedding}
 \alias{plot_embedding}
-\title{Plot embedding}
+\title{Plot an embedding}
 \usage{
 plot_embedding(
   matrix,
@@ -17,45 +17,21 @@ plot_embedding(
 \arguments{
 \item{matrix}{Input matrix.}
 
-\item{labels}{Input labels.}
+\item{labels}{Point labels.}
 
-\item{method}{Method to use for dimensionality reduction.}
+\item{method}{Embedding method.}
 
-\item{colors}{Colors to use for the plot.}
+\item{colors}{Point colors.}
 
-\item{seed}{Seed for the random number generator.}
+\item{seed}{Random seed.}
 
-\item{point_size}{Size of the points.}
+\item{point_size}{Point size.}
 
-\item{cores}{Set the number of threads when setting for \link[uwot:umap]{uwot::umap} and \link[Rtsne:Rtsne]{Rtsne::Rtsne}.}
+\item{cores}{Number of threads.}
 }
 \value{
-An embedding plot
+An embedding plot.
 }
 \description{
-Plot embedding
-}
-\examples{
-data(example_matrix)
-samples_use <- 1:200
-plot_data <- example_matrix[samples_use, ]
-labels <- sample(
-  c("A", "B", "C", "D", "E"),
-  nrow(plot_data),
-  replace = TRUE
-)
-
-plot_embedding(
-  plot_data,
-  labels,
-  method = "pca",
-  point_size = 2
-)
-
-plot_embedding(
-  plot_data,
-  labels,
-  method = "tsne",
-  point_size = 2
-)
+Plot an embedding
 }

@@ -10,6 +10,9 @@ infercsn_logo(unicode = cli::is_utf8_output())
 \item{unicode}{Unicode symbols on UTF-8 platforms.
 Default is \link[cli:is_utf8_output]{cli::is_utf8_output}.}
 }
+\value{
+A character vector.
+}
 \description{
 The inferCSN logo, using ASCII or Unicode characters
 Use \link[cli:ansi_strip]{cli::ansi_strip} to get rid of the colors.

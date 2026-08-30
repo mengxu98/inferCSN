@@ -2,7 +2,7 @@
 % Please edit documentation in R/subsampling.R
 \name{subsampling}
 \alias{subsampling}
-\title{Subsampling function}
+\title{Subsample an expression matrix}
 \usage{
 subsampling(
   matrix,
@@ -14,65 +14,21 @@ subsampling(
 )
 }
 \arguments{
-\item{matrix}{The input matrix to be subsampled.}
+\item{matrix}{Input matrix.}
 
-\item{subsampling_method}{The method to use for subsampling.
-Options are \code{"sample"}, \code{"pseudobulk"} or \code{"meta_cells"}.}
+\item{subsampling_method}{Subsampling strategy.}
 
-\item{subsampling_ratio}{The percent of all samples used for \link{fit_srm}.
-Default is \code{1}.}
+\item{subsampling_ratio}{Fraction retained or aggregated.}
 
-\item{seed}{The random seed for cross-validation.
-Default is \code{1}.}
+\item{seed}{Random seed.}
 
-\item{verbose}{Whether to print progress messages.
-Default is \code{TRUE}.}
+\item{verbose}{Whether to report progress.}
 
-\item{...}{Parameters for other methods.}
+\item{...}{Additional arguments.}
 }
 \value{
 The subsampled matrix.
 }
 \description{
-This function subsamples a matrix using either random sampling or meta cells method.
-}
-\examples{
-data(example_matrix)
-data("example_ground_truth")
-subsample_matrix <- subsampling(
-  example_matrix,
-  subsampling_ratio = 0.5
-)
-subsample_matrix_2 <- subsampling(
-  example_matrix,
-  subsampling_method = "meta_cells",
-  subsampling_ratio = 0.5,
-  fast_pca = FALSE
-)
-subsample_matrix_3 <- subsampling(
-  example_matrix,
-  subsampling_method = "pseudobulk",
-  subsampling_ratio = 0.5
-)
-
-calculate_metrics(
-  inferCSN(example_matrix),
-  example_ground_truth,
-  return_plot = TRUE
-)
-calculate_metrics(
-  inferCSN(subsample_matrix),
-  example_ground_truth,
-  return_plot = TRUE
-)
-calculate_metrics(
-  inferCSN(subsample_matrix_2),
-  example_ground_truth,
-  return_plot = TRUE
-)
-calculate_metrics(
-  inferCSN(subsample_matrix_3),
-  example_ground_truth,
-  return_plot = TRUE
-)
+Subsample an expression matrix
 }

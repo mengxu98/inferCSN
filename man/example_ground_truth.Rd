@@ -5,5 +5,5 @@
 \alias{example_ground_truth}
 \title{Example ground truth data}
 \description{
-The data used for calculate the evaluating indicator.
+Ground-truth edges for the bundled synthetic example.
 }

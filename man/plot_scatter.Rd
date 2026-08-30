@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotting_functions.R
 \name{plot_scatter}
 \alias{plot_scatter}
-\title{Plot expression data in a scatter plot}
+\title{Plot expression data}
 \usage{
 plot_scatter(
   data,
@@ -28,77 +28,29 @@ plot_scatter(
 \arguments{
 \item{data}{Input data.}
 
-\item{smoothing_method}{Method for smoothing curve, \code{lm} or \code{loess}.}
+\item{smoothing_method}{Method for smoothing curve, `lm` or `loess`.}
 
-\item{group_colors}{Colors for different groups.}
+\item{group_colors, title_color}{Group and title colors.}
 
-\item{title_color}{Color for the title.}
-
-\item{title}{Main title for the plot.}
-
-\item{col_title}{Title for the x-axis.}
-
-\item{row_title}{Title for the y-axis.}
-
-\item{legend_title}{Title for the legend.}
+\item{title, col_title, row_title, legend_title}{Plot titles.}
 
 \item{legend_position}{The position of legend.}
 
-\item{margins}{The position of marginal figure ("both", "x", "y").}
+\item{margins, marginal_type, margins_size}{Marginal plot controls.}
 
-\item{marginal_type}{The type of marginal figure (\code{density}, \code{histogram}, \code{boxplot}, \code{violin}, \code{densigram}).}
+\item{compute_correlation, compute_correlation_method}{Correlation controls.}
 
-\item{margins_size}{The size of marginal figure, note the bigger size the smaller figure.}
+\item{keep_aspect_ratio}{Whether to use a 1:1 aspect ratio.}
 
-\item{compute_correlation}{Whether to compute and print correlation on the figure.}
+\item{facet}{Whether to facet by group.}
 
-\item{compute_correlation_method}{Method to compute correlation (\code{pearson} or \code{spearman}).}
+\item{se}{Whether to show smoothing uncertainty.}
 
-\item{keep_aspect_ratio}{Logical value, whether to set aspect ratio to 1:1.}
-
-\item{facet}{Faceting variable. If setting TRUE, all settings about margins will be inalidation.}
-
-\item{se}{Display confidence interval around smooth.}
-
-\item{pointdensity}{Plot point density when only provide 1 cluster.}
+\item{pointdensity}{Whether to show point density.}
 }
 \value{
-ggplot object
+A ggplot object.
 }
 \description{
-Plot expression data in a scatter plot
-}
-\examples{
-data(example_matrix)
-test_data <- data.frame(
-  example_matrix[1:200, c(1, 7)],
-  c = c(
-    rep("c1", 40),
-    rep("c2", 40),
-    rep("c3", 40),
-    rep("c4", 40),
-    rep("c5", 40)
-  )
-)
-
-p1 <- plot_scatter(
-  test_data
-)
-p2 <- plot_scatter(
-  test_data,
-  marginal_type = "boxplot"
-)
-p1 + p2
-
-p3 <- plot_scatter(
-  test_data,
-  facet = TRUE
-)
-p3
-
-p4 <- plot_scatter(
-  test_data[, 1:2],
-  marginal_type = "histogram"
-)
-p4
+Plot expression data
 }

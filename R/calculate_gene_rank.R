@@ -13,10 +13,11 @@
 #' head(calculate_gene_rank(network_table, regulators = "g1"))
 #' head(calculate_gene_rank(network_table, targets = "g1"))
 calculate_gene_rank <- function(
-    network_table,
-    regulators = NULL,
-    targets = NULL,
-    directed = FALSE) {
+  network_table,
+  regulators = NULL,
+  targets = NULL,
+  directed = FALSE
+) {
   network_table <- network_format(
     network_table,
     regulators = regulators,

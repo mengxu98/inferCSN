@@ -12,11 +12,9 @@ calculate_gene_rank(
 )
 }
 \arguments{
-\item{network_table}{The weight data table of network.}
+\item{network_table}{Network edge table.}
 
-\item{regulators}{Regulators list.}
-
-\item{targets}{Targets list.}
+\item{regulators, targets}{Nodes to include.}
 
 \item{directed}{Whether the network is directed.}
 }

@@ -5,5 +5,5 @@
 \alias{example_meta_data}
 \title{Example meta data}
 \description{
-The data contains cells and pseudotime information.
+Cell metadata for the bundled synthetic example.
 }

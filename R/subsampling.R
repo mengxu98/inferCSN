@@ -1,61 +1,21 @@
-#' @title Subsampling function
+#' @title Subsample an expression matrix
 #'
-#' @description
-#' This function subsamples a matrix using either random sampling or meta cells method.
-#'
-#' @inheritParams inferCSN
-#' @param matrix The input matrix to be subsampled.
-#'
+#' @param matrix Input matrix.
+#' @param subsampling_method Subsampling strategy.
+#' @param subsampling_ratio Fraction retained or aggregated.
+#' @param seed Random seed.
+#' @param verbose Whether to report progress.
+#' @param ... Additional arguments.
 #' @return The subsampled matrix.
-#'
 #' @export
-#'
-#' @examples
-#' data(example_matrix)
-#' data("example_ground_truth")
-#' subsample_matrix <- subsampling(
-#'   example_matrix,
-#'   subsampling_ratio = 0.5
-#' )
-#' subsample_matrix_2 <- subsampling(
-#'   example_matrix,
-#'   subsampling_method = "meta_cells",
-#'   subsampling_ratio = 0.5,
-#'   fast_pca = FALSE
-#' )
-#' subsample_matrix_3 <- subsampling(
-#'   example_matrix,
-#'   subsampling_method = "pseudobulk",
-#'   subsampling_ratio = 0.5
-#' )
-#'
-#' calculate_metrics(
-#'   inferCSN(example_matrix),
-#'   example_ground_truth,
-#'   return_plot = TRUE
-#' )
-#' calculate_metrics(
-#'   inferCSN(subsample_matrix),
-#'   example_ground_truth,
-#'   return_plot = TRUE
-#' )
-#' calculate_metrics(
-#'   inferCSN(subsample_matrix_2),
-#'   example_ground_truth,
-#'   return_plot = TRUE
-#' )
-#' calculate_metrics(
-#'   inferCSN(subsample_matrix_3),
-#'   example_ground_truth,
-#'   return_plot = TRUE
-#' )
 subsampling <- function(
-    matrix,
-    subsampling_method = c("sample", "meta_cells", "pseudobulk"),
-    subsampling_ratio = 1,
-    seed = 1,
-    verbose = TRUE,
-    ...) {
+  matrix,
+  subsampling_method = c("sample", "meta_cells", "pseudobulk"),
+  subsampling_ratio = 1,
+  seed = 1,
+  verbose = TRUE,
+  ...
+) {
   subsampling_method <- match.arg(
     subsampling_method
   )
@@ -91,7 +51,7 @@ subsampling <- function(
       )
     },
     "pseudobulk" = {
-      .pseudobulk(
+      pseudobulk(
         matrix = matrix,
         ratio = subsampling_ratio,
         ...
@@ -113,16 +73,17 @@ subsampling <- function(
   return(matrix)
 }
 
-.pseudobulk <- function(
-    matrix,
-    ratio = 0.5,
-    k = 50,
-    seed = 1,
-    prefix = "pseudobulk_",
-    ...) {
+pseudobulk <- function(
+  matrix,
+  ratio = 0.5,
+  k = 50,
+  seed = 1,
+  prefix = "pseudobulk_",
+  ...
+) {
   n_samples <- round(nrow(matrix) * ratio)
 
-  knn_res <- .build_knn(
+  knn_res <- build_knn(
     matrix = matrix,
     k = k,
     from = "coordinates",

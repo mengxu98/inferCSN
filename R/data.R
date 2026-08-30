@@ -1,23 +1,23 @@
+#' @title Example matrix data
 #' @docType data
 #' @name example_matrix
 #'
-#' @title Example matrix data
-#' @description The matrix used for reconstruct gene regulatory network.
+#' @description Expression matrix for the bundled synthetic example.
 #'
 NULL
 
+#' @title Example ground truth data
 #' @docType data
 #' @name example_ground_truth
 #'
-#' @title Example ground truth data
-#' @description The data used for calculate the evaluating indicator.
+#' @description Ground-truth edges for the bundled synthetic example.
 #'
 NULL
 
+#' @title Example meta data
 #' @docType data
 #' @name example_meta_data
 #'
-#' @title Example meta data
-#' @description The data contains cells and pseudotime information.
+#' @description Cell metadata for the bundled synthetic example.
 #'
 NULL

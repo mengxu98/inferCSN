@@ -2,7 +2,7 @@
 % Please edit documentation in R/meta_cells.R
 \name{meta_cells}
 \alias{meta_cells}
-\title{Detection of metacells from single-cell gene expression matrix}
+\title{Build metacells}
 \usage{
 meta_cells(
   matrix,
@@ -27,76 +27,45 @@ meta_cells(
 )
 }
 \arguments{
-\item{matrix}{A gene expression matrix where rows represent genes and columns represent cells.}
+\item{matrix}{Cell-by-gene expression matrix.}
 
-\item{genes_use}{A character vector specifying genes to be used for PCA dimensionality reduction.
-Default is \code{NULL}.}
+\item{genes_use, genes_exclude}{Genes to include or exclude from PCA.}
 
-\item{genes_exclude}{A character vector specifying genes to be excluded from PCA computation.
-Default is \code{NULL}.}
+\item{var_genes_num}{Number of variable genes.}
 
-\item{var_genes_num}{Number of most variable genes to select when \code{genes_use} is not provided.
-Default is \code{min(1000, nrow(matrix))}.}
+\item{gamma}{Target cells-per-metacell ratio.}
 
-\item{gamma}{Default is \code{10}. Coarse-graining parameter defining the target ratio of input
-cells to output metacells (e.g., gamma=10 yields approximately n/10 metacells for n input cells).}
+\item{knn_k}{Number of nearest neighbors.}
 
-\item{knn_k}{Default is \code{5}. Number of nearest neighbors for constructing the cell-cell
-similarity network.}
+\item{do_scale}{Whether to scale expression values.}
 
-\item{do_scale}{Whether to standardize (center and scale) gene expression values before PCA.
-Default is \code{TRUE}.}
+\item{pc_num}{Number of principal components.}
 
-\item{pc_num}{Default is \code{25}. Number of principal components to retain for downstream analysis.}
+\item{fast_pca}{Whether to use truncated PCA.}
 
-\item{fast_pca}{Default is \code{TRUE}. Whether to use the faster \link[irlba]{irlba} algorithm
-instead of standard PCA. Recommended for large datasets.}
+\item{do_approx}{Whether to use approximate neighbor search.}
 
-\item{do_approx}{Default is \code{FALSE}. Whether to use approximate nearest neighbor search for
-datasets with >50000 cells to improve computational efficiency.}
+\item{approx_num}{Number of cells used in approximate mode.}
 
-\item{approx_num}{Default is \code{20000}. Number of cells to randomly sample for approximate
-nearest neighbor computation when \code{do_approx = TRUE}.}
+\item{directed}{Whether to build a directed graph.}
 
-\item{directed}{Default is \code{FALSE}. Whether to construct a directed or undirected nearest
-neighbor graph.}
+\item{use_nn2}{Whether to use nearest-neighbor search.}
 
-\item{use_nn2}{Default is \code{TRUE}. Whether to use the faster RANN::nn2 algorithm for nearest
-neighbor search (only applicable with Euclidean distance).}
+\item{seed}{Random seed.}
 
-\item{seed}{Default is \code{1}. Random seed for reproducibility when subsampling cells in
-approximate mode.}
+\item{cluster_method}{Community-detection method.}
 
-\item{cluster_method}{Default is \code{walktrap}. Algorithm for community detection in the cell
-similarity network. Options: \code{walktrap} (recommended) or \code{louvain} (gamma parameter ignored).}
+\item{block_size}{Mapping batch size.}
 
-\item{block_size}{Default is \code{10000}. Number of cells to process in each batch when mapping
-cells to metacells in approximate mode. Adjust based on available memory.}
+\item{weights}{Optional cell weights.}
 
-\item{weights}{Default is \code{NULL}. Numeric vector of cell-specific weights for weighted
-averaging when computing metacell expression profiles. Length must match number of cells.}
+\item{do_median_norm}{Whether to median-normalize the result.}
 
-\item{do_median_norm}{Default is \code{FALSE}. Whether to perform median-based normalization of
-the final metacell expression matrix.}
-
-\item{...}{Additional arguments passed to internal functions.}
+\item{...}{Additional arguments.}
 }
 \value{
-A matrix where rows represent metacells and columns represent genes.
+A metacell-by-gene matrix.
 }
 \description{
-This function detects metacells from a single-cell gene expression matrix
-using dimensionality reduction and clustering techniques.
-}
-\examples{
-data(example_matrix)
-meta_cells_matrix <- meta_cells(
-  example_matrix
-)
-dim(meta_cells_matrix)
-meta_cells_matrix[1:6, 1:6]
-}
-\references{
-\href{https://github.com/GfellerLab/SuperCell}{SuperCell},
-\href{https://github.com/kuijjerlab/SCORPION}{SCORPION}
+Build metacells
 }

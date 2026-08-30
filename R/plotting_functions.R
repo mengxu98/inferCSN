@@ -1,79 +1,38 @@
-#' @title Plot expression data in a scatter plot
+#' @title Plot expression data
 #'
 #' @param data Input data.
 #' @param smoothing_method Method for smoothing curve, `lm` or `loess`.
-#' @param group_colors Colors for different groups.
-#' @param title_color Color for the title.
-#' @param title Main title for the plot.
-#' @param col_title Title for the x-axis.
-#' @param row_title Title for the y-axis.
-#' @param legend_title Title for the legend.
+#' @param group_colors,title_color Group and title colors.
+#' @param title,col_title,row_title,legend_title Plot titles.
 #' @param legend_position The position of legend.
-#' @param margins The position of marginal figure ("both", "x", "y").
-#' @param marginal_type The type of marginal figure (`density`, `histogram`, `boxplot`, `violin`, `densigram`).
-#' @param margins_size The size of marginal figure, note the bigger size the smaller figure.
-#' @param compute_correlation Whether to compute and print correlation on the figure.
-#' @param compute_correlation_method Method to compute correlation (`pearson` or `spearman`).
-#' @param keep_aspect_ratio Logical value, whether to set aspect ratio to 1:1.
-#' @param facet Faceting variable. If setting TRUE, all settings about margins will be inalidation.
-#' @param se Display confidence interval around smooth.
-#' @param pointdensity Plot point density when only provide 1 cluster.
-#'
-#' @md
-#' @return ggplot object
+#' @param margins,marginal_type,margins_size Marginal plot controls.
+#' @param compute_correlation,compute_correlation_method Correlation controls.
+#' @param keep_aspect_ratio Whether to use a 1:1 aspect ratio.
+#' @param facet Whether to facet by group.
+#' @param se Whether to show smoothing uncertainty.
+#' @param pointdensity Whether to show point density.
+#' @return A ggplot object.
 #' @export
-#' @examples
-#' data(example_matrix)
-#' test_data <- data.frame(
-#'   example_matrix[1:200, c(1, 7)],
-#'   c = c(
-#'     rep("c1", 40),
-#'     rep("c2", 40),
-#'     rep("c3", 40),
-#'     rep("c4", 40),
-#'     rep("c5", 40)
-#'   )
-#' )
-#'
-#' p1 <- plot_scatter(
-#'   test_data
-#' )
-#' p2 <- plot_scatter(
-#'   test_data,
-#'   marginal_type = "boxplot"
-#' )
-#' p1 + p2
-#'
-#' p3 <- plot_scatter(
-#'   test_data,
-#'   facet = TRUE
-#' )
-#' p3
-#'
-#' p4 <- plot_scatter(
-#'   test_data[, 1:2],
-#'   marginal_type = "histogram"
-#' )
-#' p4
 plot_scatter <- function(
-    data,
-    smoothing_method = "lm",
-    group_colors = RColorBrewer::brewer.pal(9, "Set1"),
-    title_color = "black",
-    title = NULL,
-    col_title = NULL,
-    row_title = NULL,
-    legend_title = NULL,
-    legend_position = "bottom",
-    margins = "both",
-    marginal_type = NULL,
-    margins_size = 10,
-    compute_correlation = TRUE,
-    compute_correlation_method = "pearson",
-    keep_aspect_ratio = TRUE,
-    facet = FALSE,
-    se = FALSE,
-    pointdensity = TRUE) {
+  data,
+  smoothing_method = "lm",
+  group_colors = RColorBrewer::brewer.pal(9, "Set1"),
+  title_color = "black",
+  title = NULL,
+  col_title = NULL,
+  row_title = NULL,
+  legend_title = NULL,
+  legend_position = "bottom",
+  margins = "both",
+  marginal_type = NULL,
+  margins_size = 10,
+  compute_correlation = TRUE,
+  compute_correlation_method = "pearson",
+  keep_aspect_ratio = TRUE,
+  facet = FALSE,
+  se = FALSE,
+  pointdensity = TRUE
+) {
   smoothing_method <- match.arg(
     smoothing_method,
     c("lm", "loess")
@@ -193,16 +152,17 @@ plot_scatter <- function(
 #' network_table <- inferCSN(example_matrix)
 #' plot_histogram(network_table[, 3])
 plot_histogram <- function(
-    data,
-    binwidth = 0.01,
-    show_border = FALSE,
-    border_color = "black",
-    alpha = 1,
-    theme = "viridis",
-    theme_begin = 0,
-    theme_end = 0.5,
-    theme_direction = -1,
-    legend_position = "right") {
+  data,
+  binwidth = 0.01,
+  show_border = FALSE,
+  border_color = "black",
+  alpha = 1,
+  theme = "viridis",
+  theme_begin = 0,
+  theme_end = 0.5,
+  theme_direction = -1,
+  legend_position = "right"
+) {
   data <- data.frame(weight = data)
   ggplot(data, aes(x = weight)) +
     geom_histogram(
@@ -222,7 +182,8 @@ plot_histogram <- function(
     theme(
       panel.grid.minor = element_blank(),
       panel.grid.major.x = element_line(
-        color = "grey", size = 0.5
+        color = "grey",
+        size = 0.5
       ),
       axis.text = element_text(size = 12),
       axis.title = element_text(size = 14, face = "bold"),
@@ -231,51 +192,26 @@ plot_histogram <- function(
     theme_bw()
 }
 
-#' @title Plot embedding
+#' @title Plot an embedding
 #'
-#' @md
 #' @param matrix Input matrix.
-#' @param labels Input labels.
-#' @param method Method to use for dimensionality reduction.
-#' @param colors Colors to use for the plot.
-#' @param point_size Size of the points.
-#' @param seed Seed for the random number generator.
-#' @param cores Set the number of threads when setting for [uwot::umap] and [Rtsne::Rtsne].
-#'
-#' @return An embedding plot
+#' @param labels Point labels.
+#' @param method Embedding method.
+#' @param colors Point colors.
+#' @param point_size Point size.
+#' @param seed Random seed.
+#' @param cores Number of threads.
+#' @return An embedding plot.
 #' @export
-#'
-#' @examples
-#' data(example_matrix)
-#' samples_use <- 1:200
-#' plot_data <- example_matrix[samples_use, ]
-#' labels <- sample(
-#'   c("A", "B", "C", "D", "E"),
-#'   nrow(plot_data),
-#'   replace = TRUE
-#' )
-#'
-#' plot_embedding(
-#'   plot_data,
-#'   labels,
-#'   method = "pca",
-#'   point_size = 2
-#' )
-#'
-#' plot_embedding(
-#'   plot_data,
-#'   labels,
-#'   method = "tsne",
-#'   point_size = 2
-#' )
 plot_embedding <- function(
-    matrix,
-    labels = NULL,
-    method = "pca",
-    colors = RColorBrewer::brewer.pal(length(unique(labels)), "Set1"),
-    seed = 1,
-    point_size = 1,
-    cores = 1) {
+  matrix,
+  labels = NULL,
+  method = "pca",
+  colors = RColorBrewer::brewer.pal(length(unique(labels)), "Set1"),
+  seed = 1,
+  point_size = 1,
+  cores = 1
+) {
   method <- match.arg(method, c("umap", "tsne", "pca"))
 
   set.seed(seed)
@@ -370,14 +306,15 @@ plot_embedding <- function(
 #' plot_coefficient(network_table)
 #' plot_coefficient(network_table, style = "binary")
 plot_coefficient <- function(
-    data,
-    style = "continuous",
-    positive_color = "#3d67a2",
-    negative_color = "#c82926",
-    neutral_color = "#cccccc",
-    bar_width = 0.7,
-    text_size = 3,
-    show_values = TRUE) {
+  data,
+  style = "continuous",
+  positive_color = "#3d67a2",
+  negative_color = "#c82926",
+  neutral_color = "#cccccc",
+  bar_width = 0.7,
+  text_size = 3,
+  show_values = TRUE
+) {
   p <- ggplot(
     data,
     aes(
@@ -418,14 +355,15 @@ plot_coefficient <- function(
     )
 
   if (show_values) {
-    p <- p + geom_text(
-      aes(
-        label = sprintf("%.2f", weight),
-        hjust = ifelse(weight > 0, -0.1, 1.1)
-      ),
-      size = text_size,
-      color = "black"
-    )
+    p <- p +
+      geom_text(
+        aes(
+          label = sprintf("%.2f", weight),
+          hjust = ifelse(weight > 0, -0.1, 1.1)
+        ),
+        size = text_size,
+        color = "black"
+      )
   }
 
   return(p)
@@ -452,10 +390,11 @@ plot_coefficient <- function(
 #' plot_coefficients(network_table, show_values = FALSE)
 #' plot_coefficients(network_table, targets = "g1")
 plot_coefficients <- function(
-    data,
-    targets = NULL,
-    nrow = NULL,
-    ...) {
+  data,
+  targets = NULL,
+  nrow = NULL,
+  ...
+) {
   if (is.null(targets)) {
     targets <- unique(data$target)
   }
