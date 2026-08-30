@@ -19,6 +19,8 @@ single_network(
 \arguments{
 \item{matrix}{An expression matrix.}
 
+\item{regulators}{Candidate regulator genes.}
+
 \item{target}{The target gene.}
 
 \item{pseudotime}{Optional pseudotime vector or branch matrix passed to

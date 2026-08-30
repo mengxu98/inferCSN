@@ -2,6 +2,7 @@
 #'
 #' @inheritParams inferCSN
 #' @param matrix An expression matrix.
+#' @param regulators Candidate regulator genes.
 #' @param target The target gene.
 #'
 #' @param pseudotime Optional pseudotime vector or branch matrix passed to

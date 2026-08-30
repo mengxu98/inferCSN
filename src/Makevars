@@ -1,11 +1,3 @@
 PKG_CPPFLAGS = -I../inst/include
-
-ifeq ($(shell uname -s),Darwin)
-LIBOMP_PREFIX ?= $(shell brew --prefix libomp 2>/dev/null)
-PKG_CPPFLAGS += -I$(LIBOMP_PREFIX)/include
-PKG_CXXFLAGS = -Xpreprocessor -fopenmp
-PKG_LIBS = -L$(LIBOMP_PREFIX)/lib -lomp $(BLAS_LIBS) $(FLIBS)
-else
-PKG_CXXFLAGS = -fopenmp
-PKG_LIBS = -fopenmp $(BLAS_LIBS) $(FLIBS)
-endif
+PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS)
+PKG_LIBS = $(SHLIB_OPENMP_CXXFLAGS) $(BLAS_LIBS) $(FLIBS)

@@ -8,7 +8,9 @@
 #include <map>
 #include <string>
 #include <vector>
+#ifdef _OPENMP
 #include <omp.h>
+#endif
 
 using namespace Rcpp;
 
