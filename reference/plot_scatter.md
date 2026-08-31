@@ -1,6 +1,6 @@
-# Plot expression data in a scatter plot
+# Plot expression data
 
-Plot expression data in a scatter plot
+Plot expression data
 
 ## Usage
 
@@ -35,112 +35,44 @@ plot_scatter(
 
 - smoothing_method:
 
-  Method for smoothing curve, `lm` or `loess`.
+  Method for smoothing curve, \`lm\` or \`loess\`.
 
-- group_colors:
+- group_colors, title_color:
 
-  Colors for different groups.
+  Group and title colors.
 
-- title_color:
+- title, col_title, row_title, legend_title:
 
-  Color for the title.
-
-- title:
-
-  Main title for the plot.
-
-- col_title:
-
-  Title for the x-axis.
-
-- row_title:
-
-  Title for the y-axis.
-
-- legend_title:
-
-  Title for the legend.
+  Plot titles.
 
 - legend_position:
 
   The position of legend.
 
-- margins:
+- margins, marginal_type, margins_size:
 
-  The position of marginal figure ("both", "x", "y").
+  Marginal plot controls.
 
-- marginal_type:
+- compute_correlation, compute_correlation_method:
 
-  The type of marginal figure (`density`, `histogram`, `boxplot`,
-  `violin`, `densigram`).
-
-- margins_size:
-
-  The size of marginal figure, note the bigger size the smaller figure.
-
-- compute_correlation:
-
-  Whether to compute and print correlation on the figure.
-
-- compute_correlation_method:
-
-  Method to compute correlation (`pearson` or `spearman`).
+  Correlation controls.
 
 - keep_aspect_ratio:
 
-  Logical value, whether to set aspect ratio to 1:1.
+  Whether to use a 1:1 aspect ratio.
 
 - facet:
 
-  Faceting variable. If setting TRUE, all settings about margins will be
-  inalidation.
+  Whether to facet by group.
 
 - se:
 
-  Display confidence interval around smooth.
+  Whether to show smoothing uncertainty.
 
 - pointdensity:
 
-  Plot point density when only provide 1 cluster.
+  Whether to show point density.
 
 ## Value
 
-ggplot object
-
-## Examples
-
-``` r
-data(example_matrix)
-test_data <- data.frame(
-  example_matrix[1:200, c(1, 7)],
-  c = c(
-    rep("c1", 40),
-    rep("c2", 40),
-    rep("c3", 40),
-    rep("c4", 40),
-    rep("c5", 40)
-  )
-)
-
-p1 <- plot_scatter(
-  test_data
-)
-p2 <- plot_scatter(
-  test_data,
-  marginal_type = "boxplot"
-)
-p1 + p2
-
-
-p3 <- plot_scatter(
-  test_data,
-  facet = TRUE
-)
-p3
-
-p4 <- plot_scatter(
-  test_data[, 1:2],
-  marginal_type = "histogram"
-)
-p4
-```
+A ggplot object.

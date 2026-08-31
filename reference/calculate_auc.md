@@ -11,7 +11,8 @@ calculate_auc(
   return_plot = FALSE,
   line_color = "#1563cc",
   line_width = 1,
-  tag_levels = "A"
+  tag_levels = "A",
+  tf_edges = FALSE
 )
 ```
 
@@ -41,36 +42,11 @@ calculate_auc(
 
   Tag levels for plot annotations
 
+- tf_edges:
+
+  Whether to restrict candidate edges to TF-to-gene. Default is
+  \`FALSE\`.
+
 ## Value
 
 A list containing metrics and optional plots
-
-## Examples
-
-``` r
-data(example_matrix)
-data("example_ground_truth")
-network_table <- inferCSN(example_matrix)
-#> ℹ [2026-01-23 02:15:50] Inferring network for <matrix/array>...
-#> ◌ [2026-01-23 02:15:50] Checking parameters...
-#> ℹ [2026-01-23 02:15:50] Using L0 sparse regression model
-#> ℹ [2026-01-23 02:15:50] Using 1 core
-#> ℹ [2026-01-23 02:15:50] Building results
-#> ✔ [2026-01-23 02:15:50] Inferring network done
-#> ℹ [2026-01-23 02:15:50] Network information:
-#> ℹ                         Edges Regulators Targets
-#> ℹ                       1   306         18      18
-calculate_auc(
-  network_table,
-  example_ground_truth,
-  return_plot = TRUE
-)
-#> $metrics
-#>   Metric Value
-#> 1  AUROC 0.952
-#> 2  AUPRC 0.437
-#> 
-#> $plot
-
-#> 
-```

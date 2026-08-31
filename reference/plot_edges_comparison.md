@@ -1,6 +1,7 @@
-# Network Edge Comparison Visualization
+# Plot Edges Comparison
 
-Generates visualizations comparing edges of two networks.
+Creates a scatter plot comparing predicted, ground truth, and
+overlapping edges between two gene regulatory networks.
 
 ## Usage
 
@@ -17,38 +18,19 @@ plot_edges_comparison(
 
 - network_table:
 
-  A data frame of predicted network structure.
+  A data frame of predicted network structure with \`regulator\` and
+  \`target\` columns.
 
 - ground_truth:
 
-  A data frame of ground truth network.
+  A data frame of ground truth network with \`regulator\` and \`target\`
+  columns.
 
 - color_pattern:
 
-  A list of colors for different categories.
+  A named list of colors for predicted, ground_truth, overlap, and total
+  edges.
 
 ## Value
 
-A patchwork plot object containing network edge comparison and
-distribution plots
-
-## Examples
-
-``` r
-data(example_matrix)
-data("example_ground_truth")
-network_table <- inferCSN(example_matrix)
-#> ℹ [2026-01-23 02:16:04] Inferring network for <matrix/array>...
-#> ◌ [2026-01-23 02:16:04] Checking parameters...
-#> ℹ [2026-01-23 02:16:04] Using L0 sparse regression model
-#> ℹ [2026-01-23 02:16:04] Using 1 core
-#> ℹ [2026-01-23 02:16:04] Building results
-#> ✔ [2026-01-23 02:16:04] Inferring network done
-#> ℹ [2026-01-23 02:16:04] Network information:
-#> ℹ                         Edges Regulators Targets
-#> ℹ                       1   306         18      18
-plot_edges_comparison(
-  network_table,
-  example_ground_truth
-)
-```
+A ggplot object visualizing edge overlap between the two networks.

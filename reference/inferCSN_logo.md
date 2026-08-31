@@ -17,6 +17,10 @@ infercsn_logo(unicode = cli::is_utf8_output())
   Unicode symbols on UTF-8 platforms. Default is
   [cli::is_utf8_output](https://cli.r-lib.org/reference/is_utf8_output.html).
 
+## Value
+
+A character vector.
+
 ## References
 
 <https://github.com/tidyverse/tidyverse/blob/main/R/logo.R>

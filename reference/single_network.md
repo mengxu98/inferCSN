@@ -9,13 +9,12 @@ single_network(
   matrix,
   regulators,
   target,
-  cross_validation = FALSE,
-  seed = 1,
-  penalty = "L0",
-  r_squared_threshold = 0,
-  n_folds = 5,
-  verbose = TRUE,
-  ...
+  pseudotime = NULL,
+  max_support_size = NULL,
+  lag_fraction = 0.05,
+  lag_steps = NULL,
+  cores = 1,
+  verbose = TRUE
 )
 ```
 
@@ -27,46 +26,40 @@ single_network(
 
 - regulators:
 
-  The regulator genes for which to infer the regulatory network.
+  Candidate regulator genes.
 
 - target:
 
   The target gene.
 
-- cross_validation:
+- pseudotime:
 
-  Whether to use cross-validation. Default is `FALSE`.
+  Optional pseudotime vector or branch matrix passed to \[inferCSN()\].
 
-- seed:
+- max_support_size:
 
-  The random seed for cross-validation. Default is `1`.
+  Optional support-size cap passed to \[inferCSN()\].
 
-- penalty:
+- lag_fraction:
 
-  The type of regularization. This can take either one of the following
-  choices: `"L0"`, `"L0L1"`, and `"L0L2"`. For high-dimensional and
-  sparse data, `"L0L2"` is more effective. Default is `"L0"`.
+  Fractional state lag passed to \[inferCSN()\].
 
-- r_squared_threshold:
+- lag_steps:
 
-  Threshold of R² coefficient. Default is `0`.
+  Optional integer state lag passed to \[inferCSN()\].
 
-- n_folds:
+- cores:
 
-  The number of folds for cross-validation. Default is `5`.
+  Number of inference workers.
 
 - verbose:
 
-  Whether to print progress messages. Default is `TRUE`.
-
-- ...:
-
-  Parameters for other methods.
+  Whether to report progress.
 
 ## Value
 
-A data frame of the single target gene network. The data frame has three
-columns: regulator, target, and weight.
+A data frame containing only selected edges for the requested target.
+The data frame has three columns: regulator, target, and weight.
 
 ## Examples
 
@@ -79,42 +72,27 @@ head(
     target = "g1"
   )
 )
-#>   regulator target       weight
-#> 1       g10     g1  0.009932787
-#> 2       g11     g1  0.010286958
-#> 3       g12     g1  0.017584462
-#> 4       g13     g1 -0.002483363
-#> 5       g14     g1 -0.021346832
-#> 6       g15     g1  0.027390264
-head(
-  single_network(
-    example_matrix,
-    regulators = colnames(example_matrix),
-    target = "g1",
-    cross_validation = TRUE
-  )
-)
-#>   regulator target    weight
-#> 1       g10     g1 0.0000000
-#> 2       g11     g1 0.0000000
-#> 3       g12     g1 0.0220384
-#> 4       g13     g1 0.0000000
-#> 5       g14     g1 0.0000000
-#> 6       g15     g1 0.0000000
-
+#> ℹ [2026-08-31 02:40:03] Inferring network for <matrix/array>...
+#> ◌ [2026-08-31 02:40:03] Checking parameters...
+#> ✔ [2026-08-31 02:40:03] Inferring network done
+#> ℹ [2026-08-31 02:40:03] Network information:
+#> ℹ                         Edges Regulators Targets
+#> ℹ                       1     2          2       1
+#>   regulator target weight
+#> 1        g6     g1   0.75
+#> 2        g5     g1  -0.25
 single_network(
   example_matrix,
   regulators = c("g1", "g2", "g3"),
   target = "g1"
 )
-#>   regulator target     weight
-#> 1        g2     g1  0.9876086
-#> 2        g3     g1 -0.1569370
-single_network(
-  example_matrix,
-  regulators = c("g1", "g2"),
-  target = "g1"
-)
-#> ! [2026-01-23 02:16:18] Less than 2 regulators found when modeling: "g1"
-#> NULL
+#> ℹ [2026-08-31 02:40:03] Inferring network for <matrix/array>...
+#> ◌ [2026-08-31 02:40:03] Checking parameters...
+#> ✔ [2026-08-31 02:40:03] Inferring network done
+#> ℹ [2026-08-31 02:40:03] Network information:
+#> ℹ                         Edges Regulators Targets
+#> ℹ                       1     2          2       1
+#>   regulator target weight
+#> 1        g2     g1  -0.75
+#> 2        g3     g1  -0.25
 ```

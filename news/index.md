@@ -1,5 +1,36 @@
 # Changelog
 
+## inferCSN 1.2.4
+
+- **breaking**:
+  - Replaced `fit_srm()` with the greedy-L0 interfaces
+    [`fit_greedy_l0()`](https://mengxu98.github.io/inferCSN/reference/fit_greedy_l0.md)
+    and
+    [`fit_greedy_l0_batch()`](https://mengxu98.github.io/inferCSN/reference/fit_greedy_l0_batch.md).
+  - Replaced the legacy regularization, cross-validation, and
+    subsampling arguments of
+    [`inferCSN()`](https://mengxu98.github.io/inferCSN/reference/inferCSN.md)
+    with `pseudotime`, `max_support_size`, `lag_fraction`, and
+    `lag_steps`.
+- **func**:
+  - Added static and pseudotime-ordered network inference for dense and
+    sparse matrices, including multi-branch pseudotime and deterministic
+    parallel output.
+  - Added early-precision, signed-edge, motif, path, and cross-run
+    stability metrics.
+  - Extended
+    [`plot_network_heatmap()`](https://mengxu98.github.io/inferCSN/reference/plot_network_heatmap.md)
+    with aligned multi-network layouts, performance labels, and
+    ground-truth cell borders.
+- **deps**:
+  - Removed `L0Learn` and added `thisplot` for plotting support.
+- **ci**:
+  - Added R-hub platform checks and manual CRAN release checks, and
+    updated checkout actions to v5.
+- **docs**:
+  - Updated generated documentation, examples, example datasets, and the
+    pkgdown reference index.
+
 ## inferCSN 1.2.3
 
 - **func**:
@@ -111,9 +142,8 @@ CRAN release: 2025-03-27
 ## inferCSN 1.1.2
 
 - **func**:
-  - Renamed `fit_sparse_regression()` to
-    [`fit_srm()`](https://mengxu98.github.io/inferCSN/reference/fit_srm.md)
-    for shorter function name.
+  - Renamed `fit_sparse_regression()` to `fit_srm()` for shorter
+    function name.
   - Modified parameters for multiple functions.
 - **docs**:
   - Updated package logo.
@@ -122,8 +152,7 @@ CRAN release: 2025-03-27
 ## inferCSN 1.1.1
 
 - **func**:
-  - Renamed function `fit_sparse_regression()` to
-    [`fit_srm()`](https://mengxu98.github.io/inferCSN/reference/fit_srm.md).
+  - Renamed function `fit_sparse_regression()` to `fit_srm()`.
 
 ## inferCSN 1.1.0
 

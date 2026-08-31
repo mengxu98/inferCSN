@@ -10,7 +10,8 @@ calculate_auroc(
   ground_truth,
   return_plot = FALSE,
   line_color = "#1563cc",
-  line_width = 1
+  line_width = 1,
+  tf_edges = FALSE
 )
 ```
 
@@ -36,35 +37,11 @@ calculate_auroc(
 
   Width for plot lines
 
+- tf_edges:
+
+  Whether to restrict candidate edges to TF-to-gene. Default is
+  \`FALSE\`.
+
 ## Value
 
 A list containing metric and optional plot
-
-## Examples
-
-``` r
-data(example_matrix)
-data("example_ground_truth")
-network_table <- inferCSN(example_matrix)
-#> ℹ [2026-01-23 02:15:52] Inferring network for <matrix/array>...
-#> ◌ [2026-01-23 02:15:52] Checking parameters...
-#> ℹ [2026-01-23 02:15:52] Using L0 sparse regression model
-#> ℹ [2026-01-23 02:15:52] Using 1 core
-#> ℹ [2026-01-23 02:15:52] Building results
-#> ✔ [2026-01-23 02:15:52] Inferring network done
-#> ℹ [2026-01-23 02:15:52] Network information:
-#> ℹ                         Edges Regulators Targets
-#> ℹ                       1   306         18      18
-calculate_auroc(
-  network_table,
-  example_ground_truth,
-  return_plot = TRUE
-)
-#> $metrics
-#>   Metric Value
-#> 1  AUROC 0.952
-#> 
-#> $plot
-
-#> 
-```

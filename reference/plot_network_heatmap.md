@@ -1,6 +1,6 @@
-# Plot network heatmap
+# Plot network heatmaps
 
-Plot network heatmap
+Plot network heatmaps
 
 ## Usage
 
@@ -11,20 +11,37 @@ plot_network_heatmap(
   targets = NULL,
   switch_matrix = TRUE,
   show_names = FALSE,
+  show_names_position = c("outer", "all"),
+  rect_color = NA,
   heatmap_size_lock = TRUE,
   heatmap_size = 5,
   heatmap_height = NULL,
   heatmap_width = NULL,
   heatmap_title = NULL,
-  heatmap_color = c("#1966ad", "white", "#bb141a"),
+  ncol = NULL,
+  nrow = NULL,
+  performance_metrics = "none",
+  performance_ground_truth = NULL,
+  truth_cell_border = TRUE,
+  truth_cell_border_legend = TRUE,
+  truth_match_border_color = "#2E7D32",
+  truth_mismatch_border_color = "#F2C94C",
+  truth_cell_border_lwd = 1.2,
   border_color = "gray",
-  rect_color = NA,
+  heatmap_palette = "viridis",
+  heatmap_palcolor = NULL,
+  row_anno_palette = "Set1",
+  row_anno_palcolor = NULL,
+  col_anno_palette = "Set2",
+  col_anno_palcolor = NULL,
+  row_anno = FALSE,
+  column_anno = FALSE,
   anno_width = 1,
   anno_height = 1,
   row_anno_type = c("boxplot", "barplot", "histogram", "density", "lines", "points",
     "horizon"),
   column_anno_type = c("boxplot", "barplot", "histogram", "density", "lines", "points"),
-  legend_name = "Weight",
+  legend_name = NULL,
   row_title = "Regulators"
 )
 ```
@@ -33,130 +50,88 @@ plot_network_heatmap(
 
 - network_table:
 
-  The weight data table of network.
+  Network edge table.
 
-- regulators:
+- regulators, targets:
 
-  Regulators list.
-
-- targets:
-
-  Targets list.
+  Nodes to include.
 
 - switch_matrix:
 
-  Whether to weight data table to matrix. Default is `TRUE`.
+  Convert edge tables to matrices.
 
-- show_names:
+- show_names, heatmap_size_lock:
 
-  Whether to show names of row and column. Default is `FALSE`.
+  Logical display controls.
 
-- heatmap_size_lock:
+- show_names_position:
 
-  Lock the size of heatmap.
+  Name placement for multiple heatmaps.
 
-- heatmap_size:
+- heatmap_size, heatmap_height, heatmap_width:
 
-  The size of heatmap. Default is `5`.
-
-- heatmap_height:
-
-  The height of heatmap.
-
-- heatmap_width:
-
-  The width of heatmap.
+  Heatmap dimensions.
 
 - heatmap_title:
 
-  The title of heatmap.
+  Heatmap title.
 
-- heatmap_color:
+- ncol, nrow:
 
-  Colors of heatmap.
+  Layout dimensions for multiple heatmaps.
 
-- border_color:
+- performance_metrics:
 
-  Default is `"gray"`. Color of heatmap border.
+  Metrics appended to titles.
 
-- rect_color:
+- performance_ground_truth:
 
-  Default is `NA`. Color of heatmap rect.
+  Ground-truth network for metrics.
 
-- anno_width:
+- truth_cell_border, truth_cell_border_legend:
 
-  Width of annotation.
+  Ground-truth border controls.
 
-- anno_height:
+- truth_match_border_color, truth_mismatch_border_color:
 
-  Height of annotation.
+  Border colors.
 
-- row_anno_type:
+- truth_cell_border_lwd:
 
-  Default is `"boxplot"`, could add a annotation plot to row. choose one
-  of `"boxplot"`, `"barplot"`, `"histogram"`, `"density"`, `"lines"`,
-  `"points"`, and `"horizon"`.
+  Border width.
 
-- column_anno_type:
+- border_color, rect_color:
 
-  Default is `"boxplot"`, could add a annotation plot to column. choose
-  one of `"boxplot"`, `"barplot"`, `"histogram"`, `"density"`,
-  `"lines"`, and `"points"`.
+  Border and cell colors.
 
-- legend_name:
+- heatmap_palcolor, heatmap_palette:
 
-  The name of legend.
+  Heatmap colors.
 
-- row_title:
+- row_anno_palette, row_anno_palcolor:
 
-  The title of row.
+  Row annotation colors.
+
+- col_anno_palette, col_anno_palcolor:
+
+  Column annotation colors.
+
+- row_anno, column_anno:
+
+  Enable annotations.
+
+- anno_width, anno_height:
+
+  Annotation dimensions.
+
+- row_anno_type, column_anno_type:
+
+  Annotation plot types.
+
+- legend_name, row_title:
+
+  Legend and row titles.
 
 ## Value
 
-A heatmap
-
-## Examples
-
-``` r
-data(example_matrix)
-data("example_ground_truth")
-network_table <- inferCSN(example_matrix)
-#> ℹ [2026-01-23 02:16:07] Inferring network for <matrix/array>...
-#> ◌ [2026-01-23 02:16:07] Checking parameters...
-#> ℹ [2026-01-23 02:16:07] Using L0 sparse regression model
-#> ℹ [2026-01-23 02:16:07] Using 1 core
-#> ℹ [2026-01-23 02:16:07] Building results
-#> ✔ [2026-01-23 02:16:07] Inferring network done
-#> ℹ [2026-01-23 02:16:07] Network information:
-#> ℹ                         Edges Regulators Targets
-#> ℹ                       1   306         18      18
-
-p1 <- plot_network_heatmap(
-  example_ground_truth[, 1:3],
-  heatmap_title = "Ground truth",
-  legend_name = "Ground truth"
-)
-p2 <- plot_network_heatmap(
-  network_table,
-  heatmap_title = "inferCSN",
-  legend_name = "inferCSN"
-)
-ComplexHeatmap::draw(p1 + p2)
-
-
-plot_network_heatmap(
-  network_table,
-  show_names = TRUE,
-  rect_color = "gray90",
-  row_anno_type = "density",
-  column_anno_type = "barplot"
-)
-
-
-plot_network_heatmap(
-  network_table,
-  regulators = c("g1", "g3", "g5"),
-  targets = c("g3", "g6", "g9"),
-  show_names = TRUE
-)
-```
+A heatmap object.

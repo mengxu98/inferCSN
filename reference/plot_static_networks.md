@@ -17,15 +17,11 @@ plot_static_networks(
 
 - network_table:
 
-  The weight data table of network.
+  Network edge table.
 
-- regulators:
+- regulators, targets:
 
-  Regulators list.
-
-- targets:
-
-  Targets list.
+  Nodes to include.
 
 - legend_position:
 
@@ -40,31 +36,26 @@ A ggplot2 object
 ``` r
 data(example_matrix)
 network_table <- inferCSN(example_matrix)
-#> ℹ [2026-01-23 02:16:15] Inferring network for <matrix/array>...
-#> ◌ [2026-01-23 02:16:15] Checking parameters...
-#> ℹ [2026-01-23 02:16:15] Using L0 sparse regression model
-#> ℹ [2026-01-23 02:16:15] Using 1 core
-#> ⠙ [2026-01-23 02:16:15] Running for g1 [1/18] ■■■                              …
-#> ✔ [2026-01-23 02:16:15] Completed 18 tasks in 187ms
-#> 
-#> ℹ [2026-01-23 02:16:15] Building results
-#> ✔ [2026-01-23 02:16:16] Inferring network done
-#> ℹ [2026-01-23 02:16:16] Network information:
+#> ℹ [2026-08-31 02:40:02] Inferring network for <matrix/array>...
+#> ◌ [2026-08-31 02:40:02] Checking parameters...
+#> ✔ [2026-08-31 02:40:02] Inferring network done
+#> ℹ [2026-08-31 02:40:02] Network information:
 #> ℹ                         Edges Regulators Targets
-#> ℹ                       1   306         18      18
+#> ℹ                       1    12          6       6
+example_edge <- network_table[1, ]
 plot_static_networks(
   network_table,
-  regulators = "g1"
+  regulators = example_edge$regulator
 )
 
 plot_static_networks(
   network_table,
-  targets = "g1"
+  targets = example_edge$target
 )
 
 plot_static_networks(
   network_table,
-  regulators = "g1",
-  targets = "g2"
+  regulators = example_edge$regulator,
+  targets = example_edge$target
 )
 ```

@@ -14,6 +14,7 @@ You can install the released version from
 [CRAN](https://github.com/cran) use:
 
 ``` r
+
 install.packages("inferCSN")
 # or
 if (!require("pak", quietly = TRUE)) {
@@ -27,6 +28,7 @@ You can install the development version from
 [pak](https://github.com/r-lib/pak):
 
 ``` r
+
 if (!require("pak", quietly = TRUE)) {
   install.packages("pak")
 }
@@ -38,6 +40,7 @@ pak::pak("mengxu98/inferCSN")
 ### **Examples**
 
 ``` r
+
 library(inferCSN)
 data(example_matrix)
 

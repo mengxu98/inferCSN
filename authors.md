@@ -26,19 +26,6 @@ Syst Biol Appl. 2023;9(1):4.
       url = {https://doi.org/10.1038/s41540-023-00267-8},
     }
 
-Hazimeh, Hussein et al. “L0Learn: A Scalable Package for Sparse Learning
-using L0 Regularization.” J. Mach. Learn. Res. 24 (2022): 205:1-205:8.
-
-    @Article{,
-      author = {Hazimeh Hussein and Mazumder Rahul and Nonet Tim},
-      title = {L0learn: A scalable package for sparse learning using l0 regularization},
-      journal = {Journal of Machine Learning Research},
-      year = {2023},
-      volume = {24},
-      number = {205},
-      pages = {1-8},
-    }
-
 Hazimeh, Hussein and Rahul Mazumder. “Fast Best Subset Selection:
 Coordinate Descent and Local Combinatorial Optimization Algorithms.”
 Oper. Res. 68 (2018): 1517-1537.

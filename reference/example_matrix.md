@@ -1,3 +1,3 @@
 # Example matrix data
 
-The matrix used for reconstruct gene regulatory network.
+Expression matrix for the bundled synthetic example.

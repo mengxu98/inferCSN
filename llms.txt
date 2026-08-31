@@ -14,6 +14,7 @@ You can install the released version from
 [CRAN](https://github.com/cran) use:
 
 ``` r
+
 install.packages("inferCSN")
 # or
 if (!require("pak", quietly = TRUE)) {
@@ -27,6 +28,7 @@ You can install the development version from
 [pak](https://github.com/r-lib/pak):
 
 ``` r
+
 if (!require("pak", quietly = TRUE)) {
   install.packages("pak")
 }
@@ -38,6 +40,7 @@ pak::pak("mengxu98/inferCSN")
 ### **Examples**
 
 ``` r
+
 library(inferCSN)
 data(example_matrix)
 
@@ -70,7 +73,7 @@ work, please cite it reference
 ### Network evaluation
 
 - [`calculate_metrics()`](https://mengxu98.github.io/inferCSN/reference/calculate_metrics.md)
-  : Calculate Network Prediction Performance Metrics
+  : Calculate network metrics
 - [`calculate_accuracy()`](https://mengxu98.github.io/inferCSN/reference/calculate_accuracy.md)
   : Calculate Accuracy
 - [`calculate_auc()`](https://mengxu98.github.io/inferCSN/reference/calculate_auc.md)
@@ -80,15 +83,27 @@ work, please cite it reference
 - [`calculate_auprc()`](https://mengxu98.github.io/inferCSN/reference/calculate_auprc.md)
   : Calculate AUPRC Metric
 - [`calculate_precision()`](https://mengxu98.github.io/inferCSN/reference/calculate_precision.md)
-  : Calculate Precision Metric
+  : Calculate Precision
 - [`calculate_recall()`](https://mengxu98.github.io/inferCSN/reference/calculate_recall.md)
-  : Calculate Recall Metric
+  : Calculate Recall
 - [`calculate_f1()`](https://mengxu98.github.io/inferCSN/reference/calculate_f1.md)
   : Calculate F1 Score
 - [`calculate_si()`](https://mengxu98.github.io/inferCSN/reference/calculate_si.md)
   : Calculate Set Intersection
 - [`calculate_ji()`](https://mengxu98.github.io/inferCSN/reference/calculate_ji.md)
   : Calculate Jaccard Index
+- [`calculate_epr()`](https://mengxu98.github.io/inferCSN/reference/calculate_epr.md)
+  : Calculate Early Precision Ratio
+- [`calculate_signed_epr()`](https://mengxu98.github.io/inferCSN/reference/calculate_signed_epr.md)
+  : Calculate Signed Early Precision Ratio
+- [`calculate_motif_ratios()`](https://mengxu98.github.io/inferCSN/reference/calculate_motif_ratios.md)
+  : Calculate Motif Ratios
+- [`calculate_path_stats()`](https://mengxu98.github.io/inferCSN/reference/calculate_path_stats.md)
+  : Calculate Path Statistics
+- [`calculate_stability_jaccard()`](https://mengxu98.github.io/inferCSN/reference/calculate_stability_jaccard.md)
+  : Calculate Jaccard Stability Across Runs
+- [`calculate_stability_spearman()`](https://mengxu98.github.io/inferCSN/reference/calculate_stability_spearman.md)
+  : Calculate Spearman Stability Across Runs
 
 ### Network visualization
 
@@ -97,7 +112,7 @@ work, please cite it reference
 - [`plot_dynamic_networks()`](https://mengxu98.github.io/inferCSN/reference/plot_dynamic_networks.md)
   : Plot dynamic networks
 - [`plot_network_heatmap()`](https://mengxu98.github.io/inferCSN/reference/plot_network_heatmap.md)
-  : Plot network heatmap
+  : Plot network heatmaps
 - [`plot_static_networks()`](https://mengxu98.github.io/inferCSN/reference/plot_static_networks.md)
   : Plot dynamic networks
 
@@ -108,13 +123,13 @@ work, please cite it reference
 - [`plot_coefficients()`](https://mengxu98.github.io/inferCSN/reference/plot_coefficients.md)
   : Plot coefficients for multiple targets
 - [`plot_edges_comparison()`](https://mengxu98.github.io/inferCSN/reference/plot_edges_comparison.md)
-  : Network Edge Comparison Visualization
+  : Plot Edges Comparison
 - [`plot_embedding()`](https://mengxu98.github.io/inferCSN/reference/plot_embedding.md)
-  : Plot embedding
+  : Plot an embedding
 - [`plot_histogram()`](https://mengxu98.github.io/inferCSN/reference/plot_histogram.md)
   : Plot histogram
 - [`plot_scatter()`](https://mengxu98.github.io/inferCSN/reference/plot_scatter.md)
-  : Plot expression data in a scatter plot
+  : Plot expression data
 
 ### Calculate gene rank
 
@@ -125,21 +140,23 @@ work, please cite it reference
 
 - [`single_network()`](https://mengxu98.github.io/inferCSN/reference/single_network.md)
   : Construct network for single target gene
-- [`fit_srm()`](https://mengxu98.github.io/inferCSN/reference/fit_srm.md)
-  : Sparse regression model
+- [`fit_greedy_l0()`](https://mengxu98.github.io/inferCSN/reference/fit_greedy_l0.md)
+  : Fit greedy L0 regression
+- [`fit_greedy_l0_batch()`](https://mengxu98.github.io/inferCSN/reference/fit_greedy_l0_batch.md)
+  : Fit batched greedy L0 regressions
 
 ### Utils functions
 
 - [`filter_sort_matrix()`](https://mengxu98.github.io/inferCSN/reference/filter_sort_matrix.md)
-  : Filter and sort matrix
+  : Filter and sort a network matrix
 - [`meta_cells()`](https://mengxu98.github.io/inferCSN/reference/meta_cells.md)
-  : Detection of metacells from single-cell gene expression matrix
+  : Build metacells
 - [`network_format()`](https://mengxu98.github.io/inferCSN/reference/network_format.md)
-  : Format network table
+  : Format a network table
 - [`print(`*`<infercsn_logo>`*`)`](https://mengxu98.github.io/inferCSN/reference/print.inferCSN_logo.md)
   : Print logo
 - [`subsampling()`](https://mengxu98.github.io/inferCSN/reference/subsampling.md)
-  : Subsampling function
+  : Subsample an expression matrix
 
 ### Example data
 
