@@ -9,6 +9,10 @@
 
 using namespace Rcpp;
 
+static bool same_deletion_evidence(double value, double anchor) {
+  return std::fabs(value - anchor) <= 1e-12 * (1.0 + std::fabs(anchor));
+}
+
 static std::vector<double> signed_deletion_rank_scores(
     const std::vector<double>& beta,
     const std::vector<double>& evidence) {
@@ -32,7 +36,7 @@ static std::vector<double> signed_deletion_rank_scores(
     const double anchor = evidence[selected[i]];
     int j = i + 1;
     while (j < static_cast<int>(selected.size()) &&
-           evidence[selected[j]] == anchor) {
+           same_deletion_evidence(evidence[selected[j]], anchor)) {
       ++j;
     }
     ++groups;
@@ -43,7 +47,7 @@ static std::vector<double> signed_deletion_rank_scores(
     const double anchor = evidence[selected[i]];
     int j = i + 1;
     while (j < static_cast<int>(selected.size()) &&
-           evidence[selected[j]] == anchor) {
+           same_deletion_evidence(evidence[selected[j]], anchor)) {
       ++j;
     }
     const double magnitude = 1.0 -

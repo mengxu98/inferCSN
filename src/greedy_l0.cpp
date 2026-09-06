@@ -905,6 +905,59 @@ static TargetFit fit_target_greedy_from_gram(
     current_bic = best_bic;
   }
 
+  const double deletion_bic_tolerance = 1e-8;
+  while (!current_support.empty()) {
+    std::vector<double> current_inverse;
+    if (!invert_subset_gram(gram, current_support, p, current_inverse)) {
+      break;
+    }
+    const int support_size = static_cast<int>(current_support.size());
+    std::vector<int> best_support = current_support;
+    double best_sse = current_sse;
+    double best_bic = current_bic;
+    for (int remove = 0; remove < support_size; ++remove) {
+      const double inverse_diagonal = current_inverse[
+        static_cast<size_t>(remove) * support_size + remove
+      ];
+      if (inverse_diagonal <= 0.0 || !R_finite(inverse_diagonal)) {
+        continue;
+      }
+      const double trial_sse = std::max(
+        0.0,
+        current_sse + current_beta[remove] * current_beta[remove] /
+          inverse_diagonal
+      );
+      const double trial_bic = subset_bic(trial_sse, support_size - 1, n_obs);
+      const double current_tol = deletion_bic_tolerance *
+        (1.0 + std::fabs(current_bic));
+      if (trial_bic >= current_bic - current_tol) {
+        continue;
+      }
+      std::vector<int> trial_support = current_support;
+      trial_support.erase(trial_support.begin() + remove);
+      const double best_tol = deletion_bic_tolerance *
+        (1.0 + std::fabs(best_bic));
+      if (best_support == current_support || trial_bic < best_bic - best_tol ||
+          (std::fabs(trial_bic - best_bic) <= best_tol &&
+           trial_support < best_support)) {
+        best_support.swap(trial_support);
+        best_sse = trial_sse;
+        best_bic = trial_bic;
+      }
+    }
+    if (best_support == current_support) {
+      break;
+    }
+    std::vector<double> best_beta;
+    if (!fit_subset_coefficients(gram, xty, best_support, p, best_beta)) {
+      break;
+    }
+    current_support.swap(best_support);
+    current_beta.swap(best_beta);
+    current_sse = best_sse;
+    current_bic = best_bic;
+  }
+
   for (int idx = 0; idx < static_cast<int>(current_support.size()); ++idx) {
     out.coefficient[current_support[idx]] = current_beta[idx];
   }
