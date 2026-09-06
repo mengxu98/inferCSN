@@ -18,7 +18,7 @@ Imports:
     methods,
     Rcpp,
     stats,
-    thisutils (>= 0.5.2)
+    thisutils
 Suggests:
     testthat
 LinkingTo:
