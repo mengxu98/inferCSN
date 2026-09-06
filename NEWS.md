@@ -1,4 +1,32 @@
-# inferCSN
+# inferCSN 1.2.5
+
+* **breaking**:
+  * inferCSN now keeps the inference core only: `inferCSN()`, `single_network()`,
+    `fit_greedy_l0()`, `fit_greedy_l0_batch()`,
+    `network_format()`, and `filter_sort_matrix()`.
+
+* **func**:
+  * Added a backward-deletion refinement pass to the batch greedy-L0 solver (`fit_greedy_l0_batch()`), removing predictors that no longer improve BIC after forward selection, which avoids over-selecting the support near perfect fits.
+  * Group numerically tied deletion evidence against a fixed group maximum
+    using a relative tolerance of 1e-12 when computing signed ordinal weights.
+  * Added direct-QR regression checks for batch coefficients, BIC, deletion
+    evidence, and near-perfect-fit behavior.
+  * Cell preprocessing (`meta_cells()` and `subsampling()`) now lives in multiCSN;
+    call `multiCSN::meta_cells()` or `multiCSN::subsampling()` instead.
+
+* **deps**:
+  * Remove unused `gtools` and `RTransferEntropy` suggestions.
+  * Drop plotting and evaluation dependencies (`ggplot2`, `thisplot`,
+    `patchwork`, `precrec`, `pROC`).
+  * Remove `RANN`, `igraph`, `irlba`, and `proxy` from this package after moving
+    cell preprocessing to multiCSN. Drop scatter-only and network-plot
+    Suggests (`ggExtra`, `ggpointdensity`, `ggpubr`, `RColorBrewer`, `viridis`,
+    `ggnetwork`, `ggraph`, `dplyr`, `purrr`, `ComplexHeatmap`, `circlize`,
+    `gganimate`, `network`, `plotly`, `tidygraph`).
+
+* **ci**:
+  * Fixed failing package CI checks.
+  * Removed unused `dev/config_attachment.yaml`.
 
 # inferCSN 1.2.4
 
