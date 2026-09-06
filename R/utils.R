@@ -1,4 +1,4 @@
-validate_infercsn_parameters <- function(
+validate_parameters <- function(
   matrix,
   pseudotime,
   regulators,
@@ -80,6 +80,4 @@ validate_infercsn_parameters <- function(
   )
 }
 
-`%||%` <- function(x, y) {
-  if (is.null(x) || !length(x)) y else x
-}
+`%|||%` <- thisutils::`%|||%`

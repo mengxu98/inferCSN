@@ -2,11 +2,11 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 infer_network <- function(expression, gene_names, pseudotime, params) {
-  .Call("_inferCSN_infer_network", PACKAGE = "inferCSN", expression, gene_names, pseudotime, params)
+    .Call('_inferCSN_infer_network', PACKAGE = 'inferCSN', expression, gene_names, pseudotime, params)
 }
 
 solve_greedy_l0_batch <- function(gram_matrix, xty_matrix, y_ss, candidate_predictors, n_obs, max_support_size, min_improvement) {
-  .Call("_inferCSN_solve_greedy_l0_batch", PACKAGE = "inferCSN", gram_matrix, xty_matrix, y_ss, candidate_predictors, n_obs, max_support_size, min_improvement)
+    .Call('_inferCSN_solve_greedy_l0_batch', PACKAGE = 'inferCSN', gram_matrix, xty_matrix, y_ss, candidate_predictors, n_obs, max_support_size, min_improvement)
 }
 
 #' @title Filter and sort a network matrix
@@ -16,19 +16,11 @@ solve_greedy_l0_batch <- function(gram_matrix, xty_matrix, y_ss, candidate_predi
 #' @return A filtered and sorted matrix.
 #' @export
 filter_sort_matrix <- function(network_matrix, regulators = NULL, targets = NULL) {
-  .Call("_inferCSN_filter_sort_matrix", PACKAGE = "inferCSN", network_matrix, regulators, targets)
+    .Call('_inferCSN_filter_sort_matrix', PACKAGE = 'inferCSN', network_matrix, regulators, targets)
 }
 
 solve_greedy_l0 <- function(x, y, max_support_size, min_improvement) {
-  .Call("_inferCSN_solve_greedy_l0", PACKAGE = "inferCSN", x, y, max_support_size, min_improvement)
-}
-
-prepare_calculate_metrics <- function(network_table, ground_truth) {
-  .Call("_inferCSN_prepare_calculate_metrics", PACKAGE = "inferCSN", network_table, ground_truth)
-}
-
-prepare_metric_vectors <- function(network_table, ground_truth) {
-  .Call("_inferCSN_prepare_metric_vectors", PACKAGE = "inferCSN", network_table, ground_truth)
+    .Call('_inferCSN_solve_greedy_l0', PACKAGE = 'inferCSN', x, y, max_support_size, min_improvement)
 }
 
 #' @title Format a network table
@@ -39,5 +31,6 @@ prepare_metric_vectors <- function(network_table, ground_truth) {
 #' @return A formatted network edge table.
 #' @export
 network_format <- function(network_table, regulators = NULL, targets = NULL, abs_weight = TRUE) {
-  .Call("_inferCSN_network_format", PACKAGE = "inferCSN", network_table, regulators, targets, abs_weight)
+    .Call('_inferCSN_network_format', PACKAGE = 'inferCSN', network_table, regulators, targets, abs_weight)
 }
+

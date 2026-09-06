@@ -14,41 +14,13 @@ Depends:
     R (>= 4.1.0)
 Imports:
     cli,
-    dplyr,
-    ggnetwork,
-    ggplot2,
-    ggraph,
     Matrix,
     methods,
-    purrr,
     Rcpp,
     stats,
-    thisutils,
-    thisplot
+    thisutils (>= 0.5.2)
 Suggests:
-    ComplexHeatmap,
-    circlize,
-    gtools,
-    gganimate,
-    ggExtra,
-    ggpointdensity,
-    ggpubr,
-    igraph,
-    irlba,
-    network,
-    patchwork,
-    plotly,
-    precrec,
-    pROC,
-    proxy,
-    tidygraph,
-    RANN,
-    RColorBrewer,
-    Rtsne,
-    RTransferEntropy,
-    testthat,
-    uwot,
-    viridis
+    testthat
 LinkingTo:
     Rcpp
 Config/Needs/website: mengxu98/thistemplate

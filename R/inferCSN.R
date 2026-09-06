@@ -15,6 +15,9 @@
 #' @param ... Additional method arguments.
 #'
 #' @return A data frame containing exactly `regulator`, `target`, and `weight`.
+#' @details Signed ordinal weights group descending deletion evidence against
+#' each group's maximum within 1e-12 * (1 + abs(maximum)). This fixed numerical
+#' rule leaves support, fitted coefficients and raw deletion evidence unchanged.
 #'
 #' @docType methods
 #' @rdname inferCSN
@@ -56,7 +59,7 @@ infercsn_method <- function(
       sprintf(
         "Unused matrix-inference argument%s: %s",
         if (length(dots) == 1L) "" else "s",
-        paste(names(dots) %||% rep("<unnamed>", length(dots)), collapse = ", ")
+        paste(names(dots) %|||% rep("<unnamed>", length(dots)), collapse = ", ")
       ),
       call. = FALSE
     )
@@ -65,31 +68,7 @@ infercsn_method <- function(
     "Inferring network for {.cls {class(object)}}...",
     verbose = verbose
   )
-  infercsn_impl(
-    object = object,
-    pseudotime = pseudotime,
-    regulators = regulators,
-    targets = targets,
-    max_support_size = max_support_size,
-    lag_fraction = lag_fraction,
-    lag_steps = lag_steps,
-    cores = cores,
-    verbose = verbose
-  )
-}
-
-infercsn_impl <- function(
-  object,
-  pseudotime,
-  regulators,
-  targets,
-  max_support_size,
-  lag_fraction,
-  lag_steps,
-  cores,
-  verbose
-) {
-  validated <- validate_infercsn_parameters(
+  validated <- validate_parameters(
     matrix = object,
     pseudotime = pseudotime,
     regulators = regulators,
@@ -102,11 +81,30 @@ infercsn_impl <- function(
   )
 
   gene_names <- colnames(object)
-  expression <- if (inherits(object, "sparseMatrix")) object else t(object)
-  network_table <- run_network_inference(
+  expression <- t(as.matrix(object))
+  pseudotime <- validated$pseudotime
+  n_cells <- ncol(expression)
+  if (is.null(pseudotime)) {
+    pseudotime <- matrix(numeric(0L), nrow = n_cells, ncol = 0L)
+  } else if (is.data.frame(pseudotime) || is.matrix(pseudotime)) {
+    pseudotime <- as.matrix(pseudotime)
+  } else {
+    pseudotime <- matrix(pseudotime, ncol = 1L)
+  }
+  if (!is.numeric(pseudotime)) {
+    stop("`pseudotime` must be numeric.", call. = FALSE)
+  }
+  if (nrow(pseudotime) != n_cells) {
+    stop(
+      "`pseudotime` must contain one row (or one vector value) per cell.",
+      call. = FALSE
+    )
+  }
+  storage.mode(pseudotime) <- "double"
+  network_table <- infer_network(
     expression = expression,
-    pseudotime = validated$pseudotime,
-    gene_names = gene_names,
+    pseudotime = pseudotime,
+    gene_names = as.character(gene_names),
     params = list(
       min_improvement = 1e-10,
       pseudotime_lag_fraction = validated$lag_fraction,

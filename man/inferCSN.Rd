@@ -72,6 +72,11 @@ A data frame containing exactly \code{regulator}, \code{target}, and \code{weigh
 \description{
 Fits greedy-L0 models for static or pseudotime-ordered expression data.
 }
+\details{
+Signed ordinal weights group descending deletion evidence against
+each group's maximum within 1e-12 * (1 + abs(maximum)). This fixed numerical
+rule leaves support, fitted coefficients and raw deletion evidence unchanged.
+}
 \examples{
 data(example_matrix)
 data(example_meta_data)
