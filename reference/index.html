@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">inferCSN</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,7 +17,9 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
-      </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/mengxu98/inferCSN" title="GitHub" aria-label="GitHub repository"><span class="fa fab fa-github fa-lg"></span></a></li>
+      </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/mengxu98/inferCSN" title="GitHub" aria-label="GitHub repository"><span class="fa fab fa-github fa-lg"></span></a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/mengxu98" title="MengXu" aria-label="MengXu's GitHub profile"><span class="fa fas fa-home fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
@@ -67,231 +69,6 @@
         <dd>inferring cell-type specific gene regulatory network</dd>
       </dl></div><div class="section level2">
 
-      <h3 id="network-evaluation">Network evaluation<a class="anchor" aria-label="anchor" href="#network-evaluation"></a></h3>
-
-
-      <dl></dl></div><div class="section level2">
-
-
-
-
-      <dl><dt>
-
-          <code><a href="calculate_metrics.html">calculate_metrics()</a></code>
-
-        </dt>
-        <dd>Calculate network metrics</dd>
-
-        <dt>
-
-          <code><a href="calculate_accuracy.html">calculate_accuracy()</a></code>
-
-        </dt>
-        <dd>Calculate Accuracy</dd>
-
-        <dt>
-
-          <code><a href="calculate_auc.html">calculate_auc()</a></code>
-
-        </dt>
-        <dd>Calculate AUC Metrics</dd>
-
-        <dt>
-
-          <code><a href="calculate_auroc.html">calculate_auroc()</a></code>
-
-        </dt>
-        <dd>Calculate AUROC Metric</dd>
-
-        <dt>
-
-          <code><a href="calculate_auprc.html">calculate_auprc()</a></code>
-
-        </dt>
-        <dd>Calculate AUPRC Metric</dd>
-
-        <dt>
-
-          <code><a href="calculate_precision.html">calculate_precision()</a></code>
-
-        </dt>
-        <dd>Calculate Precision</dd>
-
-        <dt>
-
-          <code><a href="calculate_recall.html">calculate_recall()</a></code>
-
-        </dt>
-        <dd>Calculate Recall</dd>
-
-        <dt>
-
-          <code><a href="calculate_f1.html">calculate_f1()</a></code>
-
-        </dt>
-        <dd>Calculate F1 Score</dd>
-
-        <dt>
-
-          <code><a href="calculate_si.html">calculate_si()</a></code>
-
-        </dt>
-        <dd>Calculate Set Intersection</dd>
-
-        <dt>
-
-          <code><a href="calculate_ji.html">calculate_ji()</a></code>
-
-        </dt>
-        <dd>Calculate Jaccard Index</dd>
-
-        <dt>
-
-          <code><a href="calculate_epr.html">calculate_epr()</a></code>
-
-        </dt>
-        <dd>Calculate Early Precision Ratio</dd>
-
-        <dt>
-
-          <code><a href="calculate_signed_epr.html">calculate_signed_epr()</a></code>
-
-        </dt>
-        <dd>Calculate Signed Early Precision Ratio</dd>
-
-        <dt>
-
-          <code><a href="calculate_motif_ratios.html">calculate_motif_ratios()</a></code>
-
-        </dt>
-        <dd>Calculate Motif Ratios</dd>
-
-        <dt>
-
-          <code><a href="calculate_path_stats.html">calculate_path_stats()</a></code>
-
-        </dt>
-        <dd>Calculate Path Statistics</dd>
-
-        <dt>
-
-          <code><a href="calculate_stability_jaccard.html">calculate_stability_jaccard()</a></code>
-
-        </dt>
-        <dd>Calculate Jaccard Stability Across Runs</dd>
-
-        <dt>
-
-          <code><a href="calculate_stability_spearman.html">calculate_stability_spearman()</a></code>
-
-        </dt>
-        <dd>Calculate Spearman Stability Across Runs</dd>
-      </dl></div><div class="section level2">
-
-      <h3 id="network-visualization">Network visualization<a class="anchor" aria-label="anchor" href="#network-visualization"></a></h3>
-
-
-      <dl></dl></div><div class="section level2">
-
-
-
-
-      <dl><dt>
-
-          <code><a href="plot_contrast_networks.html">plot_contrast_networks()</a></code>
-
-        </dt>
-        <dd>Plot contrast networks</dd>
-
-        <dt>
-
-          <code><a href="plot_dynamic_networks.html">plot_dynamic_networks()</a></code>
-
-        </dt>
-        <dd>Plot dynamic networks</dd>
-
-        <dt>
-
-          <code><a href="plot_network_heatmap.html">plot_network_heatmap()</a></code>
-
-        </dt>
-        <dd>Plot network heatmaps</dd>
-
-        <dt>
-
-          <code><a href="plot_static_networks.html">plot_static_networks()</a></code>
-
-        </dt>
-        <dd>Plot dynamic networks</dd>
-      </dl></div><div class="section level2">
-
-      <h3 id="plotting-functions">Plotting functions<a class="anchor" aria-label="anchor" href="#plotting-functions"></a></h3>
-
-
-      <dl></dl></div><div class="section level2">
-
-
-
-
-      <dl><dt>
-
-          <code><a href="plot_coefficient.html">plot_coefficient()</a></code>
-
-        </dt>
-        <dd>Plot coefficients</dd>
-
-        <dt>
-
-          <code><a href="plot_coefficients.html">plot_coefficients()</a></code>
-
-        </dt>
-        <dd>Plot coefficients for multiple targets</dd>
-
-        <dt>
-
-          <code><a href="plot_edges_comparison.html">plot_edges_comparison()</a></code>
-
-        </dt>
-        <dd>Plot Edges Comparison</dd>
-
-        <dt>
-
-          <code><a href="plot_embedding.html">plot_embedding()</a></code>
-
-        </dt>
-        <dd>Plot an embedding</dd>
-
-        <dt>
-
-          <code><a href="plot_histogram.html">plot_histogram()</a></code>
-
-        </dt>
-        <dd>Plot histogram</dd>
-
-        <dt>
-
-          <code><a href="plot_scatter.html">plot_scatter()</a></code>
-
-        </dt>
-        <dd>Plot expression data</dd>
-      </dl></div><div class="section level2">
-
-      <h3 id="calculate-gene-rank">Calculate gene rank<a class="anchor" aria-label="anchor" href="#calculate-gene-rank"></a></h3>
-
-
-      <dl></dl></div><div class="section level2">
-
-
-
-
-      <dl><dt>
-
-          <code><a href="calculate_gene_rank.html">calculate_gene_rank()</a></code>
-
-        </dt>
-        <dd>Rank TFs and genes in network</dd>
-      </dl></div><div class="section level2">
-
       <h3 id="sparse-regression-model">Sparse regression model<a class="anchor" aria-label="anchor" href="#sparse-regression-model"></a></h3>
 
 
@@ -339,13 +116,6 @@
 
         <dt>
 
-          <code><a href="meta_cells.html">meta_cells()</a></code>
-
-        </dt>
-        <dd>Build metacells</dd>
-
-        <dt>
-
           <code><a href="network_format.html">network_format()</a></code>
 
         </dt>
@@ -357,13 +127,6 @@
 
         </dt>
         <dd>Print logo</dd>
-
-        <dt>
-
-          <code><a href="subsampling.html">subsampling()</a></code>
-
-        </dt>
-        <dd>Subsample an expression matrix</dd>
       </dl></div><div class="section level2">
 
       <h3 id="example-data">Example data<a class="anchor" aria-label="anchor" href="#example-data"></a></h3>

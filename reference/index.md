@@ -9,72 +9,6 @@
 - [`inferCSN()`](https://mengxu98.github.io/inferCSN/reference/inferCSN.md)
   : inferring cell-type specific gene regulatory network
 
-### Network evaluation
-
-- [`calculate_metrics()`](https://mengxu98.github.io/inferCSN/reference/calculate_metrics.md)
-  : Calculate network metrics
-- [`calculate_accuracy()`](https://mengxu98.github.io/inferCSN/reference/calculate_accuracy.md)
-  : Calculate Accuracy
-- [`calculate_auc()`](https://mengxu98.github.io/inferCSN/reference/calculate_auc.md)
-  : Calculate AUC Metrics
-- [`calculate_auroc()`](https://mengxu98.github.io/inferCSN/reference/calculate_auroc.md)
-  : Calculate AUROC Metric
-- [`calculate_auprc()`](https://mengxu98.github.io/inferCSN/reference/calculate_auprc.md)
-  : Calculate AUPRC Metric
-- [`calculate_precision()`](https://mengxu98.github.io/inferCSN/reference/calculate_precision.md)
-  : Calculate Precision
-- [`calculate_recall()`](https://mengxu98.github.io/inferCSN/reference/calculate_recall.md)
-  : Calculate Recall
-- [`calculate_f1()`](https://mengxu98.github.io/inferCSN/reference/calculate_f1.md)
-  : Calculate F1 Score
-- [`calculate_si()`](https://mengxu98.github.io/inferCSN/reference/calculate_si.md)
-  : Calculate Set Intersection
-- [`calculate_ji()`](https://mengxu98.github.io/inferCSN/reference/calculate_ji.md)
-  : Calculate Jaccard Index
-- [`calculate_epr()`](https://mengxu98.github.io/inferCSN/reference/calculate_epr.md)
-  : Calculate Early Precision Ratio
-- [`calculate_signed_epr()`](https://mengxu98.github.io/inferCSN/reference/calculate_signed_epr.md)
-  : Calculate Signed Early Precision Ratio
-- [`calculate_motif_ratios()`](https://mengxu98.github.io/inferCSN/reference/calculate_motif_ratios.md)
-  : Calculate Motif Ratios
-- [`calculate_path_stats()`](https://mengxu98.github.io/inferCSN/reference/calculate_path_stats.md)
-  : Calculate Path Statistics
-- [`calculate_stability_jaccard()`](https://mengxu98.github.io/inferCSN/reference/calculate_stability_jaccard.md)
-  : Calculate Jaccard Stability Across Runs
-- [`calculate_stability_spearman()`](https://mengxu98.github.io/inferCSN/reference/calculate_stability_spearman.md)
-  : Calculate Spearman Stability Across Runs
-
-### Network visualization
-
-- [`plot_contrast_networks()`](https://mengxu98.github.io/inferCSN/reference/plot_contrast_networks.md)
-  : Plot contrast networks
-- [`plot_dynamic_networks()`](https://mengxu98.github.io/inferCSN/reference/plot_dynamic_networks.md)
-  : Plot dynamic networks
-- [`plot_network_heatmap()`](https://mengxu98.github.io/inferCSN/reference/plot_network_heatmap.md)
-  : Plot network heatmaps
-- [`plot_static_networks()`](https://mengxu98.github.io/inferCSN/reference/plot_static_networks.md)
-  : Plot dynamic networks
-
-### Plotting functions
-
-- [`plot_coefficient()`](https://mengxu98.github.io/inferCSN/reference/plot_coefficient.md)
-  : Plot coefficients
-- [`plot_coefficients()`](https://mengxu98.github.io/inferCSN/reference/plot_coefficients.md)
-  : Plot coefficients for multiple targets
-- [`plot_edges_comparison()`](https://mengxu98.github.io/inferCSN/reference/plot_edges_comparison.md)
-  : Plot Edges Comparison
-- [`plot_embedding()`](https://mengxu98.github.io/inferCSN/reference/plot_embedding.md)
-  : Plot an embedding
-- [`plot_histogram()`](https://mengxu98.github.io/inferCSN/reference/plot_histogram.md)
-  : Plot histogram
-- [`plot_scatter()`](https://mengxu98.github.io/inferCSN/reference/plot_scatter.md)
-  : Plot expression data
-
-### Calculate gene rank
-
-- [`calculate_gene_rank()`](https://mengxu98.github.io/inferCSN/reference/calculate_gene_rank.md)
-  : Rank TFs and genes in network
-
 ### Sparse regression model
 
 - [`single_network()`](https://mengxu98.github.io/inferCSN/reference/single_network.md)
@@ -88,14 +22,10 @@
 
 - [`filter_sort_matrix()`](https://mengxu98.github.io/inferCSN/reference/filter_sort_matrix.md)
   : Filter and sort a network matrix
-- [`meta_cells()`](https://mengxu98.github.io/inferCSN/reference/meta_cells.md)
-  : Build metacells
 - [`network_format()`](https://mengxu98.github.io/inferCSN/reference/network_format.md)
   : Format a network table
 - [`print(`*`<infercsn_logo>`*`)`](https://mengxu98.github.io/inferCSN/reference/print.inferCSN_logo.md)
   : Print logo
-- [`subsampling()`](https://mengxu98.github.io/inferCSN/reference/subsampling.md)
-  : Subsample an expression matrix
 
 ### Example data
 

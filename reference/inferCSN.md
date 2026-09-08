@@ -89,6 +89,13 @@ inferCSN(
 
 A data frame containing exactly `regulator`, `target`, and `weight`.
 
+## Details
+
+Signed ordinal weights group descending deletion evidence against each
+group's maximum within 1e-12 \* (1 + abs(maximum)). This fixed numerical
+rule leaves support, fitted coefficients and raw deletion evidence
+unchanged.
+
 ## Examples
 
 ``` r
@@ -98,10 +105,10 @@ network_table <- inferCSN(
   example_matrix,
   pseudotime = example_meta_data$pseudotime
 )
-#> ℹ [2026-08-31 02:39:57] Inferring network for <matrix/array>...
-#> ◌ [2026-08-31 02:39:57] Checking parameters...
-#> ✔ [2026-08-31 02:39:57] Inferring network done
-#> ℹ [2026-08-31 02:39:57] Network information:
+#> ℹ [2026-09-08 16:58:03] Inferring network for <matrix/array>...
+#> ◌ [2026-09-08 16:58:03] Checking parameters...
+#> ✔ [2026-09-08 16:58:03] Inferring network done
+#> ℹ [2026-09-08 16:58:03] Network information:
 #> ℹ                         Edges Regulators Targets
 #> ℹ                       1    11          6       6
 head(network_table)
@@ -118,10 +125,10 @@ inferCSN(
   regulators = c("g1", "g2"),
   targets = c("g3", "g4")
 )
-#> ℹ [2026-08-31 02:39:57] Inferring network for <matrix/array>...
-#> ◌ [2026-08-31 02:39:57] Checking parameters...
-#> ✔ [2026-08-31 02:39:57] Inferring network done
-#> ℹ [2026-08-31 02:39:57] Network information:
+#> ℹ [2026-09-08 16:58:03] Inferring network for <matrix/array>...
+#> ◌ [2026-09-08 16:58:03] Checking parameters...
+#> ✔ [2026-09-08 16:58:03] Inferring network done
+#> ℹ [2026-09-08 16:58:03] Network information:
 #> ℹ                         Edges Regulators Targets
 #> ℹ                       1     4          2       2
 #>   regulator target weight

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">inferCSN</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,7 +17,9 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
-      </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/mengxu98/inferCSN" title="GitHub" aria-label="GitHub repository"><span class="fa fab fa-github fa-lg"></span></a></li>
+      </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/mengxu98/inferCSN" title="GitHub" aria-label="GitHub repository"><span class="fa fab fa-github fa-lg"></span></a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/mengxu98" title="MengXu" aria-label="MengXu's GitHub profile"><span class="fa fas fa-home fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
@@ -37,6 +39,31 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.5" id="infercsn-125">inferCSN 1.2.5<a class="anchor" aria-label="anchor" href="#infercsn-125"></a></h2>
+<ul><li>
+<strong>breaking</strong>:
+<ul><li>inferCSN now keeps the inference core only: <code><a href="../reference/inferCSN.html">inferCSN()</a></code>, <code><a href="../reference/single_network.html">single_network()</a></code>, <code><a href="../reference/fit_greedy_l0.html">fit_greedy_l0()</a></code>, <code><a href="../reference/fit_greedy_l0_batch.html">fit_greedy_l0_batch()</a></code>, <code><a href="../reference/network_format.html">network_format()</a></code>, and <code><a href="../reference/filter_sort_matrix.html">filter_sort_matrix()</a></code>.</li>
+</ul></li>
+<li>
+<strong>func</strong>:
+<ul><li>Added a backward-deletion refinement pass to the batch greedy-L0 solver (<code><a href="../reference/fit_greedy_l0_batch.html">fit_greedy_l0_batch()</a></code>), removing predictors that no longer improve BIC after forward selection, which avoids over-selecting the support near perfect fits.</li>
+<li>Group numerically tied deletion evidence against a fixed group maximum using a relative tolerance of 1e-12 when computing signed ordinal weights.</li>
+<li>Added direct-QR regression checks for batch coefficients, BIC, deletion evidence, and near-perfect-fit behavior.</li>
+<li>Cell preprocessing (<code>meta_cells()</code> and <code>subsampling()</code>) now lives in multiCSN; call <code>multiCSN::meta_cells()</code> or <code>multiCSN::subsampling()</code> instead.</li>
+</ul></li>
+<li>
+<strong>deps</strong>:
+<ul><li>Remove unused <code>gtools</code> and <code>RTransferEntropy</code> suggestions.</li>
+<li>Drop plotting and evaluation dependencies (<code>ggplot2</code>, <code>thisplot</code>, <code>patchwork</code>, <code>precrec</code>, <code>pROC</code>).</li>
+<li>Remove <code>RANN</code>, <code>igraph</code>, <code>irlba</code>, and <code>proxy</code> from this package after moving cell preprocessing to multiCSN. Drop scatter-only and network-plot Suggests (<code>ggExtra</code>, <code>ggpointdensity</code>, <code>ggpubr</code>, <code>RColorBrewer</code>, <code>viridis</code>, <code>ggnetwork</code>, <code>ggraph</code>, <code>dplyr</code>, <code>purrr</code>, <code>ComplexHeatmap</code>, <code>circlize</code>, <code>gganimate</code>, <code>network</code>, <code>plotly</code>, <code>tidygraph</code>).</li>
+</ul></li>
+<li>
+<strong>ci</strong>:
+<ul><li>Fixed failing package CI checks.</li>
+<li>Removed unused <code>dev/config_attachment.yaml</code>.</li>
+</ul></li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.4" id="infercsn-124">inferCSN 1.2.4<a class="anchor" aria-label="anchor" href="#infercsn-124"></a></h2>
 <ul><li>
 <strong>breaking</strong>:
@@ -47,7 +74,7 @@
 <strong>func</strong>:
 <ul><li>Added static and pseudotime-ordered network inference for dense and sparse matrices, including multi-branch pseudotime and deterministic parallel output.</li>
 <li>Added early-precision, signed-edge, motif, path, and cross-run stability metrics.</li>
-<li>Extended <code><a href="../reference/plot_network_heatmap.html">plot_network_heatmap()</a></code> with aligned multi-network layouts, performance labels, and ground-truth cell borders.</li>
+<li>Extended <code>plot_network_heatmap()</code> with aligned multi-network layouts, performance labels, and ground-truth cell borders.</li>
 </ul></li>
 <li>
 <strong>deps</strong>:
@@ -172,8 +199,8 @@
 </ul></li>
 <li>
 <strong>docs</strong>:
-<ul><li>Added example for <code><a href="../reference/calculate_accuracy.html">calculate_accuracy()</a></code> function.</li>
-<li>Modified examples for <code><a href="../reference/plot_network_heatmap.html">plot_network_heatmap()</a></code> function.</li>
+<ul><li>Added example for <code>calculate_accuracy()</code> function.</li>
+<li>Modified examples for <code>plot_network_heatmap()</code> function.</li>
 <li>Updated badge display.</li>
 <li>Updated ProjectId.</li>
 </ul></li>
@@ -188,7 +215,7 @@
 <li>
 <strong>docs</strong>:
 <ul><li>Edited documentation for multiple functions.</li>
-<li>Modified documentation for <code><a href="../reference/plot_network_heatmap.html">plot_network_heatmap()</a></code> function.</li>
+<li>Modified documentation for <code>plot_network_heatmap()</code> function.</li>
 <li>Updated <code>test-coverage.yaml</code> file.</li>
 <li>Renamed files for better organization.</li>
 </ul></li>
@@ -229,7 +256,7 @@
 <h2 class="pkg-version" data-toc-text="1.0.9" id="infercsn-109">inferCSN 1.0.9<a class="anchor" aria-label="anchor" href="#infercsn-109"></a></h2>
 <ul><li>
 <strong>func</strong>:
-<ul><li>Added new utility functions including <code>%s%</code>, <code>matrix_to_table()</code>, <code>pearson_correlation()</code>, <code>simulate_sparse_matrix()</code>, <code><a href="../reference/plot_coefficients.html">plot_coefficients()</a></code>, <code>split_indices()</code>, <code>subsampling_fun()</code>, and <code>weight_sift()</code>.</li>
+<ul><li>Added new utility functions including <code>%s%</code>, <code>matrix_to_table()</code>, <code>pearson_correlation()</code>, <code>simulate_sparse_matrix()</code>, <code>plot_coefficients()</code>, <code>split_indices()</code>, <code>subsampling_fun()</code>, and <code>weight_sift()</code>.</li>
 <li>Added new C++ functions including <code><a href="../reference/network_format.html">network_format()</a></code>, <code>prepare_calculate_metrics()</code> for improved performance.</li>
 <li>Added <code>CITATION</code> file for proper citation.</li>
 <li>Renamed function from <code>percent_samples</code> to <code>subsampling</code>.</li>
@@ -238,7 +265,7 @@
 <li>
 <strong>refactor</strong>:
 <ul><li>Renamed function <code>%s%</code> to <code>%ss%</code>.</li>
-<li>Renamed functions to <code><a href="../reference/calculate_metrics.html">calculate_metrics()</a></code>.</li>
+<li>Renamed functions to <code>calculate_metrics()</code>.</li>
 <li>Modified structure of <code>sparse_regression()</code> output.</li>
 <li>Modified normalization method implementation.</li>
 <li>Updated <code>log_message()</code> function.</li>
@@ -303,7 +330,7 @@
 <h2 class="pkg-version" data-toc-text="1.0.6" id="infercsn-106">inferCSN 1.0.6<a class="anchor" aria-label="anchor" href="#infercsn-106"></a></h2>
 <ul><li>
 <strong>func</strong>:
-<ul><li>Added new visualization functions: <code><a href="../reference/plot_embedding.html">plot_embedding()</a></code> and <code>plot_weight_distribution()</code>.</li>
+<ul><li>Added new visualization functions: <code>plot_embedding()</code> and <code>plot_weight_distribution()</code>.</li>
 <li>Added new parameters for <code>plot_weight_distribution()</code>.</li>
 <li>Added <code>asMatrixParallel()</code> for parallel matrix operations.</li>
 <li>Added <code>RcppParallel</code> support for improved performance.</li>
@@ -320,7 +347,7 @@
 <li>
 <strong>bugs</strong>:
 <ul><li>Fixed error for <code>.weight_sift()</code>.</li>
-<li>Fixed error and improved coding style in <code><a href="../reference/plot_scatter.html">plot_scatter()</a></code>.</li>
+<li>Fixed error and improved coding style in <code>plot_scatter()</code>.</li>
 <li>Fixed document issues.</li>
 </ul></li>
 <li>
@@ -343,17 +370,17 @@
 <strong>func</strong>:
 <ul><li>Added <code>entropy</code> to filter edges in network.</li>
 <li>Added new function <code>as_matrix()</code> for matrix conversion.</li>
-<li>Added new function <code><a href="../reference/plot_scatter.html">plot_scatter()</a></code> for scatter plot visualization.</li>
-<li>Added new parameter for <code><a href="../reference/plot_scatter.html">plot_scatter()</a></code>.</li>
+<li>Added new function <code>plot_scatter()</code> for scatter plot visualization.</li>
+<li>Added new parameter for <code>plot_scatter()</code>.</li>
 <li>Added new function <code>network_sift()</code> for network filtering (renamed from previous version).</li>
-<li>Added new functions: <code>r_square()</code>, <code><a href="../reference/plot_contrast_networks.html">plot_contrast_networks()</a></code>, <code><a href="../reference/plot_dynamic_networks.html">plot_dynamic_networks()</a></code>.</li>
+<li>Added new functions: <code>r_square()</code>, <code>plot_contrast_networks()</code>, <code>plot_dynamic_networks()</code>.</li>
 <li>Added new function <code>map_parallel()</code> and <code>parallelize_fun()</code> for parallel processing.</li>
 <li>Added <code>.softmax()</code> function.</li>
 <li>Added new parameter <code>heatmap_size_lock</code> for <code>network.heatmap()</code>.</li>
 <li>Modified S4 method for <code>inferCSN</code>.</li>
 <li>Removed <code>dynamic.networks</code>, <code>contrast.networks</code> functions (renamed/replaced).</li>
 <li>Renamed <code>net.format</code> to <code><a href="../reference/network_format.html">network_format()</a></code>.</li>
-<li>Renamed <code>dynamic.networks</code> to <code><a href="../reference/plot_static_networks.html">plot_static_networks()</a></code>.</li>
+<li>Renamed <code>dynamic.networks</code> to <code>plot_static_networks()</code>.</li>
 <li>Fixed errors and added new parameters for <code>network_sift()</code>.</li>
 <li>Deleted unnecessary functions.</li>
 <li>Modified import functions and packages.</li>

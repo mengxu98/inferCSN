@@ -1,5 +1,45 @@
 # Changelog
 
+## inferCSN 1.2.5
+
+- **breaking**:
+  - inferCSN now keeps the inference core only:
+    [`inferCSN()`](https://mengxu98.github.io/inferCSN/reference/inferCSN.md),
+    [`single_network()`](https://mengxu98.github.io/inferCSN/reference/single_network.md),
+    [`fit_greedy_l0()`](https://mengxu98.github.io/inferCSN/reference/fit_greedy_l0.md),
+    [`fit_greedy_l0_batch()`](https://mengxu98.github.io/inferCSN/reference/fit_greedy_l0_batch.md),
+    [`network_format()`](https://mengxu98.github.io/inferCSN/reference/network_format.md),
+    and
+    [`filter_sort_matrix()`](https://mengxu98.github.io/inferCSN/reference/filter_sort_matrix.md).
+- **func**:
+  - Added a backward-deletion refinement pass to the batch greedy-L0
+    solver
+    ([`fit_greedy_l0_batch()`](https://mengxu98.github.io/inferCSN/reference/fit_greedy_l0_batch.md)),
+    removing predictors that no longer improve BIC after forward
+    selection, which avoids over-selecting the support near perfect
+    fits.
+  - Group numerically tied deletion evidence against a fixed group
+    maximum using a relative tolerance of 1e-12 when computing signed
+    ordinal weights.
+  - Added direct-QR regression checks for batch coefficients, BIC,
+    deletion evidence, and near-perfect-fit behavior.
+  - Cell preprocessing (`meta_cells()` and `subsampling()`) now lives in
+    multiCSN; call `multiCSN::meta_cells()` or `multiCSN::subsampling()`
+    instead.
+- **deps**:
+  - Remove unused `gtools` and `RTransferEntropy` suggestions.
+  - Drop plotting and evaluation dependencies (`ggplot2`, `thisplot`,
+    `patchwork`, `precrec`, `pROC`).
+  - Remove `RANN`, `igraph`, `irlba`, and `proxy` from this package
+    after moving cell preprocessing to multiCSN. Drop scatter-only and
+    network-plot Suggests (`ggExtra`, `ggpointdensity`, `ggpubr`,
+    `RColorBrewer`, `viridis`, `ggnetwork`, `ggraph`, `dplyr`, `purrr`,
+    `ComplexHeatmap`, `circlize`, `gganimate`, `network`, `plotly`,
+    `tidygraph`).
+- **ci**:
+  - Fixed failing package CI checks.
+  - Removed unused `dev/config_attachment.yaml`.
+
 ## inferCSN 1.2.4
 
 - **breaking**:
@@ -18,10 +58,8 @@
     parallel output.
   - Added early-precision, signed-edge, motif, path, and cross-run
     stability metrics.
-  - Extended
-    [`plot_network_heatmap()`](https://mengxu98.github.io/inferCSN/reference/plot_network_heatmap.md)
-    with aligned multi-network layouts, performance labels, and
-    ground-truth cell borders.
+  - Extended `plot_network_heatmap()` with aligned multi-network
+    layouts, performance labels, and ground-truth cell borders.
 - **deps**:
   - Removed `L0Learn` and added `thisplot` for plotting support.
 - **ci**:
@@ -113,12 +151,8 @@ CRAN release: 2025-03-27
 - **bugs**:
   - Fixed error in pkgdown build process.
 - **docs**:
-  - Added example for
-    [`calculate_accuracy()`](https://mengxu98.github.io/inferCSN/reference/calculate_accuracy.md)
-    function.
-  - Modified examples for
-    [`plot_network_heatmap()`](https://mengxu98.github.io/inferCSN/reference/plot_network_heatmap.md)
-    function.
+  - Added example for `calculate_accuracy()` function.
+  - Modified examples for `plot_network_heatmap()` function.
   - Updated badge display.
   - Updated ProjectId.
 
@@ -130,9 +164,7 @@ CRAN release: 2025-03-27
   - Updated import records for better dependency management.
 - **docs**:
   - Edited documentation for multiple functions.
-  - Modified documentation for
-    [`plot_network_heatmap()`](https://mengxu98.github.io/inferCSN/reference/plot_network_heatmap.md)
-    function.
+  - Modified documentation for `plot_network_heatmap()` function.
   - Updated `test-coverage.yaml` file.
   - Renamed files for better organization.
 - **refactor**:
@@ -164,8 +196,8 @@ CRAN release: 2025-03-27
 - **func**:
   - Added new utility functions including `%s%`, `matrix_to_table()`,
     `pearson_correlation()`, `simulate_sparse_matrix()`,
-    [`plot_coefficients()`](https://mengxu98.github.io/inferCSN/reference/plot_coefficients.md),
-    `split_indices()`, `subsampling_fun()`, and `weight_sift()`.
+    `plot_coefficients()`, `split_indices()`, `subsampling_fun()`, and
+    `weight_sift()`.
   - Added new C++ functions including
     [`network_format()`](https://mengxu98.github.io/inferCSN/reference/network_format.md),
     `prepare_calculate_metrics()` for improved performance.
@@ -175,8 +207,7 @@ CRAN release: 2025-03-27
     \>= 4.1.0.
 - **refactor**:
   - Renamed function `%s%` to `%ss%`.
-  - Renamed functions to
-    [`calculate_metrics()`](https://mengxu98.github.io/inferCSN/reference/calculate_metrics.md).
+  - Renamed functions to `calculate_metrics()`.
   - Modified structure of `sparse_regression()` output.
   - Modified normalization method implementation.
   - Updated `log_message()` function.
@@ -225,9 +256,8 @@ CRAN release: 2024-08-24
 ## inferCSN 1.0.6
 
 - **func**:
-  - Added new visualization functions:
-    [`plot_embedding()`](https://mengxu98.github.io/inferCSN/reference/plot_embedding.md)
-    and `plot_weight_distribution()`.
+  - Added new visualization functions: `plot_embedding()` and
+    `plot_weight_distribution()`.
   - Added new parameters for `plot_weight_distribution()`.
   - Added `asMatrixParallel()` for parallel matrix operations.
   - Added `RcppParallel` support for improved performance.
@@ -242,8 +272,7 @@ CRAN release: 2024-08-24
   - Removed export of `check_parameters()`.
 - **bugs**:
   - Fixed error for `.weight_sift()`.
-  - Fixed error and improved coding style in
-    [`plot_scatter()`](https://mengxu98.github.io/inferCSN/reference/plot_scatter.md).
+  - Fixed error and improved coding style in `plot_scatter()`.
   - Fixed document issues.
 - **docs**:
   - Modified documentation for multiple functions.
@@ -262,16 +291,12 @@ CRAN release: 2024-06-26
 - **func**:
   - Added `entropy` to filter edges in network.
   - Added new function `as_matrix()` for matrix conversion.
-  - Added new function
-    [`plot_scatter()`](https://mengxu98.github.io/inferCSN/reference/plot_scatter.md)
-    for scatter plot visualization.
-  - Added new parameter for
-    [`plot_scatter()`](https://mengxu98.github.io/inferCSN/reference/plot_scatter.md).
+  - Added new function `plot_scatter()` for scatter plot visualization.
+  - Added new parameter for `plot_scatter()`.
   - Added new function `network_sift()` for network filtering (renamed
     from previous version).
-  - Added new functions: `r_square()`,
-    [`plot_contrast_networks()`](https://mengxu98.github.io/inferCSN/reference/plot_contrast_networks.md),
-    [`plot_dynamic_networks()`](https://mengxu98.github.io/inferCSN/reference/plot_dynamic_networks.md).
+  - Added new functions: `r_square()`, `plot_contrast_networks()`,
+    `plot_dynamic_networks()`.
   - Added new function `map_parallel()` and `parallelize_fun()` for
     parallel processing.
   - Added `.softmax()` function.
@@ -281,8 +306,7 @@ CRAN release: 2024-06-26
     (renamed/replaced).
   - Renamed `net.format` to
     [`network_format()`](https://mengxu98.github.io/inferCSN/reference/network_format.md).
-  - Renamed `dynamic.networks` to
-    [`plot_static_networks()`](https://mengxu98.github.io/inferCSN/reference/plot_static_networks.md).
+  - Renamed `dynamic.networks` to `plot_static_networks()`.
   - Fixed errors and added new parameters for `network_sift()`.
   - Deleted unnecessary functions.
   - Modified import functions and packages.
