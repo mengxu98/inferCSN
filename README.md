@@ -10,7 +10,9 @@
 
 [inferCSN](https://mengxu98.github.io/inferCSN/) is an R package for **infer**ring **C**ell-**S**pecific gene regulatory **N**etwork from single-cell RNA data.
 
-<img src="man/figures/inferCSN.svg" alt="inferCSN+ workflow diagram" width="75%"/>
+<img src="https://raw.githubusercontent.com/mengxu98/figures/main/inferCSN/inferCSN.svg#gh-light-mode-only" alt="inferCSN+ workflow diagram" width="75%"/>
+
+<img src="https://raw.githubusercontent.com/mengxu98/figures/main/inferCSN/inferCSN-dark.svg#gh-dark-mode-only" alt="inferCSN+ workflow diagram" width="75%"/>
 
 ## **Installation**
 

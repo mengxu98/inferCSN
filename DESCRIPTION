@@ -23,6 +23,8 @@ Suggests:
     testthat
 LinkingTo:
     Rcpp
+Remotes:
+    mengxu98/thisutils
 Config/Needs/website: mengxu98/thistemplate
 Config/testthat/edition: 3
 Encoding: UTF-8
