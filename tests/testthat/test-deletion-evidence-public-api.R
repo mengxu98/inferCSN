@@ -139,7 +139,8 @@ test_that("batch solver preserves analytic SSE near a perfect fit", {
   ), ncol = 1L)
 
   fit <- fit_greedy_l0_batch(
-    gram, xty, response_ss = 799, candidates = list(1:9), n_obs = 800
+    gram, xty,
+    response_ss = 799, candidates = list(1:9), n_obs = 800
   )
 
   expect_equal(fit$support_size, 6L)
