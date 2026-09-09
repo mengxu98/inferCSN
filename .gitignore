@@ -16,5 +16,6 @@ test
 
 # R files
 .Rhistory
+.Rprofile
 .Rproj.user
 .Ruserdata
