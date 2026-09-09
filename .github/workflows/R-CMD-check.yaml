@@ -31,8 +31,12 @@ jobs:
       - uses: actions/checkout@v5
 
       - name: run cleanup for package build 🚀
-        run: bash scripts/cleanup.sh
         shell: bash
+        run: |
+          rm -f renv.lock
+          if [ -d src ]; then
+            find src -type f \( -name '*.o' -o -name '*.dll' -o -name '*.so' \) -delete
+          fi
         
       - uses: r-lib/actions/setup-pandoc@v2
 
