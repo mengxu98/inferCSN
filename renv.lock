@@ -4,23 +4,23 @@
     "Repositories": [
       {
         "Name": "BioCsoft",
-        "URL": "https://bioconductor.org/packages/3.18/bioc"
+        "URL": "https://bioconductor.org/packages/3.22/bioc"
       },
       {
         "Name": "BioCann",
-        "URL": "https://bioconductor.org/packages/3.18/data/annotation"
+        "URL": "https://bioconductor.org/packages/3.22/data/annotation"
       },
       {
         "Name": "BioCexp",
-        "URL": "https://bioconductor.org/packages/3.18/data/experiment"
+        "URL": "https://bioconductor.org/packages/3.22/data/experiment"
       },
       {
         "Name": "BioCworkflows",
-        "URL": "https://bioconductor.org/packages/3.18/workflows"
+        "URL": "https://bioconductor.org/packages/3.22/workflows"
       },
       {
         "Name": "BioCbooks",
-        "URL": "https://bioconductor.org/packages/3.18/books"
+        "URL": "https://bioconductor.org/packages/3.22/books"
       },
       {
         "Name": "CRAN",
@@ -29,14 +29,14 @@
     ]
   },
   "Bioconductor": {
-    "Version": "3.21"
+    "Version": "3.22"
   },
   "Packages": {
     "BiocGenerics": {
       "Package": "BiocGenerics",
       "Version": "0.54.0",
-      "Source": "Repository",
-      "Repository": "https://bioconductor.org/packages/3.21/bioc",
+      "Source": "Bioconductor",
+      "Repository": "Bioconductor 3.22",
       "Requirements": [
         "R",
         "generics",
@@ -60,8 +60,8 @@
     "ComplexHeatmap": {
       "Package": "ComplexHeatmap",
       "Version": "2.24.0",
-      "Source": "Repository",
-      "Repository": "https://bioconductor.org/packages/3.21/bioc",
+      "Source": "Bioconductor",
+      "Repository": "Bioconductor 3.22",
       "Requirements": [
         "GetoptLong",
         "GlobalOptions",
@@ -156,8 +156,8 @@
     "IRanges": {
       "Package": "IRanges",
       "Version": "2.42.0",
-      "Source": "Repository",
-      "Repository": "https://bioconductor.org/packages/3.21/bioc",
+      "Source": "Bioconductor",
+      "Repository": "Bioconductor 3.22",
       "Requirements": [
         "BiocGenerics",
         "R",
@@ -353,8 +353,8 @@
     "S4Vectors": {
       "Package": "S4Vectors",
       "Version": "0.46.0",
-      "Source": "Repository",
-      "Repository": "https://bioconductor.org/packages/3.21/bioc",
+      "Source": "Bioconductor",
+      "Repository": "Bioconductor 3.22",
       "Requirements": [
         "BiocGenerics",
         "R",
