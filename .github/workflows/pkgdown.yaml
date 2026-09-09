@@ -34,7 +34,10 @@ jobs:
           needs: website
 
       - name: Build site
-        run: pkgdown::build_site()
+        run: |
+          pkgdown::build_site()
+          # Disable Jekyll so GitHub Pages serves the pkgdown output as-is.
+          file.create("docs/.nojekyll")
         shell: Rscript {0}
 
       - name: Deploy to GitHub pages 🚀
