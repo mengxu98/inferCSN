@@ -8,7 +8,7 @@
 	.st1{opacity:0.85;}
 	.st2{enable-background:new    ;}
 	.st3{fill:#FFFFFF;}
-	.st4{font-family:'TimesNewRomanPS-BoldItalicMT';}
+	.st4{font-family:'Times New Roman', Times, serif;font-weight:bold;font-style:italic;}
 	.st5{font-size:150px;}
 	.st6{fill:#B65A45;}
 	.st7{fill:#83AC78;}
