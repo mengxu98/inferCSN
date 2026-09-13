@@ -49,6 +49,23 @@ test_that("batch supports and deletion evidence agree with direct QR refits", {
   }
 })
 
+test_that("pivoted Gram fits restore predictor columns and deletion evidence", {
+  gram <- matrix(c(100, 200, 0, 200, 900, 100, 0, 100, 400), 3)
+  beta <- c(3, -1, 2)
+  xty <- gram %*% beta
+  y_ss <- sum(beta * xty) + 1
+  expected_evidence <- 100 * log(1 + beta^2 / diag(solve(gram))) - log(100)
+
+  for (candidate_order in list(1:3, 3:1, c(2L, 1L, 3L))) {
+    fit <- fit_greedy_l0_batch(gram, xty, y_ss, list(candidate_order), n_obs = 100)
+    expect_setequal(fit$predictor_index, 1:3)
+    index <- match(1:3, fit$predictor_index)
+    expect_equal(fit$standardized_beta[index], beta, tolerance = 1e-12)
+    expect_equal(fit$rss, 1, tolerance = 1e-10)
+    expect_equal(fit$deletion_delta_bic[index], expected_evidence, tolerance = 1e-10)
+  }
+})
+
 test_that("constant, singleton, duplicate and wide predictors obey support contracts", {
   set.seed(3190)
   signal <- rnorm(12)
@@ -65,6 +82,49 @@ test_that("constant, singleton, duplicate and wide predictors obey support contr
   }
   empty <- inferCSN(cbind(a = rep(1, 20), b = rep(2, 20)), verbose = FALSE)
   expect_equal(nrow(empty), 0L)
+})
+
+test_that("long forward paths preserve coefficients and deletion evidence with pivoting", {
+  for (seed in 3193:3196) {
+    set.seed(seed)
+    x <- matrix(rnorm(40 * 12), 40, 12)
+    x[, 12] <- x[, 1] + x[, 2] + rnorm(40, sd = 0.1)
+    x <- sweep(x, 2, rep(c(1, 4, 2), 4), "*")
+    gram <- crossprod(x)
+    beta <- rep(c(3, -2, 1), 4)
+    xty <- gram %*% beta
+    y_ss <- sum(beta * xty) + 1
+    evidence <- 1000 * log(1 + beta^2 / diag(solve(gram))) - log(1000)
+    for (candidate_order in list(1:12, 12:1)) {
+      fit <- fit_greedy_l0_batch(gram, xty, y_ss, list(candidate_order), n_obs = 1000)
+      expect_setequal(fit$predictor_index, 1:12)
+      index <- match(1:12, fit$predictor_index)
+      expect_equal(fit$standardized_beta[index], beta, tolerance = 1e-8)
+      expect_equal(fit$rss, 1, tolerance = 1e-7)
+      expect_equal(fit$deletion_delta_bic[index], evidence, tolerance = 1e-7)
+    }
+  }
+})
+
+test_that("large selected supports preserve coefficients and deletion evidence", {
+  for (p in c(63L, 64L, 65L, 72L)) {
+    set.seed(3197 + p)
+    x <- matrix(rnorm(100 * p), 100, p)
+    x <- sweep(x, 2, rep_len(c(1, 4, 2), p), "*")
+    gram <- crossprod(x)
+    beta <- rep_len(c(3, -2, 1), p)
+    xty <- gram %*% beta
+    y_ss <- sum(beta * xty) + 1
+    evidence <- 1000 * log(1 + beta^2 / diag(solve(gram))) - log(1000)
+    fit <- fit_greedy_l0_batch(
+      gram, xty, y_ss, list(seq_len(p)), n_obs = 1000
+    )
+    expect_setequal(fit$predictor_index, seq_len(p))
+    index <- match(seq_len(p), fit$predictor_index)
+    expect_equal(fit$standardized_beta[index], beta, tolerance = 1e-8)
+    expect_equal(fit$rss, 1, tolerance = 1e-7)
+    expect_equal(fit$deletion_delta_bic[index], evidence, tolerance = 1e-7)
+  }
 })
 
 test_that("static network output is invariant to core count and row ordering", {

@@ -7,6 +7,7 @@
 #include <limits>
 #include <map>
 #include <string>
+#include <utility>
 #include <vector>
 #ifdef _OPENMP
 #include <omp.h>
@@ -251,24 +252,207 @@ static bool fit_subset_coefficients(
       lhs[static_cast<size_t>(i) * k + j] = gram[static_cast<size_t>(subset[i]) * p + subset[j]];
     }
   }
-  return solve_linear_system(lhs, rhs, k, beta);
+  return solve_linear_system(std::move(lhs), std::move(rhs), k, beta);
 }
+
+struct InversePathCache {
+  std::vector<int> subset;
+  std::vector<int> pivots;
+  std::vector<double> diagonals;
+  std::vector<double> pivot_gram;
+  std::vector<double> pivot_inverse;
+  std::vector<double> factors;
+  std::vector<double> inverse;
+  double matrix_scale = 0.0;
+};
+
+static bool extend_subset_inverse(
+    const std::vector<double>& gram,
+    const std::vector<int>& subset,
+    int p,
+    InversePathCache& cache,
+    std::vector<double>& inverse
+) {
+  const int old_k = static_cast<int>(cache.subset.size());
+  const int k = static_cast<int>(subset.size());
+  if (old_k == 0 || k != old_k + 1 ||
+      !std::equal(cache.subset.begin(), cache.subset.end(), subset.begin())) {
+    return false;
+  }
+  const int added = subset.back();
+  const double added_diagonal = gram[static_cast<size_t>(added) * p + added];
+  const double matrix_scale = std::max(cache.matrix_scale, std::fabs(added_diagonal));
+  const double tolerance = 1e-10 * std::max(1.0, matrix_scale);
+  std::vector<double> last_column(old_k);
+  std::vector<double> last_row(k);
+  std::vector<double> last_inverse(k, 0.0);
+  for (int i = 0; i < old_k; ++i) {
+    last_column[i] = gram[static_cast<size_t>(subset[i]) * p + added];
+    last_row[i] = gram[static_cast<size_t>(added) * p + subset[i]];
+  }
+  last_row[old_k] = added_diagonal;
+  last_inverse[old_k] = 1.0;
+
+  std::vector<double> pivot_last_values(old_k);
+  std::vector<double> last_factors(old_k);
+
+  for (int column = 0; column < old_k; ++column) {
+    const double diagonal = cache.diagonals[column];
+    // The appended row is last in pivot tie order. Equality keeps the old
+    // pivot; a strictly larger candidate requires a full recomputation.
+    if (std::fabs(diagonal) <= tolerance ||
+        std::fabs(last_row[column]) > std::fabs(diagonal)) {
+      return false;
+    }
+    const int pivot = cache.pivots[column];
+    std::swap(last_column[column], last_column[pivot]);
+    last_column[column] /= diagonal;
+    const double pivot_last = last_column[column];
+    const size_t old_offset = static_cast<size_t>(column) * old_k;
+    pivot_last_values[column] = pivot_last;
+
+    const double factor = last_row[column];
+    last_factors[column] = factor;
+    if (factor != 0.0) {
+      for (int item = column; item < old_k; ++item) {
+        last_row[item] -= factor * cache.pivot_gram[old_offset + item];
+      }
+      last_row[old_k] -= factor * pivot_last;
+      for (int item = 0; item < old_k; ++item) {
+        last_inverse[item] -= factor * cache.pivot_inverse[old_offset + item];
+      }
+    }
+    for (int row = 0; row < old_k; ++row) {
+      if (row == column) {
+        continue;
+      }
+      const double old_factor = cache.factors[old_offset + row];
+      if (old_factor != 0.0) {
+        last_column[row] -= old_factor * pivot_last;
+      }
+    }
+  }
+
+  const double diagonal = last_row[old_k];
+  if (std::fabs(diagonal) <= tolerance) {
+    return false;
+  }
+  // Allocate and copy the enlarged cache only after the old pivots pass.
+  InversePathCache next;
+  next.subset = subset;
+  next.pivots = cache.pivots;
+  next.pivots.push_back(old_k);
+  next.diagonals = cache.diagonals;
+  next.diagonals.push_back(0.0);
+  next.matrix_scale = matrix_scale;
+  const size_t size = static_cast<size_t>(k) * k;
+  next.pivot_gram.assign(size, 0.0);
+  next.pivot_inverse.assign(size, 0.0);
+  next.factors.assign(size, 0.0);
+  inverse.assign(size, 0.0);
+  for (int row = 0; row < old_k; ++row) {
+    const size_t old_offset = static_cast<size_t>(row) * old_k;
+    const size_t offset = static_cast<size_t>(row) * k;
+    std::copy_n(cache.pivot_gram.data() + old_offset, old_k, next.pivot_gram.data() + offset);
+    std::copy_n(cache.pivot_inverse.data() + old_offset, old_k, next.pivot_inverse.data() + offset);
+    std::copy_n(cache.factors.data() + old_offset, old_k, next.factors.data() + offset);
+    std::copy_n(cache.inverse.data() + old_offset, old_k, inverse.data() + offset);
+    next.pivot_gram[offset + old_k] = pivot_last_values[row];
+    next.factors[offset + old_k] = last_factors[row];
+  }
+
+  next.diagonals[old_k] = diagonal;
+  next.pivot_gram[static_cast<size_t>(old_k) * k + old_k] = diagonal / diagonal;
+  for (int item = 0; item < k; ++item) {
+    last_inverse[item] /= diagonal;
+    inverse[static_cast<size_t>(old_k) * k + item] = last_inverse[item];
+    next.pivot_inverse[static_cast<size_t>(old_k) * k + item] = last_inverse[item];
+  }
+  for (int row = 0; row < old_k; ++row) {
+    const double factor = last_column[row];
+    next.factors[static_cast<size_t>(old_k) * k + row] = factor;
+    if (factor != 0.0) {
+      for (int item = 0; item < k; ++item) {
+        inverse[static_cast<size_t>(row) * k + item] -= factor * last_inverse[item];
+      }
+    }
+  }
+  next.inverse = inverse;
+  cache = std::move(next);
+  return true;
+}
+
+// The x86 generic build uses separate multiply and subtract operations.
+#if defined(__x86_64__) && (defined(__GNUC__) || defined(__clang__)) && !defined(__FMA__)
+#define INFERCSN_AVX2_ELIMINATION 1
+__attribute__((target("avx2,no-fma")))
+static void eliminate_column_avx2(
+    double* work,
+    double* inverse,
+    int k,
+    int column,
+    double* factors
+) {
+  const size_t pivot_offset = static_cast<size_t>(column) * k;
+  for (int row = 0; row < k; ++row) {
+    if (row == column) {
+      continue;
+    }
+    const size_t offset = static_cast<size_t>(row) * k;
+    double* __restrict__ work_row = work + offset;
+    const double factor = work_row[column];
+    if (factors) {
+      factors[row] = factor;
+    }
+    if (factor == 0.0) {
+      continue;
+    }
+    const double* __restrict__ pivot_work = work + pivot_offset;
+    for (int item = column; item < k; ++item) {
+      work_row[item] -= factor * pivot_work[item];
+    }
+    double* __restrict__ inverse_row = inverse + offset;
+    const double* __restrict__ pivot_inverse = inverse + pivot_offset;
+    for (int item = 0; item <= column; ++item) {
+      inverse_row[item] -= factor * pivot_inverse[item];
+    }
+  }
+}
+#endif
 
 static bool invert_subset_gram(
     const std::vector<double>& gram,
     const std::vector<int>& subset,
     int p,
-    std::vector<double>& inverse
+    std::vector<double>& inverse,
+    InversePathCache* cache = nullptr
 ) {
+  if (cache && extend_subset_inverse(gram, subset, p, *cache, inverse)) {
+    return true;
+  }
   const int k = static_cast<int>(subset.size());
+#ifdef INFERCSN_AVX2_ELIMINATION
+  static const bool has_avx2 = __builtin_cpu_supports("avx2");
+  const bool use_avx2 = has_avx2 && k >= 64;
+#endif
+  if (cache) {
+    *cache = InversePathCache();
+    cache->pivots.resize(k);
+    cache->diagonals.resize(k);
+    cache->pivot_gram.assign(static_cast<size_t>(k) * k, 0.0);
+    cache->pivot_inverse.assign(static_cast<size_t>(k) * k, 0.0);
+    cache->factors.assign(static_cast<size_t>(k) * k, 0.0);
+  }
   inverse.assign(static_cast<size_t>(k) * k, 0.0);
   if (k == 0) {
     return true;
   }
 
   std::vector<double> work(static_cast<size_t>(k) * k, 0.0);
+  std::vector<int> inverse_columns(k);
   double matrix_scale = 0.0;
   for (int row = 0; row < k; ++row) {
+    inverse_columns[row] = row;
     for (int column = 0; column < k; ++column) {
       work[static_cast<size_t>(row) * k + column] =
         gram[static_cast<size_t>(subset[row]) * p + subset[column]];
@@ -299,6 +483,7 @@ static bool invert_subset_gram(
       return false;
     }
     if (pivot != column) {
+      std::swap(inverse_columns[column], inverse_columns[pivot]);
       for (int item = 0; item < k; ++item) {
         std::swap(
           work[static_cast<size_t>(column) * k + item],
@@ -309,28 +494,79 @@ static bool invert_subset_gram(
           inverse[static_cast<size_t>(pivot) * k + item]
         );
       }
+      // Track the same column permutation in the inverse. Its pivot row then
+      // has nonzeros only in columns 0..column, even after row pivoting.
+      for (int row = 0; row < k; ++row) {
+        std::swap(
+          inverse[static_cast<size_t>(row) * k + column],
+          inverse[static_cast<size_t>(row) * k + pivot]
+        );
+      }
     }
 
     const double diagonal = work[static_cast<size_t>(column) * k + column];
-    for (int item = 0; item < k; ++item) {
+    if (cache) {
+      cache->pivots[column] = pivot;
+      cache->diagonals[column] = diagonal;
+    }
+    for (int item = column; item < k; ++item) {
       work[static_cast<size_t>(column) * k + item] /= diagonal;
+    }
+    for (int item = 0; item <= column; ++item) {
       inverse[static_cast<size_t>(column) * k + item] /= diagonal;
     }
+    if (cache) {
+      const size_t offset = static_cast<size_t>(column) * k;
+      for (int item = column; item < k; ++item) {
+        cache->pivot_gram[offset + item] = work[offset + item];
+      }
+      for (int item = 0; item <= column; ++item) {
+        cache->pivot_inverse[offset + inverse_columns[item]] = inverse[offset + item];
+      }
+    }
+#ifdef INFERCSN_AVX2_ELIMINATION
+    if (use_avx2) {
+      eliminate_column_avx2(
+        work.data(), inverse.data(), k, column,
+        cache ? cache->factors.data() + static_cast<size_t>(column) * k : nullptr
+      );
+      continue;
+    }
+#endif
     for (int row = 0; row < k; ++row) {
       if (row == column) {
         continue;
       }
       const double factor = work[static_cast<size_t>(row) * k + column];
+      if (cache) {
+        cache->factors[static_cast<size_t>(column) * k + row] = factor;
+      }
       if (factor == 0.0) {
         continue;
       }
-      for (int item = 0; item < k; ++item) {
+      for (int item = column; item < k; ++item) {
         work[static_cast<size_t>(row) * k + item] -=
           factor * work[static_cast<size_t>(column) * k + item];
+      }
+      for (int item = 0; item <= column; ++item) {
         inverse[static_cast<size_t>(row) * k + item] -=
           factor * inverse[static_cast<size_t>(column) * k + item];
       }
     }
+  }
+  // Restore the caller's original column order.
+  std::vector<double> ordered_inverse(static_cast<size_t>(k) * k);
+  for (int row = 0; row < k; ++row) {
+    for (int column = 0; column < k; ++column) {
+      ordered_inverse[static_cast<size_t>(row) * k + inverse_columns[column]] =
+        inverse[static_cast<size_t>(row) * k + column];
+    }
+  }
+  inverse.swap(ordered_inverse);
+  if (cache) {
+    cache->subset = subset;
+    cache->matrix_scale = matrix_scale;
+    cache->inverse = inverse;
   }
   return true;
 }
@@ -568,9 +804,10 @@ static TargetFit fit_target_greedy_from_gram(
   std::vector<double> path_beta;
   const double forward_bic_tolerance = 1e-10;
 
+  InversePathCache path_cache;
   for (int step = 0; step < max_support; ++step) {
     std::vector<double> path_inverse;
-    if (!invert_subset_gram(gram, selected, p, path_inverse)) {
+    if (!invert_subset_gram(gram, selected, p, path_inverse, &path_cache)) {
       break;
     }
     std::vector<double> path_projection;
