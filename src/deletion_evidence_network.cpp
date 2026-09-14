@@ -70,8 +70,12 @@ DataFrame infer_network(
     NumericMatrix pseudotime,
     List params
 ) {
-  const int p = expression.nrow();
-  const int n = expression.ncol();
+  const int n = expression.nrow();
+  const int p = expression.ncol();
+  const double* expression_values = expression.begin();
+  const auto expression_at = [expression_values, n](int gene, int cell) {
+    return expression_values[static_cast<size_t>(gene) * n + cell];
+  };
   if (p == 0 || n < 2) {
     return DataFrame::create(
       _["regulator"] = CharacterVector(),
@@ -188,7 +192,7 @@ DataFrame infer_network(
       double sum = 0.0;
       int finite_count = 0;
       for (int cell = 0; cell < n; ++cell) {
-        const double value = expression(gene, cell);
+        const double value = expression_at(gene, cell);
         if (R_finite(value)) {
           sum += value;
           ++finite_count;
@@ -200,7 +204,7 @@ DataFrame infer_network(
       const double mean = sum / static_cast<double>(finite_count);
       double ss = 0.0;
       for (int cell = 0; cell < n; ++cell) {
-        const double value = expression(gene, cell);
+        const double value = expression_at(gene, cell);
         const double centered_value = R_finite(value) ? value - mean : 0.0;
         standardized[static_cast<size_t>(gene) * n + cell] = centered_value;
         ss += centered_value * centered_value;
@@ -250,14 +254,14 @@ DataFrame infer_network(
           int x_state_n = 0;
           int y_state_n = 0;
           for (int cell : x_cells) {
-            const double value = expression(gene, cell);
+            const double value = expression_at(gene, cell);
             if (R_finite(value)) {
               x_state_sum += value;
               ++x_state_n;
             }
           }
           for (int cell : y_cells) {
-            const double value = expression(gene, cell);
+            const double value = expression_at(gene, cell);
             if (R_finite(value)) {
               y_state_sum += value;
               ++y_state_n;

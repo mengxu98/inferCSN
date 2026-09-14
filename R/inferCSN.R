@@ -81,9 +81,9 @@ infercsn_method <- function(
   )
 
   gene_names <- colnames(object)
-  expression <- t(as.matrix(object))
+  expression <- as.matrix(object)
   pseudotime <- validated$pseudotime
-  n_cells <- ncol(expression)
+  n_cells <- nrow(expression)
   if (is.null(pseudotime)) {
     pseudotime <- matrix(numeric(0L), nrow = n_cells, ncol = 0L)
   } else if (is.data.frame(pseudotime) || is.matrix(pseudotime)) {
