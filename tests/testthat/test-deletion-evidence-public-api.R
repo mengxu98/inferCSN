@@ -20,7 +20,7 @@ test_that("public static weights reconstruct from complete deletion evidence", {
     cores = 1L
   )
   archived <- inferCSN:::infer_network(
-    t(object), colnames(object), matrix(numeric(0), nrow(object), 0L), params
+    object, colnames(object), matrix(numeric(0), nrow(object), 0L), params
   )
   public <- inferCSN(
     object,
