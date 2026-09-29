@@ -49,6 +49,7 @@ reference:
 - subtitle: "Utils functions"
 - contents:
   - filter_sort_matrix
+  - select_trend_features
   - network_format
   - print.infercsn_logo
 
