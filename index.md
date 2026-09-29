@@ -6,10 +6,10 @@
 **infer**ring **C**ell-**S**pecific gene regulatory **N**etwork from
 single-cell RNA data.
 
-![inferCSN+ workflow
+![inferCSN workflow
 diagram](https://raw.githubusercontent.com/mengxu98/figures/main/inferCSN/inferCSN.svg#gh-light-mode-only)
 
-![inferCSN+ workflow
+![inferCSN workflow
 diagram](https://raw.githubusercontent.com/mengxu98/figures/main/inferCSN/inferCSN-dark.svg#gh-dark-mode-only)
 
 ## **Installation**

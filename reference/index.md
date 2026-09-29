@@ -22,6 +22,8 @@
 
 - [`filter_sort_matrix()`](https://mengxu98.github.io/inferCSN/reference/filter_sort_matrix.md)
   : Filter and sort a network matrix
+- [`select_trend_features()`](https://mengxu98.github.io/inferCSN/reference/select_trend_features.md)
+  : Select features with significant trends
 - [`network_format()`](https://mengxu98.github.io/inferCSN/reference/network_format.md)
   : Format a network table
 - [`print(`*`<infercsn_logo>`*`)`](https://mengxu98.github.io/inferCSN/reference/print.inferCSN_logo.md)
