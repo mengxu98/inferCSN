@@ -185,28 +185,7 @@ test_that("fit_greedy_l0 terminates at a delete-add-swap BIC local optimum", {
   }
 
   selected <- match(fit$model$support, colnames(x))
-  outside <- setdiff(seq_len(p), selected)
-  neighbours <- list()
-  if (length(selected)) {
-    neighbours <- c(
-      neighbours,
-      lapply(seq_along(selected), function(i) selected[-i])
-    )
-  }
-  if (length(selected) < support_cap) {
-    neighbours <- c(
-      neighbours,
-      lapply(outside, function(j) sort(c(selected, j)))
-    )
-  }
-  if (length(selected) && length(outside)) {
-    neighbours <- c(
-      neighbours,
-      unlist(lapply(seq_along(selected), function(i) {
-        lapply(outside, function(j) sort(c(selected[-i], j)))
-      }), recursive = FALSE)
-    )
-  }
+  neighbours <- support_neighbours(selected, seq_len(p), support_cap)
 
   expect_equal(fit$model$bic, bic(selected), tolerance = 1e-8)
   neighbour_bic <- vapply(neighbours, bic, numeric(1))
@@ -247,28 +226,7 @@ test_that("near-collinear randomized fits are exhaustive one-exchange optima", {
     z_y <- as.numeric(scale(y))
     p <- ncol(z_x)
     selected <- match(support, colnames(z_x))
-    outside <- setdiff(seq_len(p), selected)
-    neighbours <- list()
-    if (length(selected)) {
-      neighbours <- c(
-        neighbours,
-        lapply(seq_along(selected), function(i) selected[-i])
-      )
-    }
-    if (length(selected) < support_cap) {
-      neighbours <- c(
-        neighbours,
-        lapply(outside, function(j) sort(c(selected, j)))
-      )
-    }
-    if (length(selected) && length(outside)) {
-      neighbours <- c(
-        neighbours,
-        unlist(lapply(seq_along(selected), function(i) {
-          lapply(outside, function(j) sort(c(selected[-i], j)))
-        }), recursive = FALSE)
-      )
-    }
+    neighbours <- support_neighbours(selected, seq_len(p), support_cap)
     bic <- function(candidate) {
       if (!length(candidate)) {
         rss <- sum(z_y^2)

@@ -117,7 +117,8 @@ test_that("large selected supports preserve coefficients and deletion evidence",
     y_ss <- sum(beta * xty) + 1
     evidence <- 1000 * log(1 + beta^2 / diag(solve(gram))) - log(1000)
     fit <- fit_greedy_l0_batch(
-      gram, xty, y_ss, list(seq_len(p)), n_obs = 1000
+      gram, xty, y_ss, list(seq_len(p)),
+      n_obs = 1000
     )
     expect_setequal(fit$predictor_index, seq_len(p))
     index <- match(seq_len(p), fit$predictor_index)
@@ -131,9 +132,7 @@ test_that("static network output is invariant to core count and row ordering", {
   set.seed(3191)
   x <- matrix(rnorm(80 * 5), 80, 5, dimnames = list(paste0("c", 1:80), paste0("g", 1:5)))
   x[, 4] <- x[, 1] - x[, 2] + rnorm(80, sd = 0.1)
-  one <- inferCSN(x, cores = 1, verbose = FALSE)
-  two <- inferCSN(x, cores = 2, verbose = FALSE)
-  expect_identical(one, two)
+  one <- expect_network_across_cores(x)
   canonical <- function(z) {
     z <- z[order(z$regulator, z$target), , drop = FALSE]
     rownames(z) <- NULL

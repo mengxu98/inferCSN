@@ -1,15 +1,8 @@
-#include "network_format.h"
+#include <Rcpp.h>
 #include <algorithm>
 #include <cmath>
 
 using namespace Rcpp;
-
-AbsGreater::AbsGreater(const NumericVector &w) : weight(w) {}
-
-bool AbsGreater::operator()(int i, int j) const
-{
-  return std::abs(weight[i]) > std::abs(weight[j]);
-}
 
 //' @title Format a network table
 //'
@@ -28,47 +21,18 @@ DataFrame network_format(DataFrame network_table,
   CharacterVector target = network_table["target"];
   NumericVector weight = network_table["weight"];
 
-  LogicalVector not_na = !is_na(weight);
-  regulator = regulator[not_na];
-  target = target[not_na];
-  weight = weight[not_na];
-
-  LogicalVector non_zero = weight != 0;
-  regulator = regulator[non_zero];
-  target = target[non_zero];
-  weight = weight[non_zero];
-
-  if (regulators.isNotNull())
+  CharacterVector reg = regulators.isNotNull() ? CharacterVector(regulators) : CharacterVector();
+  CharacterVector targ = targets.isNotNull() ? CharacterVector(targets) : CharacterVector();
+  LogicalVector keep(weight.size(), false);
+  for (int i = 0; i < weight.size(); ++i)
   {
-    CharacterVector reg(regulators);
-    LogicalVector keep(regulator.size(), false);
-    for (int i = 0; i < regulator.size(); i++)
-    {
-      if (std::find(reg.begin(), reg.end(), regulator[i]) != reg.end())
-      {
-        keep[i] = true;
-      }
-    }
-    regulator = regulator[keep];
-    target = target[keep];
-    weight = weight[keep];
+    keep[i] = !NumericVector::is_na(weight[i]) && weight[i] != 0 &&
+      (regulators.isNull() || std::find(reg.begin(), reg.end(), regulator[i]) != reg.end()) &&
+      (targets.isNull() || std::find(targ.begin(), targ.end(), target[i]) != targ.end());
   }
-
-  if (targets.isNotNull())
-  {
-    CharacterVector targ(targets);
-    LogicalVector keep(target.size(), false);
-    for (int i = 0; i < target.size(); i++)
-    {
-      if (std::find(targ.begin(), targ.end(), target[i]) != targ.end())
-      {
-        keep[i] = true;
-      }
-    }
-    regulator = regulator[keep];
-    target = target[keep];
-    weight = weight[keep];
-  }
+  regulator = regulator[keep];
+  target = target[keep];
+  weight = weight[keep];
 
   CharacterVector interaction;
   if (abs_weight)
@@ -91,7 +55,9 @@ DataFrame network_format(DataFrame network_table,
   IntegerVector order(weight.size());
   for (int i = 0; i < order.size(); i++)
     order[i] = i;
-  std::sort(order.begin(), order.end(), AbsGreater(weight));
+  std::sort(order.begin(), order.end(), [&](int i, int j) {
+    return std::abs(weight[i]) > std::abs(weight[j]);
+  });
 
   regulator = regulator[order];
   target = target[order];
@@ -101,22 +67,14 @@ DataFrame network_format(DataFrame network_table,
     interaction = interaction[order];
   }
 
-  DataFrame result;
+  List result = List::create(
+      Rcpp::Named("regulator") = regulator,
+      Rcpp::Named("target") = target,
+      Rcpp::Named("weight") = weight);
   if (abs_weight)
   {
-    result = DataFrame::create(
-        Rcpp::Named("regulator") = regulator,
-        Rcpp::Named("target") = target,
-        Rcpp::Named("weight") = weight,
-        Rcpp::Named("Interaction") = interaction);
-  }
-  else
-  {
-    result = DataFrame::create(
-        Rcpp::Named("regulator") = regulator,
-        Rcpp::Named("target") = target,
-        Rcpp::Named("weight") = weight);
+    result.push_back(interaction, "Interaction");
   }
 
-  return result;
+  return DataFrame(result);
 }

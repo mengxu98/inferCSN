@@ -20,6 +20,7 @@ Imports:
     stats,
     thisutils
 Suggests:
+    L0Learn,
     testthat
 LinkingTo:
     Rcpp

@@ -13,7 +13,9 @@ single_network(
   lag_fraction = 0.05,
   lag_steps = NULL,
   cores = 1,
-  verbose = TRUE
+  verbose = TRUE,
+  method = c("greedy_l0", "L0", "L0L1", "L0L2"),
+  ...
 )
 }
 \arguments{
@@ -35,10 +37,16 @@ single_network(
 \item{cores}{Number of inference workers.}
 
 \item{verbose}{Whether to report progress.}
+
+\item{method}{\code{greedy_l0} (default), or L0Learn with the \code{L0}, \code{L0L1},
+or \code{L0L2} penalty.}
+
+\item{...}{Arguments passed to the method.}
 }
 \value{
-A data frame containing only selected edges for the requested target.
-The data frame has three columns: regulator, target, and weight.
+A data frame with regulator, target, and weight columns. Greedy-L0
+returns selected edges. L0Learn retains the original per-regulator coefficients,
+including zeros; [inferCSN()] removes zero weights from the complete network.
 }
 \description{
 Construct network for single target gene

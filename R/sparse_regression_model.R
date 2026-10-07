@@ -20,7 +20,7 @@ fit_greedy_l0 <- function(
   storage.mode(x) <- "double"
   y <- as.numeric(y)
   if (length(y) != nrow(x)) {
-    stop("`y` must have one value for every row of `x`.", call. = FALSE)
+    thisutils::log_message("`y` must have one value for every row of `x`.", message_type = "error")
   }
   if (is.null(colnames(x))) {
     colnames(x) <- paste0("V", seq_len(ncol(x)))
@@ -29,7 +29,7 @@ fit_greedy_l0 <- function(
   fit <- solve_greedy_l0(
     x = x,
     y = y,
-    max_support_size = if (is.null(max_support_size)) 0L else max_support_size,
+    max_support_size = max_support_size,
     min_improvement = as.numeric(min_improvement)
   )
   coefficient <- as.numeric(fit$coefficient)
@@ -56,7 +56,7 @@ fit_greedy_l0 <- function(
     )
     if (is.null(inverse) || any(!is.finite(inverse)) ||
       any(diag(inverse) <= 0)) {
-      stop("Selected support Gram matrix is not identifiable.", call. = FALSE)
+      thisutils::log_message("Selected support Gram matrix is not identifiable.", message_type = "error")
     }
     beta <- coefficient[support]
     removed_rss <- as.numeric(fit$rss) + beta^2 / diag(inverse)
@@ -66,7 +66,7 @@ fit_greedy_l0 <- function(
     delta <- removed_bic - as.numeric(fit$bic)
     tolerance <- 1e-8 * (1 + abs(as.numeric(fit$bic)))
     if (any(delta < -tolerance)) {
-      stop("Selected support is not deletion-local-optimal.", call. = FALSE)
+      thisutils::log_message("Selected support is not deletion-local-optimal.", message_type = "error")
     }
     deletion_delta_bic[support] <- pmax(0, delta)
   }
@@ -120,21 +120,21 @@ fit_greedy_l0_batch <- function(
     as.numeric(response_ss),
     candidates,
     as.integer(n_obs),
-    if (is.null(max_support_size)) 0L else max_support_size,
+    max_support_size,
     as.numeric(min_improvement)
   )
 }
 
 validate_max_support_size <- function(max_support_size) {
   if (is.null(max_support_size)) {
-    return(NULL)
+    return(0L)
   }
   if (!is.numeric(max_support_size) || length(max_support_size) != 1L ||
     !is.finite(max_support_size) || max_support_size < 1 ||
     max_support_size != as.integer(max_support_size)) {
-    stop(
+    thisutils::log_message(
       "`max_support_size` must be `NULL` or one positive integer.",
-      call. = FALSE
+      message_type = "error"
     )
   }
   as.integer(max_support_size)

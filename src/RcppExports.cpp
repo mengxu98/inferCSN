@@ -10,6 +10,21 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// prepare_lagged_expression
+List prepare_lagged_expression(NumericMatrix expression, NumericMatrix pseudotime, double lag_fraction, int lag_steps, int cores);
+RcppExport SEXP _inferCSN_prepare_lagged_expression(SEXP expressionSEXP, SEXP pseudotimeSEXP, SEXP lag_fractionSEXP, SEXP lag_stepsSEXP, SEXP coresSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type expression(expressionSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type pseudotime(pseudotimeSEXP);
+    Rcpp::traits::input_parameter< double >::type lag_fraction(lag_fractionSEXP);
+    Rcpp::traits::input_parameter< int >::type lag_steps(lag_stepsSEXP);
+    Rcpp::traits::input_parameter< int >::type cores(coresSEXP);
+    rcpp_result_gen = Rcpp::wrap(prepare_lagged_expression(expression, pseudotime, lag_fraction, lag_steps, cores));
+    return rcpp_result_gen;
+END_RCPP
+}
 // infer_network
 DataFrame infer_network(NumericMatrix expression, CharacterVector gene_names, NumericMatrix pseudotime, List params);
 RcppExport SEXP _inferCSN_infer_network(SEXP expressionSEXP, SEXP gene_namesSEXP, SEXP pseudotimeSEXP, SEXP paramsSEXP) {
@@ -84,6 +99,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_inferCSN_prepare_lagged_expression", (DL_FUNC) &_inferCSN_prepare_lagged_expression, 5},
     {"_inferCSN_infer_network", (DL_FUNC) &_inferCSN_infer_network, 4},
     {"_inferCSN_solve_greedy_l0_batch", (DL_FUNC) &_inferCSN_solve_greedy_l0_batch, 7},
     {"_inferCSN_filter_sort_matrix", (DL_FUNC) &_inferCSN_filter_sort_matrix, 3},
