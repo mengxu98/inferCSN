@@ -96,7 +96,7 @@ fit_l0learn_target <- function(
       "Less than 2 regulators found when modeling: {.val {target}}",
       message_type = "warning", verbose = verbose
     )
-    return(NULL)
+    return(data.frame(regulator = character(), target = character(), weight = numeric()))
   }
   if (ncol(parameters$pseudotime)) {
     genes <- c(regulators, target)
@@ -175,5 +175,5 @@ fit_l0learn_target <- function(
       message_type = "warning", verbose = verbose
     )
   }
-  return(data.frame(regulator = regulators, target = target, weight = coefficients))
+  network_format(data.frame(regulator = regulators, target = target, weight = coefficients), abs_weight = FALSE)
 }
