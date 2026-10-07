@@ -1,6 +1,6 @@
 # inferring cell-type specific gene regulatory network
 
-Fits greedy-L0 models for static or pseudotime-ordered expression data.
+inferring cell-type specific gene regulatory network
 
 ## Usage
 
@@ -15,6 +15,7 @@ inferCSN(
   lag_steps = NULL,
   cores = 1,
   verbose = TRUE,
+  method = c("greedy_l0", "L0", "L0L1", "L0L2"),
   ...
 )
 
@@ -29,6 +30,7 @@ inferCSN(
   lag_steps = NULL,
   cores = 1,
   verbose = TRUE,
+  method = c("greedy_l0", "L0", "L0L1", "L0L2"),
   ...
 )
 
@@ -43,6 +45,7 @@ inferCSN(
   lag_steps = NULL,
   cores = 1,
   verbose = TRUE,
+  method = c("greedy_l0", "L0", "L0L1", "L0L2"),
   ...
 )
 ```
@@ -55,7 +58,9 @@ inferCSN(
 
 - pseudotime:
 
-  Optional pseudotime vector or branch matrix.
+  Optional pseudotime vector or branch matrix for either method.
+  Regulators in earlier states predict targets in later states; tied
+  states are averaged and shared branch transitions are counted once.
 
 - regulators, targets:
 
@@ -71,7 +76,8 @@ inferCSN(
 
 - lag_steps:
 
-  Optional integer lag.
+  Optional integer lag. L0Learn centers and scales lagged expression
+  within each branch and defaults to fitting without an intercept.
 
 - cores:
 
@@ -81,20 +87,18 @@ inferCSN(
 
   Whether to report progress.
 
+- method:
+
+  `greedy_l0` (default), or L0Learn with the `L0`, `L0L1`, or `L0L2`
+  penalty.
+
 - ...:
 
-  Additional method arguments.
+  Arguments passed to the method.
 
 ## Value
 
 A data frame containing exactly `regulator`, `target`, and `weight`.
-
-## Details
-
-Signed ordinal weights group descending deletion evidence against each
-group's maximum within 1e-12 \* (1 + abs(maximum)). This fixed numerical
-rule leaves support, fitted coefficients and raw deletion evidence
-unchanged.
 
 ## Examples
 
@@ -105,10 +109,9 @@ network_table <- inferCSN(
   example_matrix,
   pseudotime = example_meta_data$pseudotime
 )
-#> ℹ [2026-09-29 09:29:51] Inferring network for <matrix/array>...
-#> ◌ [2026-09-29 09:29:51] Checking parameters...
-#> ✔ [2026-09-29 09:29:51] Inferring network done
-#> ℹ [2026-09-29 09:29:51] Network information:
+#> ℹ [2026-10-07 03:30:41] Inferring network for <matrix/array>...
+#> ✔ [2026-10-07 03:30:41] Inferring network done
+#> ℹ [2026-10-07 03:30:41] Network information:
 #> ℹ                         Edges Regulators Targets
 #> ℹ                       1    11          6       6
 head(network_table)
@@ -125,10 +128,9 @@ inferCSN(
   regulators = c("g1", "g2"),
   targets = c("g3", "g4")
 )
-#> ℹ [2026-09-29 09:29:51] Inferring network for <matrix/array>...
-#> ◌ [2026-09-29 09:29:51] Checking parameters...
-#> ✔ [2026-09-29 09:29:51] Inferring network done
-#> ℹ [2026-09-29 09:29:51] Network information:
+#> ℹ [2026-10-07 03:30:41] Inferring network for <matrix/array>...
+#> ✔ [2026-10-07 03:30:41] Inferring network done
+#> ℹ [2026-10-07 03:30:41] Network information:
 #> ℹ                         Edges Regulators Targets
 #> ℹ                       1     4          2       2
 #>   regulator target weight

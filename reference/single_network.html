@@ -54,7 +54,9 @@
 <span>  lag_fraction <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>  lag_steps <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cores <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"greedy_l0"</span>, <span class="st">"L0"</span>, <span class="st">"L0L1"</span>, <span class="st">"L0L2"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -98,11 +100,21 @@
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Whether to report progress.</p></dd>
 
+
+<dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
+<dd><p><code>greedy_l0</code> (default), or L0Learn with the <code>L0</code>, <code>L0L1</code>,
+or <code>L0L2</code> penalty.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Arguments passed to the method.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame containing only selected edges for the requested target.
-The data frame has three columns: regulator, target, and weight.</p>
+    <p>A data frame with regulator, target, and weight columns. Greedy-L0
+returns selected edges. L0Learn retains the original per-regulator coefficients,
+including zeros; [inferCSN()] removes zero weights from the complete network.</p>
     </div>
 
     <div class="section level2">
@@ -115,10 +127,9 @@ The data frame has three columns: regulator, target, and weight.</p>
 <span class="r-in"><span>    target <span class="op">=</span> <span class="st">"g1"</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2026-09-29 09:29:52] Inferring network for <span style="color: #0000BB;">&lt;matrix/array&gt;</span>...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2026-09-29 09:29:52] Checking parameters...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2026-09-29 09:29:52] Inferring network done</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2026-09-29 09:29:52] <span style="color: #555555;">Network information:</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2026-10-07 03:30:43] Inferring network for <span style="color: #0000BB;">&lt;matrix/array&gt;</span>...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2026-10-07 03:30:43] Inferring network done</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2026-10-07 03:30:43] <span style="color: #555555;">Network information:</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span>                       <span style="color: #555555;">  Edges Regulators Targets</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span>                       <span style="color: #555555;">1     2          2       1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   regulator target weight</span>
@@ -129,10 +140,9 @@ The data frame has three columns: regulator, target, and weight.</p>
 <span class="r-in"><span>  regulators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span>, <span class="st">"g2"</span>, <span class="st">"g3"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  target <span class="op">=</span> <span class="st">"g1"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2026-09-29 09:29:52] Inferring network for <span style="color: #0000BB;">&lt;matrix/array&gt;</span>...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FFAF00;">◌</span> [2026-09-29 09:29:52] Checking parameters...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2026-09-29 09:29:52] Inferring network done</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2026-09-29 09:29:52] <span style="color: #555555;">Network information:</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2026-10-07 03:30:43] Inferring network for <span style="color: #0000BB;">&lt;matrix/array&gt;</span>...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> [2026-10-07 03:30:43] Inferring network done</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> [2026-10-07 03:30:43] <span style="color: #555555;">Network information:</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span>                       <span style="color: #555555;">  Edges Regulators Targets</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span>                       <span style="color: #555555;">1     2          2       1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   regulator target weight</span>

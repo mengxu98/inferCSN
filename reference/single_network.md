@@ -14,7 +14,9 @@ single_network(
   lag_fraction = 0.05,
   lag_steps = NULL,
   cores = 1,
-  verbose = TRUE
+  verbose = TRUE,
+  method = c("greedy_l0", "L0", "L0L1", "L0L2"),
+  ...
 )
 ```
 
@@ -56,10 +58,21 @@ single_network(
 
   Whether to report progress.
 
+- method:
+
+  `greedy_l0` (default), or L0Learn with the `L0`, `L0L1`, or `L0L2`
+  penalty.
+
+- ...:
+
+  Arguments passed to the method.
+
 ## Value
 
-A data frame containing only selected edges for the requested target.
-The data frame has three columns: regulator, target, and weight.
+A data frame with regulator, target, and weight columns. Greedy-L0
+returns selected edges. L0Learn retains the original per-regulator
+coefficients, including zeros; \[inferCSN()\] removes zero weights from
+the complete network.
 
 ## Examples
 
@@ -72,10 +85,9 @@ head(
     target = "g1"
   )
 )
-#> ℹ [2026-09-29 09:29:52] Inferring network for <matrix/array>...
-#> ◌ [2026-09-29 09:29:52] Checking parameters...
-#> ✔ [2026-09-29 09:29:52] Inferring network done
-#> ℹ [2026-09-29 09:29:52] Network information:
+#> ℹ [2026-10-07 03:30:43] Inferring network for <matrix/array>...
+#> ✔ [2026-10-07 03:30:43] Inferring network done
+#> ℹ [2026-10-07 03:30:43] Network information:
 #> ℹ                         Edges Regulators Targets
 #> ℹ                       1     2          2       1
 #>   regulator target weight
@@ -86,10 +98,9 @@ single_network(
   regulators = c("g1", "g2", "g3"),
   target = "g1"
 )
-#> ℹ [2026-09-29 09:29:52] Inferring network for <matrix/array>...
-#> ◌ [2026-09-29 09:29:52] Checking parameters...
-#> ✔ [2026-09-29 09:29:52] Inferring network done
-#> ℹ [2026-09-29 09:29:52] Network information:
+#> ℹ [2026-10-07 03:30:43] Inferring network for <matrix/array>...
+#> ✔ [2026-10-07 03:30:43] Inferring network done
+#> ℹ [2026-10-07 03:30:43] Network information:
 #> ℹ                         Edges Regulators Targets
 #> ℹ                       1     2          2       1
 #>   regulator target weight
