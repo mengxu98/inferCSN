@@ -79,19 +79,11 @@ test_that("lagged deletion-evidence weights are deterministic across cores", {
     G2 = c(0, head(tf2, -1)) + stats::rnorm(n, sd = 0.2)
   )
   rownames(object) <- paste0("cell", seq_len(n))
-  one <- inferCSN(
+  expect_network_across_cores(
     object,
     pseudotime = seq_len(n), lag_steps = 1L,
-    regulators = c("TF1", "TF2"), targets = c("G1", "G2"),
-    cores = 1L, verbose = FALSE
+    regulators = c("TF1", "TF2"), targets = c("G1", "G2")
   )
-  two <- inferCSN(
-    object,
-    pseudotime = seq_len(n), lag_steps = 1L,
-    regulators = c("TF1", "TF2"), targets = c("G1", "G2"),
-    cores = 2L, verbose = FALSE
-  )
-  expect_identical(one, two)
 })
 
 test_that("fit_greedy_l0 archives deletion evidence for selected support", {

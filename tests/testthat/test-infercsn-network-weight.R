@@ -1,3 +1,28 @@
+test_that("network formatting preserves data frames, signs and empty selections", {
+  edges <- data.frame(
+    regulator = c("A", "A", "A", "B", "B"),
+    target = c("X", "zero", "missing", "X", "Y"),
+    weight = c(-2, 0, NA_real_, 1, 3)
+  )
+  expected <- data.frame(
+    regulator = c("A", "B"), target = c("X", "X"), weight = c(2, 1),
+    Interaction = c("Repression", "Activation")
+  )
+  expect_identical(network_format(edges, targets = "X"), expected)
+  signed <- expected[c("regulator", "target", "weight")]
+  signed$weight <- c(-2, 1)
+  expect_identical(network_format(edges, targets = "X", abs_weight = FALSE), signed)
+  expect_identical(network_format(edges, regulators = character()), expected[FALSE, ])
+})
+
+test_that("matrix filtering retains duplicate and missing name behavior", {
+  weights <- matrix(1:6, 3, dimnames = list(c("g2", "g2", NA), c("g10", "g1")))
+  filtered <- filter_sort_matrix(weights)
+  expect_identical(rownames(filtered), c("NA", "g2", "g2"))
+  expect_identical(colnames(filtered), c("g1", "g10"))
+  expect_equal(unname(filtered), unname(weights[c(3, 2, 2), c(2, 1)]))
+})
+
 test_that("inferCSN exports only target-specific greedy-L0 support", {
   set.seed(2026)
   n <- 160
@@ -151,48 +176,10 @@ test_that("network weights and ordering are deterministic across core counts", {
     target_b = -1.1 * regulators[, 3] + rnorm(n, sd = 0.2),
     target_c = 0.7 * regulators[, 4] + rnorm(n, sd = 0.3)
   )
-  infer <- function(cores) {
-    inferCSN(
-      expression,
-      regulators = colnames(regulators),
-      targets = c("target_a", "target_b", "target_c"),
-      cores = cores,
-      verbose = FALSE
-    )
-  }
-
-  single_core <- infer(1)
-  two_cores <- infer(2)
-
-  expect_equal(two_cores, single_core, tolerance = 1e-12)
+  single_core <- expect_network_across_cores(
+    expression,
+    regulators = colnames(regulators),
+    targets = c("target_a", "target_b", "target_c")
+  )
   expect_true(all(diff(abs(single_core$weight)) <= 0))
-})
-
-test_that("single_network is the same support-only inference for one target", {
-  set.seed(2034)
-  n <- 140L
-  tf_a <- rnorm(n)
-  tf_b <- rnorm(n)
-  expression <- cbind(
-    tf_a = tf_a,
-    tf_b = tf_b,
-    target = 1.7 * tf_a - 0.6 * tf_b + rnorm(n, sd = 0.05)
-  )
-
-  direct <- inferCSN(
-    expression,
-    regulators = c("tf_a", "tf_b"),
-    targets = "target",
-    cores = 1,
-    verbose = FALSE
-  )
-  delegated <- single_network(
-    expression,
-    regulators = c("tf_a", "tf_b"),
-    target = "target",
-    cores = 1,
-    verbose = FALSE
-  )
-
-  expect_equal(delegated, direct, tolerance = 1e-12)
 })

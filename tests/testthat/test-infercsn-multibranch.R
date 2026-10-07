@@ -154,19 +154,3 @@ test_that("overlapping branches use unique transitions for the support bound", {
     unique_transitions - distinct_branches - 1L
   )
 })
-
-test_that("inferCSN exposes only controls used by the native algorithm", {
-  public_controls <- names(formals(methods::getGeneric("inferCSN")))
-
-  expect_setequal(
-    public_controls,
-    c(
-      "object", "pseudotime", "regulators", "targets",
-      "max_support_size", "lag_fraction", "lag_steps", "cores", "verbose", "..."
-    )
-  )
-  expect_false(any(c(
-    "algorithm", "penalty", "cross_validation", "seed", "n_folds",
-    "subsampling_method", "subsampling_ratio"
-  ) %in% public_controls))
-})

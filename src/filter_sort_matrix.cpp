@@ -1,6 +1,9 @@
 #include <Rcpp.h>
 #include <algorithm>
 #include <string>
+#include <unordered_map>
+#include <utility>
+#include <vector>
 using namespace Rcpp;
 
 bool geneCompare(const std::string &a, const std::string &b)
@@ -43,98 +46,39 @@ filter_sort_matrix(NumericMatrix network_matrix,
   CharacterVector curr_regulators = rownames(network_matrix);
   CharacterVector curr_targets = colnames(network_matrix);
 
-  std::vector<std::string> filtered_regulators;
-  if (regulators.isNotNull())
-  {
-    CharacterVector reg(regulators);
-    for (R_xlen_t i = 0; i < curr_regulators.length(); i++)
-    {
-      std::string curr_reg = as<std::string>(curr_regulators[i]);
-      for (R_xlen_t j = 0; j < reg.length(); j++)
-      {
-        if (curr_reg == as<std::string>(reg[j]))
-        {
-          filtered_regulators.push_back(curr_reg);
-          break;
-        }
+  const auto select_indices = [](CharacterVector current,
+                                 Nullable<CharacterVector> requested) {
+    std::vector<std::string> selected;
+    std::vector<std::string> allowed;
+    if (requested.isNotNull()) allowed = as<std::vector<std::string>>(CharacterVector(requested));
+    std::unordered_map<std::string, int> positions;
+    for (int i = 0; i < current.size(); ++i) {
+      const std::string name = as<std::string>(current[i]);
+      positions[name] = i;
+      if (requested.isNull() || std::find(allowed.begin(), allowed.end(), name) != allowed.end()) {
+        selected.push_back(name);
       }
     }
-  }
-  else
+    std::sort(selected.begin(), selected.end(), geneCompare);
+    IntegerVector indices(selected.size());
+    for (size_t i = 0; i < selected.size(); ++i) indices[i] = positions[selected[i]];
+    CharacterVector names = wrap(selected);
+    return std::make_pair(indices, names);
+  };
+  const auto selected_rows = select_indices(curr_regulators, regulators);
+  const auto selected_columns = select_indices(curr_targets, targets);
+  IntegerVector rows = selected_rows.first;
+  IntegerVector columns = selected_columns.first;
+  NumericMatrix result(rows.size(), columns.size());
+  for (int i = 0; i < rows.size(); ++i)
   {
-    for (R_xlen_t i = 0; i < curr_regulators.length(); i++)
+    for (int j = 0; j < columns.size(); ++j)
     {
-      filtered_regulators.push_back(as<std::string>(curr_regulators[i]));
+      result(i, j) = network_matrix(rows[i], columns[j]);
     }
   }
-
-  std::vector<std::string> filtered_targets;
-  if (targets.isNotNull())
-  {
-    CharacterVector tar(targets);
-    for (R_xlen_t i = 0; i < curr_targets.length(); i++)
-    {
-      std::string curr_tar = as<std::string>(curr_targets[i]);
-      for (R_xlen_t j = 0; j < tar.length(); j++)
-      {
-        if (curr_tar == as<std::string>(tar[j]))
-        {
-          filtered_targets.push_back(curr_tar);
-          break;
-        }
-      }
-    }
-  }
-  else
-  {
-    for (R_xlen_t i = 0; i < curr_targets.length(); i++)
-    {
-      filtered_targets.push_back(as<std::string>(curr_targets[i]));
-    }
-  }
-
-  std::sort(filtered_regulators.begin(), filtered_regulators.end(),
-            geneCompare);
-  std::sort(filtered_targets.begin(), filtered_targets.end(), geneCompare);
-
-  NumericMatrix result(filtered_regulators.size(), filtered_targets.size());
-
-  std::unordered_map<std::string, int> old_reg_indices;
-  std::unordered_map<std::string, int> old_tar_indices;
-
-  for (R_xlen_t i = 0; i < curr_regulators.length(); i++)
-  {
-    old_reg_indices[as<std::string>(curr_regulators[i])] = i;
-  }
-  for (R_xlen_t i = 0; i < curr_targets.length(); i++)
-  {
-    old_tar_indices[as<std::string>(curr_targets[i])] = i;
-  }
-
-  for (size_t i = 0; i < filtered_regulators.size(); i++)
-  {
-    for (size_t j = 0; j < filtered_targets.size(); j++)
-    {
-      int old_row = old_reg_indices[filtered_regulators[i]];
-      int old_col = old_tar_indices[filtered_targets[j]];
-      result(i, j) = network_matrix(old_row, old_col);
-    }
-  }
-
-  CharacterVector new_regulators(filtered_regulators.size());
-  CharacterVector new_targets(filtered_targets.size());
-
-  for (size_t i = 0; i < filtered_regulators.size(); i++)
-  {
-    new_regulators[i] = filtered_regulators[i];
-  }
-  for (size_t i = 0; i < filtered_targets.size(); i++)
-  {
-    new_targets[i] = filtered_targets[i];
-  }
-
-  rownames(result) = new_regulators;
-  colnames(result) = new_targets;
+  rownames(result) = selected_rows.second;
+  colnames(result) = selected_columns.second;
 
   return result;
 }

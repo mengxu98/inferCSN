@@ -17,6 +17,7 @@ inferCSN(
   lag_steps = NULL,
   cores = 1,
   verbose = TRUE,
+  method = c("greedy_l0", "L0", "L0L1", "L0L2"),
   ...
 )
 
@@ -30,6 +31,7 @@ inferCSN(
   lag_steps = NULL,
   cores = 1,
   verbose = TRUE,
+  method = c("greedy_l0", "L0", "L0L1", "L0L2"),
   ...
 )
 
@@ -43,6 +45,7 @@ inferCSN(
   lag_steps = NULL,
   cores = 1,
   verbose = TRUE,
+  method = c("greedy_l0", "L0", "L0L1", "L0L2"),
   ...
 )
 }
@@ -50,7 +53,9 @@ inferCSN(
 \item{object}{Numeric expression matrix with cells in rows and genes in
 columns.}
 
-\item{pseudotime}{Optional pseudotime vector or branch matrix.}
+\item{pseudotime}{Optional pseudotime vector or branch matrix for either method.
+Regulators in earlier states predict targets in later states; tied states
+are averaged and shared branch transitions are counted once.}
 
 \item{regulators, targets}{Optional gene subsets.}
 
@@ -58,24 +63,23 @@ columns.}
 
 \item{lag_fraction}{Fractional lag used when \code{lag_steps} is \code{NULL}.}
 
-\item{lag_steps}{Optional integer lag.}
+\item{lag_steps}{Optional integer lag. L0Learn centers and scales lagged
+expression within each branch and defaults to fitting without an intercept.}
 
 \item{cores}{Number of inference workers.}
 
 \item{verbose}{Whether to report progress.}
 
-\item{...}{Additional method arguments.}
+\item{method}{\code{greedy_l0} (default), or L0Learn with the \code{L0}, \code{L0L1},
+or \code{L0L2} penalty.}
+
+\item{...}{Arguments passed to the method.}
 }
 \value{
 A data frame containing exactly \code{regulator}, \code{target}, and \code{weight}.
 }
 \description{
-Fits greedy-L0 models for static or pseudotime-ordered expression data.
-}
-\details{
-Signed ordinal weights group descending deletion evidence against
-each group's maximum within 1e-12 * (1 + abs(maximum)). This fixed numerical
-rule leaves support, fitted coefficients and raw deletion evidence unchanged.
+inferring cell-type specific gene regulatory network
 }
 \examples{
 data(example_matrix)

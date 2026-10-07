@@ -28,25 +28,25 @@ select_trend_features <- function(
   method <- match.arg(method)
   if (length(padjust_threshold) != 1L || !is.finite(padjust_threshold) ||
     padjust_threshold < 0 || padjust_threshold > 1) {
-    stop("`padjust_threshold` must be in [0, 1].", call. = FALSE)
+    thisutils::log_message("`padjust_threshold` must be in [0, 1].", message_type = "error")
   }
   if (!is.null(n_candidates) && (length(n_candidates) != 1L ||
     !is.finite(n_candidates) || n_candidates < 1 || n_candidates != floor(n_candidates))) {
-    stop("`n_candidates` must be a positive integer or NULL.", call. = FALSE)
+    thisutils::log_message("`n_candidates` must be a positive integer or NULL.", message_type = "error")
   }
   fit <- NULL
   if (is.null(statistics)) {
     fit <- thisutils::fit_trends(t(as.matrix(x)), pseudotime, method = method, ...)
     statistics <- fit$statistics
   } else if (length(list(...))) {
-    stop("Numerical options cannot be used with precomputed statistics.", call. = FALSE)
+    thisutils::log_message("Numerical options cannot be used with precomputed statistics.", message_type = "error")
   }
   if (!is.data.frame(statistics) || is.null(rownames(statistics)) || anyDuplicated(rownames(statistics))) {
-    stop("`statistics` must have unique feature row names.", call. = FALSE)
+    thisutils::log_message("`statistics` must have unique feature row names.", message_type = "error")
   }
   p <- if ("padjust" %in% names(statistics)) statistics$padjust else statistics$pvalue
   if (!is.numeric(p) || length(p) != nrow(statistics)) {
-    stop("`statistics` needs a numeric padjust or pvalue column.", call. = FALSE)
+    thisutils::log_message("`statistics` needs a numeric padjust or pvalue column.", message_type = "error")
   }
   keep <- which(is.finite(p) & p < padjust_threshold)
   if (!is.null(n_candidates) && length(keep) > n_candidates) {

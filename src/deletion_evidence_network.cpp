@@ -63,45 +63,12 @@ static std::vector<double> signed_deletion_rank_scores(
   return scores;
 }
 
-// [[Rcpp::export]]
-DataFrame infer_network(
-    NumericMatrix expression,
-    CharacterVector gene_names,
-    NumericMatrix pseudotime,
-    List params
+static std::vector<LagBranch> make_lag_branches(
+    const NumericMatrix& pseudotime,
+    double lag_fraction,
+    int requested_lag_steps,
+    std::map<std::vector<int>, int>& transition_multiplicity
 ) {
-  const int n = expression.nrow();
-  const int p = expression.ncol();
-  const double* expression_values = expression.begin();
-  const auto expression_at = [expression_values, n](int gene, int cell) {
-    return expression_values[static_cast<size_t>(gene) * n + cell];
-  };
-  if (p == 0 || n < 2) {
-    return DataFrame::create(
-      _["regulator"] = CharacterVector(),
-      _["target"] = CharacterVector(),
-      _["standardized_beta"] = NumericVector(),
-      _["deletion_delta_bic"] = NumericVector(),
-      _["weight"] = NumericVector(),
-      _["stringsAsFactors"] = false
-    );
-  }
-
-  int max_support = static_cast<int>(list_numeric_or_default(params, "max_support_size", 0.0));
-  if (max_support <= 0) {
-    max_support = p - 1;
-  } else {
-    max_support = std::min(max_support, p - 1);
-  }
-  max_support = std::max(0, max_support);
-  const double min_improvement = std::max(0.0, list_numeric_or_default(params, "min_improvement", 1e-10));
-  const double lag_fraction = list_numeric_or_default(params, "pseudotime_lag_fraction", 0.05);
-  const int requested_lag_steps = list_int_or_default(params, "pseudotime_lag_steps", 0);
-  const int cores = std::max(1, list_int_or_default(params, "cores", 1));
-
-  if (pseudotime.ncol() > 0 && pseudotime.nrow() != n) {
-    stop("`pseudotime` must contain one row per cell");
-  }
   std::vector<LagBranch> lag_branches;
   lag_branches.reserve(pseudotime.ncol());
   for (int branch = 0; branch < pseudotime.ncol(); ++branch) {
@@ -146,7 +113,6 @@ DataFrame infer_network(
     ),
     lag_branches.end()
   );
-  std::map<std::vector<int>, int> transition_multiplicity;
   for (const LagBranch& branch : lag_branches) {
     const int lag_n = static_cast<int>(branch.states.size()) - branch.steps;
     for (int row = 0; row < lag_n; ++row) {
@@ -161,6 +127,201 @@ DataFrame infer_network(
       branch.transition_weight[row] = 1.0 / static_cast<double>(multiplicity);
     }
   }
+  return lag_branches;
+}
+
+struct LagExpression {
+  std::vector<double> x;
+  std::vector<double> y;
+  std::vector<char> predictor_valid;
+  std::vector<char> response_valid;
+};
+
+static LagExpression lag_expression_branch(
+    const NumericMatrix& expression,
+    const LagBranch& branch,
+    int cores
+) {
+  const int n = expression.nrow();
+  const int p = expression.ncol();
+  const double* expression_values = expression.begin();
+  const auto expression_at = [expression_values, n](int gene, int cell) {
+    return expression_values[static_cast<size_t>(gene) * n + cell];
+  };
+  const int lag_n = static_cast<int>(branch.states.size()) - branch.steps;
+  LagExpression result;
+  result.x.assign(static_cast<size_t>(p) * lag_n, 0.0);
+  result.y.assign(static_cast<size_t>(p) * lag_n, 0.0);
+  result.predictor_valid.assign(p, 0);
+  result.response_valid.assign(p, 0);
+  std::vector<double>& lag_x = result.x;
+  std::vector<double>& lag_y = result.y;
+  #pragma omp parallel for num_threads(cores)
+  for (int gene = 0; gene < p; ++gene) {
+    double x_sum = 0.0;
+    double y_sum = 0.0;
+    double x_weight_sum = 0.0;
+    double y_weight_sum = 0.0;
+    std::vector<char> x_row_valid(lag_n, 0);
+    std::vector<char> y_row_valid(lag_n, 0);
+    for (int row = 0; row < lag_n; ++row) {
+      const std::vector<int>& x_cells = branch.states[row];
+      const std::vector<int>& y_cells = branch.states[row + branch.steps];
+      double x_state_sum = 0.0;
+      double y_state_sum = 0.0;
+      int x_state_n = 0;
+      int y_state_n = 0;
+      for (int cell : x_cells) {
+        const double value = expression_at(gene, cell);
+        if (R_finite(value)) {
+          x_state_sum += value;
+          ++x_state_n;
+        }
+      }
+      for (int cell : y_cells) {
+        const double value = expression_at(gene, cell);
+        if (R_finite(value)) {
+          y_state_sum += value;
+          ++y_state_n;
+        }
+      }
+      if (x_state_n > 0) {
+        const double x_value = x_state_sum / static_cast<double>(x_state_n);
+        lag_x[static_cast<size_t>(gene) * lag_n + row] = x_value;
+        x_row_valid[row] = 1;
+        x_sum += branch.transition_weight[row] * x_value;
+        x_weight_sum += branch.transition_weight[row];
+      }
+      if (y_state_n > 0) {
+        const double y_value = y_state_sum / static_cast<double>(y_state_n);
+        lag_y[static_cast<size_t>(gene) * lag_n + row] = y_value;
+        y_row_valid[row] = 1;
+        y_sum += branch.transition_weight[row] * y_value;
+        y_weight_sum += branch.transition_weight[row];
+      }
+    }
+    const double x_mean = x_weight_sum > 0.0
+      ? x_sum / x_weight_sum
+      : 0.0;
+    const double y_mean = y_weight_sum > 0.0
+      ? y_sum / y_weight_sum
+      : 0.0;
+    double x_ss = 0.0;
+    double y_ss = 0.0;
+    for (int row = 0; row < lag_n; ++row) {
+      const double x_value = lag_x[static_cast<size_t>(gene) * lag_n + row];
+      const double y_value = lag_y[static_cast<size_t>(gene) * lag_n + row];
+      if (x_row_valid[row]) {
+        const double centered_x = x_value - x_mean;
+        lag_x[static_cast<size_t>(gene) * lag_n + row] = centered_x;
+        x_ss += branch.transition_weight[row] * centered_x * centered_x;
+      }
+      if (y_row_valid[row]) {
+        const double centered_y = y_value - y_mean;
+        lag_y[static_cast<size_t>(gene) * lag_n + row] = centered_y;
+        y_ss += branch.transition_weight[row] * centered_y * centered_y;
+      }
+    }
+    if (x_weight_sum > 0.0 && x_ss > 0.0) {
+      const double x_scale = std::sqrt(x_ss / x_weight_sum);
+      result.predictor_valid[gene] = 1;
+      for (int row = 0; row < lag_n; ++row) {
+        lag_x[static_cast<size_t>(gene) * lag_n + row] /= x_scale;
+      }
+    }
+    if (y_weight_sum > 0.0 && y_ss > 0.0) {
+      const double y_scale = std::sqrt(y_ss / y_weight_sum);
+      result.response_valid[gene] = 1;
+      for (int row = 0; row < lag_n; ++row) {
+        lag_y[static_cast<size_t>(gene) * lag_n + row] /= y_scale;
+      }
+    }
+  }
+  return result;
+}
+
+// [[Rcpp::export]]
+List prepare_lagged_expression(
+    NumericMatrix expression,
+    NumericMatrix pseudotime,
+    double lag_fraction,
+    int lag_steps,
+    int cores
+) {
+  std::map<std::vector<int>, int> multiplicity;
+  const std::vector<LagBranch> branches = make_lag_branches(
+    pseudotime, lag_fraction, lag_steps, multiplicity
+  );
+  if (branches.empty()) {
+    return List::create(_["x"] = expression, _["y"] = expression, _["lagged"] = false);
+  }
+  int rows = 0;
+  for (const LagBranch& branch : branches) {
+    rows += static_cast<int>(branch.states.size()) - branch.steps;
+  }
+  const int p = expression.ncol();
+  NumericMatrix x(rows, p), y(rows, p);
+  int offset = 0;
+  for (const LagBranch& branch : branches) {
+    const int lag_n = static_cast<int>(branch.states.size()) - branch.steps;
+    const LagExpression aligned = lag_expression_branch(expression, branch, cores);
+    for (int gene = 0; gene < p; ++gene) {
+      for (int row = 0; row < lag_n; ++row) {
+        const double scale = std::sqrt(branch.transition_weight[row]);
+        x(offset + row, gene) = aligned.x[static_cast<size_t>(gene) * lag_n + row] * scale;
+        y(offset + row, gene) = aligned.y[static_cast<size_t>(gene) * lag_n + row] * scale;
+      }
+    }
+    offset += lag_n;
+  }
+  x.attr("dimnames") = List::create(R_NilValue, colnames(expression));
+  y.attr("dimnames") = List::create(R_NilValue, colnames(expression));
+  return List::create(_["x"] = x, _["y"] = y, _["lagged"] = true);
+}
+
+// [[Rcpp::export]]
+DataFrame infer_network(
+    NumericMatrix expression,
+    CharacterVector gene_names,
+    NumericMatrix pseudotime,
+    List params
+) {
+  const int n = expression.nrow();
+  const int p = expression.ncol();
+  const double* expression_values = expression.begin();
+  const auto expression_at = [expression_values, n](int gene, int cell) {
+    return expression_values[static_cast<size_t>(gene) * n + cell];
+  };
+  if (p == 0 || n < 2) {
+    return DataFrame::create(
+      _["regulator"] = CharacterVector(),
+      _["target"] = CharacterVector(),
+      _["standardized_beta"] = NumericVector(),
+      _["deletion_delta_bic"] = NumericVector(),
+      _["weight"] = NumericVector(),
+      _["stringsAsFactors"] = false
+    );
+  }
+
+  int max_support = static_cast<int>(list_numeric_or_default(params, "max_support_size", 0.0));
+  if (max_support <= 0) {
+    max_support = p - 1;
+  } else {
+    max_support = std::min(max_support, p - 1);
+  }
+  max_support = std::max(0, max_support);
+  const double min_improvement = std::max(0.0, list_numeric_or_default(params, "min_improvement", 1e-10));
+  const double lag_fraction = list_numeric_or_default(params, "pseudotime_lag_fraction", 0.05);
+  const int requested_lag_steps = list_int_or_default(params, "pseudotime_lag_steps", 0);
+  const int cores = std::max(1, list_int_or_default(params, "cores", 1));
+
+  if (pseudotime.ncol() > 0 && pseudotime.nrow() != n) {
+    stop("`pseudotime` must contain one row per cell");
+  }
+  std::map<std::vector<int>, int> transition_multiplicity;
+  std::vector<LagBranch> lag_branches = make_lag_branches(
+    pseudotime, lag_fraction, requested_lag_steps, transition_multiplicity
+  );
   const bool use_lag = !lag_branches.empty();
 
   const std::vector<char> regulator_mask = gene_mask_from_param(params, "regulators", gene_names, p);
@@ -236,93 +397,15 @@ DataFrame infer_network(
     for (const LagBranch& branch : lag_branches) {
       const int lag_n = static_cast<int>(branch.states.size()) - branch.steps;
 
-      std::vector<double> lag_x(static_cast<size_t>(p) * lag_n, 0.0);
-      std::vector<double> lag_y(static_cast<size_t>(p) * lag_n, 0.0);
-      #pragma omp parallel for num_threads(cores)
+      LagExpression aligned = lag_expression_branch(expression, branch, cores);
       for (int gene = 0; gene < p; ++gene) {
-        double x_sum = 0.0;
-        double y_sum = 0.0;
-        double x_weight_sum = 0.0;
-        double y_weight_sum = 0.0;
-        std::vector<char> x_row_valid(lag_n, 0);
-        std::vector<char> y_row_valid(lag_n, 0);
-        for (int row = 0; row < lag_n; ++row) {
-          const std::vector<int>& x_cells = branch.states[row];
-          const std::vector<int>& y_cells = branch.states[row + branch.steps];
-          double x_state_sum = 0.0;
-          double y_state_sum = 0.0;
-          int x_state_n = 0;
-          int y_state_n = 0;
-          for (int cell : x_cells) {
-            const double value = expression_at(gene, cell);
-            if (R_finite(value)) {
-              x_state_sum += value;
-              ++x_state_n;
-            }
-          }
-          for (int cell : y_cells) {
-            const double value = expression_at(gene, cell);
-            if (R_finite(value)) {
-              y_state_sum += value;
-              ++y_state_n;
-            }
-          }
-          if (x_state_n > 0) {
-            const double x_value = x_state_sum / static_cast<double>(x_state_n);
-            lag_x[static_cast<size_t>(gene) * lag_n + row] = x_value;
-            x_row_valid[row] = 1;
-            x_sum += branch.transition_weight[row] * x_value;
-            x_weight_sum += branch.transition_weight[row];
-          }
-          if (y_state_n > 0) {
-            const double y_value = y_state_sum / static_cast<double>(y_state_n);
-            lag_y[static_cast<size_t>(gene) * lag_n + row] = y_value;
-            y_row_valid[row] = 1;
-            y_sum += branch.transition_weight[row] * y_value;
-            y_weight_sum += branch.transition_weight[row];
-          }
-        }
-        const double x_mean = x_weight_sum > 0.0
-          ? x_sum / x_weight_sum
-          : 0.0;
-        const double y_mean = y_weight_sum > 0.0
-          ? y_sum / y_weight_sum
-          : 0.0;
-        double x_ss = 0.0;
-        double y_ss = 0.0;
-        for (int row = 0; row < lag_n; ++row) {
-          const double x_value = lag_x[static_cast<size_t>(gene) * lag_n + row];
-          const double y_value = lag_y[static_cast<size_t>(gene) * lag_n + row];
-          if (x_row_valid[row]) {
-            const double centered_x = x_value - x_mean;
-            lag_x[static_cast<size_t>(gene) * lag_n + row] = centered_x;
-            x_ss += branch.transition_weight[row] * centered_x * centered_x;
-          }
-          if (y_row_valid[row]) {
-            const double centered_y = y_value - y_mean;
-            lag_y[static_cast<size_t>(gene) * lag_n + row] = centered_y;
-            y_ss += branch.transition_weight[row] * centered_y * centered_y;
-          }
-        }
-        if (x_weight_sum > 0.0 && x_ss > 0.0) {
-          const double x_scale = std::sqrt(x_ss / x_weight_sum);
-          lag_predictor_valid[gene] = 1;
-          for (int row = 0; row < lag_n; ++row) {
-            lag_x[static_cast<size_t>(gene) * lag_n + row] /= x_scale;
-          }
-        }
-        if (y_weight_sum > 0.0 && y_ss > 0.0) {
-          const double y_scale = std::sqrt(y_ss / y_weight_sum);
-          lag_response_valid[gene] = 1;
-          for (int row = 0; row < lag_n; ++row) {
-            lag_y[static_cast<size_t>(gene) * lag_n + row] /= y_scale;
-          }
-        }
+        lag_predictor_valid[gene] |= aligned.predictor_valid[gene];
+        lag_response_valid[gene] |= aligned.response_valid[gene];
       }
 
       accumulate_weighted_crossproducts(
-        lag_x,
-        lag_y,
+        aligned.x,
+        aligned.y,
         branch.transition_weight,
         lag_n,
         p,
