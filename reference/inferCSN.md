@@ -109,9 +109,9 @@ network_table <- inferCSN(
   example_matrix,
   pseudotime = example_meta_data$pseudotime
 )
-#> ℹ [2026-10-07 03:30:41] Inferring network for <matrix/array>...
-#> ✔ [2026-10-07 03:30:41] Inferring network done
-#> ℹ [2026-10-07 03:30:41] Network information:
+#> ℹ [2026-10-08 08:44:53] Inferring network for <matrix/array>...
+#> ✔ [2026-10-08 08:44:53] Inferring network done
+#> ℹ [2026-10-08 08:44:53] Network information:
 #> ℹ                         Edges Regulators Targets
 #> ℹ                       1    11          6       6
 head(network_table)
@@ -128,9 +128,9 @@ inferCSN(
   regulators = c("g1", "g2"),
   targets = c("g3", "g4")
 )
-#> ℹ [2026-10-07 03:30:41] Inferring network for <matrix/array>...
-#> ✔ [2026-10-07 03:30:41] Inferring network done
-#> ℹ [2026-10-07 03:30:41] Network information:
+#> ℹ [2026-10-08 08:44:53] Inferring network for <matrix/array>...
+#> ✔ [2026-10-08 08:44:53] Inferring network done
+#> ℹ [2026-10-08 08:44:53] Network information:
 #> ℹ                         Edges Regulators Targets
 #> ℹ                       1     4          2       2
 #>   regulator target weight

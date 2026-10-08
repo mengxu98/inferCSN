@@ -85,9 +85,9 @@ head(
     target = "g1"
   )
 )
-#> ℹ [2026-10-07 03:30:43] Inferring network for <matrix/array>...
-#> ✔ [2026-10-07 03:30:43] Inferring network done
-#> ℹ [2026-10-07 03:30:43] Network information:
+#> ℹ [2026-10-08 08:44:54] Inferring network for <matrix/array>...
+#> ✔ [2026-10-08 08:44:54] Inferring network done
+#> ℹ [2026-10-08 08:44:54] Network information:
 #> ℹ                         Edges Regulators Targets
 #> ℹ                       1     2          2       1
 #>   regulator target weight
@@ -98,9 +98,9 @@ single_network(
   regulators = c("g1", "g2", "g3"),
   target = "g1"
 )
-#> ℹ [2026-10-07 03:30:43] Inferring network for <matrix/array>...
-#> ✔ [2026-10-07 03:30:43] Inferring network done
-#> ℹ [2026-10-07 03:30:43] Network information:
+#> ℹ [2026-10-08 08:44:54] Inferring network for <matrix/array>...
+#> ✔ [2026-10-08 08:44:54] Inferring network done
+#> ℹ [2026-10-08 08:44:54] Network information:
 #> ℹ                         Edges Regulators Targets
 #> ℹ                       1     2          2       1
 #>   regulator target weight
