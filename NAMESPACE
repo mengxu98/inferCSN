@@ -12,16 +12,10 @@ export(single_network)
 exportMethods(inferCSN)
 import(methods)
 importClassesFrom(Matrix,sparseMatrix)
-importFrom(Rcpp,
-  evalCpp,
-  sourceCpp
-)
+importFrom(Rcpp,evalCpp)
 importFrom(stats,
   coef,
   predict
 )
-importFrom(utils,
-  head,
-  tail
-)
+importFrom(utils,head)
 useDynLib(inferCSN)

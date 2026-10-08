@@ -1,0 +1,1228 @@
+#ifndef INFERCSN_GREEDY_L0_H
+#define INFERCSN_GREEDY_L0_H
+
+#include <Rcpp.h>
+#include <R_ext/BLAS.h>
+#include <R_ext/RS.h>
+
+#include <algorithm>
+#include <cmath>
+#include <limits>
+#include <map>
+#include <string>
+#include <utility>
+#include <vector>
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
+using namespace Rcpp;
+
+struct NetworkEdge {
+  int regulator;
+  int target;
+  double weight;
+};
+
+struct TargetFit {
+  std::vector<double> coefficient;
+  double r2;
+  double rss;
+  double bic;
+  std::vector<int> support;
+
+  TargetFit() : r2(0.0), rss(0.0), bic(std::numeric_limits<double>::infinity()) {}
+};
+
+struct LagBranch {
+  std::vector<std::vector<int> > states;
+  std::vector<double> transition_weight;
+  int steps;
+};
+
+[[maybe_unused]] static std::vector<int> lag_transition_key(
+    const LagBranch& branch,
+    int row
+) {
+  const std::vector<int>& source = branch.states[row];
+  const std::vector<int>& destination = branch.states[row + branch.steps];
+  std::vector<int> key;
+  key.reserve(source.size() + destination.size() + 1);
+  key.insert(key.end(), source.begin(), source.end());
+  key.push_back(-1);
+  key.insert(key.end(), destination.begin(), destination.end());
+  return key;
+}
+
+static double list_numeric_or_default(const List& params, const char* name, double value) {
+  if (!params.containsElementNamed(name)) {
+    return value;
+  }
+  SEXP item = params[name];
+  if (Rf_isNull(item)) {
+    return value;
+  }
+  NumericVector x(item);
+  if (x.size() == 0 || !R_finite(x[0])) {
+    return value;
+  }
+  return x[0];
+}
+
+[[maybe_unused]] static int list_int_or_default(const List& params, const char* name, int value) {
+  return static_cast<int>(list_numeric_or_default(params, name, static_cast<double>(value)));
+}
+
+[[maybe_unused]] static std::vector<char> gene_mask_from_param(
+    const List& params,
+    const char* name,
+    const CharacterVector& gene_names,
+    int p
+) {
+  std::vector<char> mask(p, 1);
+  if (!params.containsElementNamed(name)) {
+    return mask;
+  }
+  SEXP item = params[name];
+  if (Rf_isNull(item)) {
+    return mask;
+  }
+  CharacterVector requested(item);
+  if (requested.size() == 0) {
+    return mask;
+  }
+
+  std::map<std::string, int> index;
+  for (int i = 0; i < p; ++i) {
+    if (!CharacterVector::is_na(gene_names[i])) {
+      index[as<std::string>(gene_names[i])] = i;
+    }
+  }
+
+  std::vector<char> selected(p, 0);
+  int selected_count = 0;
+  for (int i = 0; i < requested.size(); ++i) {
+    if (CharacterVector::is_na(requested[i])) {
+      continue;
+    }
+    const std::string gene = as<std::string>(requested[i]);
+    std::map<std::string, int>::const_iterator found = index.find(gene);
+    if (found == index.end()) {
+      continue;
+    }
+    if (!selected[found->second]) {
+      selected[found->second] = 1;
+      ++selected_count;
+    }
+  }
+  return selected_count > 0 ? selected : mask;
+}
+
+[[maybe_unused]] static int effective_lag_steps(int state_count, double lag_fraction, int lag_steps) {
+  if (state_count < 2) {
+    return 0;
+  }
+  if (lag_steps > 0) {
+    return std::min(lag_steps, state_count - 1);
+  }
+  int fraction_steps = 0;
+  if (lag_fraction > 0.0 && R_finite(lag_fraction)) {
+    fraction_steps = static_cast<int>(
+      std::ceil(static_cast<double>(state_count) * lag_fraction)
+    );
+  }
+  return std::min(std::max(1, fraction_steps), state_count - 1);
+}
+
+[[maybe_unused]] static std::vector<std::vector<int> > pseudotime_states(
+    const NumericVector& pseudotime
+) {
+  std::vector<std::pair<double, int> > ordered;
+  ordered.reserve(pseudotime.size());
+  for (int i = 0; i < pseudotime.size(); ++i) {
+    if (R_finite(pseudotime[i])) {
+      ordered.push_back(std::make_pair(pseudotime[i], i));
+    }
+  }
+  std::sort(
+    ordered.begin(),
+    ordered.end(),
+    [](const std::pair<double, int>& left,
+       const std::pair<double, int>& right) {
+      if (left.first == right.first) {
+        return left.second < right.second;
+      }
+      return left.first < right.first;
+    }
+  );
+
+  std::vector<std::vector<int> > states;
+  int i = 0;
+  while (i < static_cast<int>(ordered.size())) {
+    int j = i + 1;
+    while (j < static_cast<int>(ordered.size()) &&
+           ordered[j].first == ordered[i].first) {
+      ++j;
+    }
+    std::vector<int> cells;
+    cells.reserve(j - i);
+    for (int pos = i; pos < j; ++pos) {
+      cells.push_back(ordered[pos].second);
+    }
+    states.push_back(cells);
+    i = j;
+  }
+  return states;
+}
+
+static bool solve_linear_system(
+    std::vector<double> a,
+    std::vector<double> b,
+    int k,
+    std::vector<double>& solution
+) {
+  solution.assign(k, 0.0);
+  if (k <= 0) {
+    return true;
+  }
+  double matrix_scale = 0.0;
+  for (int i = 0; i < k; ++i) {
+    matrix_scale = std::max(
+      matrix_scale,
+      std::fabs(a[static_cast<size_t>(i) * k + i])
+    );
+  }
+  const double pivot_tolerance = 1e-10 * std::max(1.0, matrix_scale);
+  for (int col = 0; col < k; ++col) {
+    int pivot = col;
+    double pivot_abs = std::fabs(a[static_cast<size_t>(col) * k + col]);
+    for (int row = col + 1; row < k; ++row) {
+      const double candidate = std::fabs(a[static_cast<size_t>(row) * k + col]);
+      if (candidate > pivot_abs) {
+        pivot = row;
+        pivot_abs = candidate;
+      }
+    }
+    if (pivot_abs <= pivot_tolerance) {
+      return false;
+    }
+    if (pivot != col) {
+      for (int j = col; j < k; ++j) {
+        std::swap(a[static_cast<size_t>(col) * k + j], a[static_cast<size_t>(pivot) * k + j]);
+      }
+      std::swap(b[col], b[pivot]);
+    }
+    const double diag = a[static_cast<size_t>(col) * k + col];
+    for (int row = col + 1; row < k; ++row) {
+      const double factor = a[static_cast<size_t>(row) * k + col] / diag;
+      if (factor == 0.0) {
+        continue;
+      }
+      a[static_cast<size_t>(row) * k + col] = 0.0;
+      for (int j = col + 1; j < k; ++j) {
+        a[static_cast<size_t>(row) * k + j] -= factor * a[static_cast<size_t>(col) * k + j];
+      }
+      b[row] -= factor * b[col];
+    }
+  }
+  for (int row = k - 1; row >= 0; --row) {
+    double rhs = b[row];
+    for (int col = row + 1; col < k; ++col) {
+      rhs -= a[static_cast<size_t>(row) * k + col] * solution[col];
+    }
+    const double diag = a[static_cast<size_t>(row) * k + row];
+    if (std::fabs(diag) <= pivot_tolerance) {
+      return false;
+    }
+    solution[row] = rhs / diag;
+  }
+  return true;
+}
+
+static bool fit_subset_coefficients(
+    const std::vector<double>& gram,
+    const std::vector<double>& xty,
+    const std::vector<int>& subset,
+    int p,
+    std::vector<double>& beta
+) {
+  const int k = static_cast<int>(subset.size());
+  std::vector<double> lhs(static_cast<size_t>(k) * k, 0.0);
+  std::vector<double> rhs(k, 0.0);
+  for (int i = 0; i < k; ++i) {
+    rhs[i] = xty[subset[i]];
+    for (int j = 0; j < k; ++j) {
+      lhs[static_cast<size_t>(i) * k + j] = gram[static_cast<size_t>(subset[i]) * p + subset[j]];
+    }
+  }
+  return solve_linear_system(std::move(lhs), std::move(rhs), k, beta);
+}
+
+struct InversePathCache {
+  std::vector<int> subset;
+  std::vector<int> pivots;
+  std::vector<double> diagonals;
+  std::vector<double> pivot_gram;
+  std::vector<double> pivot_inverse;
+  std::vector<double> factors;
+  std::vector<double> inverse;
+  double matrix_scale = 0.0;
+};
+
+static bool extend_subset_inverse(
+    const std::vector<double>& gram,
+    const std::vector<int>& subset,
+    int p,
+    InversePathCache& cache,
+    std::vector<double>& inverse
+) {
+  const int old_k = static_cast<int>(cache.subset.size());
+  const int k = static_cast<int>(subset.size());
+  if (old_k == 0 || k != old_k + 1 ||
+      !std::equal(cache.subset.begin(), cache.subset.end(), subset.begin())) {
+    return false;
+  }
+  const int added = subset.back();
+  const double added_diagonal = gram[static_cast<size_t>(added) * p + added];
+  const double matrix_scale = std::max(cache.matrix_scale, std::fabs(added_diagonal));
+  const double tolerance = 1e-10 * std::max(1.0, matrix_scale);
+  std::vector<double> last_column(old_k);
+  std::vector<double> last_row(k);
+  std::vector<double> last_inverse(k, 0.0);
+  for (int i = 0; i < old_k; ++i) {
+    last_column[i] = gram[static_cast<size_t>(subset[i]) * p + added];
+    last_row[i] = gram[static_cast<size_t>(added) * p + subset[i]];
+  }
+  last_row[old_k] = added_diagonal;
+  last_inverse[old_k] = 1.0;
+
+  std::vector<double> pivot_last_values(old_k);
+  std::vector<double> last_factors(old_k);
+
+  for (int column = 0; column < old_k; ++column) {
+    const double diagonal = cache.diagonals[column];
+    // The appended row is last in pivot tie order. Equality keeps the old
+    // pivot; a strictly larger candidate requires a full recomputation.
+    if (std::fabs(diagonal) <= tolerance ||
+        std::fabs(last_row[column]) > std::fabs(diagonal)) {
+      return false;
+    }
+    const int pivot = cache.pivots[column];
+    std::swap(last_column[column], last_column[pivot]);
+    last_column[column] /= diagonal;
+    const double pivot_last = last_column[column];
+    const size_t old_offset = static_cast<size_t>(column) * old_k;
+    pivot_last_values[column] = pivot_last;
+
+    const double factor = last_row[column];
+    last_factors[column] = factor;
+    if (factor != 0.0) {
+      for (int item = column; item < old_k; ++item) {
+        last_row[item] -= factor * cache.pivot_gram[old_offset + item];
+      }
+      last_row[old_k] -= factor * pivot_last;
+      for (int item = 0; item < old_k; ++item) {
+        last_inverse[item] -= factor * cache.pivot_inverse[old_offset + item];
+      }
+    }
+    for (int row = 0; row < old_k; ++row) {
+      if (row == column) {
+        continue;
+      }
+      const double old_factor = cache.factors[old_offset + row];
+      if (old_factor != 0.0) {
+        last_column[row] -= old_factor * pivot_last;
+      }
+    }
+  }
+
+  const double diagonal = last_row[old_k];
+  if (std::fabs(diagonal) <= tolerance) {
+    return false;
+  }
+  // Allocate and copy the enlarged cache only after the old pivots pass.
+  InversePathCache next;
+  next.subset = subset;
+  next.pivots = cache.pivots;
+  next.pivots.push_back(old_k);
+  next.diagonals = cache.diagonals;
+  next.diagonals.push_back(0.0);
+  next.matrix_scale = matrix_scale;
+  const size_t size = static_cast<size_t>(k) * k;
+  next.pivot_gram.assign(size, 0.0);
+  next.pivot_inverse.assign(size, 0.0);
+  next.factors.assign(size, 0.0);
+  inverse.assign(size, 0.0);
+  for (int row = 0; row < old_k; ++row) {
+    const size_t old_offset = static_cast<size_t>(row) * old_k;
+    const size_t offset = static_cast<size_t>(row) * k;
+    std::copy_n(cache.pivot_gram.data() + old_offset, old_k, next.pivot_gram.data() + offset);
+    std::copy_n(cache.pivot_inverse.data() + old_offset, old_k, next.pivot_inverse.data() + offset);
+    std::copy_n(cache.factors.data() + old_offset, old_k, next.factors.data() + offset);
+    std::copy_n(cache.inverse.data() + old_offset, old_k, inverse.data() + offset);
+    next.pivot_gram[offset + old_k] = pivot_last_values[row];
+    next.factors[offset + old_k] = last_factors[row];
+  }
+
+  next.diagonals[old_k] = diagonal;
+  next.pivot_gram[static_cast<size_t>(old_k) * k + old_k] = diagonal / diagonal;
+  for (int item = 0; item < k; ++item) {
+    last_inverse[item] /= diagonal;
+    inverse[static_cast<size_t>(old_k) * k + item] = last_inverse[item];
+    next.pivot_inverse[static_cast<size_t>(old_k) * k + item] = last_inverse[item];
+  }
+  for (int row = 0; row < old_k; ++row) {
+    const double factor = last_column[row];
+    next.factors[static_cast<size_t>(old_k) * k + row] = factor;
+    if (factor != 0.0) {
+      for (int item = 0; item < k; ++item) {
+        inverse[static_cast<size_t>(row) * k + item] -= factor * last_inverse[item];
+      }
+    }
+  }
+  next.inverse = inverse;
+  cache = std::move(next);
+  return true;
+}
+
+// The x86 generic build uses separate multiply and subtract operations.
+#if defined(__x86_64__) && (defined(__GNUC__) || defined(__clang__)) && !defined(__FMA__)
+#define INFERCSN_AVX2_ELIMINATION 1
+__attribute__((target("avx2,no-fma")))
+static void eliminate_column_avx2(
+    double* work,
+    double* inverse,
+    int k,
+    int column,
+    double* factors
+) {
+  const size_t pivot_offset = static_cast<size_t>(column) * k;
+  for (int row = 0; row < k; ++row) {
+    if (row == column) {
+      continue;
+    }
+    const size_t offset = static_cast<size_t>(row) * k;
+    double* __restrict__ work_row = work + offset;
+    const double factor = work_row[column];
+    if (factors) {
+      factors[row] = factor;
+    }
+    if (factor == 0.0) {
+      continue;
+    }
+    const double* __restrict__ pivot_work = work + pivot_offset;
+    for (int item = column; item < k; ++item) {
+      work_row[item] -= factor * pivot_work[item];
+    }
+    double* __restrict__ inverse_row = inverse + offset;
+    const double* __restrict__ pivot_inverse = inverse + pivot_offset;
+    for (int item = 0; item <= column; ++item) {
+      inverse_row[item] -= factor * pivot_inverse[item];
+    }
+  }
+}
+#endif
+
+static bool invert_subset_gram(
+    const std::vector<double>& gram,
+    const std::vector<int>& subset,
+    int p,
+    std::vector<double>& inverse,
+    InversePathCache* cache = nullptr
+) {
+  if (cache && extend_subset_inverse(gram, subset, p, *cache, inverse)) {
+    return true;
+  }
+  const int k = static_cast<int>(subset.size());
+#ifdef INFERCSN_AVX2_ELIMINATION
+  static const bool has_avx2 = __builtin_cpu_supports("avx2");
+  const bool use_avx2 = has_avx2 && k >= 64;
+#endif
+  if (cache) {
+    *cache = InversePathCache();
+    cache->pivots.resize(k);
+    cache->diagonals.resize(k);
+    cache->pivot_gram.assign(static_cast<size_t>(k) * k, 0.0);
+    cache->pivot_inverse.assign(static_cast<size_t>(k) * k, 0.0);
+    cache->factors.assign(static_cast<size_t>(k) * k, 0.0);
+  }
+  inverse.assign(static_cast<size_t>(k) * k, 0.0);
+  if (k == 0) {
+    return true;
+  }
+
+  std::vector<double> work(static_cast<size_t>(k) * k, 0.0);
+  std::vector<int> inverse_columns(k);
+  double matrix_scale = 0.0;
+  for (int row = 0; row < k; ++row) {
+    inverse_columns[row] = row;
+    for (int column = 0; column < k; ++column) {
+      work[static_cast<size_t>(row) * k + column] =
+        gram[static_cast<size_t>(subset[row]) * p + subset[column]];
+    }
+    inverse[static_cast<size_t>(row) * k + row] = 1.0;
+    matrix_scale = std::max(
+      matrix_scale,
+      std::fabs(work[static_cast<size_t>(row) * k + row])
+    );
+  }
+
+  const double pivot_tolerance = 1e-10 * std::max(1.0, matrix_scale);
+  for (int column = 0; column < k; ++column) {
+    int pivot = column;
+    double pivot_abs = std::fabs(
+      work[static_cast<size_t>(column) * k + column]
+    );
+    for (int row = column + 1; row < k; ++row) {
+      const double candidate = std::fabs(
+        work[static_cast<size_t>(row) * k + column]
+      );
+      if (candidate > pivot_abs) {
+        pivot = row;
+        pivot_abs = candidate;
+      }
+    }
+    if (pivot_abs <= pivot_tolerance) {
+      return false;
+    }
+    if (pivot != column) {
+      std::swap(inverse_columns[column], inverse_columns[pivot]);
+      for (int item = 0; item < k; ++item) {
+        std::swap(
+          work[static_cast<size_t>(column) * k + item],
+          work[static_cast<size_t>(pivot) * k + item]
+        );
+        std::swap(
+          inverse[static_cast<size_t>(column) * k + item],
+          inverse[static_cast<size_t>(pivot) * k + item]
+        );
+      }
+      // Track the same column permutation in the inverse. Its pivot row then
+      // has nonzeros only in columns 0..column, even after row pivoting.
+      for (int row = 0; row < k; ++row) {
+        std::swap(
+          inverse[static_cast<size_t>(row) * k + column],
+          inverse[static_cast<size_t>(row) * k + pivot]
+        );
+      }
+    }
+
+    const double diagonal = work[static_cast<size_t>(column) * k + column];
+    if (cache) {
+      cache->pivots[column] = pivot;
+      cache->diagonals[column] = diagonal;
+    }
+    for (int item = column; item < k; ++item) {
+      work[static_cast<size_t>(column) * k + item] /= diagonal;
+    }
+    for (int item = 0; item <= column; ++item) {
+      inverse[static_cast<size_t>(column) * k + item] /= diagonal;
+    }
+    if (cache) {
+      const size_t offset = static_cast<size_t>(column) * k;
+      for (int item = column; item < k; ++item) {
+        cache->pivot_gram[offset + item] = work[offset + item];
+      }
+      for (int item = 0; item <= column; ++item) {
+        cache->pivot_inverse[offset + inverse_columns[item]] = inverse[offset + item];
+      }
+    }
+#ifdef INFERCSN_AVX2_ELIMINATION
+    if (use_avx2) {
+      eliminate_column_avx2(
+        work.data(), inverse.data(), k, column,
+        cache ? cache->factors.data() + static_cast<size_t>(column) * k : nullptr
+      );
+      continue;
+    }
+#endif
+    for (int row = 0; row < k; ++row) {
+      if (row == column) {
+        continue;
+      }
+      const double factor = work[static_cast<size_t>(row) * k + column];
+      if (cache) {
+        cache->factors[static_cast<size_t>(column) * k + row] = factor;
+      }
+      if (factor == 0.0) {
+        continue;
+      }
+      for (int item = column; item < k; ++item) {
+        work[static_cast<size_t>(row) * k + item] -=
+          factor * work[static_cast<size_t>(column) * k + item];
+      }
+      for (int item = 0; item <= column; ++item) {
+        inverse[static_cast<size_t>(row) * k + item] -=
+          factor * inverse[static_cast<size_t>(column) * k + item];
+      }
+    }
+  }
+  // Restore the caller's original column order.
+  std::vector<double> ordered_inverse(static_cast<size_t>(k) * k);
+  for (int row = 0; row < k; ++row) {
+    for (int column = 0; column < k; ++column) {
+      ordered_inverse[static_cast<size_t>(row) * k + inverse_columns[column]] =
+        inverse[static_cast<size_t>(row) * k + column];
+    }
+  }
+  inverse.swap(ordered_inverse);
+  if (cache) {
+    cache->subset = subset;
+    cache->matrix_scale = matrix_scale;
+    cache->inverse = inverse;
+  }
+  return true;
+}
+
+static void residual_candidate_statistics(
+    const std::vector<double>& gram,
+    const std::vector<double>& xty,
+    const std::vector<int>& subset,
+    const std::vector<double>& beta,
+    const std::vector<double>& inverse,
+    const std::vector<char>& allowed,
+    const std::vector<char>& used,
+    int p,
+    std::vector<double>& projection,
+    std::vector<double>& residual_variance,
+    std::vector<double>& residual_cross,
+    std::vector<char>& valid
+) {
+  const int k = static_cast<int>(subset.size());
+  projection.assign(static_cast<size_t>(p) * k, 0.0);
+  residual_variance.assign(p, 0.0);
+  residual_cross.assign(p, 0.0);
+  valid.assign(p, 0);
+
+  if (k > 0) {
+    std::vector<double> inverse_column_major(static_cast<size_t>(k) * k, 0.0);
+    std::vector<double> selected_cross(static_cast<size_t>(k) * p, 0.0);
+    for (int column = 0; column < k; ++column) {
+      for (int row = 0; row < k; ++row) {
+        inverse_column_major[static_cast<size_t>(column) * k + row] =
+          inverse[static_cast<size_t>(row) * k + column];
+      }
+    }
+    for (int regulator = 0; regulator < p; ++regulator) {
+      for (int row = 0; row < k; ++row) {
+        selected_cross[static_cast<size_t>(regulator) * k + row] =
+          gram[static_cast<size_t>(subset[row]) * p + regulator];
+      }
+    }
+    const char no_transpose = 'N';
+    const double one = 1.0;
+    const double zero = 0.0;
+    F77_CALL(dgemm)(
+      &no_transpose,
+      &no_transpose,
+      &k,
+      &p,
+      &k,
+      &one,
+      inverse_column_major.data(),
+      &k,
+      selected_cross.data(),
+      &k,
+      &zero,
+      projection.data(),
+      &k FCONE FCONE
+    );
+  }
+
+  for (int regulator = 0; regulator < p; ++regulator) {
+    if (!allowed[regulator] || used[regulator]) {
+      continue;
+    }
+    double this_cross = xty[regulator];
+    double this_variance =
+      gram[static_cast<size_t>(regulator) * p + regulator];
+    for (int index = 0; index < k; ++index) {
+      const double gram_value =
+        gram[static_cast<size_t>(regulator) * p + subset[index]];
+      this_cross -= gram_value * beta[index];
+      this_variance -= gram_value *
+        projection[static_cast<size_t>(regulator) * k + index];
+    }
+    const double variance_tolerance = 1e-10 * std::max(
+      1.0,
+      std::fabs(gram[static_cast<size_t>(regulator) * p + regulator])
+    );
+    residual_variance[regulator] = this_variance;
+    residual_cross[regulator] = this_cross;
+    if (this_variance <= variance_tolerance || !R_finite(this_variance)) {
+      continue;
+    }
+    valid[regulator] = 1;
+  }
+}
+
+[[maybe_unused]] static void symmetric_crossproduct(
+    const std::vector<double>& matrix,
+    int rows,
+    int columns,
+    std::vector<double>& result
+) {
+  result.assign(static_cast<size_t>(columns) * columns, 0.0);
+  if (rows <= 0 || columns <= 0) {
+    return;
+  }
+  const char transpose = 'T';
+  const char no_transpose = 'N';
+  const double one = 1.0;
+  const double zero = 0.0;
+  F77_CALL(dgemm)(
+    &transpose,
+    &no_transpose,
+    &columns,
+    &columns,
+    &rows,
+    &one,
+    matrix.data(),
+    &rows,
+    matrix.data(),
+    &rows,
+    &zero,
+    result.data(),
+    &columns FCONE FCONE
+  );
+}
+
+[[maybe_unused]] static void accumulate_weighted_crossproducts(
+    std::vector<double>& predictors,
+    std::vector<double>& responses,
+    const std::vector<double>& weights,
+    int rows,
+    int columns,
+    std::vector<double>& predictor_gram,
+    std::vector<double>& predictor_response,
+    std::vector<double>& response_ss
+) {
+  for (int row = 0; row < rows; ++row) {
+    const double root_weight = std::sqrt(std::max(0.0, weights[row]));
+    for (int column = 0; column < columns; ++column) {
+      predictors[static_cast<size_t>(column) * rows + row] *= root_weight;
+      responses[static_cast<size_t>(column) * rows + row] *= root_weight;
+    }
+  }
+
+  const char transpose = 'T';
+  const char no_transpose = 'N';
+  const double one = 1.0;
+  F77_CALL(dgemm)(
+    &transpose,
+    &no_transpose,
+    &columns,
+    &columns,
+    &rows,
+    &one,
+    predictors.data(),
+    &rows,
+    predictors.data(),
+    &rows,
+    &one,
+    predictor_gram.data(),
+    &columns FCONE FCONE
+  );
+
+  F77_CALL(dgemm)(
+    &transpose,
+    &no_transpose,
+    &columns,
+    &columns,
+    &rows,
+    &one,
+    responses.data(),
+    &rows,
+    predictors.data(),
+    &rows,
+    &one,
+    predictor_response.data(),
+    &columns FCONE FCONE
+  );
+
+  for (int target = 0; target < columns; ++target) {
+    const double* response = &responses[static_cast<size_t>(target) * rows];
+    double sum_squares = 0.0;
+    for (int row = 0; row < rows; ++row) {
+      sum_squares += response[row] * response[row];
+    }
+    response_ss[target] += sum_squares;
+  }
+}
+
+static double subset_sse(
+    const std::vector<double>& gram,
+    const std::vector<double>& xty,
+    const std::vector<int>& subset,
+    const std::vector<double>& beta,
+    double y_ss,
+    int p
+) {
+  double explained = 0.0;
+  for (int i = 0; i < static_cast<int>(subset.size()); ++i) {
+    explained += 2.0 * beta[i] * xty[subset[i]];
+    for (int j = 0; j < static_cast<int>(subset.size()); ++j) {
+      explained -= beta[i] * beta[j] * gram[static_cast<size_t>(subset[i]) * p + subset[j]];
+    }
+  }
+  const double sse = y_ss - explained;
+  return std::max(0.0, sse);
+}
+
+static double subset_bic(double sse, int support_size, int n_obs) {
+  const double n = static_cast<double>(std::max(1, n_obs));
+  return n * std::log(std::max(sse / n, 1e-12)) +
+    static_cast<double>(support_size) * std::log(n);
+}
+
+static TargetFit fit_target_greedy_from_gram(
+    const std::vector<double>& gram,
+    const std::vector<double>& xty,
+    const std::vector<char>& allowed,
+    int target,
+    int p,
+    int n_obs,
+    int max_support,
+    double min_improvement,
+    double y_ss
+) {
+  TargetFit out;
+  out.coefficient.assign(p, 0.0);
+  const double baseline_bic = subset_bic(y_ss, 0, n_obs);
+  out.rss = y_ss;
+  out.bic = baseline_bic;
+  if (y_ss <= 0.0 || max_support <= 0 || n_obs < 2) {
+    return out;
+  }
+
+  std::vector<int> selected;
+  std::vector<char> used(p, 0);
+  if (target >= 0 && target < p) {
+    used[target] = 1;
+  }
+  double path_sse = y_ss;
+  double path_bic = baseline_bic;
+  double best_path_bic = baseline_bic;
+  std::vector<int> best_path_selected;
+  std::vector<double> path_beta;
+  const double forward_bic_tolerance = 1e-10;
+
+  InversePathCache path_cache;
+  for (int step = 0; step < max_support; ++step) {
+    std::vector<double> path_inverse;
+    if (!invert_subset_gram(gram, selected, p, path_inverse, &path_cache)) {
+      break;
+    }
+    std::vector<double> path_projection;
+    std::vector<double> path_variance;
+    std::vector<double> path_cross;
+    std::vector<char> path_valid;
+    residual_candidate_statistics(
+      gram,
+      xty,
+      selected,
+      path_beta,
+      path_inverse,
+      allowed,
+      used,
+      p,
+      path_projection,
+      path_variance,
+      path_cross,
+      path_valid
+    );
+    int best_regulator = -1;
+    double best_sse = path_sse;
+    for (int regulator = 0; regulator < p; ++regulator) {
+      if (!path_valid[regulator]) {
+        continue;
+      }
+      const double sse = std::max(
+        0.0,
+        path_sse - path_cross[regulator] * path_cross[regulator] /
+          path_variance[regulator]
+      );
+      if (sse >= path_sse - min_improvement) {
+        continue;
+      }
+      const double tie_tolerance = 1e-12 * (1.0 + std::fabs(best_sse));
+      if (best_regulator < 0 || sse < best_sse - tie_tolerance ||
+          (std::fabs(sse - best_sse) <= tie_tolerance && regulator < best_regulator)) {
+        best_sse = sse;
+        best_regulator = regulator;
+      }
+    }
+    if (best_regulator < 0) {
+      break;
+    }
+    std::vector<int> candidate_selected = selected;
+    candidate_selected.push_back(best_regulator);
+    std::vector<double> candidate_beta;
+    if (!fit_subset_coefficients(
+      gram,
+      xty,
+      candidate_selected,
+      p,
+      candidate_beta
+    )) {
+      break;
+    }
+    best_sse = subset_sse(
+      gram,
+      xty,
+      candidate_selected,
+      candidate_beta,
+      y_ss,
+      p
+    );
+    if (best_sse >= path_sse - min_improvement) {
+      break;
+    }
+    const double candidate_bic = subset_bic(
+      best_sse,
+      static_cast<int>(candidate_selected.size()),
+      n_obs
+    );
+    const double current_tolerance = forward_bic_tolerance *
+      (1.0 + std::fabs(path_bic));
+    if (candidate_bic >= path_bic - current_tolerance) {
+      break;
+    }
+    selected.swap(candidate_selected);
+    path_beta.swap(candidate_beta);
+    used[best_regulator] = 1;
+    path_sse = best_sse;
+    path_bic = candidate_bic;
+
+    if (path_bic < best_path_bic) {
+      best_path_bic = path_bic;
+      best_path_selected = selected;
+    }
+  }
+
+  if (best_path_selected.empty()) {
+    return out;
+  }
+
+  std::vector<int> current_support = best_path_selected;
+  std::sort(current_support.begin(), current_support.end());
+  std::vector<double> current_beta;
+  if (!fit_subset_coefficients(gram, xty, current_support, p, current_beta)) {
+    return out;
+  }
+  double current_sse = subset_sse(
+    gram,
+    xty,
+    current_support,
+    current_beta,
+    y_ss,
+    p
+  );
+  double current_bic = subset_bic(
+    current_sse,
+    static_cast<int>(current_support.size()),
+    n_obs
+  );
+  const double bic_tolerance = 1e-10;
+
+  while (true) {
+    std::vector<int> best_support = current_support;
+    std::vector<double> best_beta = current_beta;
+    double best_sse = current_sse;
+    double best_bic = current_bic;
+    bool best_beta_valid = true;
+
+    const int support_size = static_cast<int>(current_support.size());
+    std::vector<char> current_used(p, 0);
+    for (int regulator : current_support) {
+      current_used[regulator] = 1;
+    }
+    std::vector<double> current_inverse;
+    if (!invert_subset_gram(
+      gram,
+      current_support,
+      p,
+      current_inverse
+    )) {
+      break;
+    }
+    std::vector<double> outside_projection;
+    std::vector<double> outside_variance;
+    std::vector<double> outside_cross;
+    std::vector<char> outside_valid;
+    residual_candidate_statistics(
+      gram,
+      xty,
+      current_support,
+      current_beta,
+      current_inverse,
+      allowed,
+      current_used,
+      p,
+      outside_projection,
+      outside_variance,
+      outside_cross,
+      outside_valid
+    );
+
+    const auto consider_scored = [
+      &best_support,
+      &best_sse,
+      &best_bic,
+      &best_beta_valid,
+      current_bic,
+      bic_tolerance,
+      n_obs
+    ](std::vector<int> trial_support, double trial_sse) {
+      std::sort(trial_support.begin(), trial_support.end());
+      const double trial_bic = subset_bic(
+        trial_sse,
+        static_cast<int>(trial_support.size()),
+        n_obs
+      );
+      const double current_tol = bic_tolerance * (1.0 + std::fabs(current_bic));
+      if (trial_bic >= current_bic - current_tol) {
+        return;
+      }
+      const double best_tol = bic_tolerance * (1.0 + std::fabs(best_bic));
+      if (trial_bic < best_bic - best_tol ||
+          (std::fabs(trial_bic - best_bic) <= best_tol &&
+           trial_support < best_support)) {
+        best_support.swap(trial_support);
+        best_sse = trial_sse;
+        best_bic = trial_bic;
+        best_beta_valid = false;
+      }
+    };
+
+    const auto score_is_competitive = [
+      &best_bic,
+      current_bic,
+      bic_tolerance
+    ](double trial_bic) {
+      const double current_tol = bic_tolerance * (1.0 + std::fabs(current_bic));
+      if (trial_bic >= current_bic - current_tol) {
+        return false;
+      }
+      const double best_tol = bic_tolerance * (1.0 + std::fabs(best_bic));
+      return trial_bic <= best_bic + best_tol;
+    };
+
+    std::vector<double> removal_sse(support_size, current_sse);
+    std::vector<double> removal_variance(support_size, 0.0);
+    for (int remove = 0; remove < support_size; ++remove) {
+      const double inverse_diagonal =
+        current_inverse[static_cast<size_t>(remove) * support_size + remove];
+      if (inverse_diagonal <= 0.0 || !R_finite(inverse_diagonal)) {
+        continue;
+      }
+      const double residual_variance = 1.0 / inverse_diagonal;
+      removal_variance[remove] = residual_variance;
+      removal_sse[remove] = std::max(
+        0.0,
+        current_sse + current_beta[remove] * current_beta[remove] *
+          residual_variance
+      );
+      const double trial_bic = subset_bic(
+        removal_sse[remove],
+        support_size - 1,
+        n_obs
+      );
+      if (!score_is_competitive(trial_bic)) {
+        continue;
+      }
+      std::vector<int> trial = current_support;
+      trial.erase(trial.begin() + remove);
+      consider_scored(trial, removal_sse[remove]);
+    }
+
+    if (support_size < max_support) {
+      for (int regulator = 0; regulator < p; ++regulator) {
+        if (!outside_valid[regulator]) {
+          continue;
+        }
+        const double trial_sse = std::max(
+          0.0,
+          current_sse - outside_cross[regulator] * outside_cross[regulator] /
+            outside_variance[regulator]
+        );
+        const double trial_bic = subset_bic(
+          trial_sse,
+          support_size + 1,
+          n_obs
+        );
+        if (!score_is_competitive(trial_bic)) {
+          continue;
+        }
+        std::vector<int> trial = current_support;
+        trial.push_back(regulator);
+        consider_scored(trial, trial_sse);
+      }
+    }
+
+    if (support_size > 0) {
+      for (int remove = 0; remove < support_size; ++remove) {
+        const double removed_variance = removal_variance[remove];
+        if (removed_variance <= 0.0) {
+          continue;
+        }
+        for (int regulator = 0; regulator < p; ++regulator) {
+          if (!allowed[regulator] || current_used[regulator]) {
+            continue;
+          }
+          const double removed_projection = outside_projection[
+            static_cast<size_t>(regulator) * support_size + remove
+          ];
+          const double trial_variance = outside_variance[regulator] +
+            removed_projection * removed_projection * removed_variance;
+          const double trial_variance_tolerance = 1e-10 * std::max(
+            1.0,
+            std::fabs(gram[static_cast<size_t>(regulator) * p + regulator])
+          );
+          if (trial_variance <= trial_variance_tolerance ||
+              !R_finite(trial_variance)) {
+            continue;
+          }
+          const double trial_cross = outside_cross[regulator] +
+            current_beta[remove] * removed_projection * removed_variance;
+          const double trial_sse = std::max(
+            0.0,
+            removal_sse[remove] - trial_cross * trial_cross / trial_variance
+          );
+          if (trial_sse >= current_sse) {
+            continue;
+          }
+          const double trial_bic = subset_bic(
+            trial_sse,
+            support_size,
+            n_obs
+          );
+          if (!score_is_competitive(trial_bic)) {
+            continue;
+          }
+          std::vector<int> trial = current_support;
+          trial[remove] = regulator;
+          consider_scored(trial, trial_sse);
+        }
+      }
+    }
+
+    if (best_support == current_support) {
+      break;
+    }
+    if (!best_beta_valid) {
+      if (!fit_subset_coefficients(
+        gram,
+        xty,
+        best_support,
+        p,
+        best_beta
+      )) {
+        break;
+      }
+      best_sse = subset_sse(
+        gram,
+        xty,
+        best_support,
+        best_beta,
+        y_ss,
+        p
+      );
+      best_bic = subset_bic(
+        best_sse,
+        static_cast<int>(best_support.size()),
+        n_obs
+      );
+      const double current_tol = bic_tolerance *
+        (1.0 + std::fabs(current_bic));
+      if (best_bic >= current_bic - current_tol) {
+        break;
+      }
+    }
+    current_support.swap(best_support);
+    current_beta.swap(best_beta);
+    current_sse = best_sse;
+    current_bic = best_bic;
+  }
+
+  const double deletion_bic_tolerance = 1e-8;
+  while (!current_support.empty()) {
+    std::vector<double> current_inverse;
+    if (!invert_subset_gram(gram, current_support, p, current_inverse)) {
+      break;
+    }
+    const int support_size = static_cast<int>(current_support.size());
+    std::vector<int> best_support = current_support;
+    double best_sse = current_sse;
+    double best_bic = current_bic;
+    for (int remove = 0; remove < support_size; ++remove) {
+      const double inverse_diagonal = current_inverse[
+        static_cast<size_t>(remove) * support_size + remove
+      ];
+      if (inverse_diagonal <= 0.0 || !R_finite(inverse_diagonal)) {
+        continue;
+      }
+      const double trial_sse = std::max(
+        0.0,
+        current_sse + current_beta[remove] * current_beta[remove] /
+          inverse_diagonal
+      );
+      const double trial_bic = subset_bic(trial_sse, support_size - 1, n_obs);
+      const double current_tol = deletion_bic_tolerance *
+        (1.0 + std::fabs(current_bic));
+      if (trial_bic >= current_bic - current_tol) {
+        continue;
+      }
+      std::vector<int> trial_support = current_support;
+      trial_support.erase(trial_support.begin() + remove);
+      const double best_tol = deletion_bic_tolerance *
+        (1.0 + std::fabs(best_bic));
+      if (best_support == current_support || trial_bic < best_bic - best_tol ||
+          (std::fabs(trial_bic - best_bic) <= best_tol &&
+           trial_support < best_support)) {
+        best_support.swap(trial_support);
+        best_sse = trial_sse;
+        best_bic = trial_bic;
+      }
+    }
+    if (best_support == current_support) {
+      break;
+    }
+    std::vector<double> best_beta;
+    if (!fit_subset_coefficients(gram, xty, best_support, p, best_beta)) {
+      break;
+    }
+    current_support.swap(best_support);
+    current_beta.swap(best_beta);
+    current_sse = best_sse;
+    current_bic = best_bic;
+  }
+
+  for (int idx = 0; idx < static_cast<int>(current_support.size()); ++idx) {
+    out.coefficient[current_support[idx]] = current_beta[idx];
+  }
+  out.r2 = std::max(0.0, 1.0 - current_sse / y_ss);
+  out.rss = current_sse;
+  out.bic = current_bic;
+  out.support = current_support;
+  return out;
+}
+
+static inline double selected_deletion_delta_bic(
+    double beta, double inverse_diagonal, const TargetFit& fit,
+    int selected_count, int n_obs
+) {
+  if (!R_finite(beta) || beta == 0.0 ||
+      !R_finite(inverse_diagonal) || inverse_diagonal <= 0.0) {
+    stop("Invalid selected coefficient or inverse Gram diagonal.");
+  }
+  const double removed_rss = fit.rss + beta * beta / inverse_diagonal;
+  const double delta = subset_bic(removed_rss, selected_count - 1, n_obs) - fit.bic;
+  const double tolerance = 1e-8 * (1.0 + std::fabs(fit.bic));
+  if (delta < -tolerance) {
+    stop("Selected support is not deletion-local-optimal.");
+  }
+  return std::max(0.0, delta);
+}
+
+#endif

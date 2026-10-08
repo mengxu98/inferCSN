@@ -1,14 +1,7 @@
 #' @import methods
 #'
 #' @importClassesFrom Matrix sparseMatrix
-#' @importFrom Rcpp evalCpp sourceCpp
+#' @importFrom Rcpp evalCpp
 #' @importFrom stats coef predict
-#' @importFrom utils head tail
+#' @importFrom utils head
 NULL
-
-utils::globalVariables(
-  c(
-    "regulator",
-    "target"
-  )
-)

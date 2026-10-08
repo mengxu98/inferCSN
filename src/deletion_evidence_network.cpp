@@ -3,9 +3,7 @@
 #include <cmath>
 #include <vector>
 
-#define solve_greedy_l0 deletion_solve_greedy_l0
-#include "greedy_l0.cpp"
-#undef solve_greedy_l0
+#include "greedy_l0.h"
 
 using namespace Rcpp;
 
@@ -483,23 +481,13 @@ DataFrame infer_network(
         const double inverse_diagonal = support_inverse[
           static_cast<size_t>(selected) * selected_count + selected
         ];
-        if (!R_finite(beta) || beta == 0.0 ||
-            !R_finite(inverse_diagonal) || inverse_diagonal <= 0.0) {
-          stop("Invalid selected coefficient or inverse Gram diagonal.");
-        }
-        const double removed_rss = fit.rss + beta * beta / inverse_diagonal;
-        double delta_bic = subset_bic(
-          removed_rss, selected_count - 1, active_n
-        ) - fit.bic;
-        const double evidence_tolerance =
-          1e-8 * (1.0 + std::fabs(fit.bic));
-        if (delta_bic < -evidence_tolerance) {
-          stop("Selected support is not deletion-local-optimal.");
-        }
+        const double delta_bic = selected_deletion_delta_bic(
+          beta, inverse_diagonal, fit, selected_count, active_n
+        );
         const size_t edge_index =
           static_cast<size_t>(regulator) * p + target;
         core_raw[edge_index] = beta;
-        core_evidence[edge_index] = std::max(0.0, delta_bic);
+        core_evidence[edge_index] = delta_bic;
       }
     }
   }
@@ -643,22 +631,13 @@ List solve_greedy_l0_batch(
       const double inverse_diagonal = support_inverse[
         static_cast<size_t>(selected) * selected_count + selected
       ];
-      if (!R_finite(beta) || beta == 0.0 ||
-          !R_finite(inverse_diagonal) || inverse_diagonal <= 0.0) {
-        stop("Invalid selected coefficient or inverse Gram diagonal.");
-      }
-      const double removed_rss = fit.rss + beta * beta / inverse_diagonal;
-      double delta_bic = subset_bic(
-        removed_rss, selected_count - 1, n_obs
-      ) - fit.bic;
-      const double tolerance = 1e-8 * (1.0 + std::fabs(fit.bic));
-      if (delta_bic < -tolerance) {
-        stop("Selected support is not deletion-local-optimal.");
-      }
+      const double delta_bic = selected_deletion_delta_bic(
+        beta, inverse_diagonal, fit, selected_count, n_obs
+      );
       edge_predictor.push_back(candidate[local_predictor] + 1);
       edge_target.push_back(target + 1);
       edge_beta.push_back(beta);
-      edge_delta_bic.push_back(std::max(0.0, delta_bic));
+      edge_delta_bic.push_back(delta_bic);
     }
   }
 

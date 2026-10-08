@@ -35,41 +35,7 @@ fit_greedy_l0 <- function(
   coefficient <- as.numeric(fit$coefficient)
   names(coefficient) <- colnames(x)
   support <- as.integer(fit$support)
-  deletion_delta_bic <- rep(NA_real_, length(coefficient))
-  if (length(support)) {
-    standardized <- matrix(0, nrow = nrow(x), ncol = ncol(x))
-    for (column in seq_len(ncol(x))) {
-      values <- x[, column]
-      finite <- is.finite(values)
-      if (sum(finite) < 2L) next
-      centered <- numeric(length(values))
-      centered[finite] <- values[finite] - mean(values[finite])
-      scale_value <- sqrt(sum(centered^2) / (sum(finite) - 1L))
-      if (is.finite(scale_value) && scale_value > 0) {
-        standardized[, column] <- centered / scale_value
-      }
-    }
-    selected_gram <- crossprod(standardized[, support, drop = FALSE])
-    inverse <- tryCatch(
-      chol2inv(chol((selected_gram + t(selected_gram)) / 2)),
-      error = function(error) NULL
-    )
-    if (is.null(inverse) || any(!is.finite(inverse)) ||
-      any(diag(inverse) <= 0)) {
-      thisutils::log_message("Selected support Gram matrix is not identifiable.", message_type = "error")
-    }
-    beta <- coefficient[support]
-    removed_rss <- as.numeric(fit$rss) + beta^2 / diag(inverse)
-    removed_bic <- as.integer(fit$n_obs) * log(pmax(
-      removed_rss / as.integer(fit$n_obs), 1e-12
-    )) + (length(support) - 1L) * log(as.integer(fit$n_obs))
-    delta <- removed_bic - as.numeric(fit$bic)
-    tolerance <- 1e-8 * (1 + abs(as.numeric(fit$bic)))
-    if (any(delta < -tolerance)) {
-      thisutils::log_message("Selected support is not deletion-local-optimal.", message_type = "error")
-    }
-    deletion_delta_bic[support] <- pmax(0, delta)
-  }
+  deletion_delta_bic <- as.numeric(fit$deletion_delta_bic)
   list(
     model = list(
       algorithm = "greedy_l0",
