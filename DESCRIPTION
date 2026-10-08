@@ -25,7 +25,7 @@ Suggests:
 LinkingTo:
     Rcpp
 Remotes:
-    mengxu98/thisutils@bb62888fbf17e5988d71012677df3c47693290b2
+    mengxu98/thisutils
 Config/Needs/website: mengxu98/thistemplate
 Config/testthat/edition: 3
 Encoding: UTF-8
