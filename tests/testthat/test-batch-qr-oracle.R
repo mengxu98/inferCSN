@@ -1,3 +1,29 @@
+qr_inverse_diagonal <- function(x) {
+  vapply(seq_len(ncol(x)), function(j) {
+    1 / sum(lm.fit(x[, -j, drop = FALSE], x[, j])$residuals^2)
+  }, numeric(1))
+}
+
+test_that("QR inverse diagonals agree with analytic values and response refits", {
+  gram <- matrix(c(100, 200, 0, 200, 900, 100, 0, 100, 400), 3)
+  x <- rbind(chol(gram), c(0, 0, 0))
+  beta <- c(3, -1, 2)
+  y <- as.numeric(x %*% beta) + c(0, 0, 0, 1)
+  inverse_diagonal <- qr_inverse_diagonal(x)
+  expect_true(all(is.finite(inverse_diagonal) & inverse_diagonal > 0))
+  expect_equal(inverse_diagonal, c(7 / 380, 1 / 475, 1 / 380), tolerance = 1e-12)
+  full_rss <- sum(lm.fit(x, y)$residuals^2)
+  deleted_rss <- vapply(seq_len(ncol(x)), function(j) {
+    sum(lm.fit(x[, -j, drop = FALSE], y)$residuals^2)
+  }, numeric(1))
+  expect_equal(full_rss, 1, tolerance = 1e-12)
+  expect_equal(
+    100 * log(1 + beta^2 / inverse_diagonal) - log(100),
+    100 * log(deleted_rss / full_rss) - log(100),
+    tolerance = 1e-10
+  )
+})
+
 test_that("batch supports and deletion evidence agree with direct QR refits", {
   for (seed in 3101:3108) {
     set.seed(seed)
@@ -94,7 +120,9 @@ test_that("long forward paths preserve coefficients and deletion evidence with p
     beta <- rep(c(3, -2, 1), 4)
     xty <- gram %*% beta
     y_ss <- sum(beta * xty) + 1
-    evidence <- 1000 * log(1 + beta^2 / diag(solve(gram))) - log(1000)
+    inverse_diagonal <- qr_inverse_diagonal(x)
+    expect_true(all(is.finite(inverse_diagonal) & inverse_diagonal > 0))
+    evidence <- 1000 * log(1 + beta^2 / inverse_diagonal) - log(1000)
     for (candidate_order in list(1:12, 12:1)) {
       fit <- fit_greedy_l0_batch(gram, xty, y_ss, list(candidate_order), n_obs = 1000)
       expect_setequal(fit$predictor_index, 1:12)
@@ -115,7 +143,9 @@ test_that("large selected supports preserve coefficients and deletion evidence",
     beta <- rep_len(c(3, -2, 1), p)
     xty <- gram %*% beta
     y_ss <- sum(beta * xty) + 1
-    evidence <- 1000 * log(1 + beta^2 / diag(solve(gram))) - log(1000)
+    inverse_diagonal <- qr_inverse_diagonal(x)
+    expect_true(all(is.finite(inverse_diagonal) & inverse_diagonal > 0))
+    evidence <- 1000 * log(1 + beta^2 / inverse_diagonal) - log(1000)
     fit <- fit_greedy_l0_batch(
       gram, xty, y_ss, list(seq_len(p)),
       n_obs = 1000
