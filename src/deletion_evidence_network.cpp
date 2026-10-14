@@ -538,6 +538,29 @@ DataFrame infer_network(
   );
 }
 
+static void copy_candidate_gram(
+    const double* gram_values,
+    int p,
+    const std::vector<int>& candidate,
+    std::vector<double>& local_gram
+) {
+  const int k = static_cast<int>(candidate.size());
+  for (int first_left = 0; first_left < k; first_left += 32) {
+    const int last_left = std::min(k, first_left + 32);
+    for (int first_right = 0; first_right < k; first_right += 32) {
+      const int last_right = std::min(k, first_right + 32);
+      for (int right = first_right; right < last_right; ++right) {
+        const double* source = gram_values + static_cast<size_t>(candidate[right]) * p;
+        for (int left = first_left; left < last_left; ++left) {
+          const double value = source[candidate[left]];
+          if (!std::isfinite(value)) stop("Batch Gram matrix must be finite.");
+          local_gram[static_cast<size_t>(left) * k + right] = value;
+        }
+      }
+    }
+  }
+}
+
 // [[Rcpp::export]]
 List solve_greedy_l0_batch(
     NumericMatrix gram_matrix,
@@ -566,20 +589,38 @@ List solve_greedy_l0_batch(
   NumericVector bic(targets, NA_REAL);
   CharacterVector status(targets, "unprocessed");
 
+  const double* gram_values = gram_matrix.begin();
+  const double* xty_values = xty_matrix.begin();
+  std::vector<int> candidate;
+  std::vector<int> seen(p, -1);
+  std::vector<double> local_gram;
+  std::vector<double> local_xty;
+  std::vector<char> allowed;
+  std::vector<double> support_inverse;
+
+  size_t elements_until_scan = static_cast<size_t>(p) * p;
+  bool scanned_shared_gram = targets <= 1 || elements_until_scan > 8 * 1024 * 1024;
+  bool shared_gram_is_finite = false;
+  std::vector<double> shared_row_gram;
+
   for (int target = 0; target < targets; ++target) {
     IntegerVector supplied = candidate_predictors[target];
-    std::vector<int> candidate;
+    candidate.clear();
     candidate.reserve(supplied.size());
-    std::vector<char> seen(p, 0);
+    const double* target_xty = xty_values + static_cast<size_t>(target) * p;
     for (int index = 0; index < supplied.size(); ++index) {
-      const int predictor = supplied[index] - 1;
-      if (predictor < 0 || predictor >= p || seen[predictor]) {
+      const int supplied_index = supplied[index];
+      if (supplied_index == NA_INTEGER || supplied_index < 1 || supplied_index > p) {
         stop("Candidate predictor indices must be unique and one-based.");
       }
-      seen[predictor] = 1;
-      const double diagonal = gram_matrix(predictor, predictor);
-      const double cross = xty_matrix(predictor, target);
-      if (!R_finite(diagonal) || !R_finite(cross)) {
+      const int predictor = supplied_index - 1;
+      if (seen[predictor] == target) {
+        stop("Candidate predictor indices must be unique and one-based.");
+      }
+      seen[predictor] = target;
+      const double diagonal = gram_values[static_cast<size_t>(predictor) * p + predictor];
+      const double cross = target_xty[predictor];
+      if (!std::isfinite(diagonal) || !std::isfinite(cross)) {
         stop("Batch Gram and cross-products must be finite.");
       }
       if (diagonal > 0.0) candidate.push_back(predictor);
@@ -595,16 +636,43 @@ List solve_greedy_l0_batch(
     }
 
     const int k = static_cast<int>(candidate.size());
-    std::vector<double> local_gram(static_cast<size_t>(k) * k, 0.0);
-    std::vector<double> local_xty(k, 0.0);
-    std::vector<char> allowed(k, 1);
+    local_gram.resize(static_cast<size_t>(k) * k);
+    local_xty.resize(k);
+    allowed.assign(k, 1);
     for (int left = 0; left < k; ++left) {
-      local_xty[left] = xty_matrix(candidate[left], target);
-      for (int right = 0; right < k; ++right) {
-        const double value = gram_matrix(candidate[left], candidate[right]);
-        if (!R_finite(value)) stop("Batch Gram matrix must be finite.");
-        local_gram[static_cast<size_t>(left) * k + right] = value;
+      local_xty[left] = target_xty[candidate[left]];
+    }
+    if (!scanned_shared_gram) {
+      const size_t local_size = static_cast<size_t>(k) * k;
+      if (local_size >= elements_until_scan) {
+        shared_gram_is_finite = std::all_of(
+          gram_values, gram_values + static_cast<size_t>(p) * p,
+          [](double value) { return std::isfinite(value); }
+        );
+        if (shared_gram_is_finite) {
+          shared_row_gram.resize(static_cast<size_t>(p) * p);
+          for (int row = 0; row < p; ++row) {
+            for (int column = 0; column < p; ++column) {
+              shared_row_gram[static_cast<size_t>(row) * p + column] =
+                gram_values[static_cast<size_t>(column) * p + row];
+            }
+          }
+        }
+        scanned_shared_gram = true;
+      } else {
+        elements_until_scan -= local_size;
       }
+    }
+    if (shared_gram_is_finite) {
+      for (int left = 0; left < k; ++left) {
+        const double* source = shared_row_gram.data() + static_cast<size_t>(candidate[left]) * p;
+        double* destination = local_gram.data() + static_cast<size_t>(left) * k;
+        for (int right = 0; right < k; ++right) {
+          destination[right] = source[candidate[right]];
+        }
+      }
+    } else {
+      copy_candidate_gram(gram_values, p, candidate, local_gram);
     }
     const int requested_support = max_support_size <= 0
       ? k
@@ -620,7 +688,6 @@ List solve_greedy_l0_batch(
     status[target] = fit.support.empty() ? "empty_support" : "fit";
     if (fit.support.empty()) continue;
 
-    std::vector<double> support_inverse;
     if (!invert_subset_gram(local_gram, fit.support, k, support_inverse)) {
       stop("Selected support Gram matrix is not identifiable.");
     }
