@@ -166,3 +166,98 @@ test_that("batch agrees with a QR backward reference removing multiple redundant
   expect_setequal(fit$predictor_index, support)
   expect_equal(fit$bic, tail(trajectory, 1), tolerance = 1e-7)
 })
+
+test_that("batch workspace reuse preserves changing candidate sets and target order", {
+  set.seed(1013)
+  x <- scale(matrix(rnorm(80 * 70), 80))
+  y <- cbind(
+    x[, 2] - x[, 8] + rnorm(80, sd = 0.2), rnorm(80), 0,
+    x[, 5] + rnorm(80, sd = 0.3), rnorm(80)
+  )
+  gram <- crossprod(x)
+  xty <- crossprod(x, y)
+  ss <- colSums(y^2)
+  candidates <- list(70:1, c(68L, 2L), 1:70, integer(), c(11L, 5L, 3L))
+  batch <- fit_greedy_l0_batch(gram, xty, ss, candidates, nrow(x))
+  for (i in seq_along(candidates)) {
+    single <- fit_greedy_l0_batch(
+      gram, xty[, i, drop = FALSE], ss[i],
+      candidates[i], nrow(x)
+    )
+    edges <- batch$target_index == i
+    for (field in c("predictor_index", "standardized_beta", "deletion_delta_bic")) {
+      expect_identical(batch[[field]][edges], single[[field]])
+    }
+    for (field in c("candidate_size", "support_size", "rss", "bic", "status")) {
+      expect_identical(batch[[field]][i], single[[field]])
+    }
+  }
+})
+
+test_that("batch validation retains selected-domain finite and index checks", {
+  gram <- diag(3)
+  xty <- matrix(c(1, 2, 3), ncol = 1)
+  fit <- function(g = gram, c = list(1:3), cross = xty) {
+    fit_greedy_l0_batch(g, cross, 10, c, 20)
+  }
+  for (bad in list(c(1L, 1L), c(1L, NA_integer_), 0L, -1L, 4L)) {
+    expect_error(fit(c = list(bad)), "unique and one-based")
+  }
+  for (bad in c(NA_real_, NaN, Inf, -Inf)) {
+    g <- gram
+    g[1, 2] <- bad
+    expect_error(fit(g), "Gram matrix must be finite")
+    expect_identical(fit(g, list(3L)), fit(gram, list(3L)))
+    g <- gram
+    g[1, 1] <- bad
+    expect_error(fit(g), "cross-products must be finite")
+    cross <- xty
+    cross[2, 1] <- bad
+    expect_error(fit(cross = cross), "cross-products must be finite")
+  }
+})
+
+
+test_that("shared Gram scans preserve unused nonfinite values and late errors", {
+  set.seed(10141)
+  n <- 60L
+  p <- 33L
+  x <- scale(matrix(rnorm(n * p), n))
+  y <- matrix(rnorm(n * 12L), n)
+  gram <- crossprod(x)
+  xty <- crossprod(x, y)
+  candidates <- rep(list(32:1), ncol(y))
+  run <- function(g, c = candidates, z = xty) {
+    fit_greedy_l0_batch(g, z, colSums(y^2), c, n)
+  }
+  reference <- run(gram)
+  for (bad in c(NA_real_, NaN, Inf, -Inf)) {
+    g <- gram
+    g[33L, 33L] <- bad
+    expect_identical(run(g), reference)
+    g <- gram
+    g[33L, 1L] <- bad
+    expect_identical(run(g), reference)
+    late <- candidates
+    late[[12L]] <- 1:33
+    expect_error(run(g, late), "Gram matrix must be finite")
+  }
+  for (bad in list(c(1L, 1L), c(1L, NA_integer_), 0L, -1L, 34L)) {
+    late <- candidates
+    late[[12L]] <- bad
+    expect_error(run(gram, late), "unique and one-based")
+  }
+  cross <- xty
+  cross[1L, 12L] <- Inf
+  expect_error(run(gram, z = cross), "cross-products must be finite")
+  for (i in seq_len(ncol(y))) {
+    single <- fit_greedy_l0_batch(gram, xty[, i, drop = FALSE], colSums(y^2)[i], candidates[i], n)
+    selected <- reference$target_index == i
+    for (field in c("predictor_index", "standardized_beta", "deletion_delta_bic")) {
+      expect_identical(reference[[field]][selected], single[[field]])
+    }
+    for (field in c("candidate_size", "support_size", "rss", "bic", "status")) {
+      expect_identical(reference[[field]][i], single[[field]])
+    }
+  }
+})
