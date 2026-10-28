@@ -1,5 +1,3 @@
-# Package index
-
 ### Inferring cell-specific gene regulatory network
 
 - [`inferCSN-package`](https://mengxu98.github.io/inferCSN/reference/inferCSN-package.md)

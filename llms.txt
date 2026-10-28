@@ -63,8 +63,6 @@ If you use [inferCSN](https://github.com/mengxu98/inferCSN) in your
 work, please cite it reference
 [here](https://mengxu98.github.io/inferCSN/authors.html#citation).
 
-# Package index
-
 ### Inferring cell-specific gene regulatory network
 
 - [`inferCSN-package`](https://mengxu98.github.io/inferCSN/reference/inferCSN-package.md)
