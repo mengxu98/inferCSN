@@ -10,5 +10,7 @@ test_that("deletion evidence uses the same finite-response rows as the fit", {
   expect_identical(observed$model, expected$model)
   expect_identical(observed$coefficients$coefficient, expected$coefficients$coefficient)
   expect_equal(observed$coefficients$deletion_delta_bic,
-               expected$coefficients$deletion_delta_bic, tolerance = 1e-12)
+    expected$coefficients$deletion_delta_bic,
+    tolerance = 1e-12
+  )
 })
