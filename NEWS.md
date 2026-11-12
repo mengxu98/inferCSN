@@ -1,4 +1,4 @@
-# inferCSN (development version)
+# inferCSN 1.2.6
 
 * Added `deletion_rank_weight()`, the signed ordinal ranking of coefficients
   by deletion delta-BIC used by `inferCSN()`, so downstream packages reuse the
