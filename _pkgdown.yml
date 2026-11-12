@@ -45,6 +45,7 @@ reference:
   - single_network
   - fit_greedy_l0
   - fit_greedy_l0_batch
+  - deletion_rank_weight
 
 - subtitle: "Utils functions"
 - contents:

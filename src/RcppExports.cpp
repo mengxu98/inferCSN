@@ -10,6 +10,18 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// deletion_rank_weight_cpp
+NumericVector deletion_rank_weight_cpp(NumericVector coefficient, NumericVector deletion_delta_bic, IntegerVector order);
+RcppExport SEXP _inferCSN_deletion_rank_weight_cpp(SEXP coefficientSEXP, SEXP deletion_delta_bicSEXP, SEXP orderSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type coefficient(coefficientSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type deletion_delta_bic(deletion_delta_bicSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type order(orderSEXP);
+    rcpp_result_gen = Rcpp::wrap(deletion_rank_weight_cpp(coefficient, deletion_delta_bic, order));
+    return rcpp_result_gen;
+END_RCPP
+}
 // prepare_lagged_expression
 List prepare_lagged_expression(NumericMatrix expression, NumericMatrix pseudotime, double lag_fraction, int lag_steps, int cores);
 RcppExport SEXP _inferCSN_prepare_lagged_expression(SEXP expressionSEXP, SEXP pseudotimeSEXP, SEXP lag_fractionSEXP, SEXP lag_stepsSEXP, SEXP coresSEXP) {
@@ -99,6 +111,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_inferCSN_deletion_rank_weight_cpp", (DL_FUNC) &_inferCSN_deletion_rank_weight_cpp, 3},
     {"_inferCSN_prepare_lagged_expression", (DL_FUNC) &_inferCSN_prepare_lagged_expression, 5},
     {"_inferCSN_infer_network", (DL_FUNC) &_inferCSN_infer_network, 4},
     {"_inferCSN_solve_greedy_l0_batch", (DL_FUNC) &_inferCSN_solve_greedy_l0_batch, 7},

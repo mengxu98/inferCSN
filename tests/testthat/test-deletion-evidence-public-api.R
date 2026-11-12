@@ -138,3 +138,31 @@ test_that("batch solver preserves analytic SSE near a perfect fit", {
   expect_equal(fit$support_size, 6L)
   expect_true(all(fit$deletion_delta_bic >= 0))
 })
+
+test_that("deletion_rank_weight reproduces the archived inference weights", {
+  set.seed(20261111)
+  n <- 90L
+  tf <- matrix(stats::rnorm(n * 3), n, dimnames = list(NULL, paste0("TF", 1:3)))
+  object <- cbind(tf, G1 = tf[, 1] - 0.5 * tf[, 2] + stats::rnorm(n, sd = 0.4), G2 = 0.7 * tf[, 3] + stats::rnorm(n, sd = 0.5))
+  rownames(object) <- paste0("cell", seq_len(n))
+  params <- list(
+    min_improvement = 1e-10, pseudotime_lag_fraction = 0.05, pseudotime_lag_steps = NULL,
+    regulators = colnames(tf), targets = colnames(object), max_support_size = NULL, cores = 1L
+  )
+  archived <- inferCSN:::infer_network(
+    object, colnames(object), matrix(numeric(0), nrow(object), 0L), params
+  )
+  expect_identical(
+    deletion_rank_weight(archived$standardized_beta, archived$deletion_delta_bic),
+    archived$weight
+  )
+})
+
+test_that("deletion_rank_weight groups near-ties and ignores invalid entries", {
+  expect_identical(
+    deletion_rank_weight(c(0.5, -1.2, 0.3, 0, NA, 2), c(4, 9, 4 + 1e-14, 2, 1, -1)),
+    c(0.25, -0.75, 0.25, 0, 0, 0)
+  )
+  expect_identical(deletion_rank_weight(numeric(), numeric()), numeric())
+  expect_error(deletion_rank_weight(1, c(1, 2)), "lengths differ")
+})
