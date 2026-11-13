@@ -105,3 +105,35 @@ validate_max_support_size <- function(max_support_size) {
   }
   as.integer(max_support_size)
 }
+
+#' @title Rank signed edges by deletion evidence
+#' @description Converts signed coefficients and their deletion delta-BIC into
+#' the signed ordinal weights returned by [inferCSN()]. Edges are ranked by
+#' decreasing deletion evidence; evidence within `1e-12 * (1 + abs(maximum))`
+#' of a group's maximum shares one rank, and the sign of the coefficient is
+#' kept.
+#'
+#' @param coefficient Signed coefficients.
+#' @param deletion_delta_bic Non-negative deletion delta-BIC, one per
+#' coefficient.
+#'
+#' @return Signed weights in (-1, 1); zero, non-finite or negative-evidence
+#' entries receive 0.
+#' @export
+#' @examples
+#' deletion_rank_weight(c(0.5, -1.2, 0.3, 0), c(4, 9, 4, 2))
+deletion_rank_weight <- function(coefficient, deletion_delta_bic) {
+  coefficient <- suppressWarnings(as.numeric(coefficient))
+  deletion_delta_bic <- suppressWarnings(as.numeric(deletion_delta_bic))
+  if (length(coefficient) != length(deletion_delta_bic)) {
+    thisutils::log_message(
+      "Coefficient and deletion-evidence lengths differ.",
+      message_type = "error"
+    )
+  }
+  keep <- is.finite(coefficient) & coefficient != 0 &
+    is.finite(deletion_delta_bic) & deletion_delta_bic >= 0
+  kept <- which(keep)
+  ordering <- kept[order(deletion_delta_bic[kept], decreasing = TRUE, kept)]
+  deletion_rank_weight_cpp(coefficient, deletion_delta_bic, ordering)
+}

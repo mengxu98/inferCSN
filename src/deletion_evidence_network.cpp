@@ -61,6 +61,43 @@ static std::vector<double> signed_deletion_rank_scores(
   return scores;
 }
 
+// [[Rcpp::export(rng = false)]]
+NumericVector deletion_rank_weight_cpp(NumericVector coefficient,
+                                       NumericVector deletion_delta_bic,
+                                       IntegerVector order) {
+  const int n = coefficient.size();
+  NumericVector scores(n, 0.0);
+  std::vector<int> selected;
+  selected.reserve(order.size());
+  for (int k = 0; k < order.size(); ++k) {
+    const int i = order[k] - 1;
+    if (R_finite(coefficient[i]) && coefficient[i] != 0.0 &&
+        R_finite(deletion_delta_bic[i]) && deletion_delta_bic[i] >= 0.0) {
+      selected.push_back(i);
+    }
+  }
+  int groups = 0;
+  std::vector<int> group_of(selected.size());
+  for (int i = 0; i < static_cast<int>(selected.size()); ) {
+    const double anchor = deletion_delta_bic[selected[i]];
+    int j = i + 1;
+    while (j < static_cast<int>(selected.size()) &&
+           same_deletion_evidence(deletion_delta_bic[selected[j]], anchor)) {
+      ++j;
+    }
+    for (int k = i; k < j; ++k) group_of[k] = groups;
+    ++groups;
+    i = j;
+  }
+  for (int k = 0; k < static_cast<int>(selected.size()); ++k) {
+    const double magnitude = 1.0 -
+      (static_cast<double>(group_of[k]) + 0.5) / static_cast<double>(groups);
+    const int index = selected[k];
+    scores[index] = coefficient[index] < 0.0 ? -magnitude : magnitude;
+  }
+  return scores;
+}
+
 static std::vector<LagBranch> make_lag_branches(
     const NumericMatrix& pseudotime,
     double lag_fraction,
