@@ -15,6 +15,8 @@
   : Fit greedy L0 regression
 - [`fit_greedy_l0_batch()`](https://mengxu98.github.io/inferCSN/reference/fit_greedy_l0_batch.md)
   : Fit batched greedy L0 regressions
+- [`deletion_rank_weight()`](https://mengxu98.github.io/inferCSN/reference/deletion_rank_weight.md)
+  : Rank signed edges by deletion evidence
 
 ### Utils functions
 

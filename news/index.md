@@ -1,5 +1,15 @@
 # Changelog
 
+## inferCSN 1.2.6
+
+- Added
+  [`deletion_rank_weight()`](https://mengxu98.github.io/inferCSN/reference/deletion_rank_weight.md),
+  the signed ordinal ranking of coefficients by deletion delta-BIC used
+  by
+  [`inferCSN()`](https://mengxu98.github.io/inferCSN/reference/inferCSN.md),
+  so downstream packages reuse the same rule instead of reimplementing
+  it.
+
 ## inferCSN 1.2.5
 
 - **breaking**:
